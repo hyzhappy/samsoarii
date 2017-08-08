@@ -1,4 +1,5 @@
-﻿using SamSoarII.Core.Models;
+﻿using SamSoarII.Core.Communication;
+using SamSoarII.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,10 @@ namespace SamSoarII.Shell.Dialogs
         {
             InitializeComponent();
             this.communicationParams = communicationParams;
+            if(SerialPortManager.PORTNAMES.Count() <= communicationParams.SerialPortIndex)
+            {
+                this.communicationParams.SerialPortIndex = SerialPortManager.PORTNAMES.Count() - 1;
+            }
             DataContext = this.communicationParams;
             EnsureButton.Click += EnsureButton_Click;
             CancelButton.Click += CancelButton_Click;

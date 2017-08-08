@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
         xmlns:properties="clr-namespace:SamSoarII.Properties"
         mc:Ignorable="d" Icon="/Resources/Image/SamSoarII.ico" WindowStartupLocation="CenterScreen"
-        Title="{x:Static properties:Resources.File_Converter}" Height="400" Width="720" ResizeMode="NoResize" WindowStyle="SingleBorderWindow">
+        Title="{x:Static properties:Resources.File_Converter}" Height="400" Width="720" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

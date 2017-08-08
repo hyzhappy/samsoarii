@@ -7,12 +7,12 @@
         xmlns:properties="clr-namespace:SamSoarII.Properties"
         mc:Ignorable="d" Icon="/Resources/Image/SamSoarII.ico"
         Title="{x:Static properties:Resources.CommunicationSetting}" Height="320" Width="400">
-    <Grid x:Uid="Grid_1">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="5*"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_2"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <local:ComBaseSetting x:Uid="baseSetting" x:Name="baseSetting"></local:ComBaseSetting>
+        <local:ComBaseSetting x:Name="baseSetting"></local:ComBaseSetting>
         <Canvas Grid.Row="2">
             <Button x:Name="CommunicationTestButton" Width="auto" Canvas.Left="20" MinWidth="60" Height="20" Margin="0,15,0,0" Content="{x:Static properties:Resources.Communication_Test}"/>
             <Button x:Name="EnsureButton" Width="50" Height="20" Canvas.Right="80" Margin="0,15,0,0" Content="{x:Static properties:Resources.Ensure}"/>

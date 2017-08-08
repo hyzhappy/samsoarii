@@ -397,25 +397,14 @@ namespace SamSoarII
             if (vmdProj.LadderMode == LadderModes.Monitor) _CloseMonitor();
             if (!CheckLadder(false)) return false;
             if (!CheckFuncBlock(false)) return false;
-            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Generating_Final);
-            handle.Start();
-            Thread genthread = new Thread(() =>
-            {
-                GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
-                mngComu.LoadExecute();
-                handle.Completed = true;
-                handle.Abort();
-            });
-            genthread.Start();
-            while (!handle.Completed) Thread.Sleep(10);
-
+            
             mngComu.IsEnable = true;
             CommunicationParams paraCom = mdProj.PARAProj.PARACom;
             using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom,
                 CommunicationSettingDialogMode.DOWNLOAD))
             {
                 ComBaseSetting basesetting = dialog.GetBaseSetting();
-                basesetting.DataLen = mngComu.ExecLen;
+                //basesetting.DataLen = mngComu.ExecLen;
                 basesetting.SettingButtonClick += (sender1, e1) =>
                 {
                     using (CommunicationParamsDialog dialog1 = new CommunicationParamsDialog(paraCom))
@@ -453,6 +442,20 @@ namespace SamSoarII
                 };
                 dialog.Ensure += (sender3, e3) =>
                 {
+                    //按下下载键时再生成Bin,判断是否要包括软元件初始化
+                    LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Generating_Final);
+                    handle.Start();
+                    Thread genthread = new Thread(() =>
+                    {
+                        GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
+                        mngComu.LoadExecute();
+                        handle.Completed = true;
+                        handle.Abort();
+                    });
+                    genthread.Start();
+                    while (!handle.Completed) Thread.Sleep(10);
+
+
                     if (mngComu.CheckLink())
                     {
                         handle = new LoadingWindowHandle(Properties.Resources.Project_Download);
@@ -460,19 +463,22 @@ namespace SamSoarII
                         vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                         {
                             handle.Start();
-                            bool ret = mngComu.DownloadExecute();
+                            var ret = mngComu.DownloadExecute();
                             handle.Abort();
                             handle.Completed = true;
-                            if (!ret)
+                            switch (ret)
                             {
-                                //StatusBarHepler.UpdateMessageAsync(Properties.Resources.Download_Fail);
-                                LocalizedMessageBox.Show(Properties.Resources.Download_Fail, LocalizedMessageIcon.Information);
-                            }
-                            else
-                            {
-                                dialog.Close();
-                                //StatusBarHepler.UpdateMessageAsync(Properties.Resources.MessageBox_Download_Successd);
-                                LocalizedMessageBox.Show(Properties.Resources.MessageBox_Download_Successd, LocalizedMessageIcon.Information);
+                                case DownloadError.None:
+                                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Download_Successd, LocalizedMessageIcon.Information);
+                                    break;
+                                case DownloadError.CommuicationFailed:
+                                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                                    break;
+                                case DownloadError.DownloadFailed:
+                                    LocalizedMessageBox.Show(Properties.Resources.Download_Fail, LocalizedMessageIcon.Information);
+                                    break;
+                                default:
+                                    break;
                             }
                         });
                         while (!handle.Completed)

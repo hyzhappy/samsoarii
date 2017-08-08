@@ -57,8 +57,24 @@ namespace SamSoarII.Core.Communication
                     return FGs_ERR_CODE.FGs_DES_ERR;
                 case 0x26:
                     return FGs_ERR_CODE.FGs_ADDRESS_BEYOND_ERR;
-                default:
+                case 0x27:
                     return FGs_ERR_CODE.FGs_ISNOTANERRCODE;
+                case 0x60:
+                    return FGs_ERR_CODE.COMCODE_CARRY_OK;
+                case 0x61:
+                    return FGs_ERR_CODE.COMCODE_LENGTH_ERR;
+                case 0x62:
+                    return FGs_ERR_CODE.COMCODE_NODEID_ERR;
+                case 0x63:
+                    return FGs_ERR_CODE.COMCODE_CRC_ERR;
+                case 0x64:
+                    return FGs_ERR_CODE.COMCODE_INVALID_CMD;
+                case 0x65:
+                    return FGs_ERR_CODE.COMCODE_DOWNLOAD_BEYOND;
+                case 0x66:
+                    return FGs_ERR_CODE.COMCODE_PASSWD_ERR;
+                default:
+                    return FGs_ERR_CODE.COMCODE_CARRY_OK;
             }
         }
         public static byte? GetAddrType(ValueModel.Bases type,uint offset)
@@ -125,6 +141,40 @@ namespace SamSoarII.Core.Communication
                 case ValueModel.Bases.Z: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_Z; break;
             }
             return ret;
+        }
+        public static void Encrypt(int id, byte[] data)
+        {
+            for (int i = 0; i < data.Length; i++)
+            {
+                byte di = data[i];
+                byte bs = 0x01;
+                int os = 7;
+                data[i] = 0;
+                while (os >= -7)
+                {
+                    data[i] |= (byte)((os > 0) ? ((di & bs) << os) : ((di & bs) >> (-os)));
+                    bs <<= 1; os -= 2;
+                }
+                data[i] ^= (byte)id;
+            }
+        }
+
+        public static void CheckRetData(ICommunicationCommand command, byte[] _retData)
+        {
+            if (_retData.Count() < 6)
+            {
+                command.IsComplete = false;
+                command.IsSuccess = false;
+                return;
+            }
+            command.IsComplete = _retData.Length == ValueConverter.GetValueByBytes(_retData[1], _retData[2]);
+            command.IsComplete &= CRC16.CheckCRC(command);
+            if (command.IsComplete)
+            {
+                FGs_ERR_CODE errCodeType = GetERRCODEType(_retData[3]);
+                command.IsSuccess = errCodeType == FGs_ERR_CODE.COMCODE_CARRY_OK;
+            }
+            else command.IsSuccess = false;
         }
     }
 }

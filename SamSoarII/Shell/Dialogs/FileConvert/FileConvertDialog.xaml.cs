@@ -79,92 +79,92 @@ namespace SamSoarII.Shell.Dialogs
                 worker = new BackgroundWorker();
                 worker.WorkerReportsProgress = true;
                 worker.DoWork += Worker_DoWork;
-                //worker.ProgressChanged += Worker_ProgressChanged;
+                worker.ProgressChanged += Worker_ProgressChanged;
                 worker.RunWorkerAsync();
-                //progressBar = new ProgressBar();
-                //progressBar.PG_Bar.Minimum = 0;
-                //progressBar.PG_Bar.Maximum = LB_Old.Items.Count;
-                //progressBar.ShowDialog();
             }
         }
         private BackgroundWorker worker;
-        private ProgressBar progressBar;
+        ProgressBarHandle handle;
+        private long currentFileLen;
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            Dispatcher.Invoke(DispatcherPriority.Background,(ThreadStart)delegate() 
+            handle.PG_Bar?.Dispatcher.Invoke(DispatcherPriority.Normal,(ThreadStart)delegate() 
             {
-                StartAnimation(progressBar.PG_Bar.Value, e.ProgressPercentage * 3.0 / 20.0);
+                handle.StartAnimation(handle.PG_Bar.PG_Bar.Value, e.ProgressPercentage * 3.0 / 20.0, currentFileLen / (160.0 * 1024));
             });
-        }
-
-        private void StartAnimation(double from,double to)
-        {
-            DoubleAnimation animation = new DoubleAnimation();
-            animation.From = from;
-            animation.To = to;
-            animation.Duration = TimeSpan.FromSeconds(0.5);
-            progressBar.PG_Bar.BeginAnimation(RangeBase.ValueProperty, animation);
         }
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
+            handle = new ProgressBarHandle(Properties.Resources.File_Convert,0, LB_Old.Items.Count);
+            handle.Start();
             Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate () 
             {
-                int cnt = 0,covered = 0;
-                worker.ReportProgress((int)(((double)cnt / LB_Old.Items.Count) * 100));
-                string currentPath = FileHelper.AppRootPath;
-                string outPath = TB_Path.Text;
-                outPath = StringHelper.RemoveSysytemSeparator(outPath);
-                foreach (string item in LB_Old.Items)
+                _Handle();
+                handle.Completed = true;
+                handle.Abort();
+            });
+            while (!handle.Completed) Thread.Sleep(10);
+            handle = null;
+        }
+
+        private void _Handle()
+        {
+            int cnt = 0, covered = 0;
+            worker.ReportProgress((int)(((double)cnt / LB_Old.Items.Count) * 100));
+            string currentPath = FileHelper.AppRootPath;
+            string outPath = TB_Path.Text;
+            outPath = StringHelper.RemoveSystemSeparator(outPath);
+            foreach (string item in LB_Old.Items)
+            {
+                currentFileLen = FileHelper.GetFileLength(item);
+                string filename = FileHelper.GetFileName(item);
+                string outFilename = string.Format("{0}{1}{2}.{3}", outPath, System.IO.Path.DirectorySeparatorChar, filename, FileHelper.NewFileExtension);
+                if (File.Exists(outFilename))
                 {
-                    string filename = FileHelper.GetFileName(item);
-                    string outFilename = string.Format("{0}{1}{2}.{3}", outPath, System.IO.Path.DirectorySeparatorChar, filename, FileHelper.NewFileExtension);
-                    if (File.Exists(outFilename))
+                    var ret = LocalizedMessageBox.Show(string.Format("{0}\n{1}", Properties.Resources.File_Override, outFilename), LocalizedMessageButton.YesNo, LocalizedMessageIcon.Warning);
+                    if (ret != LocalizedMessageResult.Yes)
                     {
-                        var ret = LocalizedMessageBox.Show(string.Format("{0}\n{1}", Properties.Resources.File_Override, outFilename), LocalizedMessageButton.YesNo,LocalizedMessageIcon.Warning);
-                        if(ret != LocalizedMessageResult.Yes)
-                        {
-                            cnt++;
-                            worker.ReportProgress((int)(((double)cnt / LB_Old.Items.Count) * 100));
-                            continue;
-                        }
-                        else covered++;
-                    }
-                    Process cmd = new Process();
-                    cmd.StartInfo.WorkingDirectory = string.Format(@"{0:s}\Converter\.", currentPath);
-                    cmd.StartInfo.FileName = string.Format(@"{0:s}\Converter\Converter.exe", currentPath);
-                    cmd.StartInfo.Arguments = string.Format("{0} \"{1}\" \"{2}\"", 1, outPath, item);
-                    cmd.StartInfo.CreateNoWindow = true;
-                    cmd.StartInfo.UseShellExecute = false;
-                    cmd.StartInfo.RedirectStandardOutput = true;
-                    cmd.StartInfo.RedirectStandardError = true;
-                    try
-                    {
-                        cmd.Start();
-                        cmd.WaitForExit();
-                        Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-                        {
-                            LB_New.Items.Add(outFilename);
-                            Thread.Sleep(10);
-                        });
+                        currentFileLen = 0;//不覆盖，因此将文件长度设置为0
+                        worker.ReportProgress((int)(((double)(cnt + 1) / LB_Old.Items.Count) * 100));
                         cnt++;
-                        worker.ReportProgress((int)(((double)cnt / LB_Old.Items.Count) * 100));
-                        Thread.Sleep(100);
+                        continue;
                     }
-                    catch (Exception)
+                    else covered++;
+                }
+                Process cmd = new Process();
+                cmd.StartInfo.WorkingDirectory = string.Format(@"{0:s}\Converter\.", currentPath);
+                cmd.StartInfo.FileName = string.Format(@"{0:s}\Converter\Converter.exe", currentPath);
+                cmd.StartInfo.Arguments = string.Format("{0} \"{1}\" \"{2}\"", 1, outPath, item);
+                cmd.StartInfo.CreateNoWindow = true;
+                cmd.StartInfo.UseShellExecute = false;
+                cmd.StartInfo.RedirectStandardOutput = true;
+                cmd.StartInfo.RedirectStandardError = true;
+                try
+                {
+                    worker.ReportProgress((int)(((double)(cnt + 1) / LB_Old.Items.Count) * 100));
+                    cmd.Start();
+                    cmd.WaitForExit();
+                    Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                     {
-                        foreach (var process in Process.GetProcessesByName("Converter.exe"))
-                        {
-                            process.Kill();
-                        }
+                        LB_New.Items.Add(outFilename);
+                        Thread.Sleep(10);
+                    });
+                    cnt++;
+                    Thread.Sleep(100);
+                }
+                catch (Exception)
+                {
+                    foreach (var process in Process.GetProcessesByName("Converter.exe"))
+                    {
+                        process.Kill();
                     }
                 }
-                //progressBar.Close();
-                if (App.CultureIsZH_CH())
-                    LocalizedMessageBox.Show(string.Format("成功{0}{1}，失败{2}！", LB_New.Items.Count, covered == 0 ? string.Empty : string.Format("(覆盖{0})",covered) , LB_Old.Items.Count - cnt),LocalizedMessageIcon.Information);
-                else
-                    LocalizedMessageBox.Show(string.Format("{0} successful{1}, {2} failed!", LB_New.Items.Count, covered == 0 ? string.Empty : string.Format("({0} is covered)", covered), LB_Old.Items.Count - cnt), LocalizedMessageIcon.Information);
-            });
+            }
+            if (App.CultureIsZH_CH())
+                LocalizedMessageBox.Show(string.Format("成功{0}{1}，失败{2}！", LB_New.Items.Count, covered == 0 ? string.Empty : string.Format("(覆盖{0})", covered), LB_Old.Items.Count - cnt), LocalizedMessageIcon.Information);
+            else
+                LocalizedMessageBox.Show(string.Format("{0} successful{1}, {2} failed!", LB_New.Items.Count, covered == 0 ? string.Empty : string.Format("({0} is covered)", covered), LB_Old.Items.Count - cnt), LocalizedMessageIcon.Information);
         }
 
         private void FileSelect_Click(object sender, RoutedEventArgs e)

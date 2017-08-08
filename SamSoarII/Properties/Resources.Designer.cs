@@ -1492,6 +1492,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 File being converted... 的本地化字符串。
+        /// </summary>
+        public static string File_Convert {
+            get {
+                return ResourceManager.GetString("File_Convert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 File conversion 的本地化字符串。
         /// </summary>
         public static string File_Converter {
@@ -4836,6 +4845,15 @@ namespace SamSoarII.Properties {
         public static string PLC_Retentive_Zone_Settings {
             get {
                 return ResourceManager.GetString("PLC_Retentive_Zone_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The current PLC is running, if you continue to download, will automatically set to Stop. 的本地化字符串。
+        /// </summary>
+        public static string PLC_Status_To_Stop {
+            get {
+                return ResourceManager.GetString("PLC_Status_To_Stop", resourceCulture);
             }
         }
         

@@ -155,7 +155,7 @@ namespace SamSoarII.Utility
             }
         }
 
-        public static string RemoveSysytemSeparator(string path)
+        public static string RemoveSystemSeparator(string path)
         {
             if (path.EndsWith(Path.DirectorySeparatorChar.ToString()))
             {

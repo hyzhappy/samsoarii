@@ -1,16 +1,18 @@
 ﻿using SamSoarII.Core.Models;
+using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace SamSoarII.Core.Communication
 {
     public class SerialPortManager : IPortManager
     {
-        static private byte[] TESTBYTES;
-        static private string[] PORTNAMES
+        static private CommunicationTestCommand testCommand = new CommunicationTestCommand();
+        static public string[] PORTNAMES
         {
             get
             {
@@ -24,18 +26,6 @@ namespace SamSoarII.Core.Communication
         private SerialPort port = new SerialPort();
         private CommunicationManager parent;
         public CommunicationManager Parent { get { return this.parent; } }
-        static SerialPortManager()
-        {
-            byte[] tempbytes = new byte[] { 0X01, 0XFE, 0X01, 0X00, 0X01, 0X00, 0X00 };
-            byte[] CRC = CRC16.GetCRC(tempbytes);
-            TESTBYTES = new byte[tempbytes.Length + 2];
-            for (int i = 0; i < tempbytes.Length; i++)
-            {
-                TESTBYTES[i] = tempbytes[i];
-            }
-            TESTBYTES[TESTBYTES.Length - 2] = CRC[0];
-            TESTBYTES[TESTBYTES.Length - 1] = CRC[1];
-        }
         public SerialPortManager(CommunicationManager _parent)
         {
             parent = _parent;
@@ -194,12 +184,12 @@ namespace SamSoarII.Core.Communication
         }
         public int Start()
         {
+            InitializePort();
             try
             {
                 CommunicationParams paras = parent.IFParent.MDProj.PARAProj.PARACom;
                 if (!paras.IsAutoCheck)
                 {
-                    InitializePort();
                     if (!PortTest())
                     {
                         IsSuccess = false;
@@ -272,8 +262,9 @@ namespace SamSoarII.Core.Communication
             if (IsSuccess) return true;
             foreach (string _portname in PORTNAMES)
             {
-                if (port != null && port.PortName != _portname)
+                if (port?.PortName != _portname)
                 {
+                    port.Close();
                     port = new SerialPort(_portname);
                 }
                 try
@@ -282,7 +273,8 @@ namespace SamSoarII.Core.Communication
                     {
                         port.Close();
                     }
-                    return ParamsTest();
+                    bool ret = ParamsTest();
+                    if (ret) return true;
                 }
                 catch (Exception)
                 {
@@ -315,10 +307,8 @@ namespace SamSoarII.Core.Communication
         private bool PortTest()
         {
             port.Open();
-            return true;//暂不可用
-            /*
-            port.Write(TESTBYTES, 0, TESTBYTES.Length);
-            Thread.Sleep(10);
+            byte[] command = testCommand.GetBytes();
+            port.Write(command, 0, command.Length);
             try
             {
                 int recvcount = 0;
@@ -329,18 +319,26 @@ namespace SamSoarII.Core.Communication
                     recvcount++;
                     Thread.Sleep(10);
                 }
-                while (readbuffercount != 8 && recvcount < 5);
-                if (readbuffercount == 8)
+                while (readbuffercount < 3 && recvcount < 5);
+                if (readbuffercount >= 3)
                 {
-                    byte[] tempdata = new byte[8];
-                    port.Read(tempdata, 0, readbuffercount);
-                    readbuffercount = 0;
-                    if (tempdata[0] == 0x01 && tempdata[1] == 0xFE && tempdata[2] == 0x01 && tempdata[3] == 0x00 && tempdata[4] == 0x01)
-                        return true;
-                    else
+                    byte[] data = new byte[readbuffercount];
+                    port.Read(data, 0, readbuffercount);
+                    int len = ValueConverter.GetValueByBytes(data[1],data[2]);
+                    recvcount = 0;
+                    while (readbuffercount != len && recvcount < 5)
                     {
-                        port.Close();
-                        return false;
+                        readbuffercount += port.BytesToRead;
+                        recvcount++;
+                        Thread.Sleep(10);
+                    }
+                    if (readbuffercount == len)
+                    {
+                        byte[] data2 = new byte[len - data.Length];
+                        port.Read(data2, 0, len - data.Length);
+                        data = data.Concat(data2).ToArray();
+                        testCommand.RetData = data;
+                        return testCommand.IsSuccess;
                     }
                 }
             }
@@ -350,7 +348,7 @@ namespace SamSoarII.Core.Communication
                 return false;
             }
             port.Close();
-            return false;*/
+            return false;
         }
     }
 }

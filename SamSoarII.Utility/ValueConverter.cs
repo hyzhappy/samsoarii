@@ -40,6 +40,19 @@ namespace SamSoarII.Utility
             byte byte2 = (byte)((value & 0xFF00) >> 8);
             return new byte[] {byte2,byte1 };
         }
+
+        public static byte[] GetLengthByInt(int length)
+        {
+            byte byte1 = (byte)(length & 0x00FF);
+            byte byte2 = (byte)((length & 0xFF00) >> 8);
+            return new byte[] { byte1, byte2 };//低位在前
+        }
+
+        public static int GetValueByBytes(params byte[] value)
+        {
+            return (value[1] << 8) + value[0];
+        }
+
         public static byte[] GetBytes(uint value)
         {
             byte byte1 = (byte)(value & 0x000000FF);
