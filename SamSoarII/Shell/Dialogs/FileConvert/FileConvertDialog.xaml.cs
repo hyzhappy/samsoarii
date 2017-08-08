@@ -133,8 +133,8 @@ namespace SamSoarII.Shell.Dialogs
                     else covered++;
                 }
                 Process cmd = new Process();
-                cmd.StartInfo.WorkingDirectory = string.Format(@"{0:s}\Converter\.", currentPath);
-                cmd.StartInfo.FileName = string.Format(@"{0:s}\Converter\Converter.exe", currentPath);
+                cmd.StartInfo.WorkingDirectory = string.Format(@"{0}\Converter\.", currentPath);
+                cmd.StartInfo.FileName = string.Format(@"{0}\Converter\Converter.exe", currentPath);
                 cmd.StartInfo.Arguments = string.Format("{0} \"{1}\" \"{2}\"", 1, outPath, item);
                 cmd.StartInfo.CreateNoWindow = true;
                 cmd.StartInfo.UseShellExecute = false;

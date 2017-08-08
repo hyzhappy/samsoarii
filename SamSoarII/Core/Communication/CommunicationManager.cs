@@ -278,7 +278,7 @@ namespace SamSoarII.Core.Communication
 
         public DownloadError DownloadExecute()
         {
-            return new DownloadHelper(this).DownloadExecute();
+            return DownloadHelper.DownloadExecute(this);
         }
 
         public bool DownloadHandle(ICommunicationCommand cmd, bool hasRecvData = true, int waittime = 10)
