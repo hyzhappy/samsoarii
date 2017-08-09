@@ -2421,3 +2421,45 @@ void _xchd_bdword_to_bdword(int8_t* bit1, int16_t size1, int8_t* en1, int8_t* bi
 	_set_bdword(bit1, size1, en1, _get_bword(bit2, size2));
 	_set_bdword(bit2, size2, en2, tmp);
 }
+
+void _cmpw_wbit(int16_t ia, int16_t ib, int16_t* ic, int16_t loc)
+{
+	_set_wbit(ic, loc, ia == ib);
+	_set_wbit(ic+((loc+1)>>4), (loc+1)&15, ia < ib);
+	_set_wbit(ic+((loc+2)>>4), (loc+2)&15, ia > ib);
+}
+
+void _cmpd_wbit(int32_t ia, int32_t ib, int16_t* ic, int16_t loc)
+{
+	_set_wbit(ic, loc, ia == ib);
+	_set_wbit(ic+((loc+1)>>4), (loc+1)&15, ia < ib);
+	_set_wbit(ic+((loc+2)>>4), (loc+2)&15, ia > ib);
+}
+
+void _cmpf_wbit(float ia, float ib, int16_t* ic, int16_t loc)
+{
+	_set_wbit(ic, loc, ia == ib);
+	_set_wbit(ic+((loc+1)>>4), (loc+1)&15, ia < ib);
+	_set_wbit(ic+((loc+2)>>4), (loc+2)&15, ia > ib);
+}
+
+void _zcpw_wbit(int16_t ia, int16_t il, int16_t ir, int16_t* out, int16_t loc) 
+{
+	_set_wbit(out, loc, ia >= il && ia <= ir);
+	_set_wbit(out+((loc+1)>>4), (loc+1)&15, ia < il);
+	_set_wbit(out+((loc+2)>>4), (loc+2)&15, ia > ir);
+}
+
+void _zcpd_wbit(int32_t ia, int32_t il, int32_t ir, int16_t* out, int16_t loc) 
+{
+	_set_wbit(out, loc, ia >= il && ia <= ir);
+	_set_wbit(out+((loc+1)>>4), (loc+1)&15, ia < il);
+	_set_wbit(out+((loc+2)>>4), (loc+2)&15, ia > ir);
+}
+
+void _zcpf_wbit(float ia, float il, float ir, int16_t* out, int16_t loc) 
+{
+	_set_wbit(out, loc, ia >= il && ia <= ir);
+	_set_wbit(out+((loc+1)>>4), (loc+1)&15, ia < il);
+	_set_wbit(out+((loc+2)>>4), (loc+2)&15, ia > ir);
+}

@@ -295,22 +295,22 @@ namespace SamSoarII.Core.Generate
                         sw.Write("_stack_{0:d} = {1:s};\n", ++stackTop, inst[1]);
                     break;
                 case "AND":
-                    sw.Write("_stack_{0:d} &= {1:s};\n", stackTop, inst[1]);
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}&&{1:s});\n", stackTop, inst[1]);
                     break;
                 case "ANDIM":
                     if (!simumode && inst[1][0] == 'X')
-                        sw.Write("_stack_{0:d} &= ScanIm_X({1:s});\n", stackTop, inst[2]);
+                        sw.Write("_stack_{0:d} = (_stack_{0:d}&&ScanIm_X({1:s}));\n", stackTop, inst[2]);
                     else
-                        sw.Write("_stack_{0:d} &= {1:s};\n", stackTop, inst[1]);
+                        sw.Write("_stack_{0:d} = (_stack_{0:d}&&{1:s});\n", stackTop, inst[1]);
                     break;
                 case "OR":
-                    sw.Write("_stack_{0:d} |= {1:s};\n", stackTop, inst[1]);
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}||{1:s});\n", stackTop, inst[1]);
                     break;
                 case "ORIM":
                     if (!simumode && inst[1][0] == 'X')
-                        sw.Write("_stack_{0:d} |= ScanIm_X({1:s});\n", stackTop, inst[2]);
+                        sw.Write("_stack_{0:d} = (_stack_{0:d}||ScanIm_X({1:s}));\n", stackTop, inst[2]);
                     else
-                        sw.Write("_stack_{0:d} |= {1:s};\n", stackTop, inst[1]);
+                        sw.Write("_stack_{0:d} = (_stack_{0:d}||{1:s});\n", stackTop, inst[1]);
                     break;
                 case "LDI":
                     sw.Write("_stack_{0:d} = !{1:s};\n", ++stackTop, inst[1]);
@@ -322,22 +322,22 @@ namespace SamSoarII.Core.Generate
                         sw.Write("_stack_{0:d} = !{1:s};\n", ++stackTop, inst[1]);
                     break;
                 case "ANDI":
-                    sw.Write("_stack_{0:d} &= !{1:s};\n", stackTop, inst[1]);
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}&&!{1:s});\n", stackTop, inst[1]);
                     break;
                 case "ANDIIM":
                     if (!simumode && inst[1][0] == 'X')
-                        sw.Write("_stack_{0:d} &= !ScanIm_X({1:s});\n", stackTop, inst[2]);
+                        sw.Write("_stack_{0:d} = (_stack_{0:d}&&!ScanIm_X({1:s}));\n", stackTop, inst[2]);
                     else
-                        sw.Write("_stack_{0:d} &= !{1:s};\n", stackTop, inst[1]);
+                        sw.Write("_stack_{0:d} = (_stack_{0:d}&&!{1:s});\n", stackTop, inst[1]);
                     break;
                 case "ORI":
-                    sw.Write("_stack_{0:d} |= !{1:s};\n", stackTop, inst[1]);
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}||!{1:s});\n", stackTop, inst[1]);
                     break;
                 case "ORIIM":
                     if (!simumode && inst[1][0] == 'X')
-                        sw.Write("_stack_{0:d} |= !ScanIm_X({1:s});\n", stackTop, inst[2]);
+                        sw.Write("_stack_{0:d} = (_stack_{0:d}||!ScanIm_X({1:s}));\n", stackTop, inst[2]);
                     else
-                        sw.Write("_stack_{0:d} |= !{1:s};\n", stackTop, inst[1]);
+                        sw.Write("_stack_{0:d} = (_stack_{0:d}||!{1:s});\n", stackTop, inst[1]);
                     break;
                 // 上升沿和下降沿
                 /*
@@ -354,19 +354,19 @@ namespace SamSoarII.Core.Generate
                     sw.Write("_global[{0:d}] = {1:s};\n", globalCount++, inst[1]);
                     break;
                 case "ANDP":
-                    sw.Write("_stack_{0:d} &= (_global[{1:d}]==0&&{2:s}==1);\n", stackTop, globalCount, inst[1]);
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}&&_global[{1:d}]==0&&{2:s}==1);\n", stackTop, globalCount, inst[1]);
                     sw.Write("_global[{0:d}] = {1:s};\n", globalCount++, inst[1]);
                     break;
                 case "ANDF":
-                    sw.Write("_stack_{0:d} &= (_global[{1:d}]==1&&{2:s}==0);\n", stackTop, globalCount, inst[1]);
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}&&_global[{1:d}]==1&&{2:s}==0);\n", stackTop, globalCount, inst[1]);
                     sw.Write("_global[{0:d}] = {1:s};\n", globalCount++, inst[1]);
                     break;
                 case "ORP":
-                    sw.Write("_stack_{0:d} &= (_global[{1:d}]==0&&{2:s}==1);\n", stackTop, globalCount, inst[1]);
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}||_global[{1:d}]==0&&{2:s}==1);\n", stackTop, globalCount, inst[1]);
                     sw.Write("_global[{0:d}] = {1:s};\n", globalCount++, inst[1]);
                     break;
                 case "ORF":
-                    sw.Write("_stack_{0:d} &= (_global[{1:d}]==1&&{2:s}==0);\n", stackTop, globalCount, inst[1]);
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}||_global[{1:d}]==1&&{2:s}==0);\n", stackTop, globalCount, inst[1]);
                     sw.Write("_global[{0:d}] = {1:s};\n", globalCount++, inst[1]);
                     break;
                 case "INV":
@@ -389,11 +389,11 @@ namespace SamSoarII.Core.Generate
                 case "POP": stackTop--; break;
                 // 栈合并
                 case "ANDB":
-                    sw.Write("_stack_{0:d} &= _stack_{1:d};\n", stackTop - 1, stackTop);
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}&&_stack_{1:d});\n", stackTop - 1, stackTop);
                     stackTop--;
                     break;
                 case "ORB":
-                    sw.Write("_stack_{0:d} |= _stack_{1:d};\n", stackTop - 1, stackTop);
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}||_stack_{1:d});\n", stackTop - 1, stackTop);
                     stackTop--;
                     break;
                 // 比较两个数是否相等
@@ -404,11 +404,11 @@ namespace SamSoarII.Core.Generate
                 case "AWEQ":
                 case "ADEQ":
                 case "AFEQ":
-                    sw.Write("_stack_{0:d} &= ({1:s}=={2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}&&{1:s}=={2:s});\n", stackTop, inst[1], inst[2]); break;
                 case "ORWEQ":
                 case "ORDEQ":
                 case "ORFEQ":
-                    sw.Write("_stack_{0:d} |= ({1:s}=={2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}||{1:s}=={2:s});\n", stackTop, inst[1], inst[2]); break;
                 // 比较两个数是否不相等
                 case "LDWNE":
                 case "LDDNE":
@@ -417,11 +417,11 @@ namespace SamSoarII.Core.Generate
                 case "AWNE":
                 case "ADNE":
                 case "AFNE":
-                    sw.Write("_stack_{0:d} &= ({1:s}!={2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}&&{1:s}!={2:s});\n", stackTop, inst[1], inst[2]); break;
                 case "ORWNE":
                 case "ORDNE":
                 case "ORFNE":
-                    sw.Write("_stack_{0:d} |= ({1:s}!={2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}||{1:s}!={2:s});\n", stackTop, inst[1], inst[2]); break;
                 // 比较前数是否大等后数
                 case "LDWGE":
                 case "LDDGE":
@@ -430,11 +430,11 @@ namespace SamSoarII.Core.Generate
                 case "AWGE":
                 case "ADGE":
                 case "AFGE":
-                    sw.Write("_stack_{0:d} &= ({1:s}>={2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}&&{1:s}>={2:s});\n", stackTop, inst[1], inst[2]); break;
                 case "ORWGE":
                 case "ORDGE":
                 case "ORFGE":
-                    sw.Write("_stack_{0:d} |= ({1:s}>={2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}||{1:s}>={2:s});\n", stackTop, inst[1], inst[2]); break;
                 // 比较前数是否小等后数
                 case "LDWLE":
                 case "LDDLE":
@@ -443,11 +443,11 @@ namespace SamSoarII.Core.Generate
                 case "AWLE":
                 case "ADLE":
                 case "AFLE":
-                    sw.Write("_stack_{0:d} &= ({1:s}<={2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}&&{1:s}<={2:s});\n", stackTop, inst[1], inst[2]); break;
                 case "ORWLE":
                 case "ORDLE":
                 case "ORFLE":
-                    sw.Write("_stack_{0:d} |= ({1:s}<={2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}||{1:s}<={2:s});\n", stackTop, inst[1], inst[2]); break;
                 // 比较前数是否大于后数
                 case "LDWG":
                 case "LDDG":
@@ -456,11 +456,11 @@ namespace SamSoarII.Core.Generate
                 case "AWG":
                 case "ADG":
                 case "AFG":
-                    sw.Write("_stack_{0:d} &= ({1:s}>{2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}&&{1:s}>{2:s});\n", stackTop, inst[1], inst[2]); break;
                 case "ORWG":
                 case "ORDG":
                 case "ORFG":
-                    sw.Write("_stack_{0:d} |= ({1:s}>{2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}||{1:s}>{2:s});\n", stackTop, inst[1], inst[2]); break;
                 // 比较前数是否小于后数
                 case "LDWL":
                 case "LDDL":
@@ -469,11 +469,11 @@ namespace SamSoarII.Core.Generate
                 case "AWL":
                 case "ADL":
                 case "AFL":
-                    sw.Write("_stack_{0:d} &= ({1:s}<{2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}&&{1:s}<{2:s});\n", stackTop, inst[1], inst[2]); break;
                 case "ORWL":
                 case "ORDL":
                 case "ORFL":
-                    sw.Write("_stack_{0:d} |= ({1:s}<{2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} = (_stack_{0:d}||{1:s}<{2:s});\n", stackTop, inst[1], inst[2]); break;
                 // 输出线圈
                 /*
                  * 将当前栈顶的值赋值给线圈
@@ -921,17 +921,17 @@ namespace SamSoarII.Core.Generate
                         case "FACT": sw.Write("{1:s} = _fact({0:s});\n", inst[1], inst[2]); break;
                         case "SQRT": sw.Write("{1:s} = _sqrt({0:s});\n", inst[1], inst[2]); break;
                         case "CMP": sw.Write("_cmpw({0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "WBCMP": sw.Write("{2:s} _cmpw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "WBCMP": sw.Write("_cmpw_wbit({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst.ToCParas(3)); break;
                         case "CMPD": sw.Write("_cmpd({0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "WBCMPD": sw.Write("{2:s} _cmpd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "WBCMPD": sw.Write("_cmpd_wbit({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst.ToCParas(3)); break;
                         case "CMPF": sw.Write("_cmpf({0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "WBCMPF": sw.Write("{2:s} _cmpf({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "WBCMPF": sw.Write("_cmpf_wbit({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst.ToCParas(3)); break;
                         case "ZCP": sw.Write("_zcpw({0:s}, {1:s}, {2:s}, &{3:s});\n", inst[1], inst[2], inst[3], inst[4]); break;
-                        case "WBZCP": sw.Write("{3:s} _zcpw({0:s}, {1:s}, {2:s}));\n", inst[1], inst[2], inst[3], inst[4]); break;
+                        case "WBZCP": sw.Write("_zcpw_wbit({0:s}, {1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst.ToCParas(4)); break;
                         case "ZCPD": sw.Write("_zcpd({0:s}, {1:s}, {2:s}, &{3:s});\n", inst[1], inst[2], inst[3], inst[4]); break;
-                        case "WBZCPD": sw.Write("{3:s} _zcpd({0:s}, {1:s}, {2:s}));\n", inst[1], inst[2], inst[3], inst[4]); break;
+                        case "WBZCPD": sw.Write("_zcpd_wbit({0:s}, {1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst.ToCParas(4)); break;
                         case "ZCPF": sw.Write("_zcpf({0:s}, {1:s}, {2:s}, &{3:s});\n", inst[1], inst[2], inst[3], inst[4]); break;
-                        case "WBZCPF": sw.Write("{3:s} _zcpf({0:s}, {1:s}, {2:s}));\n", inst[1], inst[2], inst[3], inst[4]); break;
+                        case "WBZCPF": sw.Write("_zcpf_wbit({0:s}, {1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst.ToCParas(4)); break;
                         case "NEG": sw.Write("{1:s} = _negw({0:s});\n", inst[1], inst[2]); break;
                         case "BWNEG": sw.Write("{1:s} _negw({0:s}));\n", inst[1], inst[2]); break;
                         case "NEGD": sw.Write("{1:s} = _negd({0:s});\n", inst[1], inst[2]); break;
