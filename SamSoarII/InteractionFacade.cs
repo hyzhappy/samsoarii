@@ -1073,7 +1073,7 @@ namespace SamSoarII
         
         public void Navigate(LadderNetworkModel network, int x, int y)
         {
-            if (network.IsMasked) return;
+            if (network == null || network.IsMasked) return;
             LadderDiagramModel diagram = network.Parent;
             if (diagram.Tab == null)
             {

@@ -9,7 +9,7 @@
         xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d" Icon="/Resources/Image/SamSoarII.ico"
-        Title="{x:Static properties:Resources.Add_Element}" Height="280" Width="450" ResizeMode="NoResize">
+        Title="{x:Static properties:Resources.Add_Element}" Height="320" Width="450" ResizeMode="NoResize">
     <Window.Resources>
         <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="ElementTypeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
             <ObjectDataProvider.MethodParameters>
