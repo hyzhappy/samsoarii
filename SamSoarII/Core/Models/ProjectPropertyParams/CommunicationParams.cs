@@ -89,9 +89,13 @@ namespace SamSoarII.Core.Models
         public int Timeout
         {
             get { return this.timeout; }
-            set { this.timeout = value; PropertyChanged(this, new PropertyChangedEventArgs("Timeout")); }
+            set
+            {
+                this.timeout = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("Timeout"));
+            }
         }
-        
+
         private int downloadoption;
         public int DownloadOption
         {
@@ -139,7 +143,11 @@ namespace SamSoarII.Core.Models
             try {databitindex = int.Parse(xele.Element("DataBitIndex").Value);} catch (Exception) {}
             try {stopbitindex = int.Parse(xele.Element("StopBitIndex").Value);} catch (Exception) {}
             try {checkcodeindex = int.Parse(xele.Element("CheckCodeIndex").Value);} catch (Exception) {}
-            try {timeout = int.Parse(xele.Element("Timeout").Value);} catch (Exception) {}
+            try
+            {
+                int value = int.Parse(xele.Element("Timeout").Value);
+                timeout = value > 0 ? value : 20;
+            } catch (Exception) {}
             try {iscomlinked = bool.Parse(xele.Element("IsCOMLinked").Value);} catch (Exception) {}
             try {isautocheck = bool.Parse(xele.Element("IsAutoCheck").Value);} catch (Exception) {}
             try {downloadoption = int.Parse(xele.Element("DownloadOption").Value);} catch (Exception) {}

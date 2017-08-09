@@ -45,6 +45,7 @@ namespace SamSoarII.Shell.Dialogs
             set
             {
                 this.core = value;
+                DataContext = value;
                 if (core != null)
                 {
                     CB_Program.IsChecked = core.IsDownloadProgram;
@@ -55,8 +56,6 @@ namespace SamSoarII.Shell.Dialogs
                 }
             }
         }
-         
-        
         private void UpdateDownloadOption()
         {
             int downloadoption = 0;
@@ -70,10 +69,17 @@ namespace SamSoarII.Shell.Dialogs
                 downloadoption |= CommunicationDataDefine.OPTION_SETTING;
             core.DownloadOption = downloadoption;
             CB_Program.IsEnabled = !(CB_Element.IsChecked == true);
-            if (CB_Element.IsChecked == true)
+            if (CB_Element.IsChecked == true || CB_Setting.IsChecked == true)
                 CB_Program.IsChecked = true;
-            //BT_Modify.Visibility = CB_Setting.IsChecked == true
-            //    ? Visibility.Visible : Visibility.Hidden;
+            core.DownloadOption = 0;
+            if (CB_Program.IsChecked == true)
+                core.DownloadOption &= CommunicationDataDefine.OPTION_PROGRAM;
+            if (CB_Element.IsChecked == true)
+                core.DownloadOption &= CommunicationDataDefine.OPTION_ELEMENT;
+            if (CB_Setting.IsChecked == true)
+                core.DownloadOption &= CommunicationDataDefine.OPTION_SETTING;
+            if (CB_Initialize.IsChecked == true)
+                core.DownloadOption &= CommunicationDataDefine.OPTION_INITIALIZE;
         }
 
         private void SettingButton_Click(object sender, RoutedEventArgs e)
@@ -92,7 +98,6 @@ namespace SamSoarII.Shell.Dialogs
                     SettingButton.IsEnabled = false;
                 else
                     UpdateDownloadOption();
-                
             }
             else
             {

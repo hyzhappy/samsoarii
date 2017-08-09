@@ -583,7 +583,8 @@ Discarded input sections
  .text          0x00000000        0x0 build\\downc.o
  .data          0x00000000        0x0 build\\downc.o
  .bss           0x00000000        0x0 build\\downc.o
- .text._SBR_0   0x00000000       0x24 build\\downc.o
+ .text.InitUserRegisters
+                0x00000000       0x2c build\\downc.o
  .data.CV32DoubleWord
                 0x00000000        0x4 build\\downc.o
  .text          0x00000000        0x0 build\\downf.o
