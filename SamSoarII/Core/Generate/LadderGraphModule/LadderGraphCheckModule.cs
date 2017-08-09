@@ -70,7 +70,7 @@ namespace SamSoarII.Core.Generate
             ladderNetwork.PreCompile();
             if (ladderNetwork.Children.Count() == 0 && ladderNetwork.VLines.Count() == 0)
             {
-                return ErrorType.Empty;
+                return ErrorType.None;
             }
             if (IsLadderGraphOpen(ladderNetwork))
             {

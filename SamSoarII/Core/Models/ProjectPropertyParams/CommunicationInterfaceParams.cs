@@ -120,7 +120,11 @@ namespace SamSoarII.Core.Models
             try { checkcodeindex = int.Parse(xele.Element("CheckCodeIndex").Value); } catch (Exception) { }
             try { bufferbitindex = int.Parse(xele.Element("BufferBitIndex").Value); } catch (Exception) { }
             try { stationnumber = int.Parse(xele.Element("StationNumber").Value); } catch (Exception) { }
-            try { timeout = int.Parse(xele.Element("Timeout").Value); } catch (Exception) { }
+            try
+            {
+                int value = int.Parse(xele.Element("Timeout").Value);
+                timeout = value > 0 ? value : 20 ;
+            } catch (Exception) { timeout = 20; }
             try { comtype = (ComTypes)(int.Parse(xele.Element("ComType").Value)); } catch (Exception) { }
         }
 

@@ -338,6 +338,7 @@ namespace SamSoarII.Core.Models
                                 {
                                     inst.Status = PLCOriginInst.STATUS_ERROR;
                                     inst.Message = String.Format("{0}{1:s}。", Properties.Resources.Message_Modbus_Table, inst[2]);
+                                    return;
                                 }
                                 ModbusModel mmodel = fit.First();
                                 if (!mmodel.IsValid)
