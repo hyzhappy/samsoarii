@@ -18,7 +18,6 @@ namespace SamSoarII.AppMain
 
             //if (CheckPrincipal())
             //{
-
                 string filePath = "";
                 if ((args != null) && (args.Length > 0))
                 {
@@ -32,7 +31,6 @@ namespace SamSoarII.AppMain
                 //FilePath为Main程序的数据成员属性
                 App.AutoOpenFileFullPath = filePath;
                 new App().Run();
-
             /*}
             else
             {

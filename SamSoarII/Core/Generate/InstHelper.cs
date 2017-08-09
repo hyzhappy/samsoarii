@@ -773,10 +773,8 @@ namespace SamSoarII.Core.Generate
                         case "TRUNC": sw.Write("{1:s} = _FLOAT_to_TRUNC({0:s});\n", inst[1], inst[2]); break;
                         case "BDTRUNC": sw.Write("{1:s} _FLOAT_to_TRUNC({0:s}));\n", inst[1], inst[2]); break;
                         // 位运算指令
-                        case "INVW": sw.Write("{1:s} = ~(uint16_t)({0:s});\n", inst[1], inst[2]); break;
-                        case "INVD": sw.Write("{1:s} = ~(uint32_t)({0:s});\n", inst[1], inst[2]); break;
-                        case "BWINVW": sw.Write("{1:s}, ~(uint16_t)({0:s}));\n", inst[1], inst[2]); break;
-                        case "BDINVD": sw.Write("{1:s}, ~(uint32_t)({0:s}));\n", inst[1], inst[2]); break;
+                        case "INVW": case "INVD": sw.Write("{1:s} = ~{0:s};\n", inst[1], inst[2]); break;
+                        case "BWINVW": case "BDINVD": sw.Write("{1:s}, ~{0:s});\n", inst[1], inst[2]); break;
                         case "ANDW": case "ANDD": sw.Write("{2:s} = {0:s}&{1:s};\n", inst[1], inst[2], inst[3]); break;
                         case "BWANDW": case "BDANDD": sw.Write("{2:s}, {0:s}&{1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "ORW": case "ORD": sw.Write("{2:s} = {0:s}|{1:s};\n", inst[1], inst[2], inst[3]); break;

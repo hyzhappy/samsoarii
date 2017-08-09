@@ -173,7 +173,7 @@ namespace SamSoarII.Core.Models
                 else
                 {
                     unknown = false;
-                    store.Value = value;
+                    store.ShowValue = value.ToString();
                 }
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue"));
                 //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue")); });     

@@ -188,6 +188,30 @@ namespace SamSoarII.Core.Models
                         return value.ToString();
                 }
             }
+            set
+            {
+                switch (type)
+                {
+                    case ValueModel.Types.BOOL:
+                        Value = (byte)(value.Equals("ON") ? 1 : 0); break;
+                    case ValueModel.Types.HEX:
+                        Value = ushort.Parse(value, System.Globalization.NumberStyles.HexNumber); break;
+                    case ValueModel.Types.DHEX:
+                        Value = uint.Parse(value, System.Globalization.NumberStyles.HexNumber); break;
+                    case ValueModel.Types.BCD:
+                        Value = ValueConverter.ToUINT16(ushort.Parse(value)); break;
+                    case ValueModel.Types.WORD:
+                        Value = short.Parse(value); break;
+                    case ValueModel.Types.UWORD:
+                        Value = ushort.Parse(value); break;
+                    case ValueModel.Types.DWORD:
+                        Value = int.Parse(value); break;
+                    case ValueModel.Types.UDWORD:
+                        Value = uint.Parse(value); break;
+                    case ValueModel.Types.FLOAT:
+                        Value = float.Parse(value); break;
+                }
+            }
         }
 
         public bool IsLocked

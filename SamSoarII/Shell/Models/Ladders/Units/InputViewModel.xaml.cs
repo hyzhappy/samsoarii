@@ -357,8 +357,8 @@ namespace SamSoarII.Shell.Models
                     case "LDWGE":
                     case "LDWL":
                     case "LDWG":
-                        w1 = (Int16)(Core.Children[0].Value);
-                        w2 = (Int16)(Core.Children[1].Value);
+                        w1 = short.Parse(Core.Children[0].Value.ToString());
+                        w2 = short.Parse(Core.Children[1].Value.ToString());
                         break;
                     case "LDDEQ":
                     case "LDDNE":
@@ -366,8 +366,8 @@ namespace SamSoarII.Shell.Models
                     case "LDDGE":
                     case "LDDL":
                     case "LDDG":
-                        d1 = (Int32)(Core.Children[0].Value);
-                        d2 = (Int32)(Core.Children[1].Value);
+                        d1 = int.Parse(Core.Children[0].Value.ToString());
+                        d2 = int.Parse(Core.Children[1].Value.ToString());
                         break;
                     case "LDFEQ":
                     case "LDFNE":
@@ -375,8 +375,8 @@ namespace SamSoarII.Shell.Models
                     case "LDFGE":
                     case "LDFL":
                     case "LDFG":
-                        f1 = (float)(Core.Children[0].Value);
-                        f2 = (float)(Core.Children[1].Value);
+                        f1 = float.Parse(Core.Children[0].Value.ToString());
+                        f2 = float.Parse(Core.Children[1].Value.ToString());
                         break;
                 }
                 switch (Core.InstName)
