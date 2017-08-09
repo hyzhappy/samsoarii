@@ -1,4 +1,5 @@
-﻿using SamSoarII.Core.Models;
+﻿using SamSoarII.Core.Communication;
+using SamSoarII.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,6 +59,16 @@ namespace SamSoarII.Shell.Dialogs
         
         private void UpdateDownloadOption()
         {
+            int downloadoption = 0;
+            if (core.IsDownloadProgram)
+                downloadoption |= CommunicationDataDefine.OPTION_PROGRAM;
+            if (core.IsDownloadElement)
+                downloadoption |= CommunicationDataDefine.OPTION_ELEMENT;
+            if (core.IsDownloadInitialize)
+                downloadoption |= CommunicationDataDefine.OPTION_INITIALIZE;
+            if (core.IsDownloadSetting)
+                downloadoption |= CommunicationDataDefine.OPTION_SETTING;
+            core.DownloadOption = downloadoption;
             CB_Program.IsEnabled = !(CB_Element.IsChecked == true);
             if (CB_Element.IsChecked == true)
                 CB_Program.IsChecked = true;

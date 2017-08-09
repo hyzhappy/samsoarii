@@ -82,7 +82,7 @@
                   SelectionMode="Single"
                   SelectedCellsChanged="DG_List_SelectedCellsChanged">
             <DataGrid.Columns>
-                <DataGridTemplateColumn x:Uid="DataGridTemplateColumn_2" Width="25">
+                <DataGridTemplateColumn x:Uid="DataGridTemplateColumn_2" Width="25" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate x:Uid="DataTemplate_2">
                             <Rectangle x:Uid="Rectangle_2" Fill="{Binding BrushFill}"></Rectangle>

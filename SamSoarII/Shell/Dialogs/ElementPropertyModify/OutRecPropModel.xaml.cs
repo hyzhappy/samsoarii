@@ -99,6 +99,7 @@ namespace SamSoarII.Shell.Dialogs
             switch (InstructionName)
             {
                 case "CALL":
+                case "ATCH":
                     CollectionPopup(this, new CollectionPopupEventArgs(CollectionPopupType.SUBROUTINES, MiddleTextBox1));
                     break;
                 case "CALLM":
@@ -111,9 +112,6 @@ namespace SamSoarII.Shell.Dialogs
             SetValueString(1, MiddleTextBox2.Text);
             switch (InstructionName)
             {
-                case "ATCH":
-                    CollectionPopup(this, new CollectionPopupEventArgs(CollectionPopupType.SUBROUTINES, MiddleTextBox2));
-                    break;
                 case "MBUS":
                     CollectionPopup(this, new CollectionPopupEventArgs(CollectionPopupType.MODBUSES, MiddleTextBox2));
                     break;
@@ -135,10 +133,26 @@ namespace SamSoarII.Shell.Dialogs
         private void MiddleTextBox1_GotFocus(object sender, RoutedEventArgs e)
         {
             SelectedIndex = 0;
+            switch (InstructionName)
+            {
+                case "CALL":
+                case "ATCH":
+                    CollectionPopup(this, new CollectionPopupEventArgs(CollectionPopupType.SUBROUTINES, MiddleTextBox1));
+                    break;
+                case "CALLM":
+                    CollectionPopup(this, new CollectionPopupEventArgs(CollectionPopupType.FUNCBLOCKS, MiddleTextBox1));
+                    break;
+            }
         }
         private void MiddleTextBox2_GotFocus(object sender, RoutedEventArgs e)
         {
             SelectedIndex = 1;
+            switch (InstructionName)
+            {
+                case "MBUS":
+                    CollectionPopup(this, new CollectionPopupEventArgs(CollectionPopupType.MODBUSES, MiddleTextBox2));
+                    break;
+            }
         }
         private void MiddleTextBox3_GotFocus(object sender, RoutedEventArgs e)
         {

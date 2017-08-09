@@ -162,7 +162,8 @@ namespace SamSoarII.Shell.Models
         protected override void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnCorePropertyChanged(sender, e);
-            CommentArea.Visibility = IsCommentMode ? Visibility.Visible : Visibility.Hidden;
+            if (e.PropertyName.Equals("IsCommentMode"))
+                CommentArea.Visibility = IsCommentMode ? Visibility.Visible : Visibility.Hidden;
         }
 
         public override void Update(int flags = 255)

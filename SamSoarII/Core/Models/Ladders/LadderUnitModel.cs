@@ -757,15 +757,15 @@ namespace SamSoarII.Core.Models
                 vformats);
             Formats[(int)Types.ATCH] = new LadderUnitFormat(1300, "ATCH", Types.ATCH, Outlines.Interrupt, Shapes.OutputRect,
                 Properties.Resources.ATCH_Inst,
-                "指令将中断事件（EVENT）与子程序号码（INT）相关联，并启用中断事件。",
-                "指令将中断事件（EVENT）与子程序号码（INT）相关联，并启用中断事件。",
+                "指令将中断事件（EV）与子程序号码（INT）相关联，并启用中断事件。",
+                "指令将中断事件（EV）与子程序号码（INT）相关联，并启用中断事件。",
                 new ValueFormat[] {
-                    new ValueFormat("INT", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}),
-                    new ValueFormat("EVENT", ValueModel.Types.STRING, true, false, 1, new Regex[] {ValueModel.AnyNameRegex}) });
+                    new ValueFormat("EV", ValueModel.Types.STRING, true, false, 0, new Regex[] {ValueModel.AnyNameRegex}),
+                    new ValueFormat("INT", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex }) });
             Formats[(int)Types.DTCH] = new LadderUnitFormat(1301, "DTCH", Types.DTCH, Outlines.Interrupt, Shapes.OutputRect,
                 Properties.Resources.DTCH_Inst,
-                "指令将解除中断事件（EVENT）与中断子程序号码（INT）之间的关联，并禁用中断事件。",
-                "指令将解除中断事件（EVENT）与中断子程序号码（INT）之间的关联，并禁用中断事件。",
+                "指令将解除中断事件（EV）与中断子程序号码（INT）之间的关联，并禁用中断事件。",
+                "指令将解除中断事件（EV）与中断子程序号码（INT）之间的关联，并禁用中断事件。",
                 new ValueFormat[] {
                     new ValueFormat("INT", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}) });
             Formats[(int)Types.TRD] = new LadderUnitFormat(1400, "TRD", Types.TRD, Outlines.RealTime, Shapes.OutputRect,
