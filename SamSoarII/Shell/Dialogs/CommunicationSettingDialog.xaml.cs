@@ -37,7 +37,7 @@ namespace SamSoarII.Shell.Dialogs
             InitializeComponent();
             this.communicationParams = communicationParams;
             Mode = mode;
-            baseSetting.DataContext = this.communicationParams;
+            baseSetting.Core = communicationParams;
             //baseSetting.radiobutton.IsChecked = communicationParams.IsComLinked;
             EnsureButton.Click += EnsureButton_Click;
             CancelButton.Click += CancelButton_Click;

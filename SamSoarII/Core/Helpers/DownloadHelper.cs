@@ -117,10 +117,9 @@ namespace SamSoarII.Core.Helpers
         }
 
         #endregion
-
-
+        
         //工程，注释，软元件等用于上载的信息直接压缩xml
-        //#region Project
+        #region Initialize Project
 
         //static private void Write(ValueManager ValueManager)
         //{
@@ -267,9 +266,8 @@ namespace SamSoarII.Core.Helpers
         //    Write(dtProject, (short)(melement.Store.ID));
         //}
 
-        //#endregion
-
-
+        #endregion
+        
         #region Initialize Config data
         
         static private void WriteConfig(ProjectPropertyParams pparams)
@@ -320,8 +318,7 @@ namespace SamSoarII.Core.Helpers
         }
 
         #endregion
-
-
+        
         #region Initialize Modbus data
         
         static private void Write(ModbusTableModel mtmodel)

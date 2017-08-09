@@ -45,22 +45,18 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox x:Name="CB_Program" Margin="2,6"
-                              IsChecked="{Binding IsDownloadProgram}"
                               Checked="OnChecked" Unchecked="OnUnchecked">
                     </CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Program}"></TextBlock>
                     <CheckBox x:Name="CB_Element" Margin="10,6,2,6"
-                              IsChecked="{Binding IsDownloadComment}"
                               Checked="OnChecked" Unchecked="OnUnchecked">
                     </CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Element}"></TextBlock>
                     <CheckBox x:Name="CB_Initialize" Margin="10,6,2,6"
-                              IsChecked="{Binding IsDownloadInitialize}" 
                               Checked="OnChecked" Unchecked="OnUnchecked">
                     </CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Initialize}"></TextBlock>
                     <CheckBox x:Name="CB_Setting" Margin="10,6,2,6"
-                              IsChecked="{Binding IsDownloadSetting}"
                               Checked="OnChecked" Unchecked="OnUnchecked">
                     </CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Setting}"></TextBlock>
