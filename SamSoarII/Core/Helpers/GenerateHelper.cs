@@ -346,18 +346,10 @@ namespace SamSoarII.Core.Helpers
             PLCInstruction[] insts = network.Inst.Insts.Select(i => i.Inst).ToArray();
             foreach (PLCInstruction inst in insts)
             {
-                string dianame = null;
-                if (inst[0].Equals("CALL"))
-                    dianame = inst[1];
-                if (inst[0].Equals("ATCH"))
-                    dianame = inst[2];
-                if (dianame != null)
+                if (inst[0].Equals("CALL") || inst[0].Equals("ATCH"))
                 {
-                    LadderDiagramModel diagram = project.Diagrams.Where(d => d.Name.Equals(dianame)).FirstOrDefault();
-                    if (inst[0].Equals("CALL"))
-                        inst[1] = diagram.CName;
-                    if (inst[0].Equals("ATCH"))
-                        inst[2] = diagram.CName;
+                    LadderDiagramModel diagram = project.Diagrams.Where(d => d.Name.Equals(inst[1])).FirstOrDefault();
+                    if (diagram != null) inst[1] = diagram.CName;
                 }
             }
             InstHelper.PLCInstNetwork net = new InstHelper.PLCInstNetwork(

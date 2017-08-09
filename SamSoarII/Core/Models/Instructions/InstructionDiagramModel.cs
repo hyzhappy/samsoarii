@@ -351,19 +351,16 @@ namespace SamSoarII.Core.Models
                         case "CALL":
                         case "ATCH":
                             {
-                                int id = inst[0].Equals("CALL") ? 1 : 2;
                                 IEnumerable<LadderDiagramModel> fit = Parent.Parent.Diagrams.Where(
-                                    d => d.Name.Equals(inst[id]));    
+                                    d => d.Name.Equals(inst[1]));    
                                 if (fit.Count() <= 0)
                                 {
                                     inst.Status = PLCOriginInst.STATUS_ERROR;
-                                    inst.Message = String.Format("{0}{1:s}", Properties.Resources.Message_SubRoutine_Not_Found, inst[id]);
+                                    inst.Message = String.Format("{0}{1:s}", Properties.Resources.Message_SubRoutine_Not_Found, inst[1]);
                                     break;
                                 }
                                 if (inst[0].Equals("ATCH"))
-                                {
                                     fit.First().IsInterruptLadder = true;
-                                }
                             }
                             break;
                     }

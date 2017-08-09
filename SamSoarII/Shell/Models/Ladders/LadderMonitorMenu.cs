@@ -99,7 +99,7 @@ namespace SamSoarII.Shell.Models
                 for (int i = 0; i < vmValues.Length; i++)
                 {
                     miValues[i].Visibility = Visibility.Visible;
-                    miValues[i].Header = String.Format(App.CultureIsZH_CH() ? "修改{0:s}" : "Modify{0:s}", vmValues[i].Text);
+                    miValues[i].Header = String.Format(App.CultureIsZH_CH() ? "修改 {0:s}" : "Modify {0:s}", vmValues[i].Text);
                     switch (core.LadderMode)
                     {
                         case LadderModes.Monitor: miValues[i].IsEnabled = IFParent.MNGComu.IsAlive; break;

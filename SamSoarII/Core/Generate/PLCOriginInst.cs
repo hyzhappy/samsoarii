@@ -13,6 +13,19 @@ namespace SamSoarII.Core.Generate
             Inst = _inst;
         }
 
+        public override string ToString()
+        {
+            if (inst.ProtoType == null)
+            {
+                StringBuilder ret = new StringBuilder();
+                ret.Append(inst[0]);
+                for (int i = 1; i < inst.Count; i++)
+                    ret.Append(inst[i]);
+                return ret.ToString();
+            }
+            return inst.ProtoType.ToInstString();
+        }
+
         private PLCInstruction inst;
         public PLCInstruction Inst
         {
