@@ -223,6 +223,7 @@ namespace SamSoarII.Core.Communication
 
         public int Write(ICommunicationCommand cmd)
         {
+            if (!port.IsOpen) port.Open();
             try
             {
                 byte[] data = cmd.GetBytes();
@@ -249,6 +250,13 @@ namespace SamSoarII.Core.Communication
             }
             catch (Exception e)
             {
+                if (e.GetType() == typeof(TimeoutException))
+                {
+                    cmd.IsComplete = true;
+                    cmd.IsSuccess = false;
+                    readbuffercount = 0;
+                    return 0;
+                }
                 return 1;
             }
             if (!cmd.IsComplete)

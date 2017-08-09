@@ -48,7 +48,7 @@ namespace SamSoarII.Core.Communication
         /// <summary> 选项：是否包含程序 </summary>
         public const int OPTION_PROGRAM = 0x01;
         /// <summary> 选项：是否包含软元件 </summary>
-        public const int OPTION_ELEMENT = 0x02;
+        public const int OPTION_COMMENT = 0x02;
         /// <summary> 选项：是否包含初始化 </summary>
         public const int OPTION_INITIALIZE = 0x04;
         /// <summary> 选项：是否包含设置 </summary>

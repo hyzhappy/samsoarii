@@ -99,7 +99,7 @@ namespace SamSoarII.Shell.Dialogs
             if (baseSetting.CB_Program.IsChecked.Value)
                 dopt |= CommunicationDataDefine.OPTION_PROGRAM;
             if (baseSetting.CB_Element.IsChecked.Value)
-                dopt |= CommunicationDataDefine.OPTION_ELEMENT;
+                dopt |= CommunicationDataDefine.OPTION_COMMENT;
             if (baseSetting.CB_Initialize.IsChecked.Value)
                 dopt |= CommunicationDataDefine.OPTION_INITIALIZE;
             if (baseSetting.CB_Setting.IsChecked.Value)

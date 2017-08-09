@@ -49,7 +49,7 @@ namespace SamSoarII.Shell.Dialogs
                 if (core != null)
                 {
                     CB_Program.IsChecked = core.IsDownloadProgram;
-                    CB_Element.IsChecked = core.IsDownloadElement;
+                    CB_Element.IsChecked = core.IsDownloadComment;
                     CB_Initialize.IsChecked = core.IsDownloadInitialize;
                     CB_Setting.IsChecked = core.IsDownloadSetting;
                     UpdateDownloadOption();
@@ -58,14 +58,14 @@ namespace SamSoarII.Shell.Dialogs
         }
         private void UpdateDownloadOption()
         {
-            CB_Program.IsEnabled = !(CB_Element.IsChecked == true);
+            CB_Program.IsEnabled = !(CB_Element.IsChecked == true || CB_Setting.IsChecked == true);
             if (CB_Element.IsChecked == true || CB_Setting.IsChecked == true)
                 CB_Program.IsChecked = true;
             core.DownloadOption = 0;
             if (CB_Program.IsChecked == true)
                 core.DownloadOption &= CommunicationDataDefine.OPTION_PROGRAM;
             if (CB_Element.IsChecked == true)
-                core.DownloadOption &= CommunicationDataDefine.OPTION_ELEMENT;
+                core.DownloadOption &= CommunicationDataDefine.OPTION_COMMENT;
             if (CB_Setting.IsChecked == true)
                 core.DownloadOption &= CommunicationDataDefine.OPTION_SETTING;
             if (CB_Initialize.IsChecked == true)

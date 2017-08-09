@@ -418,10 +418,12 @@ namespace SamSoarII.Core.Helpers
                 return ret;
 
             //下载 Config
-            ret = DownloadConfigExecute(communManager);
-            if (ret != DownloadError.None)
-                return ret;
-
+            if (communManager.IFParent.MDProj.PARAProj.PARACom.IsDownloadSetting)
+            {
+                ret = DownloadConfigExecute(communManager);
+                if (ret != DownloadError.None)
+                    return ret;
+            }
             return DownloadError.None;
         }
         #endregion
@@ -477,6 +479,8 @@ namespace SamSoarII.Core.Helpers
                 FileHelper.InvalidFileName(_filename) ? "tempdfile" : FileHelper.GetFileName(_filename),
                 FileHelper.NewFileExtension);
             if (File.Exists(_filename)) File.Delete(_filename);
+
+            //重新生成程序
             communManager.IFParent.MDProj.SaveToPLC(_filename);
             //返回生成的压缩文件全名
             string genFile = FileHelper.CompressFile(_filename);
