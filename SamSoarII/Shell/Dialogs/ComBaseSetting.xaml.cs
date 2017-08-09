@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,32 +18,53 @@ namespace SamSoarII.Shell.Dialogs
     /// <summary>
     /// ComBaseSetting.xaml 的交互逻辑
     /// </summary>
-    public partial class ComBaseSetting : UserControl
+    public partial class ComBaseSetting : UserControl, IDisposable
     {
         public event RoutedEventHandler SettingButtonClick = delegate { };
         public event RoutedEventHandler ModifyButtonClick = delegate { };
-
-        private int datalen;
-        public int DataLen
-        {
-            get
-            {
-                return this.datalen;
-            }
-            set
-            {
-                this.datalen = value;
-                TB_Memory.Text = String.Format("{0}{1:N2} KB",
-                    Properties.Resources.Memory_Used,
-                    ((double)datalen) / 1024);
-            }
-        }
-
+        
         public ComBaseSetting()
         {
             InitializeComponent();
             SettingButton.Click += SettingButton_Click;
         }
+
+        public void Dispose()
+        {
+
+        }
+
+        private CommunicationParams core;
+        public CommunicationParams Core
+        {
+            get
+            {
+                return this.core;
+            }
+            set
+            {
+                this.core = value;
+                if (core != null)
+                {
+                    CB_Program.IsChecked = core.IsDownloadProgram;
+                    CB_Element.IsChecked = core.IsDownloadElement;
+                    CB_Initialize.IsChecked = core.IsDownloadInitialize;
+                    CB_Setting.IsChecked = core.IsDownloadSetting;
+                    UpdateDownloadOption();
+                }
+            }
+        }
+         
+        
+        private void UpdateDownloadOption()
+        {
+            CB_Program.IsEnabled = !(CB_Element.IsChecked == true);
+            if (CB_Element.IsChecked == true)
+                CB_Program.IsChecked = true;
+            //BT_Modify.Visibility = CB_Setting.IsChecked == true
+            //    ? Visibility.Visible : Visibility.Hidden;
+        }
+
         private void SettingButton_Click(object sender, RoutedEventArgs e)
         {
             SettingButtonClick.Invoke(sender, new RoutedEventArgs());
@@ -57,6 +79,9 @@ namespace SamSoarII.Shell.Dialogs
             {
                 if (sender == checkbox)
                     SettingButton.IsEnabled = false;
+                else
+                    UpdateDownloadOption();
+                
             }
             else
             {
@@ -69,6 +94,8 @@ namespace SamSoarII.Shell.Dialogs
             {
                 if (sender == checkbox)
                     SettingButton.IsEnabled = true;
+                else
+                    UpdateDownloadOption();
             }
             else
             {

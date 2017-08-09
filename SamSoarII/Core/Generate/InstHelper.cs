@@ -195,6 +195,7 @@ namespace SamSoarII.Core.Generate
             bool ismain = true;
             sw.Write("void RunLadder()\n{\n");
             if (simumode) sw.Write("_itr_invoke();\n");
+            //if (!simumode) sw.Write("if (MBit[8150]) InitUserRegisters();\n");
             // STL取消标志
             sw.Write("int8_t _stlrst;\n");
             // 建立局部的栈和辅助栈

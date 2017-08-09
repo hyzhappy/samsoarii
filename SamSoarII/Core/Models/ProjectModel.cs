@@ -323,8 +323,9 @@ namespace SamSoarII.Core.Models
             Save(filename);
         }
 
-        public void GenerateFileByFlag(int flag,string _filename)
+        public void SaveToPLC(string _filename)
         {
+            CommunicationParams paraCom = PARAProj.PARACom;
             XDocument xdoc = new XDocument();
             XElement xele_r = new XElement("Root");
             XElement xele_p = new XElement("Project");
@@ -348,24 +349,21 @@ namespace SamSoarII.Core.Models
             XElement xele_m = new XElement("Modbus");
             modbus.Save(xele_m);
             xele_p.Add(xele_m);
-            if ((flag & CommunicationDataDefine.OPTION_SETTING) == CommunicationDataDefine.OPTION_SETTING)
+            if (paraCom.IsDownloadSetting)
             {
                 XElement xele_pp = new XElement("ProjectPropertyParams");
                 paraProj.Save(xele_pp);
                 xele_p.Add(xele_pp);
             }
-            if ((flag & CommunicationDataDefine.OPTION_COMMENT) == CommunicationDataDefine.OPTION_COMMENT)
+            if (paraCom.IsDownloadElement)
             {
                 XElement xele_vm = new XElement("ValueManager");
                 ValueManager.Save(xele_vm);
                 xele_p.Add(xele_vm);
             }
-            if ((flag & CommunicationDataDefine.OPTION_MONITOR) == CommunicationDataDefine.OPTION_MONITOR)
-            {
-                XElement xele_mn = new XElement("Monitor");
-                monitor.Save(xele_mn);
-                xele_p.Add(xele_mn);
-            }
+            XElement xele_mn = new XElement("Monitor");
+            monitor.Save(xele_mn);
+            xele_p.Add(xele_mn);
             FileStream stream = File.Create(_filename);
             xdoc.Save(stream);
             stream.Close();

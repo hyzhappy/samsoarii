@@ -49,32 +49,30 @@
                               Checked="OnChecked" Unchecked="OnUnchecked">
                     </CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Program}"></TextBlock>
-                    <CheckBox x:Name="CB_Comment" Margin="2,6"
+                    <CheckBox x:Name="CB_Element" Margin="10,6,2,6"
                               IsChecked="{Binding IsDownloadComment}"
-                              Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
-                    <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Comment}"></TextBlock>
-                    <CheckBox x:Name="CB_Initialize" Margin="2,6"
+                              Checked="OnChecked" Unchecked="OnUnchecked">
+                    </CheckBox>
+                    <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Element}"></TextBlock>
+                    <CheckBox x:Name="CB_Initialize" Margin="10,6,2,6"
                               IsChecked="{Binding IsDownloadInitialize}" 
-                              Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
+                              Checked="OnChecked" Unchecked="OnUnchecked">
+                    </CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Initialize}"></TextBlock>
-                    <CheckBox x:Name="CB_Monitor" Margin="2,6"
-                              IsChecked="{Binding IsDownloadMonitor}"  
-                              Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
-                    <TextBlock Margin="2,6" Text="{x:Static properties:Resources.MainWindow_Monitor}"></TextBlock>
-                    <CheckBox x:Name="CB_Setting" Margin="2,6"
+                    <CheckBox x:Name="CB_Setting" Margin="10,6,2,6"
                               IsChecked="{Binding IsDownloadSetting}"
-                              Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
+                              Checked="OnChecked" Unchecked="OnUnchecked">
+                    </CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Setting}"></TextBlock>
                 </StackPanel>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Margin="2,6" x:Name="TB_Memory">所占内存：</TextBlock>
-                    <Button Grid.Column="1" Margin="6,6" Width="60" Height="20" 
+                    <Button Grid.Column="1" Margin="6,6" Width="80" Height="20" 
                             x:Name="BT_Modify" Click="BT_Modify_Click"
-                            Content="{x:Static properties:Resources.Modify}">
+                            Content="{x:Static properties:Resources.Setting_Modify}">
                     </Button>
                 </Grid>
             </Grid>

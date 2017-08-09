@@ -1003,7 +1003,7 @@ namespace SamSoarII
             return result;
         }
         
-#endregion
+        #endregion
 
         #region View Mode
 

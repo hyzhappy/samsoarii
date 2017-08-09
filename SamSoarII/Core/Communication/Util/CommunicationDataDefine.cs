@@ -47,16 +47,13 @@ namespace SamSoarII.Core.Communication
         #region 下载
         /// <summary> 选项：是否包含程序 </summary>
         public const int OPTION_PROGRAM = 0x01;
-        /// <summary> 选项：是否包含注释 </summary>
-        public const int OPTION_COMMENT = 0x02;
+        /// <summary> 选项：是否包含软元件 </summary>
+        public const int OPTION_ELEMENT = 0x02;
         /// <summary> 选项：是否包含初始化 </summary>
         public const int OPTION_INITIALIZE = 0x04;
         /// <summary> 选项：是否包含设置 </summary>
         public const int OPTION_SETTING = 0x08;
-        /// <summary> 选项：是否包含监视 </summary>
-        public const int OPTION_MONITOR = 0x10;
-
-
+        
         public const byte CMD_DOWNLOAD_FLAG = 0xF0;//下载标志位
         public const int USB_DOWNLOAD_LEN = 56;//USB下载一包的最大长度
         public const int SERIAL_DOWNLOAD_LEN = 1024;//串口下载一包的最大长度

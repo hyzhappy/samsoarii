@@ -292,7 +292,7 @@ namespace SamSoarII.Core.Helpers
                 FileHelper.InvalidFileName(_filename) ? "tempdfile" : FileHelper.GetFileName(_filename),
                 FileHelper.NewFileExtension);
             if (File.Exists(_filename)) File.Delete(_filename);
-            communManager.IFParent.MDProj.GenerateFileByFlag(flag,_filename);
+            communManager.IFParent.MDProj.SaveToPLC(_filename);
             //返回生成的压缩文件全名
             string genFile = FileHelper.CompressFile(_filename);
             try

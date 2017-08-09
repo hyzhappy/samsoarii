@@ -95,19 +95,17 @@ namespace SamSoarII.Shell.Dialogs
         }
         public void Save()
         {
-            communicationParams.IsComLinked = (bool)baseSetting.radiobutton.IsChecked;
-            communicationParams.IsAutoCheck = (bool)baseSetting.checkbox.IsChecked;
             int dopt = 0;
             if (baseSetting.CB_Program.IsChecked.Value)
                 dopt |= CommunicationDataDefine.OPTION_PROGRAM;
-            if (baseSetting.CB_Comment.IsChecked.Value)
-                dopt |= CommunicationDataDefine.OPTION_COMMENT;
+            if (baseSetting.CB_Element.IsChecked.Value)
+                dopt |= CommunicationDataDefine.OPTION_ELEMENT;
             if (baseSetting.CB_Initialize.IsChecked.Value)
                 dopt |= CommunicationDataDefine.OPTION_INITIALIZE;
-            if (baseSetting.CB_Monitor.IsChecked.Value)
-                dopt |= CommunicationDataDefine.OPTION_MONITOR;
             if (baseSetting.CB_Setting.IsChecked.Value)
                 dopt |= CommunicationDataDefine.OPTION_SETTING;
+            communicationParams.IsComLinked = (bool)baseSetting.radiobutton.IsChecked;
+            communicationParams.IsAutoCheck = (bool)baseSetting.checkbox.IsChecked;
             communicationParams.DownloadOption = dopt;
         }
     }

@@ -519,20 +519,23 @@ namespace SamSoarII.Core.Models
                 cmd.Network.MoveV(cmd.MoveUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }), -cmd.MoveX, -cmd.MoveY);
             }
             if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
-            { 
+            {
+                List<LadderUnitModel> olds = new List<LadderUnitModel>();
                 if (cmd.OldUnits.Where(u => u.OldParent != null && u.OldParent != cmd.Network).Count() > 0)
                 {
                     foreach (LadderNetworkModel network in children)
                     {
-                        network.Add(cmd.OldUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape != LadderUnitModel.Shapes.VLine; }));
-                        network.AddV(cmd.OldUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                        olds.AddRange(network.Add(cmd.OldUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape != LadderUnitModel.Shapes.VLine; })));
+                        olds.AddRange(network.AddV(cmd.OldUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape == LadderUnitModel.Shapes.VLine; })));
                     }
                 }
                 else
                 {
-                    cmd.Network.Add(cmd.OldUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
-                    cmd.Network.AddV(cmd.OldUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                    olds.AddRange(cmd.Network.Add(cmd.OldUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; })));
+                    olds.AddRange(cmd.Network.AddV(cmd.OldUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; })));
                 }
+                if (olds.Count() > 0)
+                    cmd.NewUnits = cmd.NewUnits.Union(olds.Where(u => u != null)).ToArray();
                 area.Update(cmd.OldUnits);
             }
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
@@ -686,9 +689,7 @@ namespace SamSoarII.Core.Models
                     olds.AddRange(cmd.Network.AddV(cmd.NewUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; })));
                 }
                 if (olds.Count() > 0)
-                {
                     cmd.OldUnits = cmd.OldUnits.Union(olds.Where(u => u != null)).ToArray();
-                }
                 area.Update(cmd.NewUnits);
             }
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
@@ -1011,7 +1012,7 @@ namespace SamSoarII.Core.Models
 
         public void AddSingleUnit(string text, SelectRectCore rect, LadderNetworkModel net, bool cover = true)
         {
-            string[] items = text.ToUpper().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);
+            string[] items = text.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);
             if (items.Length == 0)
                 throw new ValueParseException(Properties.Resources.Message_Input_Empty, null);
             if (!LadderUnitModel.TypeOfNames.ContainsKey(items[0]))
