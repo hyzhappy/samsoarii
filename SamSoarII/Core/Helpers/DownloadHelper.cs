@@ -457,8 +457,9 @@ namespace SamSoarII.Core.Helpers
                 for (time = 0; time < 3 && !communManager.DownloadHandle(command);) time++;
                 if (time >= 3) return DownloadError.DownloadFailed;
             }
-            if (!communManager.DownloadHandle(new BinFinishedCommand()))
-                return DownloadError.DownloadFailed;
+            command = new BinFinishedCommand();
+            for (time = 0; time < 10 && !communManager.DownloadHandle(command);) time++;
+            if (time >= 10) return DownloadError.DownloadFailed;
             return DownloadError.None;
         }
         #endregion
@@ -563,8 +564,9 @@ namespace SamSoarII.Core.Helpers
                 for (time = 0; time < 3 && !communManager.DownloadHandle(command);) time++;
                 if (time >= 3) return DownloadError.DownloadFailed;
             }
-            if (!communManager.DownloadHandle(new DownloadTypeOver(funcCode)))
-                return DownloadError.DownloadFailed;
+            command = new DownloadTypeOver(funcCode);
+            for (time = 0; time < 10 && !communManager.DownloadHandle(command);) time++;
+            if (time >= 10) return DownloadError.DownloadFailed;
             return DownloadError.None;
         }
         #endregion

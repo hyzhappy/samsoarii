@@ -44,14 +44,11 @@ namespace SamSoarII.Core.Generate
             ladderDiagram.ClearUndoRedoAction();
             foreach (var network in ladderDiagram.Children.Where(x => { return !x.IsMasked; }))
             {
-                //if (network.View != null && !network.View.ladderExpander.IsExpand)
-                //    network.View.ladderExpander.IsExpand = true;
                 error = CheckNetwork(network);
                 if (error != ErrorType.None)
                 {
                     List<LadderNetworkModel> templist = new List<LadderNetworkModel>();
                     templist.Add(network);
-                    //InstructionCommentManager.RaiseMappedMessageChangedEvent();
                     return new ErrorMessage(error,templist);
                 }
                 else
@@ -61,8 +58,6 @@ namespace SamSoarII.Core.Generate
                     LadderGraphRelocationModule.Execute(network);
                 }
             }
-            //ladderDiagram.IsModify = false;
-            //InstructionCommentManager.RaiseMappedMessageChangedEvent();
             return new ErrorMessage(error,null);
         }
         private static ErrorType CheckNetwork(LadderNetworkModel ladderNetwork)
