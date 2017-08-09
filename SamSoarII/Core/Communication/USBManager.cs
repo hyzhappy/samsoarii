@@ -35,8 +35,7 @@ namespace SamSoarII.Core.Communication
         }
         private bool AssertCommand(ICommunicationCommand cmd)
         {
-            return cmd is IntrasegmentWriteCommand || cmd is GeneralWriteCommand
-                    || cmd is ForceCancelCommand;
+            return cmd is GeneralReadCommand;
         }
         public int Start()
         {
@@ -49,47 +48,50 @@ namespace SamSoarII.Core.Communication
             else
                 return 1;
         }
+        static byte[] readbuffer = new byte[4096];
         static int readBuffercount = 0;
         public int Read(ICommunicationCommand cmd)
         {
             ErrorCode ec = ErrorCode.None;
-            byte[] tempdata = new byte[4096];
-            byte[] data = new byte[cmd.RecvDataLen];
             int bytesRead;
             try
             {
-                ec = reader.Read(tempdata, 100, out bytesRead);
-                if (AssertCommand(cmd))
+                ec = reader.Read(readbuffer, readBuffercount, 4096 - readBuffercount, 100, out bytesRead);
+                readBuffercount += bytesRead;
+                byte[] data = new byte[readBuffercount];
+                if (ec != ErrorCode.None)
+                    return 1;
+                if (!AssertCommand(cmd))
                 {
-                    for (int i = 0; i < bytesRead; i++)
-                        data[readBuffercount++] = tempdata[i];
+                    for (int i = 0; i < readBuffercount; i++)
+                        data[i] = readbuffer[i];
                 }
                 else
                 {
-                    int cnt = bytesRead / CommunicationDataDefine.USB_MAX_READ_LEN;
-                    int res = bytesRead % CommunicationDataDefine.USB_MAX_READ_LEN;
+                    int cnt = readBuffercount / CommunicationDataDefine.USB_MAX_READ_LEN;
+                    int res = readBuffercount % CommunicationDataDefine.USB_MAX_READ_LEN;
+                    data = new byte[readBuffercount - 2 * cnt - (res > 0 ? 2 : 0)];
+                    int cursor = 0;
                     for (int i = 0; i < cnt; i++)
                     {
                         for (int j = 2; j < CommunicationDataDefine.USB_MAX_READ_LEN; j++)
                         {
-                            data[readBuffercount++] = tempdata[j + CommunicationDataDefine.USB_MAX_READ_LEN * i];
+                            data[cursor++] = readbuffer[j + CommunicationDataDefine.USB_MAX_READ_LEN * i];
                         }
                     }
                     for (int i = 2; i < res; i++)
                     {
-                        data[readBuffercount++] = tempdata[i + CommunicationDataDefine.USB_MAX_READ_LEN * cnt];
+                        data[cursor++] = readbuffer[i + CommunicationDataDefine.USB_MAX_READ_LEN * cnt];
                     }
                 }
-                if (ec != ErrorCode.None)
-                    return 1;
+                cmd.RetData = data;
             }
             catch (Exception)
             {
                 return 1;
             }
-            if (readBuffercount != cmd.RecvDataLen)
+            if (!cmd.IsComplete)
                 return 1;
-            cmd.RetData = data;
             readBuffercount = 0;
             return 0;
         }

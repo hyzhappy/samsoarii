@@ -85,10 +85,10 @@ namespace SamSoarII.Shell.Dialogs
         }
         private BackgroundWorker worker;
         ProgressBarHandle handle;
-        private long currentFileLen;
+        private long currentFileLen = 0;
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            handle.PG_Bar?.Dispatcher.Invoke(DispatcherPriority.Normal,(ThreadStart)delegate() 
+            handle.PG_Bar?.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate() 
             {
                 handle.StartAnimation(handle.PG_Bar.PG_Bar.Value, e.ProgressPercentage * 3.0 / 20.0, currentFileLen / (160.0 * 1024));
             });
@@ -133,8 +133,8 @@ namespace SamSoarII.Shell.Dialogs
                     else covered++;
                 }
                 Process cmd = new Process();
-                cmd.StartInfo.WorkingDirectory = string.Format(@"{0:s}\Converter\.", currentPath);
-                cmd.StartInfo.FileName = string.Format(@"{0:s}\Converter\Converter.exe", currentPath);
+                cmd.StartInfo.WorkingDirectory = string.Format(@"{0}\Converter\.", currentPath);
+                cmd.StartInfo.FileName = string.Format(@"{0}\Converter\Converter.exe", currentPath);
                 cmd.StartInfo.Arguments = string.Format("{0} \"{1}\" \"{2}\"", 1, outPath, item);
                 cmd.StartInfo.CreateNoWindow = true;
                 cmd.StartInfo.UseShellExecute = false;

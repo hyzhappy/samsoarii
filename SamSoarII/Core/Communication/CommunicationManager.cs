@@ -271,28 +271,14 @@ namespace SamSoarII.Core.Communication
 
         public void LoadExecute()
         {
-            execdata = new List<byte>();
             string currentpath = FileHelper.AppRootPath;
-            string execfile = String.Format(@"{0:s}\downc.bin", currentpath);
-            BinaryReader br = new BinaryReader(
-                new FileStream(execfile, FileMode.Open));
-            while (br.BaseStream.CanRead)
-            {
-                try
-                {
-                    execdata.Add(br.ReadByte());
-                }
-                catch (EndOfStreamException)
-                {
-                    break;
-                }
-            }
-            br.Close();
+            string execfile = string.Format(@"{0:s}\downc.bin", currentpath);
+            execdata = FileHelper.GenerateBinaryFile(execfile).ToList();
         }
 
         public DownloadError DownloadExecute()
         {
-            return new DownloadHelper(this).DownloadExecute();
+            return DownloadHelper.DownloadExecute(this);
         }
 
         public bool DownloadHandle(ICommunicationCommand cmd, bool hasRecvData = true, int waittime = 10)
@@ -313,7 +299,7 @@ namespace SamSoarII.Core.Communication
             if (!hassend) return false;
             Thread.Sleep(waittime);
             if (!hasRecvData && cmd.RecvDataLen == 0) return true;
-            while (recvtime < 10)
+            while (recvtime < 50)
             {
                 if (mngCurrent.Read(cmd) == 0)
                 {

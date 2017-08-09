@@ -8,6 +8,16 @@ namespace SamSoarII.Core.Communication
 {
     public class SwitchToIAPCommand : ICommunicationCommand
     {
+        public SwitchToIAPCommand()
+        {
+            command = new byte[4];
+            command[0] = CommunicationDataDefine.CMD_DOWNLOAD_FLAG;
+            byte[] len = ValueConverter.GetBytes((ushort)(command.Length + 2), true);
+            command[1] = len[0];
+            command[2] = len[1];
+            command[3] = CommunicationDataDefine.CMD_IAP_REBOOT;
+            command = command.Concat(CRC16.GetCRC(command)).ToArray();
+        }
         public bool IsComplete
         {
             get; set;
@@ -37,16 +47,9 @@ namespace SamSoarII.Core.Communication
                 CommandHelper.CheckRetData(this, _retData);
             }
         }
-
+        private byte[] command;
         public byte[] GetBytes()
         {
-            byte[] command = new byte[4];
-            command[0] = CommunicationDataDefine.CMD_DOWNLOAD_FLAG;
-            byte[] len = ValueConverter.GetLengthByInt(command.Length + 2);
-            command[1] = len[0];
-            command[2] = len[1];
-            command[3] = CommunicationDataDefine.CMD_IAP_REBOOT;
-            command = command.Concat(CRC16.GetCRC(command)).ToArray();
             return command;
         }
     }

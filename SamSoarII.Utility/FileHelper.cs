@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Security.Cryptography;
+using System.Diagnostics;
 
 namespace SamSoarII.Utility
 {
@@ -103,6 +104,59 @@ namespace SamSoarII.Utility
             if (File.Exists(fullFileName))
                 return new FileInfo(fullFileName).Length;
             else return 0L;
+        }
+
+        public static string CompressFile(string fullFileName)
+        {
+            Process cmd = new Process();
+            string exepath = string.Format(@"{0}\rar", StringHelper.RemoveSystemSeparator(AppRootPath));
+            string CFName = string.Format(@"{0}\rar\temp\{1}.7z", StringHelper.RemoveSystemSeparator(AppRootPath), GetFileName(fullFileName));
+            cmd.StartInfo.FileName = string.Format(@"{0}\{1}",exepath,"HaoZipC.exe");
+            cmd.StartInfo.Arguments = string.Format("a -t7z -pSamSoarII \"{0}\" \"{1}\"", CFName, fullFileName);
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.Start();
+            cmd.WaitForExit();
+            cmd.Close();
+            return CFName;
+        }
+
+        public static void DecompressFile(string fullFileName,string outPath)
+        {
+            Process cmd = new Process();
+            string filepath = string.Format(@"{0}\{1}", StringHelper.RemoveSystemSeparator(AppRootPath), "rar");
+            cmd.StartInfo.FileName = string.Format(@"{0}\{1}", filepath, "HaoZipC.exe");
+            cmd.StartInfo.Arguments = string.Format("e -pSamSoarII \"{0}\" -o\"{1}\"", fullFileName, outPath);
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.Start();
+            cmd.WaitForExit();
+            cmd.Close();
+        }
+
+        public static bool InvalidFileName(string fullFileName)
+        {
+            return fullFileName == null || fullFileName == string.Empty;
+        }
+
+        public static byte[] GenerateBinaryFile(string fullFileName)
+        {
+            List<byte> data = new List<byte>();
+            BinaryReader br = new BinaryReader(
+                new FileStream(fullFileName, FileMode.Open));
+            while (br.BaseStream.CanRead)
+            {
+                try
+                {
+                    data.Add(br.ReadByte());
+                }
+                catch (EndOfStreamException)
+                {
+                    break;
+                }
+            }
+            br.Close();
+            return data.ToArray();
         }
     }
 }

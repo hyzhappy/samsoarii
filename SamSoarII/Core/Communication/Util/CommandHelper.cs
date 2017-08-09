@@ -161,9 +161,15 @@ namespace SamSoarII.Core.Communication
 
         public static void CheckRetData(ICommunicationCommand command, byte[] _retData)
         {
-            if (_retData.Count() < 6)
+            if (_retData.Count() < 4)
             {
                 command.IsComplete = false;
+                command.IsSuccess = false;
+                return;
+            }
+            if(_retData[0] != CommunicationDataDefine.CMD_DOWNLOAD_FLAG)
+            {
+                command.IsComplete = true;
                 command.IsSuccess = false;
                 return;
             }

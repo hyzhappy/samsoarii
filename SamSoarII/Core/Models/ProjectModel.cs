@@ -12,6 +12,7 @@ using System.IO;
 using SamSoarII.Utility;
 using SamSoarII.Shell.Windows;
 using System.Windows;
+using SamSoarII.Core.Communication;
 
 namespace SamSoarII.Core.Models
 {
@@ -294,7 +295,7 @@ namespace SamSoarII.Core.Models
 
         public void Save(string _filename)
         {
-            if (_filename == null) return;
+            if (_filename == null || _filename == string.Empty) return;
             filename = _filename;
             projname = FileHelper.GetFileName(_filename);
             XDocument xdoc = new XDocument();
@@ -320,6 +321,54 @@ namespace SamSoarII.Core.Models
         public void Save()
         {
             Save(filename);
+        }
+
+        public void GenerateFileByFlag(int flag,string _filename)
+        {
+            XDocument xdoc = new XDocument();
+            XElement xele_r = new XElement("Root");
+            XElement xele_p = new XElement("Project");
+            xdoc.Add(xele_r);
+            xele_r.Add(xele_p);
+            xele_p.SetAttributeValue("Name", FileHelper.GetFileName(_filename));
+            xele_p.SetAttributeValue("DeviceType", Device.Type);
+            foreach (LadderDiagramModel diagram in diagrams)
+            {
+                XElement xele_d = new XElement("Ladder");
+                diagram.Save(xele_d);
+                xele_p.Add(xele_d);
+            }
+            foreach (FuncBlockModel funcblock in funcblocks)
+            {
+                if (funcblock.IsLibrary) continue;
+                XElement xele_f = new XElement("FuncBlock");
+                funcblock.Save(xele_f);
+                xele_p.Add(xele_f);
+            }
+            XElement xele_m = new XElement("Modbus");
+            modbus.Save(xele_m);
+            xele_p.Add(xele_m);
+            if ((flag & CommunicationDataDefine.OPTION_SETTING) == CommunicationDataDefine.OPTION_SETTING)
+            {
+                XElement xele_pp = new XElement("ProjectPropertyParams");
+                paraProj.Save(xele_pp);
+                xele_p.Add(xele_pp);
+            }
+            if ((flag & CommunicationDataDefine.OPTION_COMMENT) == CommunicationDataDefine.OPTION_COMMENT)
+            {
+                XElement xele_vm = new XElement("ValueManager");
+                ValueManager.Save(xele_vm);
+                xele_p.Add(xele_vm);
+            }
+            if ((flag & CommunicationDataDefine.OPTION_MONITOR) == CommunicationDataDefine.OPTION_MONITOR)
+            {
+                XElement xele_mn = new XElement("Monitor");
+                monitor.Save(xele_mn);
+                xele_p.Add(xele_mn);
+            }
+            FileStream stream = File.Create(_filename);
+            xdoc.Save(stream);
+            stream.Close();
         }
 
         public void Load(XElement xele)

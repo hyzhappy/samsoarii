@@ -12,11 +12,11 @@ namespace SamSoarII.Core.Communication
         {
             command = new byte[6];
             command[0] = CommunicationDataDefine.CMD_DOWNLOAD_FLAG;
-            byte[] len = ValueConverter.GetLengthByInt(command.Length + data.Length + 2);
+            byte[] len = ValueConverter.GetBytes((ushort)(command.Length + data.Length + 2), true);
             command[1] = len[0];
             command[2] = len[1];
             command[3] = downloadCode;
-            len = ValueConverter.GetBytes((ushort)id);
+            len = ValueConverter.GetBytes((ushort)id,true);
             command[4] = len[0];
             command[5] = len[1];
             CommandHelper.Encrypt(id, data);
