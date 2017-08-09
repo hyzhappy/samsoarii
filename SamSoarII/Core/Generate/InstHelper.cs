@@ -670,12 +670,20 @@ namespace SamSoarII.Core.Generate
                             cond, inst[1], inst[2], inst[3], user_id);
                     break;
                 case "PLSR":
+                    if (!simumode)
+                        sw.Write("CI_DPLSR((uint8_t)({0:s}), (uint32_t*)(&{1:s}), (uint32_t)({2:s}), {3:s}, {4:d});\n",
+                            cond, inst[1], inst[2], inst[3], user_id);
+                    break;
                 case "DPLSR":
                     if (!simumode)
                         sw.Write("CI_DPLSR((uint8_t)({0:s}), &{1:s}, {2:s}, {3:s}, {4:d});\n",
                             cond, inst[1], inst[2], inst[3], user_id);
                     break;
                 case "PLSRD":
+                    if (!simumode)
+                        sw.Write("CI_DPLSRD((uint8_t)({0:s}), (uint32_t*)(&{1:s}), (uint32_t)({2:s}), {3:s}, {4:s}, {5:d});\n",
+                            cond, inst[1], inst[2], inst[3], inst[4], user_id);
+                    break;
                 case "DPLSRD":
                     if (!simumode)
                         sw.Write("CI_DPLSRD((uint8_t)({0:s}), &{1:s}, {2:s}, {3:s}, {4:s}, {5:d});\n",
@@ -683,7 +691,7 @@ namespace SamSoarII.Core.Generate
                     break;
                 case "HCNT":
                     if (!simumode)
-                        sw.Write("CI_HCNT((uint8_t)({0:s}),{1:s},{2:s});\n",
+                        sw.Write("CI_HCNT((uint8_t)({0:s}), {1:s}, {2:s});\n",
                              cond, inst[1], inst[2]);
                     break;
                 case "PLSNEXT":
@@ -722,7 +730,7 @@ namespace SamSoarII.Core.Generate
                 case "DRVA":
                 case "DDRVA":
                     if (!simumode)
-                        sw.Write("CI_DDRVA((uint8_t)({0:s)},{1:s},{2:s},{3:s},{4:s},{5:d});\n",
+                        sw.Write("CI_DDRVA((uint8_t)({0:s}),{1:s},{2:s},{3:s},{4:s},{5:d});\n",
                             cond, inst[2], inst[1], inst[3], inst[4], user_id);
                     break;
                 case "PLSA":
@@ -765,8 +773,10 @@ namespace SamSoarII.Core.Generate
                         case "TRUNC": sw.Write("{1:s} = _FLOAT_to_TRUNC({0:s});\n", inst[1], inst[2]); break;
                         case "BDTRUNC": sw.Write("{1:s} _FLOAT_to_TRUNC({0:s}));\n", inst[1], inst[2]); break;
                         // 位运算指令
-                        case "INVW": case "INVD": sw.Write("{1:s} = ~{0:s};\n", inst[1], inst[2]); break;
-                        case "BWINVW": case "BDINVD": sw.Write("{1:s}, ~{0:s});\n", inst[1], inst[2]); break;
+                        case "INVW": sw.Write("{1:s} = ~(uint16_t)({0:s});\n", inst[1], inst[2]); break;
+                        case "INVD": sw.Write("{1:s} = ~(uint32_t)({0:s});\n", inst[1], inst[2]); break;
+                        case "BWINVW": sw.Write("{1:s}, ~(uint16_t)({0:s}));\n", inst[1], inst[2]); break;
+                        case "BDINVD": sw.Write("{1:s}, ~(uint32_t)({0:s}));\n", inst[1], inst[2]); break;
                         case "ANDW": case "ANDD": sw.Write("{2:s} = {0:s}&{1:s};\n", inst[1], inst[2], inst[3]); break;
                         case "BWANDW": case "BDANDD": sw.Write("{2:s}, {0:s}&{1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "ORW": case "ORD": sw.Write("{2:s} = {0:s}|{1:s};\n", inst[1], inst[2], inst[3]); break;
