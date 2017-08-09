@@ -173,7 +173,13 @@ namespace SamSoarII.Core.Communication
                 command.IsSuccess = false;
                 return;
             }
-            command.IsComplete = _retData.Length == ValueConverter.GetValueByBytes(_retData[1], _retData[2]);
+            int len = ValueConverter.GetValueByBytes(_retData[1], _retData[2]);
+            command.IsComplete = _retData.Length >= len;
+            if(_retData.Length > len)
+            {
+                command.IsSuccess = false;
+                return;
+            }
             command.IsComplete &= CRC16.CheckCRC(command);
             if (command.IsComplete)
             {
