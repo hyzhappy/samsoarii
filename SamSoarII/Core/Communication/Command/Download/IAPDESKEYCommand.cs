@@ -21,7 +21,7 @@ namespace SamSoarII.Core.Communication
             {
                 command[4 + i] = (byte)(random.Next() & 0xFF);
             }
-            len = ValueConverter.GetBytes((uint)filelength);
+            len = ValueConverter.GetBytes((uint)filelength,true);
             for (int i = 0; i < len.Length; i++)
             {
                 command[12 + i] = len[i];

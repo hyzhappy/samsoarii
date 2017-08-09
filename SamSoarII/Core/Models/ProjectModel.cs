@@ -349,13 +349,13 @@ namespace SamSoarII.Core.Models
             XElement xele_m = new XElement("Modbus");
             modbus.Save(xele_m);
             xele_p.Add(xele_m);
-            if (paraCom.IsDownloadSetting)
-            {
+            //if (paraCom.IsDownloadSetting)
+            //{
                 XElement xele_pp = new XElement("ProjectPropertyParams");
                 paraProj.Save(xele_pp);
                 xele_p.Add(xele_pp);
-            }
-            if (paraCom.IsDownloadElement)
+            //}
+            if (paraCom.IsDownloadComment)
             {
                 XElement xele_vm = new XElement("ValueManager");
                 ValueManager.Save(xele_vm);

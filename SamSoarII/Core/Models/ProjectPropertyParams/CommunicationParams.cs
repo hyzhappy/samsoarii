@@ -106,9 +106,9 @@ namespace SamSoarII.Core.Models
         {
             get { return (downloadoption & CommunicationDataDefine.OPTION_PROGRAM) != 0; }
         }
-        public bool IsDownloadElement
+        public bool IsDownloadComment
         {
-            get { return (downloadoption & CommunicationDataDefine.OPTION_ELEMENT) != 0; }
+            get { return (downloadoption & CommunicationDataDefine.OPTION_COMMENT) != 0; }
         }
         public bool IsDownloadInitialize
         {
