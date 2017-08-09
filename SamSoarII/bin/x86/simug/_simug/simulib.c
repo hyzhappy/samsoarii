@@ -165,55 +165,46 @@ int _Assert(
 					*addr = (int32_t*)(&XBit[0]);
 					if (*offset < 0 || *offset + size > 128)
 						return 4;
-					*offset *= 4;
 					break;
 				case 'Y': 
 					*addr = (int32_t*)(&YBit[0]); 
 					if (*offset < 0 || *offset + size > 128)
 						return 4;
-					*offset *= 4;
 					break;
 				case 'C': 
 					*addr = (int32_t*)(&CBit[0]); 
 					if (*offset < 0 || *offset + size > 256)
 						return 4;
-					*offset *= 4;
 					break;
 				case 'T': 
 					*addr = (int32_t*)(&TBit[0]); 
 					if (*offset < 0 || *offset + size > 256)
 						return 4;
-					*offset *= 4;
 					break;
 				case 'S': 
 					*addr = (int32_t*)(&SBit[0]); 
 					if (*offset < 0 || *offset + size > 1024)
 						return 4;
-					*offset *= 4;
 					break;
 				case 'M': 
 					*addr = (int32_t*)(&MBit[0]); 
 					if (*offset < 0 || *offset + size > 8192)
 						return 4;
-					*offset *= 4;
 					break;
 				case 'D': 
 					*addr = (int32_t*)(&DWord[0]); 
 					if (*offset < 0 || *offset + size > 8192)
 						return 4;
-					*offset *= 2;
 					break;
 				case 'V': 
 					*addr = (int32_t*)(&VWord[0]); 
 					if (*offset < 0 || *offset + size > 8)
 						return 4;
-					*offset *= 2;
 					break;
 				case 'Z': 
 					*addr = (int32_t*)(&ZWord[0]); 
 					if (*offset < 0 || *offset + size > 8)
 						return 4;
-					*offset *= 2;
 					break;
 				default: 
 					return 3;
@@ -225,7 +216,6 @@ int _Assert(
 				if (*offset >= 0 && *offset + size < 200)
 				{
 					*addr = (int32_t*)(&CVWord[0]);
-					*offset *= 2;
 				}
 				else if (*offset >= 200 || *offset + size/2 < 256)
 				{
@@ -242,21 +232,18 @@ int _Assert(
 				*addr = (int32_t*)(&TVWord[0]);
 				if (*offset < 0 || *offset + size > 256)
 					return 4;
-				*offset *= 2;
 			}
 			if (name[0] == 'A' && name[1] == 'I')
 			{
 				*addr = (int32_t*)(&AIWord[0]);
 				if (*offset < 0 || *offset + size > 32)
 					return 4;
-				*offset *= 2;
 			}
 			if (name[0] == 'A' && name[1] == 'O')
 			{
 				*addr = (int32_t*)(&AOWord[0]);
 				if (*offset < 0 || *offset + size > 32)
 					return 4;
-				*offset *= 2;
 			}
 			break;
 		default:
@@ -270,7 +257,7 @@ EXPORT int GetBit(char* name, int size, int8_t* output)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size, &addr, &offset);
 	if (ret) return ret;
-	while (size--) output[size] = *(((int8_t*)addr)+offset+size*4);
+	while (size--) output[size] = *(((int8_t*)addr)+offset+size);
 	return 0;
 }
 // Get the WORD value from targeted register (D/CV/TV)
@@ -279,7 +266,7 @@ EXPORT int GetWord(char* name, int size, int16_t* output)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size, &addr, &offset);
 	if (ret) return ret;
-	while (size--) output[size] = *(((int16_t*)addr)+offset+size*2);
+	while (size--) output[size] = *(((int16_t*)addr)+offset+size);
 	return 0;
 }
 // Get the DWORD (32 bit unsigned int) value from targeted register (D/CV32)
@@ -290,7 +277,7 @@ EXPORT int GetDoubleWord(char* name, int size, int32_t* output)
 	if (ret) return ret;
 	while (size--) 
 	{
-		output[size] = *(((int16_t*)addr)+offset+size*2+2);
+		output[size] = *(((int16_t*)addr)+offset+size*2+1);
 		output[size] <<= 16;
 		output[size] |= *(((int16_t*)addr)+offset+size*2);
 	}
@@ -325,7 +312,7 @@ EXPORT int SetBit(char* name, int size, int8_t* input)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size, &addr, &offset);
 	if (ret) return ret;
-	while (size--) *(((int8_t*)addr)+offset+size*4) = input[size];
+	while (size--) *(((int8_t*)addr)+offset+size) = input[size];
 	return 0;
 }
 // Set the WORD value to targeted register (D/CV/TV)
@@ -334,7 +321,7 @@ EXPORT int SetWord(char* name, int size, int16_t* input)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size, &addr, &offset);
 	if (ret) return ret;
-	while (size--) *(((int16_t*)addr)+offset+size*2) = input[size];
+	while (size--) *(((int16_t*)addr)+offset+size) = input[size];
 	return 0;
 }
 // Set the DWORD value to targeted register (D)
@@ -345,7 +332,7 @@ EXPORT int SetDoubleWord(char* name, int size, int32_t* input)
 	if (ret) return ret;
 	while (size--) 
 	{
-		*(((int16_t*)addr)+offset+size*2+2) = (input[size]>>16);
+		*(((int16_t*)addr)+offset+size*2+1) = (input[size]>>16);
 		*(((int16_t*)addr)+offset+size*2) = (input[size]&0xffff);
 	}
 	return 0;

@@ -39,6 +39,14 @@
                         <CheckBox x:Name="CB_Coil" Margin="0,3,10,0" IsThreeState="False" IsChecked="False"></CheckBox>
                         <TextBlock FontSize="16" Text="{x:Static properties:Resources.Check_Coil_Output}"></TextBlock>
                     </StackPanel>
+                    <StackPanel Margin="0,10,0,5" Orientation="Horizontal">
+                        <CheckBox x:Name="CB_Timer" Margin="0,3,10,0" IsThreeState="False" IsChecked="False"></CheckBox>
+                        <TextBlock FontSize="16" Text="{x:Static properties:Resources.Check_Timer}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Margin="0,10,0,5" Orientation="Horizontal">
+                        <CheckBox x:Name="CB_Count" Margin="0,3,10,0" IsThreeState="False" IsChecked="False"></CheckBox>
+                        <TextBlock FontSize="16" Text="{x:Static properties:Resources.Check_Counter}"></TextBlock>
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
         </StackPanel>

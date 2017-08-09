@@ -1762,7 +1762,7 @@
     <value>Modbus table changed!</value>
   </data>
   <data name="Check_Setting_Header" xml:space="preserve">
-    <value>Multi-coil setting</value>
+    <value>Ladder checking</value>
   </data>
   <data name="Check_Coil_Output" xml:space="preserve">
     <value>Check the multi-coil output</value>
@@ -2237,5 +2237,11 @@
   </data>
   <data name="PLC_Status_To_Stop" xml:space="preserve">
     <value>The current PLC is running, if you continue to download, will automatically set to Stop.</value>
+  </data>
+  <data name="Check_Counter" xml:space="preserve">
+    <value>Check multiple counter</value>
+  </data>
+  <data name="Check_Timer" xml:space="preserve">
+    <value>Check multiple timer</value>
   </data>
 </root>

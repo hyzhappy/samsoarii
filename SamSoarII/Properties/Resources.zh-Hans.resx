@@ -1762,7 +1762,7 @@
     <value>Modbus表格已更改！</value>
   </data>
   <data name="Check_Setting_Header" xml:space="preserve">
-    <value>多线圈设置</value>
+    <value>梯形图检查设置</value>
   </data>
   <data name="Check_Coil_Output" xml:space="preserve">
     <value>检查多线圈输出</value>
@@ -2237,5 +2237,11 @@
   </data>
   <data name="PLC_Status_To_Stop" xml:space="preserve">
     <value>当前PLC为运行状态，若继续下载，将自动设置为Stop.</value>
+  </data>
+  <data name="Check_Counter" xml:space="preserve">
+    <value>检查多计数器</value>
+  </data>
+  <data name="Check_Timer" xml:space="preserve">
+    <value>检查多定时器</value>
   </data>
 </root>

@@ -385,11 +385,29 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Multi-coil setting 的本地化字符串。
+        ///   查找类似 Check multiple counter 的本地化字符串。
+        /// </summary>
+        public static string Check_Counter {
+            get {
+                return ResourceManager.GetString("Check_Counter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Ladder checking 的本地化字符串。
         /// </summary>
         public static string Check_Setting_Header {
             get {
                 return ResourceManager.GetString("Check_Setting_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Check multiple timer 的本地化字符串。
+        /// </summary>
+        public static string Check_Timer {
+            get {
+                return ResourceManager.GetString("Check_Timer", resourceCulture);
             }
         }
         

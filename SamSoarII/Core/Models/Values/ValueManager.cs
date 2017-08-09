@@ -486,74 +486,48 @@ namespace SamSoarII.Core.Models
             int bas = 0;
             int len = 0;
             //int maxlen = 0;
-            bas = GetOffset(ValueModel.Bases.TV);
-            len = Device.TVRange.Count;
-            for (int i = bas; i < bas + len; i++)
+            if (GlobalSetting.IsCheckTimer)
             {
-                ValueInfo vinfo = this[i];
-                IEnumerable<LadderUnitModel> fits = vinfo.UsedUnits.Where(
-                    u => u.Type == LadderUnitModel.Types.TON
-                      || u.Type == LadderUnitModel.Types.TONR
-                      || u.Type == LadderUnitModel.Types.TOF);
-                if (fits.Count() > 1)
+                bas = GetOffset(ValueModel.Bases.TV);
+                len = Device.TVRange.Count;
+                for (int i = bas; i < bas + len; i++)
                 {
-                    foreach (PLCOriginInst inst in fits.Select(u => u.Inst.Origin))
+                    ValueInfo vinfo = this[i];
+                    IEnumerable<LadderUnitModel> fits = vinfo.UsedUnits.Where(
+                        u => u.Type == LadderUnitModel.Types.TON
+                          || u.Type == LadderUnitModel.Types.TONR
+                          || u.Type == LadderUnitModel.Types.TOF);
+                    if (fits.Count() > 1)
                     {
-                        inst.Status = PLCOriginInst.STATUS_ERROR;
-                        inst.Message = String.Format("{0}{1:s}{2}", Properties.Resources.Counter, inst[1], Properties.Resources.Message_Has_Been_Used);
+                        foreach (PLCOriginInst inst in fits.Select(u => u.Inst.Origin))
+                        {
+                            inst.Status = PLCOriginInst.STATUS_ERROR;
+                            inst.Message = String.Format("{0}{1:s}{2}", Properties.Resources.Counter, inst[1], Properties.Resources.Message_Has_Been_Used);
+                        }
                     }
                 }
             }
-            bas = GetOffset(ValueModel.Bases.CV);
-            len = Device.CVRange.Count;
-            for (int i = bas; i < bas + len; i++)
+            if (GlobalSetting.IsCheckCounter)
             {
-                ValueInfo vinfo = this[i];
-                IEnumerable<LadderUnitModel> fits = vinfo.UsedUnits.Where(
-                    u => u.Type == LadderUnitModel.Types.CTD
-                      || u.Type == LadderUnitModel.Types.CTD
-                      || u.Type == LadderUnitModel.Types.CTUD);
-                if (fits.Count() > 1)
+                bas = GetOffset(ValueModel.Bases.CV);
+                len = Device.CVRange.Count;
+                for (int i = bas; i < bas + len; i++)
                 {
-                    foreach (PLCOriginInst inst in fits.Select(u => u.Inst.Origin))
+                    ValueInfo vinfo = this[i];
+                    IEnumerable<LadderUnitModel> fits = vinfo.UsedUnits.Where(
+                        u => u.Type == LadderUnitModel.Types.CTD
+                          || u.Type == LadderUnitModel.Types.CTD
+                          || u.Type == LadderUnitModel.Types.CTUD);
+                    if (fits.Count() > 1)
                     {
-                        inst.Status = PLCOriginInst.STATUS_ERROR;
-                        inst.Message = String.Format("{0}{1:s}{2}", Properties.Resources.Counter, inst[1], Properties.Resources.Message_Has_Been_Used);
+                        foreach (PLCOriginInst inst in fits.Select(u => u.Inst.Origin))
+                        {
+                            inst.Status = PLCOriginInst.STATUS_ERROR;
+                            inst.Message = String.Format("{0}{1:s}{2}", Properties.Resources.Counter, inst[1], Properties.Resources.Message_Has_Been_Used);
+                        }
                     }
                 }
             }
-            /*
-            bas = XOffset;
-            len = Device.XRange.Count;
-            maxlen = MaxRange.XRange.Count;
-            for (int i = bas + len; i < bas + maxlen; i++)
-            {
-                ValueInfo vinfo = infos[i];
-                if (vinfo.Units.Count() > 0)
-                {
-                    foreach (PLCOriginInst inst in vinfo.UsedUnits.Select(u => u.Inst.Origin))
-                    {
-                        inst.Status = PLCOriginInst.STATUS_ERROR;
-                        inst.Message = Properties.Resources.Message_OutOfXRange;
-                    }
-                }
-            }
-            bas = YOffset;
-            len = Device.YRange.Count;
-            maxlen = MaxRange.YRange.Count;
-            for (int i = bas + len; i < bas + maxlen; i++)
-            {
-                ValueInfo vinfo = infos[i];
-                if (vinfo.Units.Count() > 0)
-                {
-                    foreach (PLCOriginInst inst in vinfo.UsedUnits.Select(u => u.Inst.Origin))
-                    {
-                        inst.Status = PLCOriginInst.STATUS_ERROR;
-                        inst.Message = Properties.Resources.Message_OutOfYRange;
-                    }
-                }
-            }
-            */
         }
 
         private void CheckCoil(int bas, int len)
