@@ -1,12 +1,12 @@
 ﻿using SamSoarII.Core.Communication;
 using SamSoarII.Shell.Dialogs;
-using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
+using SamSoarII.Utility;
 using SamSoarII.Core.Models;
 using SamSoarII.Global;
 
@@ -45,35 +45,21 @@ namespace SamSoarII.Core.Helpers
 
         static private void InitializeData(ProjectModel project)
         {
-            //工程，注释，软元件等用于上载的信息直接压缩xml
-
-            //dtBinary = new List<byte>();
-            //dtProject = new List<byte>();
-            //dtComment = new List<byte>();
-            //dtEleList = new List<byte>();
-
             // 初始化
             dtIcon = new List<byte>();
             dtConfig = new List<byte>();
             dtModbus = new List<byte>();
             dtTable = new List<byte>();
             dtBlock = new List<byte>();
-            
             // 条形码
-
-            // 工程
-            //ltFuncs = project.Funcs.ToList();
-            //Write(project.ValueManager);
-            //Write(dtProject, project.Diagrams.Count);
-            //foreach (LadderDiagramModel ldmodel in project.Diagrams) Write(ldmodel);
-            //Write(dtProject, project.FuncBlocks.Count);
-            //foreach (FuncBlockModel fbmodel in project.FuncBlocks) Write(fbmodel);
-            //Write(dtProject, project.Monitor.Children.Count);
-
+            
             // 配置
-            WriteConfig(project.PARAProj);
+            Write(project.PARAProj);
             // Modbus
             Write(project.Modbus);
+            // Table表
+
+            // Block表
 
         }
 
@@ -118,158 +104,6 @@ namespace SamSoarII.Core.Helpers
 
         #endregion
 
-
-        //工程，注释，软元件等用于上载的信息直接压缩xml
-        //#region Project
-
-        //static private void Write(ValueManager ValueManager)
-        //{
-        //    int id = 0;
-        //    foreach (ValueInfo vinfo in ValueManager)
-        //        foreach (ValueStore vstore in vinfo.Stores)
-        //            vstore.ID = ++id;
-        //    Write(dtProject, (short)id);
-        //    foreach (ValueInfo vinfo in ValueManager)
-        //        foreach (ValueStore vstore in vinfo.Stores)
-        //            Write(vstore, ValueManager);
-        //    foreach (ValueStore vstore in ValueManager.EmptyInfo.Stores)
-        //        vstore.ID = ++id;
-        //    Write(dtProject, (short)id);
-        //    foreach (ValueStore vstore in ValueManager.EmptyInfo.Stores)
-        //        Write(vstore, ValueManager);
-
-        //}
-
-        //static private void Write(ValueStore vstore, ValueManager ValueManager)
-        //{
-        //    if (vstore.Parent == ValueManager.EmptyInfo)
-        //    {
-        //        switch (vstore.Type)
-        //        {
-        //            case ValueModel.Types.BOOL:
-        //            case ValueModel.Types.WORD:
-        //            case ValueModel.Types.DWORD:
-        //                Write(dtProject, int.Parse(vstore.Value.ToString()));
-        //                break;
-        //            case ValueModel.Types.FLOAT:
-        //                Write(dtProject, (int)(ValueConverter.FloatToUInt((float)(vstore.Value))));
-        //                break;
-        //            default:
-        //                Write(dtProject, (int)0);
-        //                break;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Write(dtProject, (short)(ValueManager.IndexOf(vstore.Parent)));
-        //        int i = 0;
-        //        i |= ((int)(vstore.Type) & 0x0f);
-        //        i <<= 4;
-        //        i |= ((int)(vstore.Flag - 1) & 0x1f);
-        //        i <<= 5;
-        //        switch (vstore.Intra)
-        //        {
-        //            case ValueModel.Bases.V: i |= 0x01; break;
-        //            case ValueModel.Bases.Z: i |= 0x02; break;
-        //        }
-        //        i <<= 2;
-        //        i |= (vstore.IntraOffset & 0x07);
-        //        Write(dtProject, (short)i);
-        //    }
-        //}
-
-        //static private void Write(LadderDiagramModel ldmodel)
-        //{
-        //    Write(dtProject, ldmodel.IsMainLadder);
-        //    Write(dtProject, ldmodel.IsExpand);
-        //    Write(dtProject, ldmodel.Name);
-        //    Write(dtProject, ldmodel.Brief);
-        //    Write(dtProject, ldmodel.NetworkCount);
-        //    foreach (LadderNetworkModel lnmodel in ldmodel.Children)
-        //        Write(lnmodel);
-        //}
-
-        //static private void Write(LadderNetworkModel lnmodel)
-        //{
-        //    Write(dtProject, lnmodel.IsExpand);
-        //    Write(dtProject, lnmodel.IsMasked);
-        //    Write(dtProject, lnmodel.Description);
-        //    Write(dtProject, lnmodel.Brief);
-        //    Write(dtProject, lnmodel.RowCount);
-        //    for (int y = 0; y < lnmodel.RowCount; y++)
-        //    {
-        //        int link = 0;
-        //        for (int x = 0; x < GlobalSetting.LadderXCapacity; x++)
-        //        {
-        //            link |= (lnmodel.Children[x, y] != null ? 1 : 0) << (x + x);
-        //            link |= (lnmodel.VLines[x, y] != null ? 1 : 0) << (x + x + 1);
-        //        }
-        //        Write(dtProject, link);
-        //    }
-        //    Write(dtProject, lnmodel.Children.Count());
-        //    foreach (LadderUnitModel unit in lnmodel.Children)
-        //        Write(unit);
-        //}
-
-        //static private void Write(LadderUnitModel unit)
-        //{
-        //    Write(dtProject, (short)(unit.X | (unit.Y << 4)));
-        //    dtProject.Add((byte)unit.Type);
-        //    if (unit.Type == LadderUnitModel.Types.CALLM)
-        //    {
-        //        FuncModel func = ltFuncs.Where(f => f.Name.Equals(unit.Children[0].Text)).First();
-        //        Write(dtProject, (short)(ltFuncs.IndexOf(func)));
-        //        Write(dtProject, (byte)(unit.Children.Count - 1));
-        //        for (int i = 1; i < unit.Children.Count; i++)
-        //            Write(dtProject, (short)(unit.Children[i].Store.ID));
-        //    }
-        //    else
-        //    {
-        //        for (int i = 0; i < unit.Children.Count; i++)
-        //            if (unit.Children[i].Type == ValueModel.Types.STRING)
-        //            {
-        //                if (unit.Type == LadderUnitModel.Types.CALLM && i == 0
-        //                 || unit.Type == LadderUnitModel.Types.ATCH && i == 1)
-        //                {
-        //                    LadderDiagramModel diagram = unit.Project.Diagrams.Where(d => d.Name.Equals(unit.Children[i].Text)).First();
-        //                    Write(dtProject, (short)(unit.Project.Diagrams.IndexOf(diagram)));
-        //                }
-        //                if (unit.Type == LadderUnitModel.Types.MBUS && i == 1)
-        //                {
-        //                    ModbusModel modbus = unit.Project.Modbus.Children.Where(m => m.Name.Equals(unit.Children[i].Text)).First();
-        //                    Write(dtProject, (short)(unit.Project.Modbus.Children.IndexOf(modbus)));
-        //                }
-        //            }
-        //            else
-        //                Write(dtProject, (short)(unit.Children[i].Store.ID));
-        //    }
-        //}
-
-        //static private void Write(FuncBlockModel fbmodel)
-        //{
-        //    Write(dtProject, fbmodel.IsLibrary);
-        //    if (!fbmodel.IsLibrary)
-        //    {
-        //        Write(dtProject, fbmodel.Name);
-        //        Write(dtProject, fbmodel.View != null ? fbmodel.View.Code : fbmodel.Code);
-        //    }
-        //}
-
-        //static private void Write(MonitorTable mtable)
-        //{
-        //    Write(dtProject, mtable.Name);
-        //    Write(dtProject, mtable.Children.Count);
-        //    foreach (MonitorElement melement in mtable.Children) Write(melement);
-        //}
-
-        //static private void Write(MonitorElement melement)
-        //{
-        //    Write(dtProject, (short)(melement.Store.ID));
-        //}
-
-        //#endregion
-
-
         #region Initialize Config data
         private static DownloadError DownloadConfigExecute()
         {
@@ -277,7 +111,7 @@ namespace SamSoarII.Core.Helpers
             return ret;
         }
 
-        static private void WriteConfig(ProjectPropertyParams pparams)
+        static private void Write(ProjectPropertyParams pparams)
         {
             dtConfig.Add(0x00);
             dtConfig.Add(0x00);
@@ -325,8 +159,7 @@ namespace SamSoarII.Core.Helpers
         }
 
         #endregion
-
-
+        
         #region Initialize Modbus data
         private static DownloadError DownloadModbusTableExecute()
         {

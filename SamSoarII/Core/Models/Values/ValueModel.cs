@@ -102,6 +102,9 @@ namespace SamSoarII.Core.Models
         public readonly static ValueRegex VerifyWordRegex6 = new ValueRegex(
             @"^(D|AO)([0-9]+)((V|Z)([0-9]+))?$",
             new string[] { "AO" });
+        public readonly static ValueRegex VerifyWordRegex7 = new ValueRegex(
+            @"^(V|Z)([0-9]+)$",
+            new string[] { "V", "Z" });
 
         public readonly static ValueRegex BitWordRegex = new ValueRegex(
             @"(K)([0-9]+)(X|Y|M|S)([0-9]+)((V|Z)([0-9]+))?$", 
