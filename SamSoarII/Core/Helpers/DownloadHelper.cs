@@ -42,7 +42,7 @@ namespace SamSoarII.Core.Helpers
         static private List<byte> dtBlock;
         
         #region InitializeData
-
+        
         static private void InitializeData(ProjectModel project)
         {
             //工程，注释，软元件等用于上载的信息直接压缩xml

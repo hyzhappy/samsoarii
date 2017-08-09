@@ -323,7 +323,7 @@ namespace SamSoarII.Global
         {
             return _loadScaleSuccessFlag;
         }
-
+        /*
         public static Dictionary<string, List<string>> InstrutionNameAndToolTips { get; private set; }
         public static void LoadInstrutionNameAndToolTips()
         {
@@ -350,7 +350,7 @@ namespace SamSoarII.Global
                 }
             }
         }
-        
+        */
         public static SolidColorBrush FoldingBrush { get; private set; }
         public static SolidColorBrush SimulateBrush { get; private set; }
         public static SolidColorBrush MonitorBrush { get; private set; }

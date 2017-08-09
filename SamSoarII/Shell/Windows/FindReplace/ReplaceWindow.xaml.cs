@@ -25,7 +25,7 @@ namespace SamSoarII.Shell.Windows
     /// <summary>
     /// ReplaceWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class ReplaceWindow : UserControl, IWindow
+    public partial class ReplaceWindow : UserControl, IWindow, INotifyPropertyChanged
     {
         public ReplaceWindow(InteractionFacade _ifParent)
         {

@@ -10,7 +10,7 @@ namespace SamSoarII.Core.Models
     {
         #region Resources
 
-        static readonly private string[] CALLMTYPES = { "BIT*", "WORD*", "DWORD*", "FLOAT*" };
+        static readonly private string[] CALLMTYPES = { "BIT", "WORD", "DWORD", "FLOAT" };
 
         static readonly private Regex[] BitRegexs = { ValueModel.VerifyBitRegex3 };
         static readonly private Regex[] WordRegexs = { ValueModel.VerifyWordRegex2 };

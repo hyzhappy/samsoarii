@@ -454,57 +454,57 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.ANDW] = new LadderUnitFormat(502, "ANDW", Types.ANDW, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.Word_And,
                 "对单字IN1和IN2执行与操作，并将结果载入输出到OUT。",
-                "对单字IN1和IN2执行与操作，并将结果载入输出到OUT。",
+                "Calculate (IN1 and IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.ORW] = new LadderUnitFormat(504, "ORW", Types.ORW, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.Word_Or,
                 "对单字IN1和IN2执行或操作，并将结果载入输出到OUT。",
-                "对单字IN1和IN2执行或操作，并将结果载入输出到OUT。",
+                "Calculate (IN1 or IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.XORW] = new LadderUnitFormat(506, "XORW", Types.XORW, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.Word_XOR,
                 "对单字IN1和IN2执行异或操作，并将结果载入输出到OUT。",
-                "对单字IN1和IN2执行异或操作，并将结果载入输出到OUT。",
+                "Calculate (IN1 xor IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.ADD] = new LadderUnitFormat(800, "ADD", Types.ADD, Outlines.IntegerCalculation, Shapes.OutputRect,
                 Properties.Resources.Word_And,
                 "将单字IN1和单字IN2相加（IN1+IN2），产生的整数结果保存到OUT。",
-                "将单字IN1和单字IN2相加（IN1+IN2），产生的整数结果保存到OUT。",
+                "Calculate (IN1 + IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.SUB] = new LadderUnitFormat(802, "SUB", Types.SUB, Outlines.IntegerCalculation, Shapes.OutputRect,
                 Properties.Resources.Word_Minus,
                 "将单字IN1和单字IN2相减（IN1-IN2），产生的整数结果保存到OUT。",
-                "将单字IN1和单字IN2相减（IN1-IN2），产生的整数结果保存到OUT。",
+                "Calculate (IN1 - IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.MULW] = new LadderUnitFormat(805, "MULW", Types.MULW, Outlines.IntegerCalculation, Shapes.OutputRect,
                 Properties.Resources.Word_Multiply,
                 "将单字IN1和单字IN2相乘（IN1*IN2），产生的整数结果保存到OUT。",
-                "将单字IN1和单字IN2相乘（IN1*IN2），产生的整数结果保存到OUT。",
+                "Calculate (IN1 * IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.DIVW] = new LadderUnitFormat(808, "DIVW", Types.DIVW, Outlines.IntegerCalculation, Shapes.OutputRect,
                 Properties.Resources.Word_Divide,
                 "将单字IN1和单字IN2相除（IN1/IN2），产生的整数结果保存到OUT。",
-                "将单字IN1和单字IN2相除（IN1/IN2），产生的整数结果保存到OUT。",
+                "Calculate (IN1 / IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.SHL] = new LadderUnitFormat(1200, "SHL", Types.SHL, Outlines.Shift, Shapes.OutputRect,
                 Properties.Resources.SHL_Inst,
                 "指令将单字（IN1）数值向左移动（IN2）位，并将结果载入单字（OUT）。移位指令对每个移出位补0。",
-                "指令将单字（IN1）数值向左移动（IN2）位，并将结果载入单字（OUT）。移位指令对每个移出位补0。",
+                "Shifting move IN1 left by IN2 step, and assign to OUT. Supply 0 to rightside if it moved.",
                 vformats);
             Formats[(int)Types.SHR] = new LadderUnitFormat(1203, "SHR", Types.SHR, Outlines.Shift, Shapes.OutputRect,
                 Properties.Resources.SHR_Inst,
                 "指令将单字（IN1）数值向右移动（IN2）位，并将结果载入单字（OUT）。移位指令对每个移出位补0。",
-                "指令将单字（IN1）数值向右移动（IN2）位，并将结果载入单字（OUT）。移位指令对每个移出位补0。",
+                "Shifting move IN1 right by IN2 step, and assign to OUT. Supply 0 to leftside if it moved. ",
                 vformats);
             Formats[(int)Types.ROL] = new LadderUnitFormat(1206, "ROL", Types.ROL, Outlines.Shift, Shapes.OutputRect,
                 Properties.Resources.ROL_Inst,
                 "指令将单字（IN1）数值向左移动（IN2）位，并将结果载入单字（OUT）。移出位按原次序补到最右侧。",
-                "指令将单字（IN1）数值向左移动（IN2）位，并将结果载入单字（OUT）。移出位按原次序补到最右侧。",
+                "Rotation move IN1 left by IN2 step, and assign to OUT. For the part moved away from range, supply it to rightside with order maintaining.",
                 vformats);
             Formats[(int)Types.ROR] = new LadderUnitFormat(1208, "ROR", Types.ROR, Outlines.Shift, Shapes.OutputRect,
                 Properties.Resources.RORD_Inst,
                 "指令将单字（IN1）数值向右移动（IN2）位，并将结果载入单字（OUT）。移出位按原次序补到最左侧。",
-                "指令将单字（IN1）数值向右移动（IN2）位，并将结果载入单字（OUT）。移出位按原次序补到最左侧。",
+                "Rotation move IN1 right by IN2 step, and assign to OUT. For the part moved away from range, supply it to leftside with order maintaining.",
                 vformats);
             vformats = new ValueFormat[] {
                     new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
@@ -513,57 +513,57 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.ANDD] = new LadderUnitFormat(503, "ANDD", Types.ANDD, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.DWord_And,
                 "对双字IN1和IN2执行与操作，并将结果载入输出到OUT。",
-                "对双字IN1和IN2执行与操作，并将结果载入输出到OUT。",
+                "Calculate the 32-bit integer (IN1 and IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.ORD] = new LadderUnitFormat(505, "ORD", Types.ORD, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.DWord_Or,
                 "对双字IN1和IN2执行或操作，并将结果载入输出到OUT。",
-                "对双字IN1和IN2执行或操作，并将结果载入输出到OUT。",
+                "Calculate the 32-bit integer (IN1 or IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.XORD] = new LadderUnitFormat(507, "XORD", Types.XORD, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.DWord_XOR,
                 "对双字IN1和IN2执行异或操作，并将结果载入输出到OUT。",
-                "对双字IN1和IN2执行异或操作，并将结果载入输出到OUT。",
+                "Calculate the 32-bit integer (IN1 xor IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.ADDD] = new LadderUnitFormat(801, "ADDD", Types.ADDD, Outlines.IntegerCalculation, Shapes.OutputRect,
                 Properties.Resources.DWord_Add,
                 "将双字IN1和双字IN2相加（IN1+IN2），产生的整数结果保存到OUT。",
-                "将双字IN1和双字IN2相加（IN1+IN2），产生的整数结果保存到OUT。",
+                "Calculate the 32-bit integer (IN1 + IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.SUBD] = new LadderUnitFormat(803, "SUBD", Types.SUBD, Outlines.IntegerCalculation, Shapes.OutputRect,
                 Properties.Resources.DWord_Minus,
                 "将双字IN1和双字IN2相减（IN1-IN2），产生的整数结果保存到OUT。",
-                "将双字IN1和双字IN2相减（IN1-IN2），产生的整数结果保存到OUT。",
+                "Calculate the 32-bit integer (IN1 - IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.MULD] = new LadderUnitFormat(806, "MULD", Types.MULD, Outlines.IntegerCalculation, Shapes.OutputRect,
                 Properties.Resources.DWord_Multiply,
                 "将双字IN1和双字IN2相减（IN1*IN2），产生的整数结果保存到OUT。",
-                "将双字IN1和双字IN2相减（IN1*IN2），产生的整数结果保存到OUT。",
+                "Calculate the 32-bit integer (IN1 * IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.DIVD] = new LadderUnitFormat(808, "DIVD", Types.DIVD, Outlines.IntegerCalculation, Shapes.OutputRect,
                 Properties.Resources.DWord_Divide,
                 "将双字IN1和双字IN2相除（IN1/IN2），产生的双字商保存到双字OUT中。",
-                "将双字IN1和双字IN2相除（IN1/IN2），产生的双字商保存到双字OUT中。",
+                "Calculate the 32-bit integer (IN1 / IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.SHLD] = new LadderUnitFormat(1201, "SHLD", Types.SHLD, Outlines.Shift, Shapes.OutputRect,
                 Properties.Resources.SHLD_Inst,
                 "指令将双字（IN1）数值向左移动（IN2）位，并将结果载入双字（OUT）。移位指令对每个移出位补0。",
-                "指令将双字（IN1）数值向左移动（IN2）位，并将结果载入双字（OUT）。移位指令对每个移出位补0。",
+                "Shifting move 32-bit IN1 left by IN2 step, and assign to OUT. Supply 0 to rightside if it moved.",
                 vformats);
             Formats[(int)Types.SHRD] = new LadderUnitFormat(1204, "SHRD", Types.SHRD, Outlines.Shift, Shapes.OutputRect,
                 Properties.Resources.SHLD_Inst,
                 "指令将双字（IN1）数值向右移动（IN2）位，并将结果载入双字（OUT）。移位指令对每个移出位补0。",
-                "指令将双字（IN1）数值向右移动（IN2）位，并将结果载入双字（OUT）。移位指令对每个移出位补0。",
+                "Shifting move 32-bit IN1 right by IN2 step, and assign to OUT. Supply 0 to leftside if it moved.",
                 vformats);
             Formats[(int)Types.ROLD] = new LadderUnitFormat(1207, "ROLD", Types.ROLD, Outlines.Shift, Shapes.OutputRect,
                 Properties.Resources.ROLD_Inst,
                 "指令将单字（IN1）数值向左移动（IN2）位，并将结果载入单字（OUT）。移出位按原次序补到最右侧。",
-                "指令将单字（IN1）数值向左移动（IN2）位，并将结果载入单字（OUT）。移出位按原次序补到最右侧。",
+                "Rotation move 32-bit IN1 left by IN2 step, and assign to OUT. For the part moved away from range, supply it to rightside with order maintaining.",
                 vformats);
             Formats[(int)Types.RORD] = new LadderUnitFormat(1209, "RORD", Types.RORD, Outlines.Shift, Shapes.OutputRect,
                 Properties.Resources.RORD_Inst,
                 "指令将双字（IN1）数值向左移动（IN2）位，并将结果载入双字（OUT）。移出位按原次序补到最左侧。",
-                "指令将双字（IN1）数值向左移动（IN2）位，并将结果载入双字（OUT）。移出位按原次序补到最左侧。",
+                "Rotation move 32-bit IN1 right by IN2 step, and assign to OUT. For the part moved away from range, supply it to leftside with order maintaining.",
                 vformats);
             vformats = new ValueFormat[] {
                     new ValueFormat("IN1", ValueModel.Types.FLOAT, true, false, 0, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
@@ -572,27 +572,27 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.ADDF] = new LadderUnitFormat(700, "ADDF", Types.ADDF, Outlines.FloatCalculation, Shapes.OutputRect,
                 Properties.Resources.Float_Add,
                 "将浮点数IN1和浮点数IN2相加（IN1+IN2），产生的实数结果保存到OUT。",
-                "将浮点数IN1和浮点数IN2相加（IN1+IN2），产生的实数结果保存到OUT。",
+                "Calculate float (IN1 + IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.SUBF] = new LadderUnitFormat(701, "SUBF", Types.SUBF, Outlines.FloatCalculation, Shapes.OutputRect,
                 Properties.Resources.Float_Minus,
                 "将浮点数IN1和浮点数IN2相减（IN1-IN2），产生的实数结果保存到OUT。",
-                "将浮点数IN1和浮点数IN2相减（IN1-IN2），产生的实数结果保存到OUT。",
+                "Calculate float (IN1 - IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.MULF] = new LadderUnitFormat(702, "MULF", Types.MULF, Outlines.FloatCalculation, Shapes.OutputRect,
                 Properties.Resources.Float_Multiply,
                 "将浮点数IN1和浮点数IN2相乘（IN1*IN2），产生的实数结果保存到OUT。",
-                "将浮点数IN1和浮点数IN2相乘（IN1*IN2），产生的实数结果保存到OUT。",
+                "Calculate float (IN1 * IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.DIVF] = new LadderUnitFormat(703, "DIVF", Types.DIVF, Outlines.FloatCalculation, Shapes.OutputRect,
                 Properties.Resources.Float_Divide,
                 "将浮点数IN1和浮点数IN2相除（IN1/IN2），产生的实数结果保存到OUT。",
-                "将浮点数IN1和浮点数IN2相除（IN1/IN2），产生的实数结果保存到OUT。",
+                "Calculate float (IN1 / IN2) and assign to OUT.",
                 vformats);
             Formats[(int)Types.POW] = new LadderUnitFormat(1801, "POW", Types.POW, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.POW_Inst,
                 "以IN1的浮点数值为底，IN2的浮点数值为指数进行幂运算，将结果传送到OUT。",
-                "以IN1的浮点数值为底，IN2的浮点数值为指数进行幂运算，将结果传送到OUT。",
+                "Calculate power with IN1 as bottom, IN2 as log, and assign the result to OUT.",
                 vformats);
             vformats = new ValueFormat[] {
                     new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
@@ -601,12 +601,12 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.MUL] = new LadderUnitFormat(804, "MUL", Types.MUL, Outlines.IntegerCalculation, Shapes.OutputRect,
                 Properties.Resources.Multiply,
                 "将单字IN1和单字IN2相乘（IN1*IN2），产生的双字结果保存到双字OUT。",
-                "将单字IN1和单字IN2相乘（IN1*IN2），产生的双字结果保存到双字OUT。",
+                "Calculate (16-bit IN1 * 16-bit IN2), assign the 32-bit result to OUT.",
                 vformats);
             Formats[(int)Types.DIV] = new LadderUnitFormat(807, "DIV", Types.DIV, Outlines.IntegerCalculation, Shapes.OutputRect,
                 Properties.Resources.Divide,
                 "将单字IN1和单字IN2相除（IN1/IN2），产生商数和余数保存到双字OUT中。低位存商，高位存余。",
-                "将单字IN1和单字IN2相除（IN1/IN2），产生商数和余数保存到双字OUT中。低位存商，高位存余。",
+                "Calculate (16-bit IN1 / 16-bit IN2), assign the divide number to lower half of 32-bit OUT, as well as the remain number to higher.",
                 vformats);
             vformats = new ValueFormat[] {
                     new ValueFormat("T", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyWordRegex4}),
@@ -616,9 +616,9 @@ namespace SamSoarII.Core.Models
                 "TON指令在启用输入端为（闭合）时，开始计时。\r\n" +
                 "当前值（TVx）大于或等于预设时间（SV）时，定时器位（Tx）为（闭合），且定时器停止计时；\r\n" +
                 "启用输入端为（断开）时，接通延时定时器自动复位，即定时器位（Tx）为OFF，当前值（TVx）为0；\r\n",
-                "TON指令在启用输入端为（闭合）时，开始计时。\r\n" +
-                "当前值（TVx）大于或等于预设时间（SV）时，定时器位（Tx）为（闭合），且定时器停止计时；\r\n" +
-                "启用输入端为（断开）时，接通延时定时器自动复位，即定时器位（Tx）为OFF，当前值（TVx）为0；\r\n",
+                "The TON instruction start timekeeping as soon as the input accessd.\r\n" +
+                "While it arrives at setting value, set Tx to ON and stop timekeeping.\r\n" +
+                "Tx is reset to OFF and TVx is reset to 0 as soon as the input opened.\r\n",
                 vformats);
             Formats[(int)Types.TOF] = new LadderUnitFormat(901, "TOF", Types.TOF, Outlines.Timer, Shapes.OutputRect,
                 Properties.Resources.TOF_Inst,
@@ -716,13 +716,13 @@ namespace SamSoarII.Core.Models
                 "当CALL指令有效时，通过被调用的指针，它将强迫程序运行与子程序ID号相同的子程序，执行完被调用子程序，会自动返回到当前CALL指令的下一条指令继续执行；\r\n" +
                 "当CALL指令无效时，程序会自动跳过此条CALL指令，执行下一条指令。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("FUNC", ValueModel.Types.STRING, true, false, 0, new Regex[] { ValueModel.AnyNameRegex }) });
+                    new ValueFormat("S", ValueModel.Types.STRING, true, false, 0, new Regex[] { ValueModel.AnyNameRegex }) });
             Formats[(int)Types.CALLM] = new LadderUnitFormat(1105, "CALLM", Types.CALLM, Outlines.ProgramControl, Shapes.OutputRect,
                 Properties.Resources.CALLM_Inst,
-                "堆栈顶为1时，会调用用户在函数功能块内实现的函数。参数最多可以设定四个，在C函数中以基地址指针的形式表示。",
-                "堆栈顶为1时，会调用用户在函数功能块内实现的函数。参数最多可以设定四个，在C函数中以基地址指针的形式表示。",
+                "堆栈顶为1时，会调用用户在函数功能块内实现的函数。参数最多可以设定四个。",
+                "堆栈顶为1时，会调用用户在函数功能块内实现的函数。参数最多可以设定四个。",
                 new ValueFormat[] {
-                    new ValueFormat("SUB", ValueModel.Types.STRING, true, false, 0, new Regex[] { ValueModel.FuncNameRegex }) });
+                    new ValueFormat("F", ValueModel.Types.STRING, true, false, 0, new Regex[] { ValueModel.FuncNameRegex }) });
             Formats[(int)Types.STL] = new LadderUnitFormat(1106, "STL", Types.STL, Outlines.ProgramControl, Shapes.OutputRect,
                 "",
                 "STL与STLE必须一一配对使用，STL表示一个状态的开始，STLE表示一个状态的结束。",
@@ -1421,6 +1421,7 @@ namespace SamSoarII.Core.Models
                 for (int i = 0; i < children.Count(); i++)
                 {
                     if (children[i].Store?.Parent == null) continue;
+                    if (children[i].Store?.Parent == ValueManager.EmptyInfo) continue;
                     ValueModel fit = children.First(v => ValueManager[v] == ValueManager[children[i]]);
                     if (fit == children[i]) yield return children[i];   
                 }
