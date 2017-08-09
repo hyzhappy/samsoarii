@@ -1032,6 +1032,19 @@ namespace SamSoarII
 
         #region Navigate & Select
         
+        private LadderNetworkModel _lastnet;
+        private int _lastx1;
+        private int _lasty1;
+        private int _lastx2;
+        private int _lasty2;
+        private LadderDiagramModel _lastdia;
+        private int _laststart;
+        private int _lastend;
+        private FuncBlockModel _lastfunc;
+        private int _lastoffset;
+        private int _lastrow;
+        private int _lastcolumn;
+
         public void Navigate(string text)
         {
             Match m = Regex.Match(text, @"\(Diagram=([^)]*)\)\(Network=([^)]*)\)\(X=([^,]*),Y=([^)]*)\)");
@@ -1057,13 +1070,20 @@ namespace SamSoarII
         {
             Navigate(network, 0, 0);
         }
-
+        
         public void Navigate(LadderNetworkModel network, int x, int y)
         {
             if (network.IsMasked) return;
             LadderDiagramModel diagram = network.Parent;
             if (diagram.Tab == null)
+            {
+                _lastnet = network;
+                _lastx1 = x;
+                _lasty1 = y;
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
+                diagram.Tab.Loaded += OnViewLoadedToNavigate;
+                return;
+            }
             tcMain.ShowItem(diagram.Tab);
             network.View.AcquireSelectRect();
             SelectRectCore rect = diagram.View.SelectionRect.Core;
@@ -1071,7 +1091,13 @@ namespace SamSoarII
             rect.Y = y;
             diagram.View.NavigateToNetworkByNum(network.ID);
         }
-
+        
+        private void OnViewLoadedToNavigate(object sender, RoutedEventArgs e)
+        {
+            Navigate(_lastnet, _lastx1, _lasty1);
+            _lastnet.Parent.Tab.Loaded -= OnViewLoadedToNavigate;
+        }
+        
         public void Navigate(FuncBlock fblock)
         {
             Navigate(fblock.Model, fblock.IndexStart);
@@ -1079,16 +1105,41 @@ namespace SamSoarII
 
         public void Navigate(FuncBlockModel fbmodel, int offset)
         {
-            if (fbmodel.View == null) fbmodel.View = new FuncBlockViewModel(fbmodel, tcMain);
+            if (fbmodel.View == null)
+            {
+                _lastfunc = fbmodel;
+                _lastoffset = offset;
+                fbmodel.View = new FuncBlockViewModel(fbmodel, tcMain);
+                fbmodel.View.Loaded += OnViewLoadedToNavigateOffset;
+            }
             tcMain.ShowItem(fbmodel.View);
             fbmodel.View.SetOffset(offset);
+        }
+
+        private void OnViewLoadedToNavigateOffset(object sender, RoutedEventArgs e)
+        {
+            Navigate(_lastfunc, _lastoffset);
+            _lastfunc.View.Loaded -= OnViewLoadedToNavigateOffset;
         }
         
         public void Navigate(FuncBlockModel fbmodel, int row, int column)
         {
-            if (fbmodel.View == null) fbmodel.View = new FuncBlockViewModel(fbmodel, tcMain);
+            if (fbmodel.View == null)
+            {
+                _lastfunc = fbmodel;
+                _lastrow = row;
+                _lastcolumn = column;
+                fbmodel.View = new FuncBlockViewModel(fbmodel, tcMain);
+                fbmodel.View.Loaded += OnViewLoadedToNavigatePosition;
+            }
             tcMain.ShowItem(fbmodel.View);
             fbmodel.View.SetPosition(row, column);
+        }
+
+        private void OnViewLoadedToNavigatePosition(object sender, RoutedEventArgs e)
+        {
+            Navigate(_lastfunc, _lastrow, _lastcolumn);
+            _lastfunc.View.Loaded -= OnViewLoadedToNavigatePosition;
         }
 
         public void Select(LadderNetworkModel network, int x1, int x2, int y1, int y2)
@@ -1098,14 +1149,29 @@ namespace SamSoarII
                 Navigate(network, x1, y1);
                 return;
             }
-            if (network.View == null || network.IsMasked) return;
+            if (network.IsMasked) return;
             LadderDiagramModel diagram = network.Parent;
             if (diagram.Tab == null)
+            {
+                _lastnet = network;
+                _lastx1 = x1;
+                _lastx2 = x2;
+                _lasty1 = y1;
+                _lasty2 = y2;
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
+                diagram.Tab.Loaded += OnViewLoadedToSelectRange;
+                return;
+            }
             tcMain.ShowItem(diagram.Tab);
             diagram.View.Select(network, x1, x2, y1, y2);
         }
 
+        private void OnViewLoadedToSelectRange(object sender, RoutedEventArgs e)
+        {
+            Select(_lastnet, _lastx1, _lastx2, _lasty1, _lasty2);
+            _lastnet.Parent.Tab.Loaded -= OnViewLoadedToSelectRange;
+        }
+        
         public void Select(LadderDiagramModel diagram, int start, int end)
         {
             foreach (LadderNetworkModel network in diagram.Children)
@@ -1114,9 +1180,21 @@ namespace SamSoarII
                 if (network.View == null) return;
             }
             if (diagram.Tab == null)
+            {
+                _lastdia = diagram;
+                _laststart = start;
+                _lastend = end;
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
+                diagram.Tab.Loaded += OnViewLoadedToSelectNetworks;
+            }
             tcMain.ShowItem(diagram.Tab);
             diagram.View.Select(start, end);
+        }
+        
+        private void OnViewLoadedToSelectNetworks(object sender, RoutedEventArgs e)
+        {
+            Select(_lastdia, _laststart, _lastend);
+            _lastdia.Tab.Loaded -= OnViewLoadedToSelectNetworks;
         }
 
         public void NavigateToBreakpointCursor()

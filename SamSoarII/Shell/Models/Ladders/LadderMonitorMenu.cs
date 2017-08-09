@@ -17,8 +17,6 @@ namespace SamSoarII.Shell.Models
             miBPRemove = new MenuItem();
             miJumpTo = new MenuItem();
             miValues = new MenuItem[] { new MenuItem(), new MenuItem(), new MenuItem(), new MenuItem(), new MenuItem() };
-            mdValues = new List<ValueModel>();
-            idValues = new int[] { 0, 0, 0, 0, 0 };
             miBPAdd.Header = Properties.Resources.LadderNetwork_AddBreakpoint;
             miBPSetting.Header = Properties.Resources.LadderNetwork_SettingBreakpoint;
             miBPRemove.Header = Properties.Resources.LadderNetwork_RemoveBreakpoint;
@@ -86,7 +84,6 @@ namespace SamSoarII.Shell.Models
                 miBPSetting.IsEnabled = false;
                 miBPRemove.IsEnabled = false;
                 miJumpTo.IsEnabled = false;
-                mdValues.Clear();
                 for (int i = 0; i < 5; i++)
                     miValues[i].Visibility = Visibility.Collapsed;
                 if (core == null) return;
@@ -98,22 +95,22 @@ namespace SamSoarII.Shell.Models
                 miBPSetting.IsEnabled = parent.LadderMode == LadderModes.Simulate && core.Breakpoint != null && core.Breakpoint.IsEnable;
                 miBPRemove.IsEnabled = parent.LadderMode == LadderModes.Simulate && core.Breakpoint != null && core.Breakpoint.IsEnable;
                 miJumpTo.IsEnabled = parent.LadderMode == LadderModes.Simulate && core.Breakpoint != null;
-                for (int i = 0, j; i < core.Children.Count(); i++)
+                vmValues = core.UniqueChildren.ToArray();
+                for (int i = 0; i < vmValues.Length; i++)
                 {
-                    for (j = 0; j < i; j++) if (core.Children[j].Text.Equals(core.Children[i].Text)) break;
-                    if (core.Children[i].Store?.Parent != null && j >= i)
+                    miValues[i].Visibility = Visibility.Visible;
+                    miValues[i].Header = String.Format(App.CultureIsZH_CH() ? "修改{0:s}" : "Modify{0:s}", vmValues[i].Text);
+                    switch (core.LadderMode)
                     {
-                        miValues[i].Visibility = Visibility.Visible;
-                        miValues[i].Header = String.Format(App.CultureIsZH_CH() ? "修改{0:s}" : "Modify{0:s}", core.Children[i].Text);
-                        idValues[i] = mdValues.Count();
-                        mdValues.Add(core.Children[i]);
-                        switch (core.LadderMode)
-                        {
-                            case LadderModes.Monitor: miValues[i].IsEnabled = IFParent.MNGComu.IsAlive; break;
-                            case LadderModes.Simulate: miValues[i].IsEnabled = IFParent.MNGSimu.IsAlive; break;
-                            default: miValues[i].IsEnabled = false; break;
-                        }
+                        case LadderModes.Monitor: miValues[i].IsEnabled = IFParent.MNGComu.IsAlive; break;
+                        case LadderModes.Simulate: miValues[i].IsEnabled = IFParent.MNGSimu.IsAlive; break;
+                        default: miValues[i].IsEnabled = false; break;
                     }
+                }
+                for (int i = vmValues.Length; i < 5; i++)
+                {
+                    miValues[i].Visibility = Visibility.Collapsed;
+                    miValues[i].IsEnabled = false;
                 }
             }
         }
@@ -124,8 +121,7 @@ namespace SamSoarII.Shell.Models
         private MenuItem miBPRemove;
         private MenuItem miJumpTo;
         private MenuItem[] miValues;
-        private List<ValueModel> mdValues;
-        private int[] idValues;
+        private ValueModel[] vmValues;
 
         #endregion
 
@@ -133,11 +129,9 @@ namespace SamSoarII.Shell.Models
 
         private void OnMenuItemClick(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < vmValues.Length; i++)
                 if (sender == miValues[i])
-                {
-                    IFParent.ShowValueModifyDialog(mdValues, idValues[i]);
-                }
+                    IFParent.ShowValueModifyDialog(vmValues, i);
             if (sender == miBPAdd)
             {
                 core.Breakpoint.IsEnable = true;

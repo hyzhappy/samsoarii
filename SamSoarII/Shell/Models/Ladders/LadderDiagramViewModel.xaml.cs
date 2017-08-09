@@ -49,8 +49,8 @@ namespace SamSoarII.Shell.Models
     {
         public LadderDiagramViewModel(LadderDiagramModel _core)
         {
-            if (GlobalSetting.InstrutionNameAndToolTips == null)
-                GlobalSetting.LoadInstrutionNameAndToolTips();
+            //if (GlobalSetting.InstrutionNameAndToolTips == null)
+            //    GlobalSetting.LoadInstrutionNameAndToolTips();
             InitializeComponent();
             DataContext = this;
             Core = _core;
