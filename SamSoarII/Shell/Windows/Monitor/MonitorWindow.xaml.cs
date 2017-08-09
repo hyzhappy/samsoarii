@@ -28,19 +28,18 @@ namespace SamSoarII.Shell.Windows
     {
         public MonitorWindow(InteractionFacade _ifParent)
         {
-            tabledict = new Dictionary<DataGridRow, MonitorElement>();
             InitializeComponent();
             DataContext = this;
             ifParent = _ifParent;
             ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
+            visiblestart = 0;
+            visibleend = -1;
         }
         
         public void Dispose()
         {
             ifParent = null;
             Core = null;
-            tabledict.Clear();
-            tabledict = null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -116,6 +115,9 @@ namespace SamSoarII.Shell.Windows
                     textbox.Text = "";
                     _selectedtable.ChildrenChanged -= OnTableChildrenChanged;
                     if (_selectedtable.View != null) _selectedtable.View = null;
+                    for (int i = visiblestart; i <= visibleend; i++)
+                        if (i < _selectedtable.Children.Count)
+                            _selectedtable.Children[i].IsVisible = false;
                 }
                 this.selectedtable = value;
                 if (selectedtable != null)
@@ -124,6 +126,8 @@ namespace SamSoarII.Shell.Windows
                     selectedtable.ChildrenChanged += OnTableChildrenChanged;
                     if (selectedtable.View != this) selectedtable.View = this;
                 }
+                visiblestart = 0;
+                visibleend = -1;
                 PropertyChanged(this, new PropertyChangedEventArgs("HasSelectedTable"));
                 PropertyChanged(this, new PropertyChangedEventArgs("TableElements"));
             }
@@ -440,29 +444,34 @@ namespace SamSoarII.Shell.Windows
                 }
             }
         }
-
-        private Dictionary<DataGridRow, MonitorElement> tabledict;
+        
+        private int visiblestart;
+        private int visibleend;
         private void DataGridRow_Loaded(object sender, RoutedEventArgs e)
         {
             DataGridRow dgrow = (DataGridRow)sender;
             MonitorElement element = (MonitorElement)(dgrow.DataContext);
-            if (!tabledict.ContainsKey(dgrow)) tabledict.Add(dgrow, element);
-            element.IsVisible = true;
+            int id = TableElements.IndexOf(element);
+            if (id < visiblestart)
+            {
+                while (id < visiblestart)
+                    TableElements[--visiblestart].IsVisible = true;
+                while (visibleend - visiblestart > 30)
+                    if (visibleend < TableElements.Count)
+                        TableElements[visibleend--].IsVisible = false;
+            }
+            if (id > visibleend)
+            {
+                while (id > visibleend)
+                    TableElements[++visibleend].IsVisible = true;
+                while (visibleend - visiblestart > 30)
+                    TableElements[visiblestart++].IsVisible = false;
+            }
         }
-        
-        private void DataGridRow_Unloaded(object sender, RoutedEventArgs e)
-        {
-            DataGridRow dgrow = (DataGridRow)sender;
-            if (!tabledict.ContainsKey(dgrow)) return;
-            MonitorElement element = tabledict[dgrow];
-            tabledict.Remove(dgrow);
-            element.IsVisible = false;
-        }
-        
 
         #endregion
 
         #endregion
-
+        
     }
 }

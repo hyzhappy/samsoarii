@@ -231,7 +231,7 @@ namespace SamSoarII.Core.Models
                 if (Inst != null) Inst.IsCommentMode = iscommentmode;
                 foreach (LadderNetworkModel network in Children)
                     network.IsCommentMode = iscommentmode;
-                ViewPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
 
             }
         }

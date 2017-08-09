@@ -55,6 +55,7 @@ namespace SamSoarII.Shell.Models
             DataContext = this;
             Core = _core;
             _selectRect = new SelectRect();
+            _selectRect.IsCommentMode = core.IsCommentMode;
             outline = new NetworkOutlineViewModel();
             cmEdit = new LadderEditMenu();
             cmMoni = new LadderMonitorMenu();
@@ -134,6 +135,9 @@ namespace SamSoarII.Shell.Models
                     Update();
                     ladderExpander.IsExpand = IsExpand;
                     PropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
+                    break;
+                case "IsCommentMode":
+                    _selectRect.IsCommentMode = core.IsCommentMode;
                     break;
             }
         }

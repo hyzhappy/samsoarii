@@ -357,6 +357,7 @@ namespace SamSoarII.Core.Models
                                 {
                                     inst.Status = PLCOriginInst.STATUS_ERROR;
                                     inst.Message = String.Format("{0}{1:s}", Properties.Resources.Message_SubRoutine_Not_Found, inst[id]);
+                                    break;
                                 }
                                 if (inst[0].Equals("ATCH"))
                                 {

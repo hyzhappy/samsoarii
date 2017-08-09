@@ -1296,7 +1296,7 @@ namespace SamSoarII.Core.Models
             }
             catch (ValueParseException e)
             {
-                throw new Exception(xele.Attribute("Type").Value);
+                //throw new Exception(xele.Attribute("Type").Value);
             }
             finally
             {
