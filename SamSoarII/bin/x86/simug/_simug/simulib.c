@@ -351,34 +351,34 @@ EXPORT int SetEnable(char* name, int size, int8_t value)
 	switch (name[0])
 	{
 	case 'X':
-		while (size--) XEnable[(offset>>2) + size] = value;
+		while (size--) XEnable[offset + size] = value;
 		break;
 	case 'Y':
-		while (size--) YEnable[(offset>>2) + size] = value;
+		while (size--) YEnable[offset + size] = value;
 		break;
 	case 'M':
-		while (size--) MEnable[(offset>>2) + size] = value;
+		while (size--) MEnable[offset + size] = value;
 		break;
 	case 'S':
-		while (size--) SEnable[(offset>>2) + size] = value;
+		while (size--) SEnable[offset + size] = value;
 		break;
 	case 'D':
-		while (size--) DEnable[(offset>>1) + size] = value;
+		while (size--) DEnable[offset + size] = value;
 		break;
 	case 'V':
-		while (size--) VEnable[(offset>>1) + size] = value;
+		while (size--) VEnable[offset + size] = value;
 		break;
 	case 'Z':
-		while (size--) ZEnable[(offset>>1) + size] = value;
+		while (size--) ZEnable[offset + size] = value;
 		break;
 	case 'A':
 		switch (name[1])
 		{
 		case 'I':
-			while (size--) AIEnable[(offset>>1) + size] = value;
+			while (size--) AIEnable[offset + size] = value;
 			break;
 		case 'O':
-			while (size--) AOEnable[(offset>>1) + size] = value;
+			while (size--) AOEnable[offset + size] = value;
 			break;
 		}
 	case 'C':
@@ -387,7 +387,7 @@ EXPORT int SetEnable(char* name, int size, int8_t value)
 		case 'V':
 			if (addr == (int32_t*)(&CVWord[0]))
 			{
-				while (size--) CVEnable[(offset>>1) + size] = value;
+				while (size--) CVEnable[offset + size] = value;
 			}
 			if (addr == (int32_t*)(&CV32DoubleWord[0]))
 			{
@@ -399,7 +399,7 @@ EXPORT int SetEnable(char* name, int size, int8_t value)
 			}
 			break;
 		default:
-			while (size--) CEnable[(offset>>2) + size] = value;
+			while (size--) CEnable[offset + size] = value;
 			break;
 		}
 		break;
@@ -407,10 +407,10 @@ EXPORT int SetEnable(char* name, int size, int8_t value)
 		switch (name[1])
 		{
 		case 'V':
-			while (size--) TVEnable[(offset>>1) + size] = value;
+			while (size--) TVEnable[offset + size] = value;
 			break;
 		default:
-			while (size--) TEnable[(offset>>2) + size] = value;
+			while (size--) TEnable[offset + size] = value;
 			break;
 		}
 		break;
