@@ -315,8 +315,8 @@ namespace SamSoarII.Core.Helpers
             cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make.cmd", currentPath);
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.RedirectStandardError = true;
+            //cmd.StartInfo.RedirectStandardOutput = true;
+            //cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
             cmd = new Process();
@@ -324,8 +324,8 @@ namespace SamSoarII.Core.Helpers
             cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\clean.cmd", currentPath);
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.RedirectStandardError = true;
+            //cmd.StartInfo.RedirectStandardOutput = true;
+            //cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
         }
