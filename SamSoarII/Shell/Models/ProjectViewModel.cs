@@ -97,7 +97,7 @@ namespace SamSoarII.Shell.Models
         public bool IsCommentMode
         {
             get { return core.IsCommentMode; }
-            set { core.IsCommentMode = value; }
+            set { core.IsCommentMode = value; PropertyChanged(this,new PropertyChangedEventArgs("IsCommentMode")); }
         }
 
         public void UpdateUnit(int flags)
