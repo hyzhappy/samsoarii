@@ -47,7 +47,7 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition x:Uid="ColumnDefinition_3" Width="60"></ColumnDefinition>
-                            <ColumnDefinition x:Uid="ColumnDefinition_4" Width="*"></ColumnDefinition>
+                            <ColumnDefinition x:Uid="ColumnDefinition_4" Width="2*"></ColumnDefinition>
                             <ColumnDefinition x:Uid="ColumnDefinition_5" Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Grid.Children>

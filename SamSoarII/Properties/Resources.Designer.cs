@@ -5668,6 +5668,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Setting Modify 的本地化字符串。
+        /// </summary>
+        public static string Setting_Modify {
+            get {
+                return ResourceManager.GetString("Setting_Modify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Word left shift 的本地化字符串。
         /// </summary>
         public static string SHL_Inst {

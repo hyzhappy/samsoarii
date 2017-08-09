@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.Core.Communication;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -91,14 +92,29 @@ namespace SamSoarII.Core.Models
             set { this.timeout = value; PropertyChanged(this, new PropertyChangedEventArgs("Timeout")); }
         }
         
-
         private int downloadoption;
         public int DownloadOption
         {
             get { return this.downloadoption; }
             set { this.downloadoption = value; PropertyChanged(this, new PropertyChangedEventArgs("DownloadOption")); }
         }
-        
+        public bool IsDownloadProgram
+        {
+            get { return (downloadoption & CommunicationDataDefine.OPTION_PROGRAM) != 0; }
+        }
+        public bool IsDownloadElement
+        {
+            get { return (downloadoption & CommunicationDataDefine.OPTION_ELEMENT) != 0; }
+        }
+        public bool IsDownloadInitialize
+        {
+            get { return (downloadoption & CommunicationDataDefine.OPTION_INITIALIZE) != 0; }
+        }
+        public bool IsDownloadSetting
+        {
+            get { return (downloadoption & CommunicationDataDefine.OPTION_SETTING) != 0; }
+        }
+
         #endregion
 
         #region Save & Load

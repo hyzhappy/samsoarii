@@ -2244,4 +2244,7 @@
   <data name="Check_Timer" xml:space="preserve">
     <value>检查多定时器</value>
   </data>
+  <data name="Setting_Modify" xml:space="preserve">
+    <value>修改配置</value>
+  </data>
 </root>

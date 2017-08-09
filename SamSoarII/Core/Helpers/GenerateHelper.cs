@@ -199,7 +199,82 @@ namespace SamSoarII.Core.Helpers
             plclibAFile = String.Format(@"{0:s}\downg\{1:s}", currentPath, plclibAFile);
             // 生成梯形图的c语言
             StreamWriter sw = new StreamWriter(ladderCFile);
+            sw.Write("void InitUserRegisters();\r\n");
             InstHelper.InstToDownCode(sw, nets.ToArray());
+            sw.Write("void InitUserRegisters()\r\n{\r\n");
+            if (project.PARAProj.PARACom.IsDownloadInitialize)
+            {
+                ValueManager ValueManager = project.Parent.MNGValue;
+                foreach (ValueInfo vinfo in ValueManager)
+                {
+                    if (vinfo.InitModel != null)
+                    {
+                        IElementInitializeModel imodel = vinfo.InitModel;
+                        string varname = String.Empty;
+                        switch (imodel.Base)
+                        {
+                            case "X":
+                            case "Y":
+                            case "S":
+                            case "M":
+                            case "T":
+                            case "C":
+                                varname = String.Format("{0:s}Bit[{1:d}]",
+                                    imodel.Base, imodel.Offset);
+                                break;
+                            case "D":
+                            case "TV":
+                            case "AI":
+                            case "AO":
+                            case "V":
+                            case "Z":
+                                varname = String.Format("{0:s}Word[{1:d}]",
+                                    imodel.Base, imodel.Offset);
+                                break;
+                            case "CV":
+                                varname = String.Format("{0:s}{1:s}[{2:d}]",
+                                    imodel.Base,
+                                    (imodel.DataType == 3 || imodel.DataType == 4)
+                                        ? "32DoubleWord" : "Word",
+                                    (imodel.DataType == 3 || imodel.DataType == 4)
+                                        ? (imodel.Offset - 200) : imodel.Offset);
+                                break;
+                        }
+                        switch (imodel.DataType)
+                        {
+                            case 0:
+                                sw.Write("{0:s} = {1:d};\r\n",
+                                    varname, imodel.ShowValue.Equals("ON") ? 1 : 0);
+                                break;
+                            case 1:
+                                sw.Write("*((_WORD)(&{0:s})) = {1:s};\r\n",
+                                    varname, imodel.ShowValue);
+                                break;
+                            case 2:
+                                sw.Write("*((U_WORD)(&{0:s})) = {1:s};\r\n",
+                                    varname, imodel.ShowValue);
+                                break;
+                            case 3:
+                                sw.Write("*((D_WORD)(&{0:s})) = {1:s};\r\n",
+                                    varname, imodel.ShowValue);
+                                break;
+                            case 4:
+                                sw.Write("*((UD_WORD)(&{0:s})) = {1:s};\r\n",
+                                    varname, imodel.ShowValue);
+                                break;
+                            case 5:
+                                sw.Write("*((_WORD)(&{0:s})) = _BCD_to_WORD({1:s});\r\n",
+                                    varname, imodel.ShowValue);
+                                break;
+                            case 6:
+                                sw.Write("*((_FLOAT)(&{0:s})) = {1:s};\r\n",
+                                    varname, imodel.ShowValue);
+                                break;
+                        }
+                    }
+                }
+            }
+            sw.Write("}\r\n");
             sw.Close();
             // 生成用户函数的头文件
             sw = new StreamWriter(funcBlockHFile);
@@ -211,9 +286,7 @@ namespace SamSoarII.Core.Helpers
             sw.Write("typedef uint32_t* UD_WORD;\n");
             sw.Write("typedef float* _FLOAT;\n");
             foreach (FuncBlockModel fbmodel in project.FuncBlocks)
-            {
                 GenerateCHeader(fbmodel, sw);
-            }
             sw.Close();
             // 生成用户函数的c语言
             sw = new StreamWriter(funcBlockCFile);
@@ -234,9 +307,7 @@ namespace SamSoarII.Core.Helpers
             sw.Write("extern _WORD AOWord;\r\n");
             sw.Write("extern D_WORD CV32DoubleWord;\r\n");
             foreach (FuncBlockModel fbmodel in project.FuncBlocks)
-            {
                 GenerateCCode(fbmodel, sw);
-            }
             sw.Close();
             Process cmd = null;
             cmd = new Process();

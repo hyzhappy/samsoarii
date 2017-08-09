@@ -2244,4 +2244,7 @@
   <data name="Check_Timer" xml:space="preserve">
     <value>Check multiple timer</value>
   </data>
+  <data name="Setting_Modify" xml:space="preserve">
+    <value>Setting Modify</value>
+  </data>
 </root>
