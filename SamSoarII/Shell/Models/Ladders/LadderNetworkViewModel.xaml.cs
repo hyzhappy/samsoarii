@@ -135,7 +135,7 @@ namespace SamSoarII.Shell.Models
                         ReleaseSelectRect();
                         if (IsSelectAreaMode && !IsSelectAllMode) IsSelectAreaMode = false;
                         LadderCanvas.Height = 0;
-                        LadderCanvas.Children.Clear();
+                        DynamicDispose(true);
                         if (ThumbnailButton.ToolTip == null)
                         {
                             ThumbnailButton.ToolTip = new ToolTip();
@@ -218,11 +218,16 @@ namespace SamSoarII.Shell.Models
                         break;
                     if (sender.View == null)
                         sender.View = LadderUnitViewModel.Create(sender);
-                    LadderCanvas.Children.Add(sender.View);
+                    if (sender.View.Parent != ViewParent.MainCanvas)
+                    {
+                        if (sender.View.Parent is Canvas)
+                            ((Canvas)(sender.View.Parent)).Children.Remove(sender.View);
+                        ViewParent.MainCanvas.Children.Add(sender.View);
+                    }
                     break;
                 case LadderUnitAction.REMOVE:
                     if (sender.View == null) break;
-                    LadderCanvas.Children.Remove(sender.View);
+                    sender.View.Visibility = Visibility.Hidden;
                     sender.View.Dispose();
                     break;
                 case LadderUnitAction.MOVE:
@@ -703,11 +708,11 @@ namespace SamSoarII.Shell.Models
             oldscrolloffset = newscrolloffset;
         }
 
-        public void DynamicDispose()
+        public void DynamicDispose(bool hide = false)
         {
             if (loadedrowstart <= loadedrowend)
             {
-                DisposeRange(loadedrowstart, loadedrowend);
+                DisposeRange(loadedrowstart, loadedrowend, hide);
                 loadedrowstart = 0;
                 loadedrowend = -1;
             }
@@ -727,14 +732,19 @@ namespace SamSoarII.Shell.Models
                         if (unit.View == null)
                         {
                             unit.View = LadderUnitViewModel.Create(unit);
-                            LadderCanvas.Children.Add(unit.View);
+                            if (unit.View.Parent != ViewParent.MainCanvas)
+                            {
+                                if (unit.View.Parent is Canvas)
+                                    ((Canvas)(unit.View.Parent)).Children.Remove(unit.View);
+                                ViewParent.MainCanvas.Children.Add(unit.View);
+                            }
                         }
                     }
                 });
             }
         }
 
-        private void DisposeRange(int rowstart, int rowend)
+        private void DisposeRange(int rowstart, int rowend, bool hide = false)
         {
             int dir = (rowstart < rowend ? 1 : -1);
             for (int y = rowstart; y != rowend + dir; y += dir)
@@ -747,9 +757,7 @@ namespace SamSoarII.Shell.Models
                     {
                         if (unit.View != null)
                         {
-                            LadderCanvas.Children.Remove(unit.View);
-                            //AllResourceManager.Dispose(unit.View);
-                            //unit.View = null;
+                            if (hide) unit.View.Visibility = Visibility.Hidden;
                             unit.View.Dispose();
                         }
                     }
@@ -770,6 +778,7 @@ namespace SamSoarII.Shell.Models
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsMasked"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("CanvasTop"));
+            OnCorePropertyChanged(this, new PropertyChangedEventArgs("UnitBaseTop"));
         }
         
         public LadderModes LadderMode { get { return core.LadderMode; } }

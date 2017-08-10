@@ -248,9 +248,13 @@ namespace SamSoarII.Core.Models
             foreach (LadderNetworkModel network in children)
             {
                 network.CanvasTop = currenttop;
-                currenttop += (network.IsExpand ? network.RowCount : 0) * unitheight + 100;
+                currenttop += FontManager.GetLadder().FontSize + 32;
                 if (network.IsBriefExpand)
                     currenttop += network.BriefRowCount * FontManager.GetLadder().FontSize;
+                network.UnitBaseTop = currenttop;
+                currenttop += (network.IsExpand ? network.RowCount : 0) * unitheight + 48;
+                network.ViewHeight = currenttop - network.CanvasTop;
+                currenttop += 12;
             }
             canvasheight = currenttop;
             ViewPropertyChanged(this, new PropertyChangedEventArgs("CanvasHeight"));

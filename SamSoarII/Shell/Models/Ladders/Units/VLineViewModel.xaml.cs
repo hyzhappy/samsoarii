@@ -56,7 +56,7 @@ namespace SamSoarII.Shell.Models
             switch (flags)
             {
                 case UPDATE_TOP:
-                    Canvas.SetTop(this, Y * (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) + 100);
+                    Canvas.SetTop(this, Core.Parent.UnitBaseTop + Y * (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) + 100);
                     break;
                 case UPDATE_LEFT:
                     Canvas.SetLeft(this, X * Global.GlobalSetting.LadderWidthUnit + Global.GlobalSetting.LadderWidthUnit / 2);

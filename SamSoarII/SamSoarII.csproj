@@ -502,6 +502,9 @@
     <Compile Include="Shell\Models\Ladders\SelectRect.xaml.cs">
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Models\SelectArea.xaml.cs">
+      <DependentUpon>SelectArea.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shell\Windows\BreakpointWindow.xaml.cs">
       <DependentUpon>BreakpointWindow.xaml</DependentUpon>
     </Compile>
@@ -1052,6 +1055,10 @@
     <Page Include="Shell\Models\Ladders\SelectRect.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\SelectArea.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Windows\BreakpointWindow.xaml">
       <SubType>Designer</SubType>

@@ -13,8 +13,7 @@
              Background="White" Focusable="True"
              PreviewMouseWheel="OnLadderDiagramMouseWheel"
              PreviewKeyDown="OnLadderDiagramKeyDown"
-             PreviewKeyUp="OnLadderDiagramKeyUp"
-             MouseUp="OnLadderDiagramMouseUp">
+             PreviewKeyUp="OnLadderDiagramKeyUp">
     <UserControl.CommandBindings>
         <CommandBinding Command="{x:Static ApplicationCommands.Cut}"   CanExecute="CutCopyCommandCanExecute" Executed="OnCutCommandExecute"></CommandBinding>
         <CommandBinding Command="{x:Static ApplicationCommands.Copy}"  CanExecute="CutCopyCommandCanExecute" Executed="OnCopyCommandExecute"></CommandBinding>
@@ -32,8 +31,7 @@
         <util:BoolToVisibilityConverter2 x:Key="converter2"></util:BoolToVisibilityConverter2>
     </UserControl.Resources>
     <ScrollViewer x:Name="MainScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SizeChanged="MainScrollViewer_SizeChanged" ScrollChanged="MainScrollViewer_ScrollChanged">
-        <StackPanel x:Name="mainStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" Background="Transparent" LayoutTransform="{x:Static gb:GlobalSetting.LadderScaleTransform}"
-                    PreviewMouseDown="OnLadderDiagramMouseDown" MouseMove="OnLadderDiagramMouseMove">
+        <StackPanel x:Name="mainStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" Background="Transparent" LayoutTransform="{x:Static gb:GlobalSetting.LadderScaleTransform}">
             <StackPanel.Resources>
                 <ContextMenu x:Key="CommentAreaContextMenu">
                     <MenuItem Header="{x:Static properties:Resources.LadderDiagram_Edit_Program_Comment}" Click="OnEditComment"></MenuItem>
@@ -79,7 +77,8 @@
                                 MouseDoubleClick="OnThumbnailButtonMouseDoubleClick">
                         </Button>
                     </StackPanel>
-                    <Canvas x:Name="MainCanvas" Width="3600" HorizontalAlignment="Left" AllowDrop="True" Drop="OnDrop" DragLeave="OnDragLeave" DragOver="OnDragOver" MouseMove="OnMouseMove"/>
+                    <Canvas x:Name="MainCanvas" Width="3600" HorizontalAlignment="Left" AllowDrop="True" Drop="OnDrop" DragLeave="OnDragLeave" DragOver="OnDragOver" 
+                            MouseMove="OnMainCanvasMouseMove" MouseDown="OnMainCanvasMouseDown" MouseUp="OnMainCanvasMouseUp"/>
                     <Line x:Name="line2" Stroke="Black" Margin="-25,0,0,0" StrokeThickness="3" X1="0" Y1="0" X2="20" Y2="0"></Line>
                 </StackPanel>
             </Grid>

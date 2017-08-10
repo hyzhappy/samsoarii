@@ -56,17 +56,17 @@ namespace SamSoarII.Shell.Models
                 if (parent == value) return;
                 LadderNetworkModel _parent = parent;
                 this.parent = null;
-                if (_parent?.View != null)
+                if (_parent != null)
                 {
-                    _parent.View.LadderCanvas.Children.Remove(View);
+                    //_parent.View.LadderCanvas.Children.Remove(View);
                     if (_parent.Parent.View.SelectionStatus == SelectStatus.SingleSelected)
                         _parent.Parent.View.SelectionStatus = SelectStatus.Idle;
                 }
                 this.parent = value;
-                if (parent?.View != null)
+                if (parent != null)
                 {
                     if (!parent.IsExpand) parent.IsExpand = true;
-                    parent.View.LadderCanvas.Children.Add(View);
+                    //parent.View.LadderCanvas.Children.Add(View);
                     parent.View.SelectAreaOriginFX = X;
                     parent.View.SelectAreaOriginFY = Y;
                     parent.View.SelectAreaOriginSX = X;
@@ -114,6 +114,12 @@ namespace SamSoarII.Shell.Models
             get
             {
                 return parent == null ? null : parent.Children[x, y];
+            }
+            set
+            {
+                Parent = value.Parent;
+                X = value.X;
+                Y = value.Y;
             }
         }
 
@@ -203,6 +209,8 @@ namespace SamSoarII.Shell.Models
             Core = new SelectRectCore(null);
             Width = Global.GlobalSetting.LadderWidthUnit;
             IsCommentMode = false;
+            Canvas.SetZIndex(this, 1);
+            Visibility = Visibility.Hidden;
         }
 
         public void Dispose()
@@ -247,8 +255,16 @@ namespace SamSoarII.Shell.Models
         {
             switch (e.PropertyName)
             {
-                case "X": Canvas.SetLeft(this, Global.GlobalSetting.LadderWidthUnit * Core.X); break;
-                case "Y": Canvas.SetTop(this, (isCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) * Core.Y); break;
+                case "Parent": case "X": case "Y":
+                    if (Core?.Parent != null)
+                    {
+                        Visibility = Visibility.Visible;
+                        Canvas.SetLeft(this, Global.GlobalSetting.LadderWidthUnit * Core.X);
+                        Canvas.SetTop(this, Core.Parent.UnitBaseTop + (isCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) * Core.Y);
+                    }
+                    else
+                        Visibility = Visibility.Hidden;
+                    break;
             }
             PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
         }
@@ -273,13 +289,6 @@ namespace SamSoarII.Shell.Models
                 Canvas.SetTop(this, (isCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) * Core.Y);
                 Height = isCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit;
             }
-        }
-
-        public void Move(LadderNetworkViewModel net, int x = 0, int y = 0)
-        {
-            Core.Parent = (net != null ? net.Core : null);
-            Core.X = x;
-            Core.Y = y;
         }
 
         #endregion
