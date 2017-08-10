@@ -265,6 +265,20 @@ namespace SamSoarII.Core.Models
             get { return this.canvastop; }
             set { this.canvastop = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("CanvasTop")); }
         }
+
+        private double viewheight;
+        public double ViewHeight
+        {
+            get { return this.viewheight; }
+            set { this.viewheight = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("ViewHeight")); }
+        }
+
+        private double unitbasetop;
+        public double UnitBaseTop
+        {
+            get { return this.unitbasetop; }
+            set { this.unitbasetop = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("UnitBaseTop")); }
+        }
         
         #endregion
 

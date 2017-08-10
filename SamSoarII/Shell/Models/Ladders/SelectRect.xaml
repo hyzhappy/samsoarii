@@ -6,10 +6,8 @@
              xmlns:local="clr-namespace:SamSoarII.Shell.Models"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Canvas x:Uid="Canvas_1">
-        <Rectangle x:Uid="Rectangle_1" 
+    <Rectangle x:Uid="Rectangle_1" 
                    Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Width}" 
                    Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Height}" 
-                   StrokeThickness="4" Stroke="YellowGreen"></Rectangle>
-    </Canvas>
+                   StrokeThickness="4" Stroke="YellowGreen"/>
 </UserControl>

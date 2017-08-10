@@ -55,7 +55,6 @@ namespace SamSoarII.Shell.Models
 
         public LadderUnitViewModel()
         {
-
         }
 
         public virtual void Dispose()
@@ -99,10 +98,7 @@ namespace SamSoarII.Shell.Models
                 default:
                     ret = null; break;
             }
-            if (ret != null && ret.Parent is Canvas)
-            {
-                ((Canvas)(ret.Parent)).Children.Remove(ret);
-            }
+            if (ret != null) ret.Visibility = Visibility.Visible;
             return ret;
         }
         
@@ -250,7 +246,7 @@ namespace SamSoarII.Shell.Models
                 case 0:
                     break;
                 case UPDATE_TOP:
-                    Canvas.SetTop(this, Y * (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit));
+                    Canvas.SetTop(this, core.Parent.UnitBaseTop + Y * (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit));
                     break;
                 case UPDATE_LEFT:
                     Canvas.SetLeft(this, X * Global.GlobalSetting.LadderWidthUnit);
