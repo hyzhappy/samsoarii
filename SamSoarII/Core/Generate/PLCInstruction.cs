@@ -187,17 +187,14 @@ namespace SamSoarII.Core.Generate
                         break;
                 }
                 for (int i = 1; i <= prototype.Children.Count; i++)
-                    if (args[i] == null)
-                        args[i] = ToCStyle(prototype.Children[i - 1]);
+                    if (args[i] == null) args[i] = ToCStyle(prototype.Children[i - 1]);
                 /*
                  * 注意如果是复位(RST)了计数器的位(C)的话
                  * 会影响对应标号的计数器值
                  * 所以标号需要记录到另外的参数
                  */
                 if (args[0].Length > 2 && args[0].Substring(0, 3).Equals("RST") && args[1][0] == 'C')
-                {
                     args = args.Concat(new string[] { prototype.Children[0].Text.Substring(1), prototype.Children[1].Store.Value.ToString() }).ToArray();
-                }
                 if (args[0].Length > 2 && args[0].Substring(0, 2).Equals("CT"))
                     args = args.Concat(new string[] { prototype.Children[0].Text.Substring(2) }).ToArray();
             }

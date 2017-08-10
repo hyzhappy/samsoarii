@@ -159,6 +159,9 @@ namespace SamSoarII.Shell.Models
                     PropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
                     ViewParent.IsViewModified = true;
                     break;
+                case "IsBriefExpand":
+                    CommentAreaExpander.IsExpanded = core.IsBriefExpand;
+                    break;
                 case "IsMasked":
                     if (IsMasked)
                     {
@@ -189,6 +192,9 @@ namespace SamSoarII.Shell.Models
                         SelectAreaSecondX = SelectAreaSecondX;
                         SelectAreaSecondY = SelectAreaSecondY;
                     }
+                    break;
+                case "CanvasTop":
+                    Canvas.SetTop(this, core.CanvasTop);
                     break;
                 case "ID":
                     NetworkNumberLabel.Content = NetworkNumber;
@@ -760,8 +766,10 @@ namespace SamSoarII.Shell.Models
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("Description"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
+            OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsBriefExpand"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsMasked"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
+            OnCorePropertyChanged(this, new PropertyChangedEventArgs("CanvasTop"));
         }
         
         public LadderModes LadderMode { get { return core.LadderMode; } }
@@ -1060,8 +1068,18 @@ namespace SamSoarII.Shell.Models
                 }
             }
         }
+        
+        private void CommentAreaExpander_Expanded(object sender, RoutedEventArgs e)
+        {
+            core.IsBriefExpand = true;
+        }
+
+        private void CommentAreaExpander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            core.IsBriefExpand = false;
+        }
 
         #endregion
-        
+
     }
 }
