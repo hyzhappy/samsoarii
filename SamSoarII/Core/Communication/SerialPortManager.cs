@@ -250,7 +250,7 @@ namespace SamSoarII.Core.Communication
             }
             catch (Exception e)
             {
-                if (e.GetType() == typeof(TimeoutException) && AssertCmd(cmd))
+                if (e.GetType() == typeof(TimeoutException))
                 {
                     cmd.IsComplete = true;
                     cmd.IsSuccess = false;
@@ -264,11 +264,7 @@ namespace SamSoarII.Core.Communication
             readbuffercount = 0;
             return 0;
         }
-        private bool AssertCmd(ICommunicationCommand cmd)
-        {
-            return cmd is GeneralReadCommand || cmd is ForceCancelCommand
-                || cmd is GeneralWriteCommand || cmd is IntrasegmentWriteCommand;
-        }
+
         public bool AutoCheck()
         {
             if (IsSuccess) return true;
