@@ -44,7 +44,7 @@
                     <local:LadderExpander.Height>
                         <MultiBinding Converter="{StaticResource converter1}">
                             <Binding ElementName="MainBorder" Path="ActualHeight"></Binding>
-                            <Binding ElementName="MainCanvas" Path="ActualHeight"></Binding>
+                            <Binding ElementName="LadderNetworkStackPanel" Path="ActualHeight"></Binding>
                         </MultiBinding>
                     </local:LadderExpander.Height>
                 </local:LadderExpander>
@@ -55,7 +55,7 @@
                     <Rectangle.Height>
                         <MultiBinding Converter="{StaticResource converter1}">
                             <Binding ElementName="MainBorder" Path="ActualHeight"></Binding>
-                            <Binding ElementName="MainCanvas" Path="ActualHeight"></Binding>
+                            <Binding ElementName="LadderNetworkStackPanel" Path="ActualHeight"></Binding>
                         </MultiBinding>
                     </Rectangle.Height>
                 </Rectangle>
@@ -79,7 +79,7 @@
                                 MouseDoubleClick="OnThumbnailButtonMouseDoubleClick">
                         </Button>
                     </StackPanel>
-                    <Canvas x:Name="MainCanvas" Width="3600" HorizontalAlignment="Left" AllowDrop="True" Drop="OnDrop" DragLeave="OnDragLeave" DragOver="OnDragOver" MouseMove="OnMouseMove"/>
+                    <StackPanel x:Name="LadderNetworkStackPanel" HorizontalAlignment="Left" AllowDrop="True" Drop="OnDrop" DragLeave="OnDragLeave" DragOver="OnDragOver" MouseMove="OnMouseMove"/>
                     <Line x:Name="line2" Stroke="Black" Margin="-25,0,0,0" StrokeThickness="3" X1="0" Y1="0" X2="20" Y2="0"></Line>
                 </StackPanel>
             </Grid>
@@ -88,7 +88,7 @@
                     <Line.Y2>
                         <MultiBinding x:Uid="MultiBinding_3" Converter="{StaticResource converter1}">
                             <Binding x:Uid="Binding_5" ElementName="MainBorder" Path="ActualHeight"></Binding>
-                            <Binding x:Uid="Binding_6" ElementName="MainCanvas" Path="ActualHeight"></Binding>
+                            <Binding x:Uid="Binding_6" ElementName="LadderNetworkStackPanel" Path="ActualHeight"></Binding>
                         </MultiBinding>
                     </Line.Y2>
                 </Line>

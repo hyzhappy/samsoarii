@@ -139,9 +139,6 @@ namespace SamSoarII.Shell.Models
                 case "IsCommentMode":
                     _selectRect.IsCommentMode = core.IsCommentMode;
                     break;
-                case "CanvasHeight":
-                    MainCanvas.Height = core.CanvasHeight;
-                    break;
             }
         }
         
@@ -155,16 +152,16 @@ namespace SamSoarII.Shell.Models
                     net = (LadderNetworkModel)(e.NewItems[0]);
                     if (net.View == null)
                         net.View = new LadderNetworkViewModel(net);
-                    MainCanvas.Children.Insert(e.NewStartingIndex, net.View);
+                    LadderNetworkStackPanel.Children.Insert(e.NewStartingIndex, net.View);
                     break;
                 case NotifyCollectionChangedAction.Remove:
                     net = (LadderNetworkModel)(e.OldItems[0]);
                     if (SelectRectOwner == net) SelectRectOwner = null;
-                    MainCanvas.Children.RemoveAt(e.OldStartingIndex);
+                    LadderNetworkStackPanel.Children.RemoveAt(e.OldStartingIndex);
                     break;
                 case NotifyCollectionChangedAction.Replace:
                     net = (LadderNetworkModel)(e.NewItems[0]);
-                    MainCanvas.Children[e.NewStartingIndex] = net.View;
+                    LadderNetworkStackPanel.Children[e.NewStartingIndex] = net.View;
                     break;
                 case NotifyCollectionChangedAction.Move:
                 case NotifyCollectionChangedAction.Reset:
@@ -2075,7 +2072,7 @@ namespace SamSoarII.Shell.Models
             PropertyChanged(this, new PropertyChangedEventArgs("LadderComment"));
             if (!IsExpand)
             {
-                MainCanvas.Children.Clear();
+                LadderNetworkStackPanel.Children.Clear();
                 if (ThumbnailButton.ToolTip == null)
                 {
                     ThumbnailButton.ToolTip = GenerateToolTipByLadder();
@@ -2090,13 +2087,12 @@ namespace SamSoarII.Shell.Models
                     ThumbnailButton.ToolTip = null;
                     TitleStackPanel.Children.Remove(ThumbnailButton);
                 }
-                MainCanvas.Children.Clear();
+                LadderNetworkStackPanel.Children.Clear();
                 foreach (LadderNetworkModel net in core.Children)
                 {
                     if (net.View == null) net.View = new LadderNetworkViewModel(net);
-                    MainCanvas.Children.Add(net.View);
+                    LadderNetworkStackPanel.Children.Add(net.View);
                 }
-                core.UpdateCanvasTop();
             }
         }
 
