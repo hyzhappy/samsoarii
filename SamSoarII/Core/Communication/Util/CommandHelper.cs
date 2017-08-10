@@ -159,48 +159,23 @@ namespace SamSoarII.Core.Communication
             }
         }
 
-        public static void Decrypt(int id, byte[] data)
-        {
-            for (int i = 0; i < data.Length; i++)
-            {
-                data[i] ^= (byte)id;
-                byte di = data[i];
-                ushort bs = 0x0101;
-                int os = 7;
-                data[i] = 0;
-                while (os >= -7)
-                {
-                    data[i] |= (byte)((os > 0) ? ((di & bs) << os) : ((di & bs) >> (-os)));
-                    bs <<= 1; os -= 2;
-                }
-            }
-        }
         public static void CheckRetData(ICommunicationCommand command, byte[] _retData)
         {
-            //数据长度为0视为为未完
-            if (_retData.Length == 0)
+            if (_retData.Count() < 4)
             {
                 command.IsComplete = false;
                 command.IsSuccess = false;
                 return;
             }
-            //数据不是以CMD_DOWNLOAD_FLAG开头，视为接受完成但错误
-            if (_retData[0] != CommunicationDataDefine.CMD_DOWNLOAD_FLAG)
+            if(_retData[0] != CommunicationDataDefine.CMD_DOWNLOAD_FLAG)
             {
                 command.IsComplete = true;
                 command.IsSuccess = false;
                 return;
             }
-            if (_retData.Length < 3)
-            {
-                command.IsComplete = false;
-                command.IsSuccess = false;
-                return;
-            }
             int len = ValueConverter.GetValueByBytes(_retData[1], _retData[2]);
             command.IsComplete = _retData.Length >= len;
-            //长度大于应接受的长度，视为接受完成但错误
-            if (_retData.Length > len)
+            if(_retData.Length > len)
             {
                 command.IsSuccess = false;
                 return;
