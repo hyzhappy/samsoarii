@@ -27,9 +27,10 @@
                 </StackPanel.Resources>
                 <Grid x:Name="CommentAreaGrid" Background="Transparent">
                     <Border x:Name="CommentAreaBorder" BorderThickness="4" BorderBrush="Brown" Width="1500" Margin="20,0,0,0" HorizontalAlignment="Left">
-                        <Expander x:Name="CommentAreaExpander" Width="{Binding ElementName=CommentAreaBorder, Path=Width}" Background="LightCyan" MouseDoubleClick="OnEditComment">
+                        <Expander x:Name="CommentAreaExpander" Width="1500" Background="LightCyan" MouseDoubleClick="OnEditComment" 
+                                  Expanded="CommentAreaExpander_Expanded" Collapsed="CommentAreaExpander_Collapsed">
                             <Expander.Header>
-                                <Grid x:Uid="Grid_2" Width="{Binding ElementName=CommentAreaBorder,Path=Width}" ContextMenu="{StaticResource CommentAreaContextMenu}">
+                                <Grid x:Uid="Grid_2" Width="1500" ContextMenu="{StaticResource CommentAreaContextMenu}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition x:Uid="ColumnDefinition_1" Width="1*"></ColumnDefinition>
                                         <ColumnDefinition x:Uid="ColumnDefinition_2" Width="1*"></ColumnDefinition>
@@ -56,20 +57,6 @@
                         HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" 
                         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                         PreviewMouseDown="OnCanvasMouseDown" PreviewMouseUp="OnCanvasMouseUp">
-                        <Canvas.Resources>
-                            <ContextMenu x:Key="CM_Monitor" x:Name="CM_Monitor">
-                                <MenuItem x:Name="CMI_Value1"/>
-                                <MenuItem x:Name="CMI_Value2"/>
-                                <MenuItem x:Name="CMI_Value3"/>
-                                <MenuItem x:Name="CMI_Value4"/>
-                                <MenuItem x:Name="CMI_Value5"/>
-                                <Separator/>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_AddBreakpoint}" Command="{x:Static gb:BreakpointCommand.Add}"/>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_SettingBreakpoint}" Command="{x:Static gb:BreakpointCommand.Setting}"/>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_RemoveBreakpoint}" Command="{x:Static gb:BreakpointCommand.Remove}"/>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_JumpToThis}" Command="{x:Static gb:BreakpointCommand.JumpTo}"/>
-                            </ContextMenu>
-                        </Canvas.Resources>
                     </Canvas>
                 </Grid>
             </StackPanel>

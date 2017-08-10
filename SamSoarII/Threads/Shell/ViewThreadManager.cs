@@ -59,37 +59,23 @@ namespace SamSoarII.Threads
             try
             {
                 double newscrolloffset = current.Scroll.VerticalOffset;
-                if (current.IsViewModified || newscrolloffset - oldscrolloffset > 5.0)
+                if (current.IsViewModified || Math.Abs(newscrolloffset - oldscrolloffset) > 5.0)
                 {
-                    //do
-                    //{
-                        current.IsViewModified = false;
-                        for (int i = 0; i < current.Core.Children.Count; i++)
-                            current.Core.Children[i].View.DynamicUpdate();
-                        oldscrolloffset = newscrolloffset;
-                    //} while (current.IsViewModified);
-                }
-                else if (oldscrolloffset - newscrolloffset > 5.0)
-                {
-                    for (int i = current.Core.Children.Count - 1; i >= 0; i--)
+                    current.IsViewModified = false;
+                    for (int i = 0; i < current.Core.Children.Count; i++)
                         current.Core.Children[i].View.DynamicUpdate();
                     oldscrolloffset = newscrolloffset;
                 }
 
                 double newinstoffset = current.Core.Inst.View.Scroll.VerticalOffset;
-                if (current.Core.Inst.View.IsViewModified || newinstoffset - oldinstoffset > 5.0)
+                if (current.Core.Inst.View.IsViewModified || Math.Abs(newinstoffset - oldinstoffset) > 5.0)
                 {
                     current.Core.Inst.View.IsViewModified = false;
                     for (int i = 0; i < current.Core.Children.Count; i++)
                         current.Core.Children[i].Inst.View.DynamicUpdate();
                     oldinstoffset = newinstoffset;
                 }
-                else if (oldinstoffset - newinstoffset > 5.0)
-                {
-                    for (int i = current.Core.Children.Count - 1; i >= 0; i--)
-                        current.Core.Children[i].Inst.View.DynamicUpdate();
-                    oldinstoffset = newinstoffset;
-                }
+
                 double newoutlineoffset = current.Outline.Scroll.VerticalOffset;
                 if (Math.Abs(newoutlineoffset - oldoutlineoffset) > 2.0)
                 {
