@@ -409,12 +409,12 @@ namespace SamSoarII.Core.Helpers
                 return ret;
 
             //下载 PlsTable
-            ret = DownloadPlsTableExecute();
+            ret = DownloadPlsTableExecute(communManager);
             if (ret != DownloadError.None)
                 return ret;
 
             //下载 PlsBlock
-            ret = DownloadPlsBlockExecute();
+            ret = DownloadPlsBlockExecute(communManager);
             if (ret != DownloadError.None)
                 return ret;
 
@@ -530,18 +530,18 @@ namespace SamSoarII.Core.Helpers
         #endregion
 
         #region PlsTable download
-        private static DownloadError DownloadPlsTableExecute()
+        private static DownloadError DownloadPlsTableExecute(CommunicationManager communManager)
         {
-            DownloadError ret = DownloadError.None;
-            return ret;
+            if (dtTable.Count == 0) return DownloadError.None;
+            return _DownloadHandle(communManager, dtTable.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_PLSTABLE);
         }
         #endregion
 
         #region PlsBlock download
-        private static DownloadError DownloadPlsBlockExecute()
+        private static DownloadError DownloadPlsBlockExecute(CommunicationManager communManager)
         {
-            DownloadError ret = DownloadError.None;
-            return ret;
+            if (dtBlock.Count == 0) return DownloadError.None;
+            return _DownloadHandle(communManager, dtBlock.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_PLSBLOCK);
         }
         #endregion
 
@@ -596,6 +596,12 @@ namespace SamSoarII.Core.Helpers
         }
         #endregion
 
+        #region tools
+        public static bool CheckOption(int oldoption, int newoption)
+        {
+            return (oldoption & CommunicationDataDefine.OPTION_INITIALIZE) == (newoption & CommunicationDataDefine.OPTION_INITIALIZE);
+        }
+        #endregion
         #endregion
     }
 }
