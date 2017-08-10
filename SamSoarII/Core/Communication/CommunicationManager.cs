@@ -165,7 +165,7 @@ namespace SamSoarII.Core.Communication
                     {
                         ValueManager.ReadMonitorData();
                         readcmds = ValueManager.GetReadCommands().ToArray();
-                        readindex = 0;   
+                        readindex = 0;
                     }
                     current = readcmds.Count() == 0 ? null : readcmds[readindex++];
                 }
