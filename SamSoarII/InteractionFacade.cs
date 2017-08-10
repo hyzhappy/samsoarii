@@ -390,7 +390,11 @@ namespace SamSoarII
             mngValue.Initialize();
             //GC.Collect();
         }
-        
+        /// <summary>
+        /// 记录每次下载后的选项，判断是否需重新生成Bin,初始化为-1表示第一次打开对话框
+        /// </summary>
+        /// <returns></returns>
+        private int _option = -1;
         public bool DownloadProject()
         {
             if (vmdProj.LadderMode == LadderModes.Simulate) _CloseSimulate();
@@ -442,20 +446,24 @@ namespace SamSoarII
                 };
                 dialog.Ensure += (sender3, e3) =>
                 {
-                    //按下下载键时再生成Bin,判断是否要包括软元件初始化
-                    LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Generating_Final);
-                    handle.Start();
-                    Thread genthread = new Thread(() =>
+                    LoadingWindowHandle handle;
+                    if (_option < 0 || !DownloadHelper.CheckOption(_option, paraCom.DownloadOption))
                     {
-                        GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
-                        mngComu.LoadExecute();
-                        handle.Completed = true;
-                        handle.Abort();
-                    });
-                    genthread.Start();
-                    while (!handle.Completed) Thread.Sleep(10);
-
-
+                        _option = paraCom.DownloadOption;
+                        //按下下载键时再生成Bin,判断是否要包括软元件初始化
+                        handle = new LoadingWindowHandle(Properties.Resources.Generating_Final);
+                        handle.Start();
+                        Thread genthread = new Thread(() =>
+                        {
+                            GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
+                            mngComu.LoadExecute();
+                            handle.Completed = true;
+                            handle.Abort();
+                        });
+                        genthread.Start();
+                        while (!handle.Completed) Thread.Sleep(10);
+                    }
+                    
                     if (mngComu.CheckLink())
                     {
                         handle = new LoadingWindowHandle(Properties.Resources.Project_Download);
