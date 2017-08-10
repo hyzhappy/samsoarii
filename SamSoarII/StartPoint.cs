@@ -47,6 +47,7 @@ namespace SamSoarII.AppMain
                 //退出
                 return;
             }*/
+
         }
         /// <summary>
         /// 检查是否以管理员权限运行
