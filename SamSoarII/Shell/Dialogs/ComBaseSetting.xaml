@@ -36,7 +36,7 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <GroupBox x:Name="DownloadDataGroupBox" Grid.Row="2" Grid.Column="0" Visibility="Hidden"
+        <GroupBox x:Name="DataGroupBox" Grid.Row="2" Grid.Column="0" Visibility="Hidden"
                   Header="{x:Static properties:Resources.Communication_Download_Data}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -48,7 +48,7 @@
                               Checked="OnChecked" Unchecked="OnUnchecked">
                     </CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Program}"></TextBlock>
-                    <CheckBox x:Name="CB_Element" Margin="10,6,2,6"
+                    <CheckBox x:Name="CB_Comment" Margin="10,6,2,6"
                               Checked="OnChecked" Unchecked="OnUnchecked">
                     </CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Comment}"></TextBlock>
@@ -61,7 +61,7 @@
                     </CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Setting}"></TextBlock>
                 </StackPanel>
-                <Grid Grid.Row="1">
+                <Grid x:Name="GD_Modify" Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="*"/>

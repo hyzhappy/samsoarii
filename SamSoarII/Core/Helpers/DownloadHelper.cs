@@ -21,8 +21,34 @@ namespace SamSoarII.Core.Helpers
         DownloadFailed
     }
 
-    public class DownloadHelper
+    public static class DownloadHelper
     {
+        #region option
+        private static int downloadoption;
+        public static int DownloadOption
+        {
+            get { return downloadoption; }
+            set { downloadoption = value; }
+        }
+        public static bool IsDownloadProgram
+        {
+            get { return (downloadoption & CommunicationDataDefine.OPTION_PROGRAM) != 0; }
+        }
+        public static bool IsDownloadComment
+        {
+            get { return (downloadoption & CommunicationDataDefine.OPTION_COMMENT) != 0; }
+        }
+        public static bool IsDownloadInitialize
+        {
+            get { return (downloadoption & CommunicationDataDefine.OPTION_INITIALIZE) != 0; }
+        }
+        public static bool IsDownloadSetting
+        {
+            get { return (downloadoption & CommunicationDataDefine.OPTION_SETTING) != 0; }
+        }
+        #endregion
+
+        #region data
         /// <summary> 程序 </summary>
         //static private List<byte> dtBinary;
         /// <summary> 条形码 </summary>
@@ -41,9 +67,10 @@ namespace SamSoarII.Core.Helpers
         static private List<byte> dtTable;
         /// <summary> Block表 </summary>
         static private List<byte> dtBlock;
-        
+        #endregion
+
         #region InitializeData
-        
+
         static private void InitializeData(ProjectModel project)
         {
             //工程，注释，软元件等用于上载的信息直接压缩xml
@@ -391,35 +418,37 @@ namespace SamSoarII.Core.Helpers
             {
 
             }
-
-            //下载Bin文件
+            
             DownloadError ret = DownloadError.None;
-            ret = DownloadBinExecute(communManager);
-            if (ret != DownloadError.None)
-                return ret;
+            if (IsDownloadProgram)
+            {
+                //下载Bin文件
+                ret = DownloadBinExecute(communManager);
+                if (ret != DownloadError.None)
+                    return ret;
 
-            //下载用于上载的XML压缩文件（包括程序，注释（可选），软元件表（可选）等）
-            ret = DownloadProjExecute(communManager,communManager.IFParent.MDProj.PARAProj.PARACom.DownloadOption);
-            if (ret != DownloadError.None)
-                return ret;
+                //下载用于上载的XML压缩文件（包括程序，注释（可选），软元件表（可选）等）
+                ret = DownloadProjExecute(communManager);
+                if (ret != DownloadError.None)
+                    return ret;
 
-            //下载Modbus表格
-            ret = DownloadModbusTableExecute(communManager);
-            if (ret != DownloadError.None)
-                return ret;
+                //下载Modbus表格
+                ret = DownloadModbusTableExecute(communManager);
+                if (ret != DownloadError.None)
+                    return ret;
 
-            //下载 PlsTable
-            ret = DownloadPlsTableExecute(communManager);
-            if (ret != DownloadError.None)
-                return ret;
+                //下载 PlsTable
+                ret = DownloadPlsTableExecute(communManager);
+                if (ret != DownloadError.None)
+                    return ret;
 
-            //下载 PlsBlock
-            ret = DownloadPlsBlockExecute(communManager);
-            if (ret != DownloadError.None)
-                return ret;
-
+                //下载 PlsBlock
+                ret = DownloadPlsBlockExecute(communManager);
+                if (ret != DownloadError.None)
+                    return ret;
+            }
             //下载 Config
-            if (communManager.IFParent.MDProj.PARAProj.PARACom.IsDownloadSetting)
+            if (IsDownloadSetting)
             {
                 ret = DownloadConfigExecute(communManager);
                 if (ret != DownloadError.None)
@@ -481,9 +510,8 @@ namespace SamSoarII.Core.Helpers
 
         #region Proj Download
         //工程文件（包括程序，注释（可选），软元件表（可选）等）
-        private static DownloadError DownloadProjExecute(CommunicationManager communManager,int flag)
+        private static DownloadError DownloadProjExecute(CommunicationManager communManager)
         {
-            if (flag == 0) return DownloadError.None;
             string genPath = string.Format(@"{0}\rar\temp", FileHelper.AppRootPath);
             if (!Directory.Exists(genPath))
                 Directory.CreateDirectory(genPath);
@@ -599,7 +627,8 @@ namespace SamSoarII.Core.Helpers
         #region tools
         public static bool CheckOption(int oldoption, int newoption)
         {
-            return (oldoption & CommunicationDataDefine.OPTION_INITIALIZE) == (newoption & CommunicationDataDefine.OPTION_INITIALIZE);
+            return ((oldoption & CommunicationDataDefine.OPTION_INITIALIZE) == (newoption & CommunicationDataDefine.OPTION_INITIALIZE)) && 
+                ((oldoption & CommunicationDataDefine.OPTION_PROGRAM) == (newoption & CommunicationDataDefine.OPTION_PROGRAM));
         }
         #endregion
 

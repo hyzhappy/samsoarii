@@ -202,7 +202,7 @@ namespace SamSoarII.Core.Helpers
             sw.Write("void InitUserRegisters();\r\n");
             InstHelper.InstToDownCode(sw, nets.ToArray());
             sw.Write("void InitUserRegisters()\r\n{\r\n");
-            if (project.PARAProj.PARACom.IsDownloadInitialize)
+            if (DownloadHelper.IsDownloadInitialize)
             {
                 ValueManager ValueManager = project.Parent.MNGValue;
                 foreach (ValueInfo vinfo in ValueManager)

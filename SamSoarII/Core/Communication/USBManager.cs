@@ -107,7 +107,6 @@ namespace SamSoarII.Core.Communication
                 {
                     CloseUSB();
                     Start();
-                    //writer.Flush();
                     Thread.Sleep(500);
                     return 1;
                 }
@@ -116,7 +115,6 @@ namespace SamSoarII.Core.Communication
             {
                 CloseUSB();
                 Start();
-                //writer.Flush();
                 Thread.Sleep(500);
                 return 1;
             }

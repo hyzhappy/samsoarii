@@ -446,10 +446,14 @@ namespace SamSoarII
                 };
                 dialog.Ensure += (sender3, e3) =>
                 {
-                    LoadingWindowHandle handle;
-                    if (_option < 0 || !DownloadHelper.CheckOption(_option, paraCom.DownloadOption))
+                    if (DownloadHelper.DownloadOption == 0)
                     {
-                        _option = paraCom.DownloadOption;
+                        LocalizedMessageBox.Show(Properties.Resources.Please_Select_DownData, LocalizedMessageIcon.Information);
+                        return;
+                    }
+                    LoadingWindowHandle handle;
+                    if (DownloadHelper.IsDownloadProgram && (_option < 0 || !DownloadHelper.CheckOption(_option, DownloadHelper.DownloadOption)))
+                    {
                         //按下下载键时再生成Bin,判断是否要包括软元件初始化
                         handle = new LoadingWindowHandle(Properties.Resources.Generating_Final);
                         handle.Start();
@@ -464,6 +468,7 @@ namespace SamSoarII
                         while (!handle.Completed) Thread.Sleep(10);
                     }
 
+                    _option = DownloadHelper.DownloadOption;
 
                     if (mngComu.CheckLink())
                     {
@@ -507,9 +512,84 @@ namespace SamSoarII
             return true;
         }
         
-        public void UploadProject()
+        public bool UploadProject()
         {
+            if (mdProj != null)
+            {
+                if (vmdProj.LadderMode == LadderModes.Simulate) _CloseSimulate();
+                if (vmdProj.LadderMode == LadderModes.Monitor) _CloseMonitor();
+                if (!CheckLadder(false)) return false;
+                if (!CheckFuncBlock(false)) return false;
+            }
+            mngComu.IsEnable = true;
+            CommunicationParams paraCom = mngComu.PARACom;
+            using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom,
+                CommunicationSettingDialogMode.UPLOAD))
+            {
+                ComBaseSetting basesetting = dialog.GetBaseSetting();
+                basesetting.SettingButtonClick += (sender1, e1) =>
+                {
+                    using (CommunicationParamsDialog dialog1 = new CommunicationParamsDialog(paraCom))
+                    {
+                        dialog1.ShowDialog();
+                    }
+                };
+                dialog.CommunicationTest += (sender2, e2) =>
+                {
+                    if (mngComu.CheckLink())
+                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Success, LocalizedMessageIcon.Information);
+                    else
+                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                };
+                dialog.Ensure += (sender3, e3) =>
+                {
+                    if (UploadHelper.UploadOption == 0)
+                    {
+                        LocalizedMessageBox.Show(Properties.Resources.Please_Select_UpData, LocalizedMessageIcon.Information);
+                        return;
+                    }
 
+                    LoadingWindowHandle handle;
+
+                    if (mngComu.CheckLink())
+                    {
+                        handle = new LoadingWindowHandle(Properties.Resources.Project_Upload);
+                        Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
+                        {
+                            handle.Start();
+                            var ret = mngComu.UploadExecute();
+                            mngComu.AbortAll();
+                            handle.Abort();
+                            handle.Completed = true;
+                            switch (ret)
+                            {
+                                case UploadError.None:
+                                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Upload_Successd, LocalizedMessageIcon.Information);
+                                    break;
+                                case UploadError.CommuicationFailed:
+                                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                                    break;
+                                case UploadError.UploadFailed:
+                                    LocalizedMessageBox.Show(Properties.Resources.Upload_Fail, LocalizedMessageIcon.Information);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        });
+                        while (!handle.Completed)
+                        {
+                            Thread.Sleep(10);
+                        }
+                    }
+                    else
+                    {
+                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                    }
+                };
+                dialog.ShowDialog();
+            }
+            mngComu.IsEnable = false;
+            return true;
         }
 
         public bool SimulateProject()

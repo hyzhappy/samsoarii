@@ -1203,6 +1203,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7EFA4F1B458C4E95BF0E32B7762E071C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7F312827AD1A4D529E10D2C3CD749382"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -6678,6 +6684,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7EFA4F1B458C4E95BF0E32B7762E071C"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\libarm_cortexM3l_math.a"
+            "TargetName" = "8:libarm_cortexM3l_math.a"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7F312827AD1A4D529E10D2C3CD749382"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\armv7e-m\\libnosys.a"
@@ -11660,7 +11686,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SamSoarII"
         "ProductCode" = "8:{D8A07A80-3750-422E-A921-59646E9DA217}"
-        "PackageCode" = "8:{57ED47C8-91C1-4943-A01A-2073B6924D10}"
+        "PackageCode" = "8:{8D452ACC-2B3F-4D1F-B44E-8C012BEF9422}"
         "UpgradeCode" = "8:{A7ED4973-BC60-4163-929E-885AA3DD333F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

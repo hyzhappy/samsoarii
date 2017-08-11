@@ -185,7 +185,7 @@ namespace SamSoarII.Core.Communication
                 return;
             }
             //数据不是以CMD_DOWNLOAD_FLAG开头，视为接受完成但错误
-            if (_retData[0] != CommunicationDataDefine.CMD_DOWNLOAD_FLAG)
+            if (_retData[0] != CommunicationDataDefine.CMD_COMMU_FLAG)
             {
                 command.IsComplete = true;
                 command.IsSuccess = false;

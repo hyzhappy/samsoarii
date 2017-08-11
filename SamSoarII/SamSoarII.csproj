@@ -154,6 +154,9 @@
     <Compile Include="Core\Communication\Command\ICommunicationCommand.cs" />
     <Compile Include="Core\Communication\Command\Monitor\IntrasegmentReadCommand.cs" />
     <Compile Include="Core\Communication\Command\Monitor\IntrasegmentWriteCommand.cs" />
+    <Compile Include="Core\Communication\Command\Upload\UploadTypeData.cs" />
+    <Compile Include="Core\Communication\Command\Upload\UploadTypeOver.cs" />
+    <Compile Include="Core\Communication\Command\Upload\UploadTypeStart.cs" />
     <Compile Include="Core\Communication\CommunicationManager.cs" />
     <Compile Include="Core\Communication\IPortManager.cs" />
     <Compile Include="Core\Communication\SerialPortManager.cs" />
@@ -1137,7 +1140,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Communication\Command\Upload\" />
     <Folder Include="Core\Models\Ladders\Commands\" />
     <Folder Include="Core\Models\Ladders\PLSBlock\" />
     <Folder Include="Shell\Helper\" />

@@ -1,4 +1,5 @@
 ﻿using SamSoarII.Core.Communication;
+using SamSoarII.Core.Helpers;
 using SamSoarII.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,23 @@ namespace SamSoarII.Shell.Dialogs
     {
         public event RoutedEventHandler SettingButtonClick = delegate { };
         public event RoutedEventHandler ModifyButtonClick = delegate { };
-        
+        private CommunicationSettingDialogMode mode;
+        public CommunicationSettingDialogMode Mode
+        {
+            get
+            {
+                return mode;
+            }
+            set
+            {
+                mode = value;
+                if(value == CommunicationSettingDialogMode.UPLOAD)
+                {
+                    GD_Modify.Visibility = Visibility.Collapsed;
+                    DataGroupBox.Header = Properties.Resources.Communication_Upload_Data;
+                }
+            }
+        }
         public ComBaseSetting()
         {
             InitializeComponent();
@@ -32,7 +49,7 @@ namespace SamSoarII.Shell.Dialogs
 
         public void Dispose()
         {
-
+            core = null;
         }
 
         private CommunicationParams core;
@@ -46,30 +63,52 @@ namespace SamSoarII.Shell.Dialogs
             {
                 this.core = value;
                 DataContext = value;
-                if (core != null)
+                if (Mode == CommunicationSettingDialogMode.DOWNLOAD)
                 {
-                    CB_Program.IsChecked = core.IsDownloadProgram;
-                    CB_Element.IsChecked = core.IsDownloadComment;
-                    CB_Initialize.IsChecked = core.IsDownloadInitialize;
-                    CB_Setting.IsChecked = core.IsDownloadSetting;
-                    UpdateDownloadOption();
+                    CB_Program.IsChecked = DownloadHelper.IsDownloadProgram;
+                    CB_Comment.IsChecked = DownloadHelper.IsDownloadComment;
+                    CB_Initialize.IsChecked = DownloadHelper.IsDownloadInitialize;
+                    CB_Setting.IsChecked = DownloadHelper.IsDownloadSetting;
                 }
+                else
+                {
+                    CB_Program.IsChecked = UploadHelper.IsUploadProgram;
+                    CB_Comment.IsChecked = UploadHelper.IsUploadComment;
+                    CB_Initialize.IsChecked = UploadHelper.IsUploadInitialize;
+                    CB_Setting.IsChecked = UploadHelper.IsUploadSetting;
+                }
+                UpdateDownloadOption();
             }
         }
         private void UpdateDownloadOption()
         {
-            CB_Program.IsEnabled = !(CB_Element.IsChecked == true || CB_Setting.IsChecked == true);
-            if (CB_Element.IsChecked == true || CB_Setting.IsChecked == true)
+            CB_Program.IsEnabled = !(CB_Comment.IsChecked == true || CB_Initialize.IsChecked == true);
+            if (CB_Comment.IsChecked == true || CB_Initialize.IsChecked == true)
                 CB_Program.IsChecked = true;
-            core.DownloadOption = 0;
-            if (CB_Program.IsChecked == true)
-                core.DownloadOption &= CommunicationDataDefine.OPTION_PROGRAM;
-            if (CB_Element.IsChecked == true)
-                core.DownloadOption &= CommunicationDataDefine.OPTION_COMMENT;
-            if (CB_Setting.IsChecked == true)
-                core.DownloadOption &= CommunicationDataDefine.OPTION_SETTING;
-            if (CB_Initialize.IsChecked == true)
-                core.DownloadOption &= CommunicationDataDefine.OPTION_INITIALIZE;
+            if (Mode == CommunicationSettingDialogMode.UPLOAD)
+            {
+                UploadHelper.UploadOption = 0;
+                if (CB_Program.IsChecked == true)
+                    UploadHelper.UploadOption &= CommunicationDataDefine.OPTION_PROGRAM;
+                if (CB_Comment.IsChecked == true)
+                    UploadHelper.UploadOption &= CommunicationDataDefine.OPTION_COMMENT;
+                if (CB_Setting.IsChecked == true)
+                    UploadHelper.UploadOption &= CommunicationDataDefine.OPTION_SETTING;
+                if (CB_Initialize.IsChecked == true)
+                    UploadHelper.UploadOption &= CommunicationDataDefine.OPTION_INITIALIZE;
+            }
+            else
+            {
+                DownloadHelper.DownloadOption = 0;
+                if (CB_Program.IsChecked == true)
+                    DownloadHelper.DownloadOption &= CommunicationDataDefine.OPTION_PROGRAM;
+                if (CB_Comment.IsChecked == true)
+                    DownloadHelper.DownloadOption &= CommunicationDataDefine.OPTION_COMMENT;
+                if (CB_Setting.IsChecked == true)
+                    DownloadHelper.DownloadOption &= CommunicationDataDefine.OPTION_SETTING;
+                if (CB_Initialize.IsChecked == true)
+                    DownloadHelper.DownloadOption &= CommunicationDataDefine.OPTION_INITIALIZE;
+            }
         }
 
         private void SettingButton_Click(object sender, RoutedEventArgs e)

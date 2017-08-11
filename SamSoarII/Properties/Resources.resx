@@ -1726,7 +1726,7 @@
     <value>Downloading...</value>
   </data>
   <data name="Download_Fail" xml:space="preserve">
-    <value>Download fail</value>
+    <value>Download fail!</value>
   </data>
   <data name="FuncBlock_Correct" xml:space="preserve">
     <value>The function block is correct!</value>
@@ -2252,5 +2252,23 @@
   </data>
   <data name="Show_Password" xml:space="preserve">
     <value>show password</value>
+  </data>
+  <data name="Please_Select_DownData" xml:space="preserve">
+    <value>Please select the data to download!</value>
+  </data>
+  <data name="Communication_Upload_Data" xml:space="preserve">
+    <value>Upload Data</value>
+  </data>
+  <data name="Please_Select_UpData" xml:space="preserve">
+    <value>Please select the data to upload!</value>
+  </data>
+  <data name="Project_Upload" xml:space="preserve">
+    <value>Project Upload</value>
+  </data>
+  <data name="MessageBox_Upload_Successd" xml:space="preserve">
+    <value>Upload Successd</value>
+  </data>
+  <data name="Upload_Fail" xml:space="preserve">
+    <value>Upload fail!</value>
   </data>
 </root>

@@ -634,7 +634,7 @@
     <value>替换结果</value>
   </data>
   <data name="Setting" xml:space="preserve">
-    <value>设置</value>
+    <value>配置</value>
   </data>
   <data name="Content" xml:space="preserve">
     <value>内容</value>
@@ -2252,5 +2252,23 @@
   </data>
   <data name="Show_Password" xml:space="preserve">
     <value>显示密码</value>
+  </data>
+  <data name="Please_Select_DownData" xml:space="preserve">
+    <value>请选择要下载的数据！</value>
+  </data>
+  <data name="Communication_Upload_Data" xml:space="preserve">
+    <value>上载数据</value>
+  </data>
+  <data name="Please_Select_UpData" xml:space="preserve">
+    <value>请选择要上载的数据！</value>
+  </data>
+  <data name="Project_Upload" xml:space="preserve">
+    <value>工程下载</value>
+  </data>
+  <data name="MessageBox_Upload_Successd" xml:space="preserve">
+    <value>上载成功</value>
+  </data>
+  <data name="Upload_Fail" xml:space="preserve">
+    <value>上载失败！</value>
   </data>
 </root>

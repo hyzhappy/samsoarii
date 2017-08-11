@@ -15,12 +15,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using SamSoarII.Core.Communication;
+using SamSoarII.Core.Helpers;
 
 namespace SamSoarII.Shell.Dialogs
 {
     public enum CommunicationSettingDialogMode
     {
-        SETTING, TEST, MONITOR, DOWNLOAD
+        SETTING, TEST, MONITOR, DOWNLOAD, UPLOAD
     }
     /// <summary>
     /// CommunicationSettingDialog_.xaml 的交互逻辑
@@ -37,15 +38,16 @@ namespace SamSoarII.Shell.Dialogs
             InitializeComponent();
             this.communicationParams = communicationParams;
             Mode = mode;
+            baseSetting.Mode = Mode;
             baseSetting.Core = communicationParams;
             //baseSetting.radiobutton.IsChecked = communicationParams.IsComLinked;
             EnsureButton.Click += EnsureButton_Click;
             CancelButton.Click += CancelButton_Click;
             CommunicationTestButton.Click += CommunicationTestButton_Click;
             KeyDown += CommunicationSettingDialog_KeyDown;
-            if (Mode == CommunicationSettingDialogMode.DOWNLOAD)
+            if (Mode == CommunicationSettingDialogMode.DOWNLOAD || Mode == CommunicationSettingDialogMode.UPLOAD)
             {
-                baseSetting.DownloadDataGroupBox.Visibility = Visibility.Visible;
+                baseSetting.DataGroupBox.Visibility = Visibility.Visible;
             }
         }
         public void Dispose()
@@ -98,7 +100,7 @@ namespace SamSoarII.Shell.Dialogs
             int dopt = 0;
             if (baseSetting.CB_Program.IsChecked.Value)
                 dopt |= CommunicationDataDefine.OPTION_PROGRAM;
-            if (baseSetting.CB_Element.IsChecked.Value)
+            if (baseSetting.CB_Comment.IsChecked.Value)
                 dopt |= CommunicationDataDefine.OPTION_COMMENT;
             if (baseSetting.CB_Initialize.IsChecked.Value)
                 dopt |= CommunicationDataDefine.OPTION_INITIALIZE;
@@ -106,7 +108,14 @@ namespace SamSoarII.Shell.Dialogs
                 dopt |= CommunicationDataDefine.OPTION_SETTING;
             communicationParams.IsComLinked = (bool)baseSetting.radiobutton.IsChecked;
             communicationParams.IsAutoCheck = (bool)baseSetting.checkbox.IsChecked;
-            communicationParams.DownloadOption = dopt;
+            if (baseSetting.Mode == CommunicationSettingDialogMode.UPLOAD)
+            {
+                UploadHelper.UploadOption = dopt;
+            }
+            else
+            {
+                DownloadHelper.DownloadOption = dopt;
+            }
         }
     }
 }

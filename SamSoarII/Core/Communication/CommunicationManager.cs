@@ -29,6 +29,7 @@ namespace SamSoarII.Core.Communication
             //elements.CollectionChanged += OnElementCollectionChanged;
             writecmds = new Queue<ICommunicationCommand>();
             Paused += OnThreadPaused;
+
             //PARACom.PropertyChanged += OnCommunicationParamsChanged;
         }
         
@@ -37,9 +38,24 @@ namespace SamSoarII.Core.Communication
         private InteractionFacade ifParent;
         public InteractionFacade IFParent { get { return this.ifParent; } }
         public ValueManager ValueManager { get { return ifParent.MNGValue; } }
-        public CommunicationParams PARACom { get { return ifParent.MDProj?.PARAProj?.PARACom; } }
+        private CommunicationParams _PARACom;
+        public CommunicationParams PARACom
+        {
+            get
+            {
+                if (ifParent.MDProj != null)
+                {
+                    return ifParent.MDProj?.PARAProj?.PARACom;
+                }
+                if(_PARACom == null)
+                {
+                    _PARACom = new CommunicationParams(null);
+                }
+                return _PARACom;
+            }
+        }
         public MonitorModel MDMoni { get { return ifParent.MDProj?.Monitor; } }
-
+        
         #region Port & USB
 
         private SerialPortManager mngPort;
@@ -316,6 +332,11 @@ namespace SamSoarII.Core.Communication
 
         #region Upload
 
+        public UploadError UploadExecute()
+        {
+            return UploadHelper.UploadExecute(this);
+        }
+
         #endregion
 
         #region Arrange
@@ -484,7 +505,7 @@ namespace SamSoarII.Core.Communication
         #endregion
 
         #region Event Handler
-        
+
         private void OnCommunicationParamsChanged(object sender, PropertyChangedEventArgs e)
         {
             PortType = PARACom.IsComLinked ? PortTypes.SerialPort : PortTypes.USB;
