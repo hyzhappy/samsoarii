@@ -347,6 +347,10 @@ namespace SamSoarII.Core.Generate
         /// </summary>
         public bool CheckOpenCircuit()
         {
+            // 不存在起点
+            if (nodes.Where(n => n.IsStart).Count() == 0) return false;
+            // 不存在终点
+            if (nodes.Where(n => n.IsTerminate).Count() == 0) return false;
             foreach (LadderChartNode node in nodes)
             {
                 // 检查左断路的基本条件

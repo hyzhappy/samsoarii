@@ -454,13 +454,22 @@ namespace SamSoarII.Shell.Models
         
         public void ReleaseSelectRect()
         {
-            if (ViewParent.SelectionRect == null) return;
-            if (ViewParent.SelectionRect.Core.Parent == Core)
-                ViewParent.SelectionRect.Core.Parent = null;
+            if (ViewParent?.SelectionRect == null
+             || ViewParent?.SelectionArea == null)
+            {
+                return;
+            }
+            if (ViewParent.SelectionRect.Core.Parent == Core
+             || ViewParent.SelectionArea.Core.State == SelectAreaCore.Status.SelectRange
+             && ViewParent.SelectionArea.Core.NetOrigin == core.ID)
+            {
+                ViewParent.ReleaseSelect();
+            }
         }
+
         public void AcquireSelectRect()
         {
-            if (ViewParent.SelectionRect == null) return;
+            if (ViewParent?.SelectionRect == null) return;
             if (ViewParent.SelectionRect.Core.Parent != Core)
                 ViewParent.SelectionRect.Core.Parent = Core;
         }

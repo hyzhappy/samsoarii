@@ -398,6 +398,13 @@ namespace SamSoarII.Shell.Models
 
         #region Selection area change
 
+        public void ReleaseSelect()
+        {
+            _selectArea.Core.Release();
+            _selectRect.Core.Parent = null;
+            _selectStatus = SelectStatus.Idle;
+        }
+
         private void SelectionAreaChanged(Key key)
         {
             if (_selectStatus == SelectStatus.SingleSelected)
@@ -2391,7 +2398,6 @@ namespace SamSoarII.Shell.Models
                 }
             }
             */
-
         }
         
         private void OnMainCanvasMouseDown(object sender, MouseButtonEventArgs e)

@@ -330,14 +330,14 @@ void _xchd_bdword_to_dword(int8_t* bit, int16_t size, int8_t* en, int32_t* dword
 
 void _xchd_bdword_to_bdword(int8_t* bit1, int16_t size1, int8_t* en1, int8_t* bit2, int16_t size2, int8_t* en2);
 
-void _cmpw_wbit(int16_t ia, int16_t ib, int16_t* ic, int16_t loc);
+void _cmpw_wbit(int16_t ia, int16_t ib, int16_t* ic, int16_t loc, int8_t* en);
 
-void _cmpd_wbit(int32_t ia, int32_t ib, int16_t* ic, int16_t loc);
+void _cmpd_wbit(int32_t ia, int32_t ib, int16_t* ic, int16_t loc, int8_t* en);
 
-void _cmpf_wbit(float ia, float ib, int16_t* ic, int16_t loc);
+void _cmpf_wbit(float ia, float ib, int16_t* ic, int16_t loc, int8_t* en);
 
-void _zcpw_wbit(int16_t ia, int16_t il, int16_t ir, int16_t* out, int16_t loc);
+void _zcpw_wbit(int16_t ia, int16_t il, int16_t ir, int16_t* out, int16_t loc, int8_t* en);
 
-void _zcpd_wbit(int32_t ia, int32_t il, int32_t ir, int16_t* out, int16_t loc);
+void _zcpd_wbit(int32_t ia, int32_t il, int32_t ir, int16_t* out, int16_t loc, int8_t* en);
 
-void _zcpf_wbit(float ia, float il, float ir, int16_t* out, int16_t loc);
+void _zcpf_wbit(float ia, float il, float ir, int16_t* out, int16_t loc, int8_t* en);
