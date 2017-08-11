@@ -59,20 +59,10 @@ namespace SamSoarII.Threads
             try
             {
                 double newscrolloffset = current.Scroll.VerticalOffset;
-                if (current.IsViewModified || newscrolloffset - oldscrolloffset > 5.0)
+                if (current.IsViewModified || Math.Abs(newscrolloffset - oldscrolloffset) > 5.0)
                 {
-                    //do
-                    //{
-                        current.IsViewModified = false;
-                        for (int i = 0; i < current.Core.Children.Count; i++)
-                            current.Core.Children[i].View.DynamicUpdate();
-                        oldscrolloffset = newscrolloffset;
-                    //} while (current.IsViewModified);
-                }
-                else if (oldscrolloffset - newscrolloffset > 5.0)
-                {
-                    for (int i = current.Core.Children.Count - 1; i >= 0; i--)
-                        current.Core.Children[i].View.DynamicUpdate();
+                    current.IsViewModified = false;
+                    current.DynamicUpdate();
                     oldscrolloffset = newscrolloffset;
                 }
 
@@ -108,11 +98,9 @@ namespace SamSoarII.Threads
             try
             {
                 for (int i = 0; i < current.Core.Children.Count; i++)
-                {
-                    current.Core.Children[i].View.DynamicDispose();
                     current.Core.Children[i].Inst.View.DynamicDispose();
-                }
                 current.Outline.DynamicDispose();
+                current.DynamicDispose();
             }
             catch (Exception)
             {

@@ -76,6 +76,8 @@ namespace SamSoarII.Shell.Models
             ladderExpander.expandButton.IsExpandChanged += OnExpandChanged;
             ladderExpander.IsExpand = IsExpand;
             TitleStackPanel.Children.Remove(ThumbnailButton);
+            loadedrowstart = 0;
+            loadedrowend = -1;
             Update();
         }
         
@@ -175,14 +177,22 @@ namespace SamSoarII.Shell.Models
             {
                 case NotifyCollectionChangedAction.Add:
                     net = (LadderNetworkModel)(e.NewItems[0]);
+                    if (net.ID < loadedrowstart || net.ID > loadedrowend)
+                        break;
                     if (net.View == null)
-                        net.View = new LadderNetworkViewModel(net);
-                    MainCanvas.Children.Insert(e.NewStartingIndex, net.View);
+                        net.View = AllResourceManager.CreateNet(net);
+                    if (net.View.Parent != MainCanvas)
+                    {
+                        if (net.View.Parent is Canvas)
+                            ((Canvas)(net.View.Parent)).Children.Remove(net.View);
+                        MainCanvas.Children.Add(net.View);
+                    }
                     break;
                 case NotifyCollectionChangedAction.Remove:
                     net = (LadderNetworkModel)(e.OldItems[0]);
                     if (SelectRectOwner == net) SelectRectOwner = null;
-                    MainCanvas.Children.Remove(net.View);
+                    net.View.Visibility = Visibility.Hidden;
+                    net.View.Dispose();
                     break;
                 case NotifyCollectionChangedAction.Replace:
                     net = (LadderNetworkModel)(e.NewItems[0]);
@@ -1287,6 +1297,151 @@ namespace SamSoarII.Shell.Models
             set { this.isviewmodified = value; }
         }
 
+        private int loadedrowstart;
+        public int LoadedRowStart { get { return this.loadedrowstart; } }
+
+        private int loadedrowend;
+        public int LoadedRowEnd { get { return this.loadedrowend; } }
+
+        private double oldscrolloffset;
+        public void DynamicUpdate()
+        {
+            double scaleY = 0;
+            double newscrolloffset = 0;
+            double scrollheight = 0;
+            double titleheight = 0;
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
+                newscrolloffset = Scroll.VerticalOffset;
+                scrollheight = Scroll.ViewportHeight;
+                titleheight = TopBorder;
+            });
+            if (!IsExpand)
+            {
+                if (loadedrowstart <= loadedrowend)
+                {
+                    DisposeRange(loadedrowstart, loadedrowend);
+                    loadedrowstart = 0;
+                    loadedrowend = -1;
+                }
+            }
+            else
+            {
+                int _loadedrowstart = 0;
+                int _loadedrowend = core.NetworkCount - 1;
+                LadderNetworkModel net = core.Children[_loadedrowstart];
+                while (net != null && (net.CanvasTop + net.ViewHeight) * scaleY - newscrolloffset < -20)
+                {
+                    _loadedrowstart++;
+                    net = _loadedrowstart < core.NetworkCount ? core.Children[_loadedrowstart] : null;
+                }
+                net = core.Children[_loadedrowend];
+                while (net != null && net.CanvasTop * scaleY - newscrolloffset > scrollheight + 20)
+                {
+                    _loadedrowend--;
+                    net = _loadedrowend >= 0 ? core.Children[_loadedrowend] : null;
+                }
+                if (_loadedrowstart > _loadedrowend)
+                {
+                    if (loadedrowstart <= loadedrowend)
+                    {
+                        if (newscrolloffset > oldscrolloffset)
+                            DisposeRange(loadedrowstart, loadedrowend);
+                        else
+                            DisposeRange(loadedrowend, loadedrowstart);
+                    }
+                }
+                else if (loadedrowstart > loadedrowend)
+                {
+                    if (newscrolloffset > oldscrolloffset)
+                        CreateRange(_loadedrowstart, _loadedrowend);
+                    else
+                        CreateRange(_loadedrowend, _loadedrowstart);
+                }
+                else
+                {
+                    if (newscrolloffset > oldscrolloffset)
+                    {
+                        if (_loadedrowstart < loadedrowstart)
+                            CreateRange(_loadedrowstart, Math.Min(_loadedrowend, loadedrowstart - 1));
+                        if (_loadedrowstart > loadedrowstart)
+                            DisposeRange(loadedrowstart, _loadedrowstart - 1);
+                        if (loadedrowend < _loadedrowend)
+                            CreateRange(Math.Max(_loadedrowstart, loadedrowend + 1), _loadedrowend);
+                        if (loadedrowend > _loadedrowend)
+                            DisposeRange(_loadedrowend + 1, loadedrowend);
+                    }
+                    else
+                    {
+                        if (_loadedrowstart < loadedrowstart)
+                            CreateRange(Math.Min(_loadedrowend, loadedrowstart - 1), _loadedrowstart);
+                        if (_loadedrowstart > loadedrowstart)
+                            DisposeRange(_loadedrowstart - 1, loadedrowstart);
+                        if (loadedrowend < _loadedrowend)
+                            CreateRange(_loadedrowend, Math.Max(_loadedrowstart, loadedrowend + 1));
+                        if (loadedrowend > _loadedrowend)
+                            DisposeRange(loadedrowend, _loadedrowend + 1);
+                    }
+                }
+                loadedrowstart = _loadedrowstart;
+                loadedrowend = _loadedrowend;
+            }
+            oldscrolloffset = newscrolloffset;
+            foreach (LadderNetworkModel net in core.Children)
+                if (net.View != null) net.View.DynamicUpdate();
+        }
+
+        public void DynamicDispose()
+        {
+            if (loadedrowstart <= loadedrowend)
+            {
+                DisposeRange(loadedrowstart, loadedrowend);
+                loadedrowstart = 0;
+                loadedrowend = -1;
+            }
+        }
+
+        private void DisposeRange(int rowstart, int rowend)
+        {
+            int dir = (rowstart < rowend ? 1 : -1);
+            for (int y = rowstart; y != rowend + dir; y += dir)
+            {
+                LadderNetworkModel net = core.Children[y];
+                if (net.View != null)
+                {
+                    net.View.DynamicDispose();
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                    {
+                        net.View.Visibility = Visibility.Hidden;
+                        net.View.Dispose();
+                    });
+                }
+            }
+        }
+
+        private void CreateRange(int rowstart, int rowend)
+        {
+            int dir = (rowstart < rowend ? 1 : -1);
+            for (int y = rowstart; y != rowend + dir; y += dir)
+            {
+                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                {
+                    LadderNetworkModel net = core.Children[y];
+                    if (net.View == null)
+                    {
+                        net.View = AllResourceManager.CreateNet(net);
+                        if (net.View.Parent != MainCanvas)
+                        {
+                            if (net.View.Parent is Canvas)
+                                ((Canvas)(net.View.Parent)).Children.Remove(net.View);
+                            MainCanvas.Children.Add(net.View);
+                        }
+                    }
+                });
+            }
+        }
+
         #endregion
 
         #region network drag(only not IsExpand)
@@ -1354,13 +1509,6 @@ namespace SamSoarII.Shell.Models
                     TitleStackPanel.Children.Remove(ThumbnailButton);
                 }
                 MainCanvas.Visibility = Visibility.Visible;
-                foreach (LadderNetworkModel net in core.Children)
-                {
-                    if (net.View == null)
-                        net.View = new LadderNetworkViewModel(net);
-                    if (!MainCanvas.Children.Contains(net.View))
-                        MainCanvas.Children.Add(net.View);
-                }
                 core.UpdateCanvasTop();
             }
         }
@@ -2236,10 +2384,15 @@ namespace SamSoarII.Shell.Models
         }
         private void OnMainCanvasDragLeave(object sender, DragEventArgs e)
         {
-            ((LadderNetworkViewModel)e.Source).Opacity = 1;
-            if (dragItem == null) return;
-            dragItem.CommentAreaBorder.BorderBrush = Brushes.Brown;
-            dragItem.CommentAreaBorder.BorderThickness = new Thickness(4);
+            switch (_selectStatus)
+            {
+                case SelectStatus.NetworkDraging:
+                    ((LadderNetworkViewModel)e.Source).Opacity = 1;
+                    if (dragItem == null) return;
+                    dragItem.CommentAreaBorder.BorderBrush = Brushes.Brown;
+                    dragItem.CommentAreaBorder.BorderThickness = new Thickness(4);
+                    break;
+            }
         }
 
         private object GetObjectByMouse(MouseEventArgs e)
