@@ -147,7 +147,7 @@ namespace SamSoarII.Core.Communication
             paras.SerialPortIndex = PORTNAMES.ToList().IndexOf(port.PortName);
             paras.BaudRateIndex = BAUDRATES.ToList().IndexOf(port.BaudRate);
             paras.StopBitIndex = STOPBITS.ToList().IndexOf(GetStopBits(port.StopBits));
-            paras.Timeout = Timeout > 0 ? Timeout : 20;
+            paras.Timeout = Timeout > 0 ? Timeout : 200;
             paras.CheckCodeIndex = PARITYS.ToList().IndexOf(GetParity(port.Parity));
         }
         private int GetStopBits(StopBits stopBits)
@@ -250,7 +250,7 @@ namespace SamSoarII.Core.Communication
             }
             catch (Exception e)
             {
-                if (e.GetType() == typeof(TimeoutException))
+                if (e.GetType() == typeof(TimeoutException) && AssertCmd(cmd))
                 {
                     cmd.IsComplete = true;
                     cmd.IsSuccess = false;
@@ -263,6 +263,11 @@ namespace SamSoarII.Core.Communication
                 return 1;
             readbuffercount = 0;
             return 0;
+        }
+        private bool AssertCmd(ICommunicationCommand cmd)
+        {
+            return cmd is GeneralReadCommand || cmd is ForceCancelCommand
+                || cmd is GeneralWriteCommand || cmd is IntrasegmentWriteCommand;
         }
 
         public bool AutoCheck()

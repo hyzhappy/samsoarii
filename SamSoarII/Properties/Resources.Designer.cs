@@ -1366,6 +1366,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Please enter your password: 的本地化字符串。
+        /// </summary>
+        public static string Enter_Password {
+            get {
+                return ResourceManager.GetString("Enter_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Error 的本地化字符串。
         /// </summary>
         public static string Error {
@@ -5709,6 +5718,15 @@ namespace SamSoarII.Properties {
         public static string Short_Error {
             get {
                 return ResourceManager.GetString("Short_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 show password 的本地化字符串。
+        /// </summary>
+        public static string Show_Password {
+            get {
+                return ResourceManager.GetString("Show_Password", resourceCulture);
             }
         }
         

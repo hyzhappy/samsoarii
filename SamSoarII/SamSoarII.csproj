@@ -296,6 +296,9 @@
     <Compile Include="Shell\Dialogs\ElementPropertyModify\PolylinePropertyDialog.xaml.cs">
       <DependentUpon>PolylinePropertyDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Dialogs\PasswordDialog.xaml.cs">
+      <DependentUpon>PasswordDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shell\Dialogs\PolylineAxisWidget.xaml.cs">
       <DependentUpon>PolylineAxisWidget.xaml</DependentUpon>
     </Compile>
@@ -814,6 +817,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Dialogs\ElementPropertyModify\PolylinePropertyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\PasswordDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

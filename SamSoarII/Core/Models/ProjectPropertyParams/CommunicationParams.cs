@@ -18,7 +18,7 @@ namespace SamSoarII.Core.Models
             databitindex = 0;
             stopbitindex = 0;
             checkcodeindex = 0;
-            timeout = 20;
+            timeout = 200;
             iscomlinked = false;
             isautocheck = true;
         }
@@ -146,7 +146,7 @@ namespace SamSoarII.Core.Models
             try
             {
                 int value = int.Parse(xele.Element("Timeout").Value);
-                timeout = value > 0 ? value : 20;
+                timeout = value > 0 ? value : 200;
             } catch (Exception) {}
             try {iscomlinked = bool.Parse(xele.Element("IsCOMLinked").Value);} catch (Exception) {}
             try {isautocheck = bool.Parse(xele.Element("IsAutoCheck").Value);} catch (Exception) {}

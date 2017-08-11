@@ -403,10 +403,6 @@ namespace SamSoarII.Core.Generate
                 MoveVerticalLine(ladderLogicModule, VLines[i], GetCount(ladderLogicModule, VLines, VLines[i]));
             }
         }
-        private static bool IsLinked(LadderUnitModel vline1, LadderUnitModel vline2)
-        {
-            return (vline1.Y == vline2.Y + 1) && (vline1.X == vline2.X);
-        }
         private static void MoveVerticalLine(LadderLogicModule ladderLogicModule, LadderUnitModel vLine, int cnt)
         {
             if (vLine.X != cnt - 1)

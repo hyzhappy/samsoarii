@@ -194,7 +194,7 @@ namespace SamSoarII.Core.Communication
                 }
                 //_Thread_WaitForActive(itvtime);
                 Thread.Sleep(itvtime);
-                while (hassend)
+                while (hassend && recvtime < 5)
                 {
                     if (Recv(current) || current.IsComplete)
                     {
