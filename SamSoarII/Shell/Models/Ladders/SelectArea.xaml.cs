@@ -53,6 +53,7 @@ namespace SamSoarII.Shell.Models
         public enum Status { NotSelected, SelectRange, SelectCross }
         private Status state;
         public Status State { get { return this.state; } }
+        private Direction movedir;
 
         private int netorigin;
         public int NetOrigin { get { return this.netorigin; } }
@@ -249,7 +250,7 @@ namespace SamSoarII.Shell.Models
                         return ystart > 0 || netorigin > 0;
                 case Status.SelectCross:
                     if (netorigin == netstart)
-                        return netorigin > 0 || netend > netstart;
+                        return true;
                     else
                         return netstart > 0;
                 default:
@@ -268,7 +269,7 @@ namespace SamSoarII.Shell.Models
                         return yend < parent.Children[netorigin].RowCount - 1 || netorigin < parent.NetworkCount - 1;
                 case Status.SelectCross:
                     if (netorigin == netend)
-                        return netorigin < parent.NetworkCount - 1 || netstart < netend;
+                        return true;
                     else
                         return netend < parent.NetworkCount - 1;
                 default:
@@ -336,22 +337,15 @@ namespace SamSoarII.Shell.Models
                     }
                     if (ystart < 0)
                     {
-                        Select(netorigin, netorigin - 1);
+                        Select(netorigin, netorigin);
+                        movedir = Direction.Up;
                     }
                     View?.Update();
                     break;
                 case Status.SelectCross:
-                    if (netorigin == netstart)
-                    {
-                        if (--netend < netstart)
-                        {
-                            netstart++; netend--;
-                        }
-                    }
-                    else
-                    {
-                        netstart--;
-                    }
+                    if (netorigin == netstart && movedir != Direction.Up) netend--; else netstart--;
+                    if (netend < netstart) Select(netorigin, xorigin, yorigin,
+                        xorigin == xstart ? xend : xstart, parent.Children[netorigin].RowCount - 1);
                     View?.Update();
                     break;
             }
@@ -359,7 +353,6 @@ namespace SamSoarII.Shell.Models
 
         public void MoveDown()
         {
-
             switch (state)
             {
                 case Status.SelectRange:
@@ -376,22 +369,15 @@ namespace SamSoarII.Shell.Models
                     }
                     if (yend >= parent.Children[netorigin].RowCount)
                     {
-                        Select(netorigin, netorigin + 1);
+                        Select(netorigin, netorigin);
+                        movedir = Direction.Down;
                     }
                     View?.Update();
                     break;
                 case Status.SelectCross:
-                    if (netorigin == netend)
-                    {
-                        if (++netstart > netend)
-                        {
-                            netstart--; netend++;
-                        }
-                    }
-                    else
-                    {
-                        netend++;
-                    }
+                    if (netorigin == netend && movedir != Direction.Down) netstart++; else netend++;
+                    if (netend < netstart) Select(netorigin, xorigin, yorigin,
+                         xorigin == xstart ? xend : xstart, 0);
                     View?.Update();
                     break;
             }
