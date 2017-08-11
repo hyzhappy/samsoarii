@@ -49,27 +49,6 @@ namespace SamSoarII.Shell.Models
 
         #region Number
         
-        private LadderNetworkViewModel parent;
-        public new LadderNetworkViewModel Parent
-        {
-            get
-            {
-                return this.parent;
-            }
-            set
-            {
-                if (parent != value)
-                {
-                    LadderNetworkViewModel _parent = parent;
-                    this.parent = null;
-                    if (_parent != null && _parent.CMMoni != null) _parent.CMMoni = null;
-                    this.parent = value;
-                    if (parent != null && parent.CMMoni != this) parent.CMMoni = this;
-                }
-                Core = parent != null ? parent.ViewParent.SelectionRect.Current : null;
-            }
-        }
-        
         private LadderUnitModel core;
         public LadderUnitModel Core
         {
@@ -87,14 +66,14 @@ namespace SamSoarII.Shell.Models
                 for (int i = 0; i < 5; i++)
                     miValues[i].Visibility = Visibility.Collapsed;
                 if (core == null) return;
-                miBPAdd.Visibility = parent.LadderMode == LadderModes.Simulate ? Visibility.Visible : Visibility.Collapsed;
-                miBPSetting.Visibility = parent.LadderMode == LadderModes.Simulate ? Visibility.Visible : Visibility.Collapsed;
-                miBPRemove.Visibility = parent.LadderMode == LadderModes.Simulate ? Visibility.Visible : Visibility.Collapsed;
-                miJumpTo.Visibility = parent.LadderMode == LadderModes.Simulate ? Visibility.Visible : Visibility.Collapsed;
-                miBPAdd.IsEnabled = parent.LadderMode == LadderModes.Simulate && core.Breakpoint != null && !core.Breakpoint.IsEnable;
-                miBPSetting.IsEnabled = parent.LadderMode == LadderModes.Simulate && core.Breakpoint != null && core.Breakpoint.IsEnable;
-                miBPRemove.IsEnabled = parent.LadderMode == LadderModes.Simulate && core.Breakpoint != null && core.Breakpoint.IsEnable;
-                miJumpTo.IsEnabled = parent.LadderMode == LadderModes.Simulate && core.Breakpoint != null;
+                miBPAdd.Visibility = core.LadderMode == LadderModes.Simulate ? Visibility.Visible : Visibility.Collapsed;
+                miBPSetting.Visibility = core.LadderMode == LadderModes.Simulate ? Visibility.Visible : Visibility.Collapsed;
+                miBPRemove.Visibility = core.LadderMode == LadderModes.Simulate ? Visibility.Visible : Visibility.Collapsed;
+                miJumpTo.Visibility = core.LadderMode == LadderModes.Simulate ? Visibility.Visible : Visibility.Collapsed;
+                miBPAdd.IsEnabled = core.LadderMode == LadderModes.Simulate && core.Breakpoint != null && !core.Breakpoint.IsEnable;
+                miBPSetting.IsEnabled = core.LadderMode == LadderModes.Simulate && core.Breakpoint != null && core.Breakpoint.IsEnable;
+                miBPRemove.IsEnabled = core.LadderMode == LadderModes.Simulate && core.Breakpoint != null && core.Breakpoint.IsEnable;
+                miJumpTo.IsEnabled = core.LadderMode == LadderModes.Simulate && core.Breakpoint != null;
                 vmValues = core.UniqueChildren.ToArray();
                 for (int i = 0; i < vmValues.Length; i++)
                 {

@@ -278,159 +278,6 @@ namespace SamSoarII.Shell.Models
 
         public int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
         public int HeightUnit { get { return IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit; } }
-
-        public int SelectAreaOriginFX
-        {
-            get; set;
-        }
-        public int SelectAreaOriginFY
-        {
-            get; set;
-        }
-        private int _selectAreaOriginSX;
-        public int SelectAreaOriginSX
-        {
-            get
-            {
-                return _selectAreaOriginSX;
-            }
-            set
-            {
-                if (value < 0)
-                {
-                    value = 0;
-                }
-                if (value > GlobalSetting.LadderXCapacity - 1)
-                {
-                    value = GlobalSetting.LadderXCapacity - 1;
-                }
-                _selectAreaOriginSX = value;
-            }
-        }
-        private int _selectAreaFirstX;
-        private int _selectAreaFirstY;
-        private int _selectAreaSecondX;
-        private int _selectAreaSecondY;
-        public int SelectAreaFirstX
-        {
-            get
-            {
-                return _selectAreaFirstX;
-            }
-            set
-            {
-                _selectAreaFirstX = value;
-                var left = Math.Min(_selectAreaFirstX, _selectAreaSecondX) * WidthUnit;
-                var width = (Math.Abs(_selectAreaFirstX - _selectAreaSecondX) + 1) * WidthUnit;
-                SelectArea.Width = width;
-                Canvas.SetLeft(SelectArea, left);
-            }
-        }
-        public int SelectAreaFirstY
-        {
-            get
-            {
-                return _selectAreaFirstY;
-            }
-            set
-            {
-                _selectAreaFirstY = value;
-                var top = Math.Min(_selectAreaFirstY, _selectAreaSecondY) * HeightUnit;
-                int height = !IsExpand ? 0 : (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * HeightUnit;
-                SelectArea.Height = height;
-                Canvas.SetTop(SelectArea, top);
-            }
-        }
-        public int SelectAreaSecondX
-        {
-            get
-            {
-                return _selectAreaSecondX;
-            }
-            set
-            {
-                if (value < 0)
-                {
-                    value = 0;
-                }
-                if (value > GlobalSetting.LadderXCapacity - 1)
-                {
-                    value = GlobalSetting.LadderXCapacity - 1;
-                }
-                _selectAreaSecondX = value;
-                var left = Math.Min(_selectAreaFirstX, _selectAreaSecondX) * WidthUnit;
-                var width = (Math.Abs(_selectAreaFirstX - _selectAreaSecondX) + 1) * WidthUnit;
-                SelectArea.Width = width;
-                Canvas.SetLeft(SelectArea, left);
-            }
-        }
-        public int SelectAreaSecondY
-        {
-            get
-            {
-                return _selectAreaSecondY;
-            }
-            set
-            {
-                if (value < 0) value = 0;
-                if (value > RowCount - 1)
-                    value = RowCount - 1;
-                _selectAreaSecondY = value;
-                var top = Math.Min(_selectAreaFirstY, _selectAreaSecondY) * HeightUnit;
-                int height = !IsExpand ? 0 : (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * HeightUnit;
-                SelectArea.Height = height;
-                Canvas.SetTop(SelectArea, top);
-            }
-        }
-        private bool _isSelectAreaMode;
-        public bool IsSelectAreaMode
-        {
-            get
-            {
-                return _isSelectAreaMode;
-            }
-            set
-            {
-                if (!_isSelectAreaMode && value
-                 && !LadderCanvas.Children.Contains(SelectArea))
-                {
-                    LadderCanvas.Children.Add(SelectArea);
-                }
-                if (!value && _isSelectAreaMode
-                 && LadderCanvas.Children.Contains(SelectArea))
-                {
-                    LadderCanvas.Children.Remove(SelectArea);
-                }
-                _isSelectAreaMode = value;
-            }
-        }
-        private bool _isSelectAllMode;
-        public bool IsSelectAllMode
-        {
-            get
-            {
-                return _isSelectAllMode;
-            }
-            set
-            {
-                _isSelectAllMode = value;
-                if (_isSelectAllMode)
-                {
-                    IsSelectAreaMode = true;
-                    SelectAreaFirstY = 0;
-                    SelectAreaFirstX = 0;
-                    SelectAreaSecondX = GlobalSetting.LadderXCapacity - 1;
-                    SelectAreaSecondY = !IsExpand ? 0 : RowCount - 1;
-                    CommentAreaGrid.Background = new SolidColorBrush(Colors.DarkBlue);
-                    CommentAreaGrid.Background.Opacity = 0.3;
-                }
-                else
-                {
-                    CommentAreaGrid.Background = Brushes.Transparent;
-                }
-            }
-        }
-        public Rectangle SelectArea { get; set; } = new Rectangle();
         
         public bool IsSingleSelected()
         {
@@ -668,7 +515,7 @@ namespace SamSoarII.Shell.Models
             oldscrolloffset = newscrolloffset;
         }
 
-        public void DynamicDispose(bool hide = false)
+        public void DynamicDispose(bool hide = true)
         {
             if (loadedrowstart <= loadedrowend)
             {
@@ -743,54 +590,6 @@ namespace SamSoarII.Shell.Models
         
         public LadderModes LadderMode { get { return core.LadderMode; } }
         public bool IsCommentMode { get { return core.IsCommentMode; } }
-
-        public LadderEditMenu CMEdit
-        {
-            get
-            {
-                return LadderCanvas.ContextMenu is LadderEditMenu
-                    ? (LadderEditMenu)(LadderCanvas.ContextMenu) : null;
-            }
-            set
-            {
-                if (CMEdit == value) return;
-                CMMoni = null;
-                LadderEditMenu _CMEdit = CMEdit;
-                LadderCanvas.ContextMenu = null;
-                if (_CMEdit != null)
-                {
-                    _CMEdit.Post -= OnLadderNetworkEdit;
-                    if (_CMEdit.Parent != null) _CMEdit.Parent = null;
-                }
-                LadderCanvas.ContextMenu = value;
-                _CMEdit = CMEdit;
-                if (_CMEdit != null)
-                {
-                    _CMEdit.Post += OnLadderNetworkEdit;
-                    if (_CMEdit.Parent != this) _CMEdit.Parent = this;
-                }
-            }
-        }
-
-        public LadderMonitorMenu CMMoni
-        {
-            get
-            {
-                return LadderCanvas.ContextMenu is LadderMonitorMenu
-                    ? (LadderMonitorMenu)(LadderCanvas.ContextMenu) : null;
-            }
-            set
-            {
-                if (CMMoni == value) return;
-                CMEdit = null;
-                LadderMonitorMenu _CMMoni = CMMoni;
-                LadderCanvas.ContextMenu = null;
-                if (_CMMoni != null && _CMMoni.Parent != null) _CMMoni.Parent = null;
-                LadderCanvas.ContextMenu = value;
-                _CMMoni = CMMoni;
-                if (_CMMoni != null && _CMMoni.Parent != this) _CMMoni.Parent = this;
-            }
-        }
         
         public bool IsMasked
         {
@@ -878,14 +677,14 @@ namespace SamSoarII.Shell.Models
                 case LadderEditEventArgs.Types.RowInsertBefore:
                     if (IsSingleSelected())
                         Core.Parent.AddR(Core, ViewParent.SelectionRect.Y);
-                    else if (IsSelectAreaMode)
-                        Core.Parent.AddR(Core, Math.Min(SelectAreaFirstY, SelectAreaSecondY));
+                    else if (IsMultiSelected())
+                        Core.Parent.AddR(Core, ViewParent.SelectionArea.Core.YStart);
                     break;
                 case LadderEditEventArgs.Types.RowInsertAfter:
                     if (IsSingleSelected())
                         Core.Parent.AddR(Core, ViewParent.SelectionRect.Y + 1);
-                    else if (IsSelectAreaMode)
-                        Core.Parent.AddR(Core, Math.Max(SelectAreaFirstY, SelectAreaSecondY) + 1);
+                    else if (IsMultiSelected())
+                        Core.Parent.AddR(Core, ViewParent.SelectionArea.Core.YEnd + 1);
                     break;
                 case LadderEditEventArgs.Types.RowInsertEnd:
                     Core.Parent.AddR(Core, RowCount);
@@ -893,8 +692,8 @@ namespace SamSoarII.Shell.Models
                 case LadderEditEventArgs.Types.RowDelete:
                     if (IsSingleSelected())
                         Core.Parent.RemoveR(Core, ViewParent.SelectionRect.Y);
-                    else if (IsSelectAreaMode)
-                        Core.Parent.RemoveR(Core, Math.Min(SelectAreaFirstY, SelectAreaSecondY), Math.Max(SelectAreaFirstY, SelectAreaSecondY));
+                    else if (IsMultiSelected())
+                        Core.Parent.RemoveR(Core, ViewParent.SelectionArea.Core.YStart, ViewParent.SelectionArea.Core.YEnd);
                     break;
                 case LadderEditEventArgs.Types.NetInsertBefore:
                     Core.Parent.AddN(Core.ID);
@@ -928,16 +727,6 @@ namespace SamSoarII.Shell.Models
         
         private void OnCanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
-            switch (LadderMode)
-            {
-                case LadderModes.Edit:
-                    CMEdit = ViewParent.CMEdit;
-                    break;
-                default:
-                    CMMoni = ViewParent.CMMoni;
-                    CMMoni.Core = ViewParent.SelectionRect.Current;
-                    break;
-            }
             LadderCanvas.CaptureMouse();
             AcquireSelectRect(e);
             if (e.ClickCount == 2)

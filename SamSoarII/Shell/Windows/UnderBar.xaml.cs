@@ -280,12 +280,10 @@ namespace SamSoarII.Shell.Windows
                     switch (view.SelectionArea.Core.State)
                     {
                         case SelectAreaCore.Status.SelectRange:
-                            TB_Item2.Text = String.Format("{0:s} {1:d}", Properties.Resources.Network, network.Core.ID);
+                            TB_Item2.Text = String.Format("{0:s} {1:d}", Properties.Resources.Network, view.SelectionArea.Core.NetOrigin);
                             TB_Item1.Text = String.Format("(X1={0:d},X2={1:d},Y1={2:d},Y2={3:d})",
-                                Math.Min(network.SelectAreaFirstX, network.SelectAreaSecondX),
-                                Math.Max(network.SelectAreaFirstX, network.SelectAreaSecondX),
-                                Math.Min(network.SelectAreaFirstY, network.SelectAreaSecondY),
-                                Math.Max(network.SelectAreaFirstY, network.SelectAreaSecondY));
+                                view.SelectionArea.Core.XStart, view.SelectionArea.Core.XEnd,
+                                view.SelectionArea.Core.YStart, view.SelectionArea.Core.YEnd);
                             break;
                         case SelectAreaCore.Status.SelectCross:
                             TB_Item2.Text = String.Format("{0:s} ({1:d}~{2:d})", 

@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.ComponentModel;
 
+using SamSoarII.Core.Models;
+
 namespace SamSoarII.Shell.Models
 {
     public class LadderEditMenu : ContextMenu, IDisposable
@@ -140,28 +142,24 @@ namespace SamSoarII.Shell.Models
 
         #region Number
 
-        private LadderNetworkViewModel parent;
-        public new LadderNetworkViewModel Parent
+        private LadderNetworkModel core;
+        public LadderNetworkModel Core
         {
             get
             {
-                return this.parent;
+                return this.core;
             }
             set
             {
-                LadderNetworkViewModel _parent = parent;
-                this.parent = null;
-                if (_parent != null)
+                LadderNetworkModel _core = core;
+                this.core = null;
+                if (_core != null)
+                    _core.PropertyChanged -= OnCorePropertyChanged;
+                this.core = value;
+                if (core != null)
                 {
-                    _parent.Core.PropertyChanged -= OnCorePropertyChanged;
-                    if (_parent.CMEdit != null) _parent.CMEdit = null;
-                }
-                this.parent = value;
-                if (parent != null)
-                {
-                    parent.Core.PropertyChanged += OnCorePropertyChanged;
-                    OnCorePropertyChanged(parent.Core, new PropertyChangedEventArgs("IsMasked"));
-                    if (parent.CMEdit != this) parent.CMEdit = this;
+                    core.PropertyChanged += OnCorePropertyChanged;
+                    OnCorePropertyChanged(core, new PropertyChangedEventArgs("IsMasked"));
                 }
             }
         }
@@ -210,10 +208,10 @@ namespace SamSoarII.Shell.Models
             if (sender == miNetCut) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetCut));
             if (sender == miNetCopy) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetCopy));
             if (sender == miNetShield) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetShield));
-            if (sender == Expand) parent.ExpandOrCollapsed(true, false);
-            if (sender == ExpandAll) parent.ExpandOrCollapsed(true, true);
-            if (sender == Collapsed) parent.ExpandOrCollapsed(false, false);
-            if (sender == CollapsedAll) parent.ExpandOrCollapsed(false, true);
+            if (sender == Expand) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetExpand));
+            if (sender == ExpandAll) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetExpandAll));
+            if (sender == Collapsed) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetCollapsed));
+            if (sender == CollapsedAll) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetCollapsedAll));
         }
         
         private void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -221,19 +219,19 @@ namespace SamSoarII.Shell.Models
             switch (e.PropertyName)
             {
                 case "IsMasked":
-                    miNetShield.IsChecked = parent.IsMasked;
-                    miCut.IsEnabled = !parent.IsMasked;
-                    miCopy.IsEnabled = !parent.IsMasked;
-                    miPaste.IsEnabled = !parent.IsMasked;
-                    miDelete.IsEnabled = !parent.IsMasked;
-                    miRowInsert.IsEnabled = !parent.IsMasked;
-                    miRowIBefore.IsEnabled = !parent.IsMasked;
-                    miRowIAfter.IsEnabled = !parent.IsMasked;
-                    miRowIEnd.IsEnabled = !parent.IsMasked;
-                    miRowDelete.IsEnabled = !parent.IsMasked;
-                    miNetRemove.IsEnabled = !parent.IsMasked;
-                    miNetCut.IsEnabled = !parent.IsMasked;
-                    miNetCopy.IsEnabled = !parent.IsMasked;
+                    miNetShield.IsChecked = core.IsMasked;
+                    miCut.IsEnabled = !core.IsMasked;
+                    miCopy.IsEnabled = !core.IsMasked;
+                    miPaste.IsEnabled = !core.IsMasked;
+                    miDelete.IsEnabled = !core.IsMasked;
+                    miRowInsert.IsEnabled = !core.IsMasked;
+                    miRowIBefore.IsEnabled = !core.IsMasked;
+                    miRowIAfter.IsEnabled = !core.IsMasked;
+                    miRowIEnd.IsEnabled = !core.IsMasked;
+                    miRowDelete.IsEnabled = !core.IsMasked;
+                    miNetRemove.IsEnabled = !core.IsMasked;
+                    miNetCut.IsEnabled = !core.IsMasked;
+                    miNetCopy.IsEnabled = !core.IsMasked;
                     break;
             }
         }
@@ -244,7 +242,10 @@ namespace SamSoarII.Shell.Models
 
     public class LadderEditEventArgs
     {
-        public enum Types { Delete, RowInsertBefore, RowInsertAfter, RowInsertEnd, RowDelete, NetInsertBefore, NetInsertAfter, NetInsertEnd, NetDelete, NetCut, NetCopy, NetShield}
+        public enum Types { Delete,
+            RowInsertBefore, RowInsertAfter, RowInsertEnd, RowDelete,
+            NetInsertBefore, NetInsertAfter, NetInsertEnd, NetDelete, NetCut, NetCopy, NetShield,
+            NetExpand, NetExpandAll, NetCollapsed, NetCollapsedAll}
         private Types type;
         public Types Type { get { return this.type; } }
 

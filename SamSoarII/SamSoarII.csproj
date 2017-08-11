@@ -498,14 +498,14 @@
     <Compile Include="Shell\Models\ModbusTableViewModel.xaml.cs">
       <DependentUpon>ModbusTableViewModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shell\Models\NetworkOutlineViewModel.xaml.cs">
+    <Compile Include="Shell\Models\Ladders\NetworkOutlineViewModel.xaml.cs">
       <DependentUpon>NetworkOutlineViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Models\ProjectViewModel.cs" />
     <Compile Include="Shell\Models\Ladders\SelectRect.xaml.cs">
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shell\Models\SelectArea.xaml.cs">
+    <Compile Include="Shell\Models\Ladders\SelectArea.xaml.cs">
       <DependentUpon>SelectArea.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Windows\BreakpointWindow.xaml.cs">
@@ -1055,7 +1055,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Shell\Models\NetworkOutlineViewModel.xaml">
+    <Page Include="Shell\Models\Ladders\NetworkOutlineViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1063,7 +1063,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Shell\Models\SelectArea.xaml">
+    <Page Include="Shell\Models\Ladders\SelectArea.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

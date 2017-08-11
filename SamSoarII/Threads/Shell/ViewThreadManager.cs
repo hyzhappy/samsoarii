@@ -91,8 +91,9 @@ namespace SamSoarII.Threads
                     oldinstoffset = newinstoffset;
                 }
                 double newoutlineoffset = current.Outline.Scroll.VerticalOffset;
-                if (Math.Abs(newoutlineoffset - oldoutlineoffset) > 2.0)
+                if (current.Outline.IsViewModified || Math.Abs(newoutlineoffset - oldoutlineoffset) > 2.0)
                 {
+                    current.Outline.IsViewModified = false;
                     current.Outline.DynamicUpdate();
                     oldoutlineoffset = newoutlineoffset;
                 }
