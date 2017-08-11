@@ -8,6 +8,7 @@ using LibUsbDotNet;
 using LibUsbDotNet.Main;
 using LibUsbDotNet.LibUsb;
 using LibUsbDotNet.DeviceNotify;
+using System.Threading;
 
 namespace SamSoarII.Core.Communication
 {
@@ -103,10 +104,20 @@ namespace SamSoarII.Core.Communication
             {
                 ec = writer.Write(cmd.GetBytes(), 2000, out bytesWritten);
                 if (ec != ErrorCode.None)
+                {
+                    CloseUSB();
+                    Start();
+                    //writer.Flush();
+                    Thread.Sleep(500);
                     return 1;
+                }
             }
             catch (Exception)
             {
+                CloseUSB();
+                Start();
+                //writer.Flush();
+                Thread.Sleep(500);
                 return 1;
             }
             return 0;
