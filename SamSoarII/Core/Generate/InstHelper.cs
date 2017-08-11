@@ -750,6 +750,103 @@ namespace SamSoarII.Core.Generate
                         sw.Write("CI_RTC_SETRTC((uint8_t)({0:s}),&{1:s});\n",
                             cond, inst[1]);
                     break;
+                // 可能调用下位的浮点运算
+                case "ADDF":
+                    if (!simumode)
+                        sw.Write("CI_FLOAT32_ADD((uint8_t)({0:s}),{1:s},{2:s},&{3:s});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    else
+                        sw.Write("if ({0:s}) {3:s} = _addf({1:s}, {2:s});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    break;
+                case "SUBF":
+                    if (!simumode)
+                        sw.Write("CI_FLOAT32_SUB((uint8_t)({0:s}),{1:s},{2:s},&{3:s});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    else
+                        sw.Write("if ({0:s}) {3:s} = _subf({1:s}, {2:s});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    break;
+                case "MULF":
+                    if (!simumode)
+                        sw.Write("CI_FLOAT32_MUL((uint8_t)({0:s}),{1:s},{2:s},&{3:s});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    else
+                        sw.Write("if ({0:s}) {3:s} = _mulf({1:s}, {2:s});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    break;
+                case "DIVF":
+                    if (!simumode)
+                        sw.Write("CI_FLOAT32_DIV((uint8_t)({0:s}),{1:s},{2:s},&{3:s});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    else
+                        sw.Write("if ({0:s}) {3:s} = _divf({1:s}, {2:s});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    break;
+                case "SIN":
+                    if (!simumode)
+                        sw.Write("CI_FLOAT32_SIN((uint8_t)({0:s}),{1:s},&{2:s});\n",
+                            cond, inst[1], inst[2]);
+                    else
+                        sw.Write("if ({0:s}) {2:s} = _sin({1:s});\n",
+                            cond, inst[1], inst[2]);
+                    break;
+                case "COS":
+                    if (!simumode)
+                        sw.Write("CI_FLOAT32_COS((uint8_t)({0:s}),{1:s},&{2:s});\n",
+                            cond, inst[1], inst[2]);
+                    else
+                        sw.Write("if ({0:s}) {2:s} = _cos({1:s});\n",
+                            cond, inst[1], inst[2]);
+                    break;
+                case "TAN":
+                    if (!simumode)
+                        sw.Write("CI_FLOAT32_TAN((uint8_t)({0:s}),{1:s},&{2:s});\n",
+                            cond, inst[1], inst[2]);
+                    else
+                        sw.Write("if ({0:s}) {2:s} = _tan({1:s});\n",
+                            cond, inst[1], inst[2]);
+                    break;
+                case "LN":
+                    if (!simumode)
+                        sw.Write("CI_FLOAT32_LN((uint8_t)({0:s}),{1:s},&{2:s});\n",
+                            cond, inst[1], inst[2]);
+                    else
+                        sw.Write("if ({0:s}) {2:s} = _ln({1:s});\n",
+                            cond, inst[1], inst[2]);
+                    break;
+                case "EXP":
+                    if (!simumode)
+                        sw.Write("CI_FLOAT32_EXP((uint8_t)({0:s}),{1:s},&{2:s});\n",
+                            cond, inst[1], inst[2]);
+                    else
+                        sw.Write("if ({0:s}) {2:s} = _exp({1:s});\n",
+                            cond, inst[1], inst[2]);
+                    break;
+                case "LOG":
+                    if (!simumode)
+                        sw.Write("CI_FLOAT32_LOG((uint8_t)({0:s}),{1:s},&{2:s});\n",
+                            cond, inst[1], inst[2]);
+                    else
+                        sw.Write("if ({0:s}) {2:s} = _log({1:s});\n",
+                            cond, inst[1], inst[2]);
+                    break;
+                case "POW":
+                    if (!simumode)
+                        sw.Write("CI_FLOAT32_POW((uint8_t)({0:s}),{1:s},{2:s},&{3:s});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    else
+                        sw.Write("if ({0:s}) {3:s} = _pow({1:s}, {2:s}});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    break;
+                case "SQRT":
+                    if (!simumode)
+                        sw.Write("CI_FLOAT32_SQRT((uint8_t)({0:s}),{1:s},&{2:s});\n",
+                            cond, inst[1], inst[2]);
+                    else
+                        sw.Write("if ({0:s}) {2:s} = _sqrt({1:s});\n",
+                            cond, inst[1], inst[2]);
+                    break;
                 // 默认的其他情况，一般之前要先判断栈顶
                 default:
                     sw.Write("if ({0:s}) {{\n", cond);
@@ -801,26 +898,22 @@ namespace SamSoarII.Core.Generate
                         case "BWADD": sw.Write("{2:s} _addw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "ADDD": sw.Write("{2:s} = _addd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BDADDD": sw.Write("{2:s} _addd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
-                        case "ADDF": sw.Write("{2:s} = _addf({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "SUB": sw.Write("{2:s} = _subw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BWSUB": sw.Write("{2:s} _subw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SUBD": sw.Write("{2:s} = _subd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BDSUBD": sw.Write("{2:s} _subd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
-                        case "SUBF": sw.Write("{2:s} = _subf({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "MUL": sw.Write("{2:s} = _mulwd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BDMUL": sw.Write("{2:s} _mulwd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "MULW": sw.Write("{2:s} = _mulww({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BWMULW": sw.Write("{2:s} _mulww({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "MULD": sw.Write("{2:s} = _muldd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BDMULD": sw.Write("{2:s} _muldd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
-                        case "MULF": sw.Write("{2:s} = _mulff({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "DIV": sw.Write("{2:s} = _divwd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BDDIV": sw.Write("{2:s} _divwd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "DIVW": sw.Write("{2:s} = _divww({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BWDIVW": sw.Write("{2:s} _divww({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "DIVD": sw.Write("{2:s} = _divdd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BDDIVD": sw.Write("{2:s} _divdd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
-                        case "DIVF": sw.Write("{2:s} = _divff({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "INC": sw.Write("{1:s} = _incw({0:s});\n", inst[1], inst[2]); break;
                         case "BWINC": sw.Write("{1:s} _incw({0:s}));\n", inst[1], inst[2]); break;
                         case "INCD": sw.Write("{1:s} = _incd({0:s});\n", inst[1], inst[2]); break;
@@ -829,11 +922,6 @@ namespace SamSoarII.Core.Generate
                         case "BWDEC": sw.Write("{1:s} _decw({0:s}));\n", inst[1], inst[2]); break;
                         case "DECD": sw.Write("{1:s} = _decd({0:s});\n", inst[1], inst[2]); break;
                         case "BDDECD": sw.Write("{1:s} _decd({0:s}));\n", inst[1], inst[2]); break;
-                        case "SIN": sw.Write("{1:s} = _sin({0:s});\n", inst[1], inst[2]); break;
-                        case "COS": sw.Write("{1:s} = _cos({0:s});\n", inst[1], inst[2]); break;
-                        case "TAN": sw.Write("{1:s} = _tan({0:s});\n", inst[1], inst[2]); break;
-                        case "LN": sw.Write("{1:s} = _ln({0:s});\n", inst[1], inst[2]); break;
-                        case "EXP": sw.Write("{1:s} = _exp({0:s});\n", inst[1], inst[2]); break;
                         // 移位指令
                         case "SHL": sw.Write("{2:s} = _shlw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BWSHL": sw.Write("{2:s} _shlw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
@@ -916,10 +1004,7 @@ namespace SamSoarII.Core.Generate
                             }
                             break;
                         // 辅助功能
-                        case "LOG": sw.Write("{1:s} = _log({0:s});\n", inst[1], inst[2]); break;
-                        case "POW": sw.Write("{2:s} = _pow({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "FACT": sw.Write("{1:s} = _fact({0:s});\n", inst[1], inst[2]); break;
-                        case "SQRT": sw.Write("{1:s} = _sqrt({0:s});\n", inst[1], inst[2]); break;
                         case "CMP": sw.Write("_cmpw({0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]); break;
                         case "WBCMP":
                             if (simumode)

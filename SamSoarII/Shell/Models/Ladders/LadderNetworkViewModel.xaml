@@ -27,7 +27,8 @@
                 </StackPanel.Resources>
                 <Grid x:Name="CommentAreaGrid" Background="Transparent">
                     <Border x:Name="CommentAreaBorder" BorderThickness="4" BorderBrush="Brown" Width="1500" Margin="20,0,0,0" HorizontalAlignment="Left">
-                        <Expander x:Name="CommentAreaExpander" Width="{Binding ElementName=CommentAreaBorder, Path=Width}" Background="LightCyan" MouseDoubleClick="OnEditComment">
+                        <Expander x:Name="CommentAreaExpander" Width="{Binding ElementName=CommentAreaBorder, Path=Width}" Background="LightCyan" MouseDoubleClick="OnEditComment"
+                                  Expanded="CommentAreaExpander_Expanded" Collapsed="CommentAreaExpander_Collapsed">
                             <Expander.Header>
                                 <Grid x:Uid="Grid_2" Width="{Binding ElementName=CommentAreaBorder,Path=Width}" ContextMenu="{StaticResource CommentAreaContextMenu}">
                                     <Grid.ColumnDefinitions>
@@ -54,8 +55,7 @@
                 <Grid x:Name="GD_Canvas">
                     <Canvas x:Name="LadderCanvas"
                         HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" 
-                        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                        PreviewMouseDown="OnCanvasMouseDown" PreviewMouseUp="OnCanvasMouseUp">
+                        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
                         <Canvas.Resources>
                             <ContextMenu x:Key="CM_Monitor" x:Name="CM_Monitor">
                                 <MenuItem x:Name="CMI_Value1"/>

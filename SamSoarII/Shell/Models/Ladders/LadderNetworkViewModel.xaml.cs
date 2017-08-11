@@ -332,96 +332,12 @@ namespace SamSoarII.Shell.Models
         //private bool isexpand;
         public bool IsExpand
         {
-            get
-            {
-                return Core.IsExpand;
-            }
-            set
-            {
-                Core.IsExpand = value;
-            }
+            get { return Core.IsExpand; }
+            set { Core.IsExpand = value; }
         }
-        public void ExpandOrCollapsed(bool isExpand,bool isAll)
-        {
-            if (isAll)
-            {
-                foreach (var net in core.Parent.Children)
-                {
-                    net.View.IsExpand = isExpand;
-                }
-                core.Parent.View.IsExpand = isExpand;
-            }
-            else
-            {
-                IsExpand = isExpand;
-            }
-        }
-        private Canvas tipcanvas = null;
-        private ToolTip GenerateToolTipByLadder()
-        {
-            ToolTip tooltip = new ToolTip();
-            ScrollViewer scroll = new ScrollViewer();
-            scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
-            scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-            tipcanvas = new Canvas();
-            scroll.MaxHeight = 385;
-            tipcanvas.Background = Brushes.White;
-            tipcanvas.HorizontalAlignment = HorizontalAlignment.Left;
-            ScaleTransform transform = new ScaleTransform(GlobalSetting.LadderOriginScaleX / 1.7, GlobalSetting.LadderOriginScaleY / 1.7);
-            tipcanvas.Height = Core.RowCount * HeightUnit;
-            tipcanvas.Width = LadderCanvas.Width;
-            tipcanvas.LayoutTransform = transform;
-            scroll.Content = tipcanvas;
-            tooltip.Content = scroll;
-            return tooltip;
-        }
-
-        private void RemoveToolTipByLadder(ToolTip tooltip)
-        {
-            if (tooltip != null)
-            {
-                //Canvas canvas = (Canvas)((ScrollViewer)tooltip.Content).Content;
-                tipcanvas.LayoutTransform = null;
-                tipcanvas.Children.Clear();
-                tipcanvas = null;
-            }
-        }
-
-        #endregion
-
-        #region Acquire
         
-        public bool AcquireSelectRect(MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed && !IsMasked)
-            {
-                var pos = e.GetPosition(LadderCanvas);
-                return AcquireSelectRect(pos);
-            }
-            return false;
-        }
-        public bool AcquireSelectRect(DragEventArgs e)
-        {
-            var pos = e.GetPosition(LadderCanvas);
-            return AcquireSelectRect(pos);
-        }
-        public bool AcquireSelectRect(Point pos)
-        {
-            var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, WidthUnit, HeightUnit);
-            if (intPoint.X < 0 || intPoint.X >= GlobalSetting.LadderXCapacity
-             || intPoint.Y < 0 || intPoint.Y >= RowCount)
-            {
-                return false;
-            }
-            ViewParent.SelectionRect.X = intPoint.X;
-            ViewParent.SelectionRect.Y = intPoint.Y;
-            if (!IsSingleSelected())
-                AcquireSelectRect();
-            return true;
-        }
-
         #endregion
-
+        
         #region Dynamic
 
         private int loadedrowstart;
@@ -724,31 +640,7 @@ namespace SamSoarII.Shell.Models
         {
             IFParent.ShowEditNetworkCommentDialog(Core);
         }
-        
-        private void OnCanvasMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            LadderCanvas.CaptureMouse();
-            AcquireSelectRect(e);
-            if (e.ClickCount == 2)
-            {
-                LadderUnitModel unit = ViewParent.SelectionRect.Current;
-                if (LadderMode == LadderModes.Edit)
-                {
-                    if (unit == null || unit.Shape == LadderUnitModel.Shapes.HLine || unit.Shape == LadderUnitModel.Shapes.Special)
-                        IFParent.ShowInstructionInputDialog("", ViewParent.SelectionRect.Core);
-                    else
-                        IFParent.ShowElementPropertyDialog(unit);
-                }
-                else if (unit != null)
-                {
-                    IFParent.ShowValueModifyDialog(unit.UniqueChildren);
-                }
-            }
-        }
-        private void OnCanvasMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            LadderCanvas.ReleaseMouseCapture();
-        }
+        /*
         protected override void OnDragOver(DragEventArgs e)
         {
             base.OnDragOver(e);
@@ -761,8 +653,8 @@ namespace SamSoarII.Shell.Models
                  || ptvitem.RelativeObject is LadderDiagramModel
                  || ptvitem.RelativeObject is ModbusModel)
                 {
-                    if (ladderExpander.IsExpand && !IsMasked)
-                        AcquireSelectRect(e);
+                    //if (ladderExpander.IsExpand && !IsMasked)
+                    //    AcquireSelectRect(e);
                 }
             }
             double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
@@ -826,7 +718,7 @@ namespace SamSoarII.Shell.Models
                 }
             }
         }
-        
+        */
         private void CommentAreaExpander_Expanded(object sender, RoutedEventArgs e)
         {
             core.IsBriefExpand = true;
@@ -838,6 +730,6 @@ namespace SamSoarII.Shell.Models
         }
 
         #endregion
-
+        
     }
 }

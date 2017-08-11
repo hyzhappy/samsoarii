@@ -1316,44 +1316,6 @@ namespace SamSoarII.Shell.Models
                 }
             }
         }
-        private void OnDrop(object sender, DragEventArgs e)
-        {
-            var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
-            var desnetwork = (LadderNetworkViewModel)e.Source;
-            if (sourcenet == null) return;
-            if (sourcenet != desnetwork)
-            {
-                desnetwork.Opacity = 0.3;
-                desnetwork.ladderExpander.IsExpand = false;
-                Core.ExchangeN(sourcenet.Core, desnetwork.Core);
-            }
-            sourcenet.CommentAreaBorder.BorderBrush = Brushes.Brown;
-            sourcenet.CommentAreaBorder.BorderThickness = new Thickness(4);
-            desnetwork.Opacity = 1;
-            dragItem = null;
-            currentItem = null;
-        }
-        private void OnDragOver(object sender, DragEventArgs e)
-        {
-            var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
-            var desnetwork = (LadderNetworkViewModel)e.Source;
-            if (sourcenet == null) return;
-            if (sourcenet != desnetwork)
-            {
-                sourcenet.CommentAreaBorder.BorderBrush = GlobalSetting.MonitorBrush;
-                sourcenet.CommentAreaBorder.BorderThickness = new Thickness(6);
-                desnetwork.Opacity = 0.3;
-                desnetwork.ladderExpander.IsExpand = false;
-            }
-        }
-        private void OnDragLeave(object sender, DragEventArgs e)
-        {
-            ((LadderNetworkViewModel)e.Source).Opacity = 1;
-            if (dragItem == null) return;
-            dragItem.CommentAreaBorder.BorderBrush = Brushes.Brown;
-            dragItem.CommentAreaBorder.BorderThickness = new Thickness(4);
-        }
-
         #endregion
 
         #region ContextMenu
@@ -2000,6 +1962,10 @@ namespace SamSoarII.Shell.Models
                             LadderNetworkModel net = (LadderNetworkModel)obj;
                             _selectArea.Core.Select(SelectRectOwner.ID, net.ID);
                         }
+                        else if (_selectArea.Core.State != SelectAreaCore.Status.SelectCross)
+                        {
+                            _selectArea.Core.Select(SelectRectOwner.ID, SelectRectOwner.ID);
+                        }
                         if (_selectArea.Core.State != SelectAreaCore.Status.NotSelected)
                         {
                             _selectRect.Core.Parent = null;
@@ -2022,10 +1988,14 @@ namespace SamSoarII.Shell.Models
                             LadderNetworkModel net = (LadderNetworkModel)obj;
                             _selectArea.Core.Move(net);
                         }
+                        else if (_selectArea.Core.State != SelectAreaCore.Status.SelectCross)
+                        {
+                            _selectArea.Core.Select(SelectStartNetwork.ID, SelectStartNetwork.ID);
+                        }
                         if (_selectArea.Core.XStart == _selectArea.Core.XEnd
                          && _selectArea.Core.YStart == _selectArea.Core.YEnd)
                         {
-                            _selectRect.Core.Parent = core.Children[_selectArea.Core.NetStart];
+                            _selectRect.Core.Parent = SelectStartNetwork;
                             _selectRect.Core.X = _selectArea.Core.XStart;
                             _selectRect.Core.Y = _selectArea.Core.YStart;
                             _selectArea.Core.Release();
@@ -2105,7 +2075,7 @@ namespace SamSoarII.Shell.Models
                 cmMoni.Core = null;
                 cmEdit.Core = net;
                 if (LadderMode != LadderModes.Edit || e.ChangedButton == MouseButton.Left)
-                    ReleaseSelect();
+                    ReleaseSelect();   
             }
             else
             {
@@ -2147,6 +2117,44 @@ namespace SamSoarII.Shell.Models
             }
         }
         
+        private void OnMainCanvasDrop(object sender, DragEventArgs e)
+        {
+            var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
+            var desnetwork = (LadderNetworkViewModel)e.Source;
+            if (sourcenet == null) return;
+            if (sourcenet != desnetwork)
+            {
+                desnetwork.Opacity = 0.3;
+                desnetwork.ladderExpander.IsExpand = false;
+                Core.ExchangeN(sourcenet.Core, desnetwork.Core);
+            }
+            sourcenet.CommentAreaBorder.BorderBrush = Brushes.Brown;
+            sourcenet.CommentAreaBorder.BorderThickness = new Thickness(4);
+            desnetwork.Opacity = 1;
+            dragItem = null;
+            currentItem = null;
+        }
+        private void OnMainCanvasDragOver(object sender, DragEventArgs e)
+        {
+            var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
+            var desnetwork = (LadderNetworkViewModel)e.Source;
+            if (sourcenet == null) return;
+            if (sourcenet != desnetwork)
+            {
+                sourcenet.CommentAreaBorder.BorderBrush = GlobalSetting.MonitorBrush;
+                sourcenet.CommentAreaBorder.BorderThickness = new Thickness(6);
+                desnetwork.Opacity = 0.3;
+                desnetwork.ladderExpander.IsExpand = false;
+            }
+        }
+        private void OnMainCanvasDragLeave(object sender, DragEventArgs e)
+        {
+            ((LadderNetworkViewModel)e.Source).Opacity = 1;
+            if (dragItem == null) return;
+            dragItem.CommentAreaBorder.BorderBrush = Brushes.Brown;
+            dragItem.CommentAreaBorder.BorderThickness = new Thickness(4);
+        }
+
         private object GetObjectByMouse(MouseEventArgs e)
         {
             Point p = e.GetPosition(MainCanvas);
@@ -2155,7 +2163,7 @@ namespace SamSoarII.Shell.Models
             foreach (LadderNetworkModel net in Core.Children)
             {
                 if (p.Y >= net.CanvasTop && p.Y < net.UnitBaseTop) return net;
-                if (!net.IsExpand || net.IsMasked) continue;
+                if (p.Y < net.UnitBaseTop || !net.IsExpand || net.IsMasked) continue;
                 int y = (int)((p.Y - net.UnitBaseTop) / HeightUnit);
                 if (x >= 0 && x < GlobalSetting.LadderXCapacity
                  && y >= 0 && y < net.RowCount)
@@ -2302,13 +2310,15 @@ namespace SamSoarII.Shell.Models
                     break;
             }
         }
+        
+
 
         #endregion
 
         #endregion
 
     }
-    
+
     public class LadderNetworkPositionModel
     {
         public LadderNetworkModel Network { get; private set; }
