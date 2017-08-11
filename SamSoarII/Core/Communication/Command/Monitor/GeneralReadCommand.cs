@@ -98,7 +98,7 @@ namespace SamSoarII.Core.Communication
                 IsComplete = (errCodeType != FGs_ERR_CODE.FGs_ISNOTANERRCODE);
                 return;
             }
-            if (RetData.Length != RecvDataLen)
+            if (RetData.Length < RecvDataLen)
             {
                 IsComplete = false;
                 IsSuccess = false;

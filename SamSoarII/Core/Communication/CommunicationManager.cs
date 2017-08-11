@@ -258,7 +258,7 @@ namespace SamSoarII.Core.Communication
                     case PortTypes.USB:
                         return CommunicationDataDefine.USB_DOWNLOAD_LEN;
                     default:
-                        return CommunicationDataDefine.SERIAL_DOWNLOAD_LEN;
+                        return CommunicationDataDefine.USB_DOWNLOAD_LEN;
                 }
             }
         }

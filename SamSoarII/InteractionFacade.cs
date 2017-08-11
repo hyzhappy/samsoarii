@@ -473,6 +473,7 @@ namespace SamSoarII
                         {
                             handle.Start();
                             var ret = mngComu.DownloadExecute();
+                            mngComu.AbortAll();
                             handle.Abort();
                             handle.Completed = true;
                             switch (ret)
