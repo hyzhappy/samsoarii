@@ -29,14 +29,20 @@ namespace SamSoarII.Shell.Models
             InitializeComponent();
             LadderScale.ScaleX = GlobalSetting.LadderOriginScaleX / 1.7;
             LadderScale.ScaleY = GlobalSetting.LadderOriginScaleY / 1.7;
-
+            Loaded += OnLoaded;
         }
-
+        
         public void Dispose()
         {
+            Loaded -= OnLoaded;
             Core = null;
         }
 
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            IsViewModified = true;
+        }
+        
         #region Number
 
         private LadderNetworkModel core;
@@ -68,6 +74,13 @@ namespace SamSoarII.Shell.Models
         #endregion
 
         #region Shell
+
+        private bool isviewmodified;
+        public bool IsViewModified
+        {
+            get { return this.isviewmodified; }
+            set { this.isviewmodified = value; }
+        }
 
         private int loadedrowstart;
         public int LoadedRowStart { get { return this.loadedrowstart; } }

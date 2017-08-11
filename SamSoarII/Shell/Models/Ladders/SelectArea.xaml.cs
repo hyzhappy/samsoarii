@@ -187,34 +187,18 @@ namespace SamSoarII.Shell.Models
         
         public void Move(LadderUnitModel unit)
         {
-            switch (state)
-            {
-                case Status.SelectRange:
-                    if (unit.Parent.ID == netorigin)
-                        Select(netorigin, xorigin, yorigin, unit.X, unit.Y);
-                    else
-                        Select(netorigin, unit.Parent.ID);
-                    break;
-                case Status.SelectCross:
-                    Select(netorigin, unit.Parent.ID);
-                    break;
-            }
+            if (unit.Parent.ID == netorigin)
+                Select(netorigin, xorigin, yorigin, unit.X, unit.Y);
+            else
+                Select(netorigin, unit.Parent.ID);
         }
 
         public void Move(LadderNetworkPositionModel pos)
         {
-            switch (state)
-            {
-                case Status.SelectRange:
-                    if (pos.Network.ID == netorigin)
-                        Select(netorigin, xorigin, yorigin, pos.X, pos.Y);
-                    else
-                        Select(netorigin, pos.Network.ID);
-                    break;
-                case Status.SelectCross:
-                    Select(netorigin, pos.Network.ID);
-                    break;
-            }
+            if (pos.Network.ID == netorigin)
+                Select(netorigin, xorigin, yorigin, pos.X, pos.Y);
+            else
+                Select(netorigin, pos.Network.ID);
         }
 
         public void Move(LadderNetworkModel net)
@@ -464,6 +448,7 @@ namespace SamSoarII.Shell.Models
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
 
         public LadderDiagramModel CoreParent { get { return core?.Parent; } }
+        public LadderNetworkModel NetOrigin { get { return CoreParent.Children[core.NetOrigin]; } }
         public LadderNetworkModel NetStart { get { return CoreParent.Children[core.NetStart]; } }
         public LadderNetworkModel NetEnd { get { return CoreParent.Children[core.NetEnd]; } }
         

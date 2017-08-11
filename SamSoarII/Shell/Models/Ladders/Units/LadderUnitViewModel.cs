@@ -228,9 +228,8 @@ namespace SamSoarII.Shell.Models
 
         private LadderModes oldladdermode;
         public LadderModes LadderMode { get { return core.LadderMode; } }
-        
         public bool IsCommentMode { get { return core.IsCommentMode; } }
-
+        
         public const int UPDATE_ALL = 0xff;
         public const int UPDATE_TOP = 0x01;
         public const int UPDATE_LEFT = 0x02;
@@ -246,7 +245,8 @@ namespace SamSoarII.Shell.Models
                 case 0:
                     break;
                 case UPDATE_TOP:
-                    Canvas.SetTop(this, core.Parent.UnitBaseTop + Y * (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit));
+                    Canvas.SetTop(this, (core.Parent.IsExpand ? core.Parent.UnitBaseTop : 0)
+                        + Y * (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit));
                     break;
                 case UPDATE_LEFT:
                     Canvas.SetLeft(this, X * Global.GlobalSetting.LadderWidthUnit);
