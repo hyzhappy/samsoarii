@@ -25,6 +25,8 @@ using System.Runtime.InteropServices;
 using SamSoarII.Utility;
 using System.Windows.Threading;
 using System.Threading;
+using SamSoarII.Shell.Windows;
+using SamSoarII.Shell.Dialogs;
 
 namespace SamSoarII.Shell.Models
 {
@@ -36,6 +38,7 @@ namespace SamSoarII.Shell.Models
         MultiSelecting,
         MultiSelected,
         NetworkDraging,
+        UnitDraging,
     }
 
     public enum CrossNetworkState
@@ -73,6 +76,8 @@ namespace SamSoarII.Shell.Models
             ladderExpander.expandButton.IsExpandChanged += OnExpandChanged;
             ladderExpander.IsExpand = IsExpand;
             TitleStackPanel.Children.Remove(ThumbnailButton);
+            loadedrowstart = 0;
+            loadedrowend = -1;
             Update();
         }
         
@@ -172,14 +177,22 @@ namespace SamSoarII.Shell.Models
             {
                 case NotifyCollectionChangedAction.Add:
                     net = (LadderNetworkModel)(e.NewItems[0]);
+                    if (net.ID < loadedrowstart || net.ID > loadedrowend)
+                        break;
                     if (net.View == null)
-                        net.View = new LadderNetworkViewModel(net);
-                    MainCanvas.Children.Insert(e.NewStartingIndex, net.View);
+                        net.View = AllResourceManager.CreateNet(net);
+                    if (net.View.Parent != MainCanvas)
+                    {
+                        if (net.View.Parent is Canvas)
+                            ((Canvas)(net.View.Parent)).Children.Remove(net.View);
+                        MainCanvas.Children.Add(net.View);
+                    }
                     break;
                 case NotifyCollectionChangedAction.Remove:
                     net = (LadderNetworkModel)(e.OldItems[0]);
                     if (SelectRectOwner == net) SelectRectOwner = null;
-                    MainCanvas.Children.Remove(net.View);
+                    net.View.Visibility = Visibility.Hidden;
+                    net.View.Dispose();
                     break;
                 case NotifyCollectionChangedAction.Replace:
                     net = (LadderNetworkModel)(e.NewItems[0]);
@@ -1284,6 +1297,151 @@ namespace SamSoarII.Shell.Models
             set { this.isviewmodified = value; }
         }
 
+        private int loadedrowstart;
+        public int LoadedRowStart { get { return this.loadedrowstart; } }
+
+        private int loadedrowend;
+        public int LoadedRowEnd { get { return this.loadedrowend; } }
+
+        private double oldscrolloffset;
+        public void DynamicUpdate()
+        {
+            double scaleY = 0;
+            double newscrolloffset = 0;
+            double scrollheight = 0;
+            double titleheight = 0;
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
+                newscrolloffset = Scroll.VerticalOffset;
+                scrollheight = Scroll.ViewportHeight;
+                titleheight = TopBorder;
+            });
+            if (!IsExpand)
+            {
+                if (loadedrowstart <= loadedrowend)
+                {
+                    DisposeRange(loadedrowstart, loadedrowend);
+                    loadedrowstart = 0;
+                    loadedrowend = -1;
+                }
+            }
+            else
+            {
+                int _loadedrowstart = 0;
+                int _loadedrowend = core.NetworkCount - 1;
+                LadderNetworkModel net = core.Children[_loadedrowstart];
+                while (net != null && (net.CanvasTop + net.ViewHeight) * scaleY - newscrolloffset < -20)
+                {
+                    _loadedrowstart++;
+                    net = _loadedrowstart < core.NetworkCount ? core.Children[_loadedrowstart] : null;
+                }
+                net = core.Children[_loadedrowend];
+                while (net != null && net.CanvasTop * scaleY - newscrolloffset > scrollheight + 20)
+                {
+                    _loadedrowend--;
+                    net = _loadedrowend >= 0 ? core.Children[_loadedrowend] : null;
+                }
+                if (_loadedrowstart > _loadedrowend)
+                {
+                    if (loadedrowstart <= loadedrowend)
+                    {
+                        if (newscrolloffset > oldscrolloffset)
+                            DisposeRange(loadedrowstart, loadedrowend);
+                        else
+                            DisposeRange(loadedrowend, loadedrowstart);
+                    }
+                }
+                else if (loadedrowstart > loadedrowend)
+                {
+                    if (newscrolloffset > oldscrolloffset)
+                        CreateRange(_loadedrowstart, _loadedrowend);
+                    else
+                        CreateRange(_loadedrowend, _loadedrowstart);
+                }
+                else
+                {
+                    if (newscrolloffset > oldscrolloffset)
+                    {
+                        if (_loadedrowstart < loadedrowstart)
+                            CreateRange(_loadedrowstart, Math.Min(_loadedrowend, loadedrowstart - 1));
+                        if (_loadedrowstart > loadedrowstart)
+                            DisposeRange(loadedrowstart, _loadedrowstart - 1);
+                        if (loadedrowend < _loadedrowend)
+                            CreateRange(Math.Max(_loadedrowstart, loadedrowend + 1), _loadedrowend);
+                        if (loadedrowend > _loadedrowend)
+                            DisposeRange(_loadedrowend + 1, loadedrowend);
+                    }
+                    else
+                    {
+                        if (_loadedrowstart < loadedrowstart)
+                            CreateRange(Math.Min(_loadedrowend, loadedrowstart - 1), _loadedrowstart);
+                        if (_loadedrowstart > loadedrowstart)
+                            DisposeRange(_loadedrowstart - 1, loadedrowstart);
+                        if (loadedrowend < _loadedrowend)
+                            CreateRange(_loadedrowend, Math.Max(_loadedrowstart, loadedrowend + 1));
+                        if (loadedrowend > _loadedrowend)
+                            DisposeRange(loadedrowend, _loadedrowend + 1);
+                    }
+                }
+                loadedrowstart = _loadedrowstart;
+                loadedrowend = _loadedrowend;
+            }
+            oldscrolloffset = newscrolloffset;
+            foreach (LadderNetworkModel net in core.Children)
+                if (net.View != null) net.View.DynamicUpdate();
+        }
+
+        public void DynamicDispose()
+        {
+            if (loadedrowstart <= loadedrowend)
+            {
+                DisposeRange(loadedrowstart, loadedrowend);
+                loadedrowstart = 0;
+                loadedrowend = -1;
+            }
+        }
+
+        private void DisposeRange(int rowstart, int rowend)
+        {
+            int dir = (rowstart < rowend ? 1 : -1);
+            for (int y = rowstart; y != rowend + dir; y += dir)
+            {
+                LadderNetworkModel net = core.Children[y];
+                if (net.View != null)
+                {
+                    net.View.DynamicDispose();
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                    {
+                        net.View.Visibility = Visibility.Hidden;
+                        net.View.Dispose();
+                    });
+                }
+            }
+        }
+
+        private void CreateRange(int rowstart, int rowend)
+        {
+            int dir = (rowstart < rowend ? 1 : -1);
+            for (int y = rowstart; y != rowend + dir; y += dir)
+            {
+                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                {
+                    LadderNetworkModel net = core.Children[y];
+                    if (net.View == null)
+                    {
+                        net.View = AllResourceManager.CreateNet(net);
+                        if (net.View.Parent != MainCanvas)
+                        {
+                            if (net.View.Parent is Canvas)
+                                ((Canvas)(net.View.Parent)).Children.Remove(net.View);
+                            MainCanvas.Children.Add(net.View);
+                        }
+                    }
+                });
+            }
+        }
+
         #endregion
 
         #region network drag(only not IsExpand)
@@ -1351,13 +1509,6 @@ namespace SamSoarII.Shell.Models
                     TitleStackPanel.Children.Remove(ThumbnailButton);
                 }
                 MainCanvas.Visibility = Visibility.Visible;
-                foreach (LadderNetworkModel net in core.Children)
-                {
-                    if (net.View == null)
-                        net.View = new LadderNetworkViewModel(net);
-                    if (!MainCanvas.Children.Contains(net.View))
-                        MainCanvas.Children.Add(net.View);
-                }
                 core.UpdateCanvasTop();
             }
         }
@@ -2005,21 +2156,13 @@ namespace SamSoarII.Shell.Models
                 }
                 var p1 = e.GetPosition(MainScrollViewer);
                 if (MainScrollViewer.ViewportHeight < p1.Y)
-                {
                     MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + (p1.Y - MainScrollViewer.ViewportHeight) * GlobalSetting.LadderScaleY * 0.2);
-                }
                 else if (p1.Y < 0)
-                {
                     MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + p1.Y * GlobalSetting.LadderScaleY * 0.2);
-                }
                 else if (p1.X < 0)
-                {
                     MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + p1.X * GlobalSetting.LadderScaleX * 0.8);
-                }
                 else if (MainScrollViewer.ViewportWidth < p1.X)
-                {
                     MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + (p1.X - MainScrollViewer.ViewportWidth) * GlobalSetting.LadderScaleX * 0.8);
-                }
             }
             /*
             currentItem = GetNetworkByMouse();
@@ -2046,10 +2189,10 @@ namespace SamSoarII.Shell.Models
             if (obj is LadderUnitModel)
             {
                 LadderUnitModel unit = (LadderUnitModel)obj;
-                cmMoni.Core = unit;
                 cmEdit.Core = unit.Parent;
-                if (LadderMode != LadderModes.Edit || e.ChangedButton == MouseButton.Left)
+                if (unit.IsUsed && (LadderMode != LadderModes.Edit || e.ChangedButton == MouseButton.Left))
                 {
+                    cmMoni.Core = unit;
                     _selectArea.Core.Release();
                     _selectRect.Core.Current = unit;
                     _selectStatus = SelectStatus.SingleSelecting;
@@ -2058,9 +2201,9 @@ namespace SamSoarII.Shell.Models
             else if (obj is LadderNetworkPositionModel)
             {
                 LadderNetworkPositionModel pos = (LadderNetworkPositionModel)obj;
-                cmMoni.Core = null;
                 cmEdit.Core = pos.Network;
-                if (LadderMode != LadderModes.Edit || e.ChangedButton == MouseButton.Left)
+                cmMoni.Core = null;
+                if (!pos.Network.IsMasked && (LadderMode != LadderModes.Edit || e.ChangedButton == MouseButton.Left))
                 {
                     _selectArea.Core.Release();
                     _selectRect.Core.Parent = pos.Network;
@@ -2119,51 +2262,159 @@ namespace SamSoarII.Shell.Models
         
         private void OnMainCanvasDrop(object sender, DragEventArgs e)
         {
-            var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
-            var desnetwork = (LadderNetworkViewModel)e.Source;
-            if (sourcenet == null) return;
-            if (sourcenet != desnetwork)
+            switch (_selectStatus)
             {
-                desnetwork.Opacity = 0.3;
-                desnetwork.ladderExpander.IsExpand = false;
-                Core.ExchangeN(sourcenet.Core, desnetwork.Core);
+                case SelectStatus.NetworkDraging:
+                    var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
+                    var desnetwork = (LadderNetworkViewModel)e.Source;
+                    if (sourcenet == null) return;
+                    if (sourcenet != desnetwork)
+                    {
+                        desnetwork.Opacity = 0.3;
+                        desnetwork.ladderExpander.IsExpand = false;
+                        Core.ExchangeN(sourcenet.Core, desnetwork.Core);
+                    }
+                    sourcenet.CommentAreaBorder.BorderBrush = Brushes.Brown;
+                    sourcenet.CommentAreaBorder.BorderThickness = new Thickness(4);
+                    desnetwork.Opacity = 1;
+                    dragItem = null;
+                    currentItem = null;
+                    break;
+                case SelectStatus.UnitDraging:
+                    ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
+                    if (_selectRect.Core.Parent == null) return;
+                    if (e.Data.GetDataPresent(ptvitem.GetType()))
+                    {
+                        ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
+                        if (ptvitem.RelativeObject is LadderUnitModel.Types)
+                        {
+                            LadderUnitModel.Types type = (LadderUnitModel.Types)(ptvitem.RelativeObject);
+                            //Core.Parent.QuickInsertElement(type, ViewParent.SelectionRect.Core, false);
+                            if (IFParent.ShowElementPropertyDialog(type, _selectRect.Core, false))
+                                SelectRectRight();
+                        }
+                        else if (ptvitem.RelativeObject is FuncModel)
+                        {
+                            FuncModel fmodel = (FuncModel)(ptvitem.RelativeObject);
+                            if (!fmodel.CanCALLM())
+                            {
+                                LocalizedMessageBox.Show(String.Format("{0:s}{1}", fmodel.Name, Properties.Resources.Message_Can_Not_CALL), LocalizedMessageIcon.Error);
+                                return;
+                            }
+                            IFParent.ShowElementPropertyDialog(fmodel, _selectRect.Core);
+                        }
+                        else if (ptvitem.RelativeObject is LadderDiagramModel)
+                        {
+                            LadderDiagramModel ldmodel = (LadderDiagramModel)(ptvitem.RelativeObject);
+                            LadderUnitModel unit = new LadderUnitModel(null, LadderUnitModel.Types.CALL);
+                            unit.InstArgs = new string[] { ldmodel.Name };
+                            unit.X = _selectRect.X;
+                            unit.Y = _selectRect.Y;
+                            Core.AddSingleUnit(unit, SelectRectOwner, false);
+                        }
+                        else if (ptvitem.RelativeObject is ModbusModel)
+                        {
+                            ModbusModel mmodel = (ModbusModel)(ptvitem.RelativeObject);
+                            IFParent.ShowElementPropertyDialog(mmodel, _selectRect.Core);
+                        }
+                    }
+                    break;
             }
-            sourcenet.CommentAreaBorder.BorderBrush = Brushes.Brown;
-            sourcenet.CommentAreaBorder.BorderThickness = new Thickness(4);
-            desnetwork.Opacity = 1;
-            dragItem = null;
-            currentItem = null;
         }
+
         private void OnMainCanvasDragOver(object sender, DragEventArgs e)
         {
-            var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
-            var desnetwork = (LadderNetworkViewModel)e.Source;
-            if (sourcenet == null) return;
-            if (sourcenet != desnetwork)
+            switch (_selectStatus)
             {
-                sourcenet.CommentAreaBorder.BorderBrush = GlobalSetting.MonitorBrush;
-                sourcenet.CommentAreaBorder.BorderThickness = new Thickness(6);
-                desnetwork.Opacity = 0.3;
-                desnetwork.ladderExpander.IsExpand = false;
+                case SelectStatus.NetworkDraging:
+                    var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
+                    var desnetwork = (LadderNetworkViewModel)e.Source;
+                    if (sourcenet == null) return;
+                    if (sourcenet != desnetwork)
+                    {
+                        sourcenet.CommentAreaBorder.BorderBrush = GlobalSetting.MonitorBrush;
+                        sourcenet.CommentAreaBorder.BorderThickness = new Thickness(6);
+                        desnetwork.Opacity = 0.3;
+                        desnetwork.ladderExpander.IsExpand = false;
+                    }
+                    break;
+                default:
+                    _selectStatus = SelectStatus.UnitDraging;
+                    ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
+                    if (e.Data.GetDataPresent(ptvitem.GetType()))
+                    {
+                        ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
+                        if (ptvitem.RelativeObject is LadderUnitModel.Types
+                         || ptvitem.RelativeObject is FuncModel
+                         || ptvitem.RelativeObject is LadderDiagramModel
+                         || ptvitem.RelativeObject is ModbusModel)
+                        {
+                            object obj = GetObjectByMouse(e);
+                            if (obj is LadderUnitModel)
+                            {
+                                LadderUnitModel unit = (LadderUnitModel)obj;
+                                _selectArea.Core.Release();
+                                _selectRect.Core.Parent = unit.Parent;
+                                _selectRect.X = unit.X;
+                                _selectRect.Y = unit.Y;
+                            }
+                            else if (obj is LadderNetworkPositionModel)
+                            {
+                                LadderNetworkPositionModel pos = (LadderNetworkPositionModel)obj;
+                                _selectArea.Core.Release();
+                                _selectRect.Core.Parent = pos.Network;
+                                _selectRect.X = pos.X;
+                                _selectRect.Y = pos.Y;
+                            }
+                        }
+                    }
+                    double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
+                    double scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
+                    var p1 = e.GetPosition(MainScrollViewer);
+                    if (MainScrollViewer.ViewportHeight < p1.Y)
+                        MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + (p1.Y - MainScrollViewer.ViewportHeight) * GlobalSetting.LadderScaleY * 0.2);
+                    else if (p1.Y < 0)
+                        MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + p1.Y * GlobalSetting.LadderScaleY * 0.2);
+                    else if (p1.X < 0)
+                        MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + p1.X * GlobalSetting.LadderScaleX * 0.8);
+                    else if (MainScrollViewer.ViewportWidth < p1.X)
+                        MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + (p1.X - MainScrollViewer.ViewportWidth) * GlobalSetting.LadderScaleX * 0.8);
+                    break;
             }
         }
         private void OnMainCanvasDragLeave(object sender, DragEventArgs e)
         {
-            ((LadderNetworkViewModel)e.Source).Opacity = 1;
-            if (dragItem == null) return;
-            dragItem.CommentAreaBorder.BorderBrush = Brushes.Brown;
-            dragItem.CommentAreaBorder.BorderThickness = new Thickness(4);
+            switch (_selectStatus)
+            {
+                case SelectStatus.NetworkDraging:
+                    ((LadderNetworkViewModel)e.Source).Opacity = 1;
+                    if (dragItem == null) return;
+                    dragItem.CommentAreaBorder.BorderBrush = Brushes.Brown;
+                    dragItem.CommentAreaBorder.BorderThickness = new Thickness(4);
+                    break;
+            }
         }
 
         private object GetObjectByMouse(MouseEventArgs e)
         {
             Point p = e.GetPosition(MainCanvas);
+            return GetObjectByMouse(p);
+        }
+
+        private object GetObjectByMouse(DragEventArgs e)
+        {
+            Point p = e.GetPosition(MainCanvas);
+            return GetObjectByMouse(p);
+        }
+
+        private object GetObjectByMouse(Point p)
+        {
             if (p.X < 0) return null;
             int x = (int)(p.X / WidthUnit);
             foreach (LadderNetworkModel net in Core.Children)
             {
                 if (p.Y >= net.CanvasTop && p.Y < net.UnitBaseTop) return net;
-                if (p.Y < net.UnitBaseTop || !net.IsExpand || net.IsMasked) continue;
+                if (p.Y < net.UnitBaseTop || !net.IsExpand) continue;
                 int y = (int)((p.Y - net.UnitBaseTop) / HeightUnit);
                 if (x >= 0 && x < GlobalSetting.LadderXCapacity
                  && y >= 0 && y < net.RowCount)
@@ -2227,37 +2478,64 @@ namespace SamSoarII.Shell.Models
                         Delete();
                     break;
                 case LadderEditEventArgs.Types.NetInsertBefore:
+                    Core.AddN(cmEdit.Core.ID);
+                    /*
                     if (_selectStatus == SelectStatus.SingleSelected)
                         Core.AddN(SelectRectOwner.ID);
                     else
                         Core.AddN(_selectArea.NetStart.ID);
+                    */                
                     break;
                 case LadderEditEventArgs.Types.NetInsertAfter:
+                    Core.AddN(cmEdit.Core.ID + 1);
+                    /*
                     if (_selectStatus == SelectStatus.SingleSelected)
                         Core.AddN(SelectRectOwner.ID + 1);
                     else
                         Core.AddN(_selectArea.NetEnd.ID + 1);
+                    */
                     break;
                 case LadderEditEventArgs.Types.NetInsertEnd:
                     Core.AddN(Core.NetworkCount);
                     break;
                 case LadderEditEventArgs.Types.NetDelete:
+                    if (_selectStatus == SelectStatus.MultiSelected
+                     && _selectArea.Core.State == SelectAreaCore.Status.SelectRange)
+                        Core.RemoveN(SelectStartNetwork.ID, SelectStartNetwork);
+                    else if (cmEdit.Core != null)
+                        Core.RemoveN(cmEdit.Core.ID, cmEdit.Core);
+                    /*
                     if (_selectStatus == SelectStatus.SingleSelected)
                         Core.RemoveN(SelectRectOwner.ID, SelectRectOwner);
                     else if (_selectStatus == SelectStatus.MultiSelected
                      && _selectArea.Core.State == SelectAreaCore.Status.SelectRange)
                         Core.RemoveN(SelectStartNetwork.ID, SelectStartNetwork);
-                    else
-                        Delete();
+                    */
                     break;
                 case LadderEditEventArgs.Types.NetCopy:
+                    if (_selectStatus == SelectStatus.MultiSelected
+                     && _selectArea.Core.State == SelectAreaCore.Status.SelectCross)
+                        CutAndCopy(false);
+                    else if (cmEdit.Core != null)
+                        cmEdit.Core.CopyToClipboard();
+                    /*
                     if (_selectStatus == SelectStatus.SingleSelected)
                         SelectRectOwner.CopyToClipboard();
                     else if (_selectStatus == SelectStatus.MultiSelected
                      && _selectArea.Core.State == SelectAreaCore.Status.SelectRange)
                         SelectStartNetwork.CopyToClipboard();
+                    */
                     break;
                 case LadderEditEventArgs.Types.NetCut:
+                    if (_selectStatus == SelectStatus.MultiSelected
+                     && _selectArea.Core.State == SelectAreaCore.Status.SelectCross)
+                        CutAndCopy(true);
+                    else if (cmEdit.Core != null)
+                    {
+                        cmEdit.Core.CopyToClipboard();
+                        Core.RemoveN(cmEdit.Core.ID, cmEdit.Core);
+                    }
+                    /*
                     if (_selectStatus == SelectStatus.SingleSelected)
                     {
                         SelectRectOwner.CopyToClipboard();
@@ -2269,40 +2547,41 @@ namespace SamSoarII.Shell.Models
                         SelectStartNetwork.CopyToClipboard();
                         Core.RemoveN(SelectStartNetwork.ID, SelectStartNetwork);
                     }
+                    */
                     break;
                 case LadderEditEventArgs.Types.NetShield:
-                    if (_selectStatus == SelectStatus.SingleSelected)
-                        SelectRectOwner.IsMasked = !SelectRectOwner.IsMasked;
-                    else
+                    if (_selectStatus == SelectStatus.MultiSelected)
                     {
                         bool ismasked = !cmEdit.Core.IsMasked;
                         for (int i = _selectArea.Core.NetStart; i <= _selectArea.Core.NetEnd; i++)
                             core.Children[i].IsMasked = ismasked;
                     }
+                    else if (cmEdit.Core != null)
+                        cmEdit.Core.IsMasked = !cmEdit.Core.IsMasked;
                     break;
                 case LadderEditEventArgs.Types.NetExpand:
-                    if (_selectStatus == SelectStatus.SingleSelected)
-                        SelectRectOwner.IsExpand = true;
-                    else
+                    if (_selectStatus == SelectStatus.MultiSelected)
                     {
                         for (int i = _selectArea.Core.NetStart; i <= _selectArea.Core.NetEnd; i++)
                             core.Children[i].IsExpand = true;
                         NavigateToSelectArea(Directions.None, Directions.Up);
                     }
+                    else if (cmEdit.Core != null)
+                        cmEdit.Core.IsExpand = true;
                     break;
                 case LadderEditEventArgs.Types.NetExpandAll:
                     foreach (LadderNetworkModel net in core.Children)
                         net.IsExpand = true;
                     break;
                 case LadderEditEventArgs.Types.NetCollapsed:
-                    if (_selectStatus == SelectStatus.SingleSelected)
-                        SelectRectOwner.IsExpand = false;
-                    else
+                    if (_selectStatus == SelectStatus.MultiSelected)
                     {
                         for (int i = _selectArea.Core.NetStart; i <= _selectArea.Core.NetEnd; i++)
                             core.Children[i].IsExpand = false;
                         NavigateToSelectArea(Directions.None, Directions.Up);
                     }
+                    else if (cmEdit.Core != null)
+                        cmEdit.Core.IsExpand = false;
                     break;
                 case LadderEditEventArgs.Types.NetCollapsedAll:
                     foreach (LadderNetworkModel net in core.Children)

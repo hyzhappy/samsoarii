@@ -11,6 +11,7 @@ namespace SamSoarII
 {
     public abstract class AllResourceManager
     {
+        static private ResourceManager<LadderNetworkViewModel> rmgNet;
         static private ResourceManager<InputViewModel> rmgInput;
         static private ResourceManager<OutputViewModel> rmgOutput;
         static private ResourceManager<OutputRectViewModel> rmgOutRec;
@@ -19,9 +20,10 @@ namespace SamSoarII
         static private ResourceManager<VLineViewModel> rmgVLine;
         static private ResourceManager<InstructionRowViewModel> rmgIRow;
         static private ResourceManager<LadderBrpoViewModel> rmgBrpo;
-
+        
         static public void Initialize()
         {
+            rmgNet = new ResourceManager<LadderNetworkViewModel>(new LadderNetworkViewModel(null), 20, new object[] { null });
             rmgInput = new ResourceManager<InputViewModel>(new InputViewModel(null), 100, new object[] { null });
             rmgOutput = new ResourceManager<OutputViewModel>(new OutputViewModel(null), 25, new object[] { null });
             rmgOutRec = new ResourceManager<OutputRectViewModel>(new OutputRectViewModel(null), 25, new object[] { null });
@@ -32,6 +34,15 @@ namespace SamSoarII
             rmgBrpo = new ResourceManager<LadderBrpoViewModel>(new LadderBrpoViewModel(null), 20, new object[] { null });
         }
 
+        static public LadderNetworkViewModel CreateNet(LadderNetworkModel core)
+        {
+            return rmgNet.Create(core);
+        }
+        static public void Dispose(LadderNetworkViewModel net)
+        {
+            rmgNet.Dispose(net);
+        }
+    
         static public LadderBrpoViewModel CreateBrpo(LadderBrpoModel core)
         {
             return rmgBrpo.Create(core);

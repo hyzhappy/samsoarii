@@ -401,7 +401,9 @@ namespace SamSoarII
             if (vmdProj.LadderMode == LadderModes.Monitor) _CloseMonitor();
             if (!CheckLadder(false)) return false;
             if (!CheckFuncBlock(false)) return false;
-            
+#if DEBUG
+            GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
+#endif
             mngComu.IsEnable = true;
             CommunicationParams paraCom = mdProj.PARAProj.PARACom;
             using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom,
@@ -1175,6 +1177,8 @@ namespace SamSoarII
                 return;
             }
             tcMain.ShowItem(diagram.Tab);
+            if (network.View == null)
+                network.View = AllResourceManager.CreateNet(network);
             network.View.AcquireSelectRect();
             SelectRectCore rect = diagram.View.SelectionRect.Core;
             rect.X = x;

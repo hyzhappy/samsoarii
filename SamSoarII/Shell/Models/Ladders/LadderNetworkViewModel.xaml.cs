@@ -41,26 +41,52 @@ namespace SamSoarII.Shell.Models
     /// <summary>
     /// LadderNetworkViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class LadderNetworkViewModel : UserControl, IViewModel, INotifyPropertyChanged, IComparable<LadderNetworkViewModel>
+    public partial class LadderNetworkViewModel : UserControl, IViewModel, INotifyPropertyChanged, IComparable<LadderNetworkViewModel>, IResource
     {
+        #region IResource
+
+        private int resourceid;
+        public int ResourceID
+        {
+            get { return this.resourceid; }
+            set { this.resourceid = value; }
+        }
+
+        public IResource Create(params object[] args)
+        {
+            return new LadderNetworkViewModel((LadderNetworkModel)args[0]);
+        }
+
+        public virtual void Recreate(params object[] args)
+        {
+            CommentAreaGrid.Children.Remove(ThumbnailButton);
+            Visibility = Visibility.Visible;
+            Core = (LadderNetworkModel)args[0];
+            loadedrowstart = 0;
+            loadedrowend = -1;
+            if (Core != null)
+            {
+                ladderExpander.IsExpand = IsExpand;
+                Update();
+            }
+        }
+        
+        #endregion
+
         public LadderNetworkViewModel(LadderNetworkModel _core)
         {
             InitializeComponent();
             DataContext = this;
-            Core = _core;
             ladderExpander.MouseEnter += OnExpanderMouseEnter;
             ladderExpander.MouseLeave += OnExpanderMouseLeave;
             ladderExpander.expandButton.IsExpandChanged += OnExpandChanged;
-            ladderExpander.IsExpand = IsExpand;
-            CommentAreaGrid.Children.Remove(ThumbnailButton);
-            loadedrowstart = 0;
-            loadedrowend = -1;
-            Update();
+            Recreate(_core);
         }
 
         public void Dispose()
         {
             Core = null;
+            AllResourceManager.Dispose(this);
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -169,6 +195,7 @@ namespace SamSoarII.Shell.Models
                         LadderCanvas.Background = Brushes.LightGray;
                         CommentAreaExpander.Opacity = 0.4;
                         LadderCanvas.Opacity = 0.4;
+                        Canvas.SetZIndex(this, -2);
                     }
                     else
                     {
@@ -176,6 +203,7 @@ namespace SamSoarII.Shell.Models
                         LadderCanvas.Opacity = 1.0;
                         CommentAreaExpander.Background = Brushes.LightCyan;
                         LadderCanvas.Background = Brushes.Transparent;
+                        Canvas.SetZIndex(this, 0);
                     }
                     PropertyChanged(this, new PropertyChangedEventArgs("IsMasked"));
                     break;
@@ -193,6 +221,10 @@ namespace SamSoarII.Shell.Models
                     break;
                 case "Description":
                     NetworkDescriptionTextBlock.Text = NetworkDescription;
+                    break;
+                case "ViewHeight":
+                    ladderExpander.Height = core.ViewHeight;
+                    Rect.Height = core.ViewHeight;
                     break;
             }
         }
@@ -263,12 +295,12 @@ namespace SamSoarII.Shell.Models
 
         public string NetworkBrief
         {
-            get { return Core.Brief; }
+            get { return core != null ? core.Brief : ""; }
         }
 
         public string NetworkDescription
         {
-            get { return Core.Description; }
+            get { return core != null ? core.Description : ""; }
         }
 
 
@@ -332,8 +364,8 @@ namespace SamSoarII.Shell.Models
         //private bool isexpand;
         public bool IsExpand
         {
-            get { return Core.IsExpand; }
-            set { Core.IsExpand = value; }
+            get { return core != null ? Core.IsExpand : false; }
+            set { if (core != null) core.IsExpand = value; }
         }
         
         #endregion
@@ -502,6 +534,7 @@ namespace SamSoarII.Shell.Models
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("CanvasTop"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("UnitBaseTop"));
+            OnCorePropertyChanged(this, new PropertyChangedEventArgs("ViewHeight"));
         }
         
         public LadderModes LadderMode { get { return core.LadderMode; } }
@@ -640,85 +673,7 @@ namespace SamSoarII.Shell.Models
         {
             IFParent.ShowEditNetworkCommentDialog(Core);
         }
-        /*
-        protected override void OnDragOver(DragEventArgs e)
-        {
-            base.OnDragOver(e);
-            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
-            if (e.Data.GetDataPresent(ptvitem.GetType()))
-            {
-                ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
-                if (ptvitem.RelativeObject is LadderUnitModel.Types
-                 || ptvitem.RelativeObject is FuncModel
-                 || ptvitem.RelativeObject is LadderDiagramModel
-                 || ptvitem.RelativeObject is ModbusModel)
-                {
-                    //if (ladderExpander.IsExpand && !IsMasked)
-                    //    AcquireSelectRect(e);
-                }
-            }
-            double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
-            double scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
-            var point = e.GetPosition(ViewParent.MainScrollViewer);
-            if (ViewParent.MainScrollViewer.ViewportHeight - point.Y < 100 * scaleY)
-                ViewParent.MainScrollViewer.ScrollToVerticalOffset(ViewParent.MainScrollViewer.VerticalOffset + 80 * scaleX);
-            else if (point.Y < 100 * scaleY)
-                ViewParent.MainScrollViewer.ScrollToVerticalOffset(ViewParent.MainScrollViewer.VerticalOffset - 80 * scaleY);
-            else if (point.X < 100 * scaleX)
-                ViewParent.MainScrollViewer.ScrollToHorizontalOffset(ViewParent.MainScrollViewer.HorizontalOffset - 80 * scaleY);
-            else if (ViewParent.MainScrollViewer.ViewportWidth - point.X < 100 * scaleX)
-                ViewParent.MainScrollViewer.ScrollToHorizontalOffset(ViewParent.MainScrollViewer.HorizontalOffset + 80 * scaleX);
-            //e.Handled = true;
-        }
-        protected override void OnDrop(DragEventArgs e)
-        {
-            base.OnDrop(e);
-            if (!ladderExpander.IsExpand || IsMasked) return;
-            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
-            bool isacquired = AcquireSelectRect(e);
-            if (e.Data.GetDataPresent(typeof(LadderNetworkViewModel)))
-            {
-                isacquired = false;
-                ReleaseSelectRect();
-            }
-            if (!isacquired) return;
-            if (e.Data.GetDataPresent(ptvitem.GetType()))
-            {
-                ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
-                if (ptvitem.RelativeObject is LadderUnitModel.Types)
-                {
-                    LadderUnitModel.Types type = (LadderUnitModel.Types)(ptvitem.RelativeObject);
-                    //Core.Parent.QuickInsertElement(type, ViewParent.SelectionRect.Core, false);
-                    if (IFParent.ShowElementPropertyDialog(type, ViewParent.SelectionRect.Core, false))
-                        core.Parent.View.SelectRectRight();
-                }
-                else if (ptvitem.RelativeObject is FuncModel)
-                {
-                    FuncModel fmodel = (FuncModel)(ptvitem.RelativeObject);
-                    if (!fmodel.CanCALLM())
-                    {
-                        LocalizedMessageBox.Show(String.Format("{0:s}{1}", fmodel.Name, Properties.Resources.Message_Can_Not_CALL), LocalizedMessageIcon.Error);
-                        return;
-                    }
-                    IFParent.ShowElementPropertyDialog(fmodel, ViewParent.SelectionRect.Core);
-                }
-                else if (ptvitem.RelativeObject is LadderDiagramModel)
-                {
-                    LadderDiagramModel ldmodel = (LadderDiagramModel)(ptvitem.RelativeObject);
-                    LadderUnitModel unit = new LadderUnitModel(null, LadderUnitModel.Types.CALL);
-                    unit.InstArgs = new string[] { ldmodel.Name };
-                    unit.X = ViewParent.SelectionRect.X;
-                    unit.Y = ViewParent.SelectionRect.Y;
-                    Core.Parent.AddSingleUnit(unit, Core, false);
-                }
-                else if (ptvitem.RelativeObject is ModbusModel)
-                {
-                    ModbusModel mmodel = (ModbusModel)(ptvitem.RelativeObject);
-                    IFParent.ShowElementPropertyDialog(mmodel, ViewParent.SelectionRect.Core);
-                }
-            }
-        }
-        */
+
         private void CommentAreaExpander_Expanded(object sender, RoutedEventArgs e)
         {
             core.IsBriefExpand = true;

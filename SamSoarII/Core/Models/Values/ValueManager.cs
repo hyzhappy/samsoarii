@@ -226,7 +226,7 @@ namespace SamSoarII.Core.Models
                 case ValueModel.Bases.C:
                     return COffset - XDelta - YDelta;
                 case ValueModel.Bases.T:
-                    return YOffset - XDelta - YDelta;
+                    return TOffset - XDelta - YDelta;
                 case ValueModel.Bases.D:
                     return DOffset - XDelta - YDelta;
                 case ValueModel.Bases.CV:

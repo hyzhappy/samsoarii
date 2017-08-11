@@ -149,6 +149,7 @@ namespace SamSoarII.Shell.Models
             {
                 case "X": Update(UPDATE_LEFT); break;
                 case "Y": Update(UPDATE_TOP); break;
+                case "IsUsed": Update(UPDATE_OPACITY); break;
                 case "IsCommentMode": Update(UPDATE_TOP | UPDATE_HEIGHT); break;
                 case "LadderMode":
                     if (oldladdermode != LadderModes.Edit)
@@ -238,6 +239,7 @@ namespace SamSoarII.Shell.Models
         public const int UPDATE_PROPERTY = 0x10;
         public const int UPDATE_STYLE = 0x20;
         public const int UPDATE_BRPO = 0x40;
+        public const int UPDATE_OPACITY = 0x80;
         public virtual void Update(int flags = UPDATE_ALL)
         {
             switch (flags)
@@ -263,6 +265,9 @@ namespace SamSoarII.Shell.Models
                     break;
                 case UPDATE_BRPO:
                     break;
+                case UPDATE_OPACITY:
+                    Opacity = core.IsUsed ? 1.0 : 0.3;
+                    break;
                 default:
                     Update(flags & UPDATE_TOP);
                     Update(flags & UPDATE_LEFT);
@@ -271,6 +276,7 @@ namespace SamSoarII.Shell.Models
                     Update(flags & UPDATE_PROPERTY);
                     Update(flags & UPDATE_STYLE);
                     Update(flags & UPDATE_BRPO);
+                    Update(flags & UPDATE_OPACITY);
                     break;
             }
         }
