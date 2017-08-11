@@ -5,7 +5,8 @@ using System.Text;
 
 namespace SamSoarII.Core.Helpers
 {
-    public abstract class UploadHelper : IHelper
+    public static class UploadHelper
     {
+
     }
 }

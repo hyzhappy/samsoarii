@@ -463,7 +463,8 @@ namespace SamSoarII
                         genthread.Start();
                         while (!handle.Completed) Thread.Sleep(10);
                     }
-                    
+
+
                     if (mngComu.CheckLink())
                     {
                         handle = new LoadingWindowHandle(Properties.Resources.Project_Download);

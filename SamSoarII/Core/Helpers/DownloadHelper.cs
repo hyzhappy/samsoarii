@@ -597,7 +597,7 @@ namespace SamSoarII.Core.Helpers
         #endregion
 
         #region tools
-        public static bool CheckOption(int oldoption,int newoption)
+        public static bool CheckOption(int oldoption, int newoption)
         {
             return (oldoption & CommunicationDataDefine.OPTION_INITIALIZE) == (newoption & CommunicationDataDefine.OPTION_INITIALIZE);
         }

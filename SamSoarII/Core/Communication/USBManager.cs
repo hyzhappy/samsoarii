@@ -56,7 +56,7 @@ namespace SamSoarII.Core.Communication
             int bytesRead;
             try
             {
-                ec = reader.Read(readbuffer, readBuffercount, 4096 - readBuffercount, 100, out bytesRead);
+                ec = reader.Read(readbuffer, readBuffercount, 4096 - readBuffercount, 2000, out bytesRead);
                 readBuffercount += bytesRead;
                 byte[] data = new byte[readBuffercount];
                 if (ec != ErrorCode.None)

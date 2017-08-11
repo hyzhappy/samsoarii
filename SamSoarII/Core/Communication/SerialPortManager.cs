@@ -147,7 +147,7 @@ namespace SamSoarII.Core.Communication
             paras.SerialPortIndex = PORTNAMES.ToList().IndexOf(port.PortName);
             paras.BaudRateIndex = BAUDRATES.ToList().IndexOf(port.BaudRate);
             paras.StopBitIndex = STOPBITS.ToList().IndexOf(GetStopBits(port.StopBits));
-            paras.Timeout = Timeout > 0 ? Timeout : 20;
+            paras.Timeout = Timeout > 0 ? Timeout : 200;
             paras.CheckCodeIndex = PARITYS.ToList().IndexOf(GetParity(port.Parity));
         }
         private int GetStopBits(StopBits stopBits)
@@ -269,6 +269,7 @@ namespace SamSoarII.Core.Communication
             return cmd is GeneralReadCommand || cmd is ForceCancelCommand
                 || cmd is GeneralWriteCommand || cmd is IntrasegmentWriteCommand;
         }
+
         public bool AutoCheck()
         {
             if (IsSuccess) return true;

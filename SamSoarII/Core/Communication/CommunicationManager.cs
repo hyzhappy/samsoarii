@@ -165,7 +165,7 @@ namespace SamSoarII.Core.Communication
                     {
                         ValueManager.ReadMonitorData();
                         readcmds = ValueManager.GetReadCommands().ToArray();
-                        readindex = 0;
+                        readindex = 0;   
                     }
                     current = readcmds.Count() == 0 ? null : readcmds[readindex++];
                 }
@@ -194,7 +194,7 @@ namespace SamSoarII.Core.Communication
                 }
                 //_Thread_WaitForActive(itvtime);
                 Thread.Sleep(itvtime);
-                while (hassend)
+                while (hassend && recvtime < 5)
                 {
                     if (Recv(current) || current.IsComplete)
                     {

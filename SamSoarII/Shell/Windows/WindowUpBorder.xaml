@@ -7,7 +7,7 @@
              xmlns:properties="clr-namespace:SamSoarII.Properties"
              xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Xceed.Wpf.AvalonDock"
              mc:Ignorable="d" 
-             d:DesignHeight="24" d:DesignWidth="1024" MouseLeftButtonDown="OnMouseDoubleClick" MouseMove="OnDragWindow">
+             d:DesignHeight="24" d:DesignWidth="1024" MouseMove="OnDragWindow">
     <DockPanel>
         <DockPanel.Resources>
             <Style TargetType="Button">

@@ -64,13 +64,13 @@ namespace SamSoarII.Shell.Windows
             }
         }
 
-        private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-            {
-                ChangeWindowState();
-            }
-        }
+        //private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (e.ClickCount == 2)
+        //    {
+        //        ChangeWindowState();
+        //    }
+        //}
 
         private void OnCloseWindow(object sender, RoutedEventArgs e)
         {
