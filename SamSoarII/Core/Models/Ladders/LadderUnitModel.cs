@@ -1368,7 +1368,7 @@ namespace SamSoarII.Core.Models
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        protected void InvokePropertyChanged(string propertyname)
+        public void InvokePropertyChanged(string propertyname)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(propertyname));
         }

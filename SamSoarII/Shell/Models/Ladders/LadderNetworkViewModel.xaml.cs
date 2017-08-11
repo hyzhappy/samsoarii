@@ -169,6 +169,7 @@ namespace SamSoarII.Shell.Models
                         LadderCanvas.Background = Brushes.LightGray;
                         CommentAreaExpander.Opacity = 0.4;
                         LadderCanvas.Opacity = 0.4;
+                        Canvas.SetZIndex(this, -2);
                     }
                     else
                     {
@@ -176,6 +177,7 @@ namespace SamSoarII.Shell.Models
                         LadderCanvas.Opacity = 1.0;
                         CommentAreaExpander.Background = Brushes.LightCyan;
                         LadderCanvas.Background = Brushes.Transparent;
+                        Canvas.SetZIndex(this, 0);
                     }
                     PropertyChanged(this, new PropertyChangedEventArgs("IsMasked"));
                     break;

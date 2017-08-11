@@ -125,6 +125,8 @@ namespace SamSoarII.Core.Models
                 //if (ismasked && !value) ValueManager.Add(this);
                 this.ismasked = value;
                 PropertyChanged(this, new PropertyChangedEventArgs("IsMasked"));
+                foreach (LadderUnitModel unit in Children.Concat(VLines))
+                    unit.InvokePropertyChanged("IsUsed");
             }
         }
 

@@ -2046,10 +2046,10 @@ namespace SamSoarII.Shell.Models
             if (obj is LadderUnitModel)
             {
                 LadderUnitModel unit = (LadderUnitModel)obj;
-                cmMoni.Core = unit;
                 cmEdit.Core = unit.Parent;
-                if (LadderMode != LadderModes.Edit || e.ChangedButton == MouseButton.Left)
+                if (unit.IsUsed && (LadderMode != LadderModes.Edit || e.ChangedButton == MouseButton.Left))
                 {
+                    cmMoni.Core = unit;
                     _selectArea.Core.Release();
                     _selectRect.Core.Current = unit;
                     _selectStatus = SelectStatus.SingleSelecting;
@@ -2058,9 +2058,9 @@ namespace SamSoarII.Shell.Models
             else if (obj is LadderNetworkPositionModel)
             {
                 LadderNetworkPositionModel pos = (LadderNetworkPositionModel)obj;
-                cmMoni.Core = null;
                 cmEdit.Core = pos.Network;
-                if (LadderMode != LadderModes.Edit || e.ChangedButton == MouseButton.Left)
+                cmMoni.Core = null;
+                if (!pos.Network.IsMasked && (LadderMode != LadderModes.Edit || e.ChangedButton == MouseButton.Left))
                 {
                     _selectArea.Core.Release();
                     _selectRect.Core.Parent = pos.Network;
@@ -2163,7 +2163,7 @@ namespace SamSoarII.Shell.Models
             foreach (LadderNetworkModel net in Core.Children)
             {
                 if (p.Y >= net.CanvasTop && p.Y < net.UnitBaseTop) return net;
-                if (p.Y < net.UnitBaseTop || !net.IsExpand || net.IsMasked) continue;
+                if (p.Y < net.UnitBaseTop || !net.IsExpand) continue;
                 int y = (int)((p.Y - net.UnitBaseTop) / HeightUnit);
                 if (x >= 0 && x < GlobalSetting.LadderXCapacity
                  && y >= 0 && y < net.RowCount)
@@ -2227,37 +2227,64 @@ namespace SamSoarII.Shell.Models
                         Delete();
                     break;
                 case LadderEditEventArgs.Types.NetInsertBefore:
+                    Core.AddN(cmEdit.Core.ID);
+                    /*
                     if (_selectStatus == SelectStatus.SingleSelected)
                         Core.AddN(SelectRectOwner.ID);
                     else
                         Core.AddN(_selectArea.NetStart.ID);
+                    */                
                     break;
                 case LadderEditEventArgs.Types.NetInsertAfter:
+                    Core.AddN(cmEdit.Core.ID + 1);
+                    /*
                     if (_selectStatus == SelectStatus.SingleSelected)
                         Core.AddN(SelectRectOwner.ID + 1);
                     else
                         Core.AddN(_selectArea.NetEnd.ID + 1);
+                    */
                     break;
                 case LadderEditEventArgs.Types.NetInsertEnd:
                     Core.AddN(Core.NetworkCount);
                     break;
                 case LadderEditEventArgs.Types.NetDelete:
+                    if (_selectStatus == SelectStatus.MultiSelected
+                     && _selectArea.Core.State == SelectAreaCore.Status.SelectRange)
+                        Core.RemoveN(SelectStartNetwork.ID, SelectStartNetwork);
+                    else if (cmEdit.Core != null)
+                        Core.RemoveN(cmEdit.Core.ID, cmEdit.Core);
+                    /*
                     if (_selectStatus == SelectStatus.SingleSelected)
                         Core.RemoveN(SelectRectOwner.ID, SelectRectOwner);
                     else if (_selectStatus == SelectStatus.MultiSelected
                      && _selectArea.Core.State == SelectAreaCore.Status.SelectRange)
                         Core.RemoveN(SelectStartNetwork.ID, SelectStartNetwork);
-                    else
-                        Delete();
+                    */
                     break;
                 case LadderEditEventArgs.Types.NetCopy:
+                    if (_selectStatus == SelectStatus.MultiSelected
+                     && _selectArea.Core.State == SelectAreaCore.Status.SelectCross)
+                        CutAndCopy(false);
+                    else if (cmEdit.Core != null)
+                        cmEdit.Core.CopyToClipboard();
+                    /*
                     if (_selectStatus == SelectStatus.SingleSelected)
                         SelectRectOwner.CopyToClipboard();
                     else if (_selectStatus == SelectStatus.MultiSelected
                      && _selectArea.Core.State == SelectAreaCore.Status.SelectRange)
                         SelectStartNetwork.CopyToClipboard();
+                    */
                     break;
                 case LadderEditEventArgs.Types.NetCut:
+                    if (_selectStatus == SelectStatus.MultiSelected
+                     && _selectArea.Core.State == SelectAreaCore.Status.SelectCross)
+                        CutAndCopy(true);
+                    else if (cmEdit.Core != null)
+                    {
+                        cmEdit.Core.CopyToClipboard();
+                        Core.RemoveN(cmEdit.Core.ID, cmEdit.Core);
+                    }
+                    /*
                     if (_selectStatus == SelectStatus.SingleSelected)
                     {
                         SelectRectOwner.CopyToClipboard();
@@ -2269,40 +2296,41 @@ namespace SamSoarII.Shell.Models
                         SelectStartNetwork.CopyToClipboard();
                         Core.RemoveN(SelectStartNetwork.ID, SelectStartNetwork);
                     }
+                    */
                     break;
                 case LadderEditEventArgs.Types.NetShield:
-                    if (_selectStatus == SelectStatus.SingleSelected)
-                        SelectRectOwner.IsMasked = !SelectRectOwner.IsMasked;
-                    else
+                    if (_selectStatus == SelectStatus.MultiSelected)
                     {
                         bool ismasked = !cmEdit.Core.IsMasked;
                         for (int i = _selectArea.Core.NetStart; i <= _selectArea.Core.NetEnd; i++)
                             core.Children[i].IsMasked = ismasked;
                     }
+                    else if (cmEdit.Core != null)
+                        cmEdit.Core.IsMasked = !cmEdit.Core.IsMasked;
                     break;
                 case LadderEditEventArgs.Types.NetExpand:
-                    if (_selectStatus == SelectStatus.SingleSelected)
-                        SelectRectOwner.IsExpand = true;
-                    else
+                    if (_selectStatus == SelectStatus.MultiSelected)
                     {
                         for (int i = _selectArea.Core.NetStart; i <= _selectArea.Core.NetEnd; i++)
                             core.Children[i].IsExpand = true;
                         NavigateToSelectArea(Directions.None, Directions.Up);
                     }
+                    else if (cmEdit.Core != null)
+                        cmEdit.Core.IsExpand = true;
                     break;
                 case LadderEditEventArgs.Types.NetExpandAll:
                     foreach (LadderNetworkModel net in core.Children)
                         net.IsExpand = true;
                     break;
                 case LadderEditEventArgs.Types.NetCollapsed:
-                    if (_selectStatus == SelectStatus.SingleSelected)
-                        SelectRectOwner.IsExpand = false;
-                    else
+                    if (_selectStatus == SelectStatus.MultiSelected)
                     {
                         for (int i = _selectArea.Core.NetStart; i <= _selectArea.Core.NetEnd; i++)
                             core.Children[i].IsExpand = false;
                         NavigateToSelectArea(Directions.None, Directions.Up);
                     }
+                    else if (cmEdit.Core != null)
+                        cmEdit.Core.IsExpand = false;
                     break;
                 case LadderEditEventArgs.Types.NetCollapsedAll:
                     foreach (LadderNetworkModel net in core.Children)

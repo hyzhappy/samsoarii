@@ -401,7 +401,9 @@ namespace SamSoarII
             if (vmdProj.LadderMode == LadderModes.Monitor) _CloseMonitor();
             if (!CheckLadder(false)) return false;
             if (!CheckFuncBlock(false)) return false;
-            
+#if DEBUG
+            GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
+#endif
             mngComu.IsEnable = true;
             CommunicationParams paraCom = mdProj.PARAProj.PARACom;
             using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom,

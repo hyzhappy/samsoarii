@@ -159,14 +159,14 @@ namespace SamSoarII.Core.Helpers
             cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
-            /*
+#if RELEASE
             File.Delete(ladderHFile);
             File.Delete(ladderCFile);
             File.Delete(simulibHFile);
             File.Delete(simulibCFile);
             File.Delete(funcBlockHFile);
             File.Delete(funcBlockCFile);
-            */
+#endif
             return SimulateDllModel.LoadDll(outputDllFile);
         }
 
@@ -319,6 +319,7 @@ namespace SamSoarII.Core.Helpers
             //cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
+#if RELEASE
             cmd = new Process();
             cmd.StartInfo.WorkingDirectory = String.Format(@"{0:s}\downg\.", currentPath);
             cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\clean.cmd", currentPath);
@@ -328,6 +329,7 @@ namespace SamSoarII.Core.Helpers
             //cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
+#endif
         }
 
         private static void Generate(
