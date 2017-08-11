@@ -37,7 +37,7 @@
                     <MenuItem Header="{x:Static properties:Resources.LadderDiagram_Edit_Program_Comment}" Click="OnEditComment"></MenuItem>
                 </ContextMenu>
             </StackPanel.Resources>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel x:Name="LeftStackPanel" Orientation="Horizontal">
                 <local:LadderExpander VerticalAlignment="Top" IsExpand="True" x:Name="ladderExpander" Background="Transparent">
                     <local:LadderExpander.Height>
                         <MultiBinding Converter="{StaticResource converter1}">

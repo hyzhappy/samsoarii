@@ -48,9 +48,6 @@ namespace SamSoarII.Shell.Models
             InitializeComponent();
             DataContext = this;
             Core = _core;
-            SelectArea.Fill = new SolidColorBrush(Colors.DarkBlue);
-            SelectArea.Opacity = 0.2;
-            Canvas.SetZIndex(SelectArea, -1);
             ladderExpander.MouseEnter += OnExpanderMouseEnter;
             ladderExpander.MouseLeave += OnExpanderMouseLeave;
             ladderExpander.expandButton.IsExpandChanged += OnExpandChanged;
@@ -119,10 +116,15 @@ namespace SamSoarII.Shell.Models
                 case "RowCount":
                     if (IsSingleSelected())
                         if (ViewParent.SelectionRect.Y >= RowCount) ViewParent.SelectionRect.Y = RowCount - 1;
-                    if (IsSelectAreaMode || IsSelectAllMode)
+                    if (IsMultiSelected())
                     {
-                        if (SelectAreaFirstY >= RowCount) SelectAreaFirstY = RowCount - 1;
-                        if (SelectAreaSecondY >= RowCount) SelectAreaSecondY = RowCount - 1;
+                        if (ViewParent.SelectionArea.Core.YStart >= RowCount)
+                            ReleaseSelectRect();
+                        else
+                        {
+                            while (ViewParent.SelectionArea.Core.YEnd >= RowCount)
+                                ViewParent.SelectionArea.Core.MoveUp();
+                        }
                     }
                     LadderCanvas.Height = RowCount * HeightUnit;
                     DynamicUpdate();
@@ -133,7 +135,6 @@ namespace SamSoarII.Shell.Models
                     if (!IsExpand)
                     {
                         ReleaseSelectRect();
-                        if (IsSelectAreaMode && !IsSelectAllMode) IsSelectAreaMode = false;
                         LadderCanvas.Height = 0;
                         DynamicDispose(true);
                         if (ThumbnailButton.ToolTip == null)
@@ -152,8 +153,6 @@ namespace SamSoarII.Shell.Models
                             CommentAreaGrid.Children.Remove(ThumbnailButton);
                         }
                         LadderCanvas.Height = RowCount * HeightUnit;
-                        if (IsSelectAreaMode && !LadderCanvas.Children.Contains(SelectArea))
-                            LadderCanvas.Children.Add(SelectArea);
                     }
                     PropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
                     PropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
@@ -165,10 +164,7 @@ namespace SamSoarII.Shell.Models
                 case "IsMasked":
                     if (IsMasked)
                     {
-                        if (ViewParent?.SelectionRect?.Core != null)
-                            ViewParent.SelectionRect.Core.Parent = null;
-                        IsSelectAreaMode = false;
-                        IsSelectAllMode = false;
+                        ReleaseSelectRect();
                         CommentAreaExpander.Background = Brushes.LightGray;
                         LadderCanvas.Background = Brushes.LightGray;
                         CommentAreaExpander.Opacity = 0.4;
@@ -185,13 +181,6 @@ namespace SamSoarII.Shell.Models
                     break;
                 case "IsCommentMode":
                     LadderCanvas.Height = HeightUnit * RowCount;
-                    if (IsSelectAreaMode || IsSelectAllMode)
-                    {
-                        SelectAreaFirstX = SelectAreaFirstX;
-                        SelectAreaFirstY = SelectAreaFirstY;
-                        SelectAreaSecondX = SelectAreaSecondX;
-                        SelectAreaSecondY = SelectAreaSecondY;
-                    }
                     break;
                 case "CanvasTop":
                     Canvas.SetTop(this, core.CanvasTop);
@@ -284,11 +273,7 @@ namespace SamSoarII.Shell.Models
 
 
         #endregion
-
-        #region Canvas System
-
-        #endregion
-
+        
         #region Select
 
         public int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
@@ -449,7 +434,20 @@ namespace SamSoarII.Shell.Models
         
         public bool IsSingleSelected()
         {
-            return LadderCanvas.Children.Contains(ViewParent.SelectionRect);
+            return ViewParent?.SelectionRect != null && ViewParent.SelectionRect.Core.Parent == Core;
+        }
+
+        public bool IsMultiSelected()
+        {
+            if (ViewParent?.SelectionArea == null)
+                return false;
+            switch (ViewParent.SelectionArea.Core.State)
+            {
+                case SelectAreaCore.Status.SelectRange:
+                    return ViewParent.SelectionArea.Core.NetOrigin == core.ID;
+                default:
+                    return false;
+            }
         }
         
         public void ReleaseSelectRect()
@@ -469,69 +467,17 @@ namespace SamSoarII.Shell.Models
 
         public void AcquireSelectRect()
         {
-            if (ViewParent?.SelectionRect == null) return;
+            if (ViewParent?.SelectionRect == null
+             || ViewParent?.SelectionArea == null)
+            {
+                return;
+            }
+            ViewParent.SelectionArea.Core.Release();
             if (ViewParent.SelectionRect.Core.Parent != Core)
                 ViewParent.SelectionRect.Core.Parent = Core;
-        }
-
-        public void EnterOriginSelectArea(bool isUp)
-        {
-            if (!isUp)
-            {
-                if (IsExpand && SelectAreaOriginFY == 0 && SelectAreaOriginFX == SelectAreaOriginSX)
-                {
-                    AcquireSelectRect();
-                }
-                else
-                {
-                    SelectAreaSecondY = 0;
-                    SelectAreaFirstX = SelectAreaOriginFX;
-                    SelectAreaFirstY = SelectAreaOriginFY;
-                    SelectAreaSecondX = SelectAreaOriginSX;
-                    IsSelectAreaMode = true;
-                }
-            }
-            else
-            {
-                if (IsExpand && SelectAreaOriginFY == RowCount - 1 && SelectAreaOriginFX == SelectAreaOriginSX)
-                {
-                    AcquireSelectRect();
-                }
-                else
-                {
-                    SelectAreaSecondY = RowCount > 0 ? RowCount - 1 : 0;
-                    SelectAreaFirstX = SelectAreaOriginFX;
-                    SelectAreaFirstY = SelectAreaOriginFY;
-                    SelectAreaSecondX = SelectAreaOriginSX;
-                    IsSelectAreaMode = true;
-                }
-            }
-        }
-
-        public IEnumerable<LadderUnitModel> GetSelectedElements()
-        {
-            int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
-            int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
-            int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
-            int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
-            return Core.Children.SelectRange(xBegin, xEnd, yBegin, yEnd);
+            ViewParent.SelectionStatus = SelectStatus.SingleSelected;
         }
         
-        public IEnumerable<LadderUnitModel> GetSelectedHLines()
-        {
-            return GetSelectedElements().Where(
-                (ele) => { return ele.Shape == LadderUnitModel.Shapes.HLine; });
-        }
-
-        public IEnumerable<LadderUnitModel> GetSelectedVLines()
-        {
-            int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
-            int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
-            int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
-            int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
-            return Core.VLines.SelectRange(xBegin, xEnd, yBegin, yEnd);
-        }
-
         #endregion
         
         #region Expand
@@ -643,15 +589,16 @@ namespace SamSoarII.Shell.Models
             //double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
             double scaleY = 0;
             ScrollViewer scroll = null;
-            Point p = new Point();
             double newscrolloffset = 0;
+            double titleheight = 0;
             Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
+                if (ViewParent == null) return;
                 scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
                 scroll = ViewParent?.Scroll;
                 if (scroll == null) return;
-                p = LadderCanvas.TranslatePoint(new Point(0, 0), scroll);
                 newscrolloffset = scroll.VerticalOffset;
+                titleheight = ViewParent.TopBorder;
             });
             if (scroll == null) return;
             if (!IsExpand)
@@ -667,8 +614,12 @@ namespace SamSoarII.Shell.Models
             {
                 int _loadedrowstart = 0; 
                 int _loadedrowend = RowCount - 1;
-                _loadedrowstart = Math.Max(_loadedrowstart, (int)(-p.Y / (HeightUnit * scaleY)) - (newscrolloffset < oldscrolloffset ? 3 : 1));
-                _loadedrowend = Math.Min(_loadedrowend, (int)((-p.Y + scroll.ViewportHeight) / (HeightUnit * scaleY)) + (newscrolloffset > oldscrolloffset ? 3 : 1));
+                _loadedrowstart = Math.Max(_loadedrowstart, 
+                    (int)(((newscrolloffset - titleheight) / scaleY - core.UnitBaseTop) / HeightUnit) 
+                    - (newscrolloffset < oldscrolloffset ? 3 : 1));
+                _loadedrowend = Math.Min(_loadedrowend, 
+                    (int)(((newscrolloffset - titleheight + scroll.ViewportHeight) / scaleY - core.UnitBaseTop) / HeightUnit) 
+                    + (newscrolloffset > oldscrolloffset ? 3 : 1));
                 if (_loadedrowstart > _loadedrowend)
                 {
                     if (loadedrowstart <= loadedrowend)
@@ -679,7 +630,7 @@ namespace SamSoarII.Shell.Models
                             DisposeRange(loadedrowend, loadedrowstart);
                     }
                 }
-                else if (loadedrowstart > _loadedrowend)
+                else if (loadedrowstart > loadedrowend)
                 {
                     if (newscrolloffset > oldscrolloffset)
                         CreateRange(_loadedrowstart, _loadedrowend);
@@ -753,7 +704,7 @@ namespace SamSoarII.Shell.Models
             }
         }
 
-        private void DisposeRange(int rowstart, int rowend, bool hide = false)
+        private void DisposeRange(int rowstart, int rowend, bool hide = true)
         {
             int dir = (rowstart < rowend ? 1 : -1);
             for (int y = rowstart; y != rowend + dir; y += dir)
