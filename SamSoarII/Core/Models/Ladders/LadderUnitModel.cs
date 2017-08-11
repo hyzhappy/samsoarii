@@ -155,7 +155,7 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.NULL] = new LadderUnitFormat(0, "NULL", Types.NULL, Outlines.NULL, Shapes.Null,
                 "", "", "", vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, 0, new Regex[]{ ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) };
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, 0, new Regex[]{ ValueModel.VerifyBitRegex2, ValueModel.WordBitRegex}) };
             Formats[(int)Types.OUT] = new LadderUnitFormat(209, "OUT", Types.OUT, Outlines.BitOperation, Shapes.Output,
                 Properties.Resources.MainWindow_Output_Coil,
                 "线圈前方条件持续导通时，线圈才会输出；",

@@ -25,6 +25,8 @@ using System.Runtime.InteropServices;
 using SamSoarII.Utility;
 using System.Windows.Threading;
 using System.Threading;
+using SamSoarII.Shell.Windows;
+using SamSoarII.Shell.Dialogs;
 
 namespace SamSoarII.Shell.Models
 {
@@ -36,6 +38,7 @@ namespace SamSoarII.Shell.Models
         MultiSelecting,
         MultiSelected,
         NetworkDraging,
+        UnitDraging,
     }
 
     public enum CrossNetworkState
@@ -2005,21 +2008,13 @@ namespace SamSoarII.Shell.Models
                 }
                 var p1 = e.GetPosition(MainScrollViewer);
                 if (MainScrollViewer.ViewportHeight < p1.Y)
-                {
                     MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + (p1.Y - MainScrollViewer.ViewportHeight) * GlobalSetting.LadderScaleY * 0.2);
-                }
                 else if (p1.Y < 0)
-                {
                     MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + p1.Y * GlobalSetting.LadderScaleY * 0.2);
-                }
                 else if (p1.X < 0)
-                {
                     MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + p1.X * GlobalSetting.LadderScaleX * 0.8);
-                }
                 else if (MainScrollViewer.ViewportWidth < p1.X)
-                {
                     MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + (p1.X - MainScrollViewer.ViewportWidth) * GlobalSetting.LadderScaleX * 0.8);
-                }
             }
             /*
             currentItem = GetNetworkByMouse();
@@ -2119,32 +2114,124 @@ namespace SamSoarII.Shell.Models
         
         private void OnMainCanvasDrop(object sender, DragEventArgs e)
         {
-            var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
-            var desnetwork = (LadderNetworkViewModel)e.Source;
-            if (sourcenet == null) return;
-            if (sourcenet != desnetwork)
+            switch (_selectStatus)
             {
-                desnetwork.Opacity = 0.3;
-                desnetwork.ladderExpander.IsExpand = false;
-                Core.ExchangeN(sourcenet.Core, desnetwork.Core);
+                case SelectStatus.NetworkDraging:
+                    var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
+                    var desnetwork = (LadderNetworkViewModel)e.Source;
+                    if (sourcenet == null) return;
+                    if (sourcenet != desnetwork)
+                    {
+                        desnetwork.Opacity = 0.3;
+                        desnetwork.ladderExpander.IsExpand = false;
+                        Core.ExchangeN(sourcenet.Core, desnetwork.Core);
+                    }
+                    sourcenet.CommentAreaBorder.BorderBrush = Brushes.Brown;
+                    sourcenet.CommentAreaBorder.BorderThickness = new Thickness(4);
+                    desnetwork.Opacity = 1;
+                    dragItem = null;
+                    currentItem = null;
+                    break;
+                case SelectStatus.UnitDraging:
+                    ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
+                    if (_selectRect.Core.Parent == null) return;
+                    if (e.Data.GetDataPresent(ptvitem.GetType()))
+                    {
+                        ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
+                        if (ptvitem.RelativeObject is LadderUnitModel.Types)
+                        {
+                            LadderUnitModel.Types type = (LadderUnitModel.Types)(ptvitem.RelativeObject);
+                            //Core.Parent.QuickInsertElement(type, ViewParent.SelectionRect.Core, false);
+                            if (IFParent.ShowElementPropertyDialog(type, _selectRect.Core, false))
+                                SelectRectRight();
+                        }
+                        else if (ptvitem.RelativeObject is FuncModel)
+                        {
+                            FuncModel fmodel = (FuncModel)(ptvitem.RelativeObject);
+                            if (!fmodel.CanCALLM())
+                            {
+                                LocalizedMessageBox.Show(String.Format("{0:s}{1}", fmodel.Name, Properties.Resources.Message_Can_Not_CALL), LocalizedMessageIcon.Error);
+                                return;
+                            }
+                            IFParent.ShowElementPropertyDialog(fmodel, _selectRect.Core);
+                        }
+                        else if (ptvitem.RelativeObject is LadderDiagramModel)
+                        {
+                            LadderDiagramModel ldmodel = (LadderDiagramModel)(ptvitem.RelativeObject);
+                            LadderUnitModel unit = new LadderUnitModel(null, LadderUnitModel.Types.CALL);
+                            unit.InstArgs = new string[] { ldmodel.Name };
+                            unit.X = _selectRect.X;
+                            unit.Y = _selectRect.Y;
+                            Core.AddSingleUnit(unit, SelectRectOwner, false);
+                        }
+                        else if (ptvitem.RelativeObject is ModbusModel)
+                        {
+                            ModbusModel mmodel = (ModbusModel)(ptvitem.RelativeObject);
+                            IFParent.ShowElementPropertyDialog(mmodel, _selectRect.Core);
+                        }
+                    }
+                    break;
             }
-            sourcenet.CommentAreaBorder.BorderBrush = Brushes.Brown;
-            sourcenet.CommentAreaBorder.BorderThickness = new Thickness(4);
-            desnetwork.Opacity = 1;
-            dragItem = null;
-            currentItem = null;
         }
+
         private void OnMainCanvasDragOver(object sender, DragEventArgs e)
         {
-            var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
-            var desnetwork = (LadderNetworkViewModel)e.Source;
-            if (sourcenet == null) return;
-            if (sourcenet != desnetwork)
+            switch (_selectStatus)
             {
-                sourcenet.CommentAreaBorder.BorderBrush = GlobalSetting.MonitorBrush;
-                sourcenet.CommentAreaBorder.BorderThickness = new Thickness(6);
-                desnetwork.Opacity = 0.3;
-                desnetwork.ladderExpander.IsExpand = false;
+                case SelectStatus.NetworkDraging:
+                    var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
+                    var desnetwork = (LadderNetworkViewModel)e.Source;
+                    if (sourcenet == null) return;
+                    if (sourcenet != desnetwork)
+                    {
+                        sourcenet.CommentAreaBorder.BorderBrush = GlobalSetting.MonitorBrush;
+                        sourcenet.CommentAreaBorder.BorderThickness = new Thickness(6);
+                        desnetwork.Opacity = 0.3;
+                        desnetwork.ladderExpander.IsExpand = false;
+                    }
+                    break;
+                default:
+                    _selectStatus = SelectStatus.UnitDraging;
+                    ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
+                    if (e.Data.GetDataPresent(ptvitem.GetType()))
+                    {
+                        ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
+                        if (ptvitem.RelativeObject is LadderUnitModel.Types
+                         || ptvitem.RelativeObject is FuncModel
+                         || ptvitem.RelativeObject is LadderDiagramModel
+                         || ptvitem.RelativeObject is ModbusModel)
+                        {
+                            object obj = GetObjectByMouse(e);
+                            if (obj is LadderUnitModel)
+                            {
+                                LadderUnitModel unit = (LadderUnitModel)obj;
+                                _selectArea.Core.Release();
+                                _selectRect.Core.Parent = unit.Parent;
+                                _selectRect.X = unit.X;
+                                _selectRect.Y = unit.Y;
+                            }
+                            else if (obj is LadderNetworkPositionModel)
+                            {
+                                LadderNetworkPositionModel pos = (LadderNetworkPositionModel)obj;
+                                _selectArea.Core.Release();
+                                _selectRect.Core.Parent = pos.Network;
+                                _selectRect.X = pos.X;
+                                _selectRect.Y = pos.Y;
+                            }
+                        }
+                    }
+                    double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
+                    double scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
+                    var p1 = e.GetPosition(MainScrollViewer);
+                    if (MainScrollViewer.ViewportHeight < p1.Y)
+                        MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + (p1.Y - MainScrollViewer.ViewportHeight) * GlobalSetting.LadderScaleY * 0.2);
+                    else if (p1.Y < 0)
+                        MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + p1.Y * GlobalSetting.LadderScaleY * 0.2);
+                    else if (p1.X < 0)
+                        MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + p1.X * GlobalSetting.LadderScaleX * 0.8);
+                    else if (MainScrollViewer.ViewportWidth < p1.X)
+                        MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + (p1.X - MainScrollViewer.ViewportWidth) * GlobalSetting.LadderScaleX * 0.8);
+                    break;
             }
         }
         private void OnMainCanvasDragLeave(object sender, DragEventArgs e)
@@ -2158,6 +2245,17 @@ namespace SamSoarII.Shell.Models
         private object GetObjectByMouse(MouseEventArgs e)
         {
             Point p = e.GetPosition(MainCanvas);
+            return GetObjectByMouse(p);
+        }
+
+        private object GetObjectByMouse(DragEventArgs e)
+        {
+            Point p = e.GetPosition(MainCanvas);
+            return GetObjectByMouse(p);
+        }
+
+        private object GetObjectByMouse(Point p)
+        {
             if (p.X < 0) return null;
             int x = (int)(p.X / WidthUnit);
             foreach (LadderNetworkModel net in Core.Children)
