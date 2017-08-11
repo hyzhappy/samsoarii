@@ -78,8 +78,17 @@ namespace SamSoarII.Core.Models
         private int rowcount;
         public int RowCount
         {
-            get { return this.rowcount; }
-            set { this.rowcount = value; PropertyChanged(this, new PropertyChangedEventArgs("RowCount")); }
+            get
+            {
+                return this.rowcount;
+            }
+            set
+            {
+                if (rowcount == value) return;
+                this.rowcount = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
+                parent?.UpdateCanvasTop();
+            }
         }
 
         private int id;
@@ -179,8 +188,43 @@ namespace SamSoarII.Core.Models
         private bool isexpand;
         public bool IsExpand
         {
-            get { return this.isexpand; }
-            set { this.isexpand = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("IsExpand")); }
+            get
+            {
+                return this.isexpand;
+            }
+            set
+            {
+                if (isexpand == value) return;
+                this.isexpand = value;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
+                parent?.UpdateCanvasTop();
+            }
+        }
+
+        private bool isbriefexpand;
+        public bool IsBriefExpand
+        {
+            get
+            {
+                return this.isbriefexpand;
+            }
+            set
+            {
+                if (isbriefexpand == value) return;
+                this.isbriefexpand = value;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("IsBriefExpand"));
+                parent?.UpdateCanvasTop();
+            }
+        }
+        public int BriefRowCount
+        {
+            get
+            {
+                int rows = 1;
+                for (int i = 0; i < Description.Length; i++)
+                    if (Description[i] == '\n') rows++;
+                return rows;
+            }
         }
 
         private LadderModes laddermode;
@@ -214,6 +258,27 @@ namespace SamSoarII.Core.Models
                 ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
             }
         }
+
+        private double canvastop;
+        public double CanvasTop
+        {
+            get { return this.canvastop; }
+            set { this.canvastop = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("CanvasTop")); }
+        }
+
+        private double viewheight;
+        public double ViewHeight
+        {
+            get { return this.viewheight; }
+            set { this.viewheight = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("ViewHeight")); }
+        }
+
+        private double unitbasetop;
+        public double UnitBaseTop
+        {
+            get { return this.unitbasetop; }
+            set { this.unitbasetop = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("UnitBaseTop")); }
+        }
         
         #endregion
 
@@ -227,6 +292,8 @@ namespace SamSoarII.Core.Models
             ismasked = xatt == null ? false : bool.Parse(xatt.Value);
             xatt = xele.Attribute("IsExpand");
             isexpand = xatt == null ? true : bool.Parse(xatt.Value);
+            xatt = xele.Attribute("IsBriefExpand");
+            isbriefexpand = xatt == null ? false : bool.Parse(xatt.Value);
             XElement xele_b = xele.Element("Brief");
             brief = xele_b != null ? xele_b.Value : "";
             XElement xele_d = xele.Element("Description");
@@ -250,6 +317,7 @@ namespace SamSoarII.Core.Models
             xele.SetAttributeValue("RowCount", rowcount);
             xele.SetAttributeValue("IsMasked", ismasked);
             xele.SetAttributeValue("IsExpand", isexpand);
+            xele.SetAttributeValue("IsBriefExpand", isbriefexpand);
             xele.SetElementValue("Brief", brief);
             xele.SetElementValue("Description", description);
             XElement xele_lc = new XElement("LadderContent");

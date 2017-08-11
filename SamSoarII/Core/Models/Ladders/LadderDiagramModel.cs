@@ -9,6 +9,7 @@ using System.ComponentModel;
 using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
 using SamSoarII.Global;
+using SamSoarII.Shell.Managers;
 
 namespace SamSoarII.Core.Models
 {
@@ -82,6 +83,7 @@ namespace SamSoarII.Core.Models
                     lnmodel.PropertyChanged += OnChildrenPropertyChanged;
             PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
             ChildrenChanged(this, e);
+            UpdateCanvasTop();
         }
         private void OnChildrenPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -236,6 +238,28 @@ namespace SamSoarII.Core.Models
             }
         }
 
+        private double canvasheight;
+        public double CanvasHeight { get { return this.canvasheight; } }
+
+        public void UpdateCanvasTop()
+        {
+            int unitheight = IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit;
+            double currenttop = 0;
+            foreach (LadderNetworkModel network in children)
+            {
+                network.CanvasTop = currenttop;
+                currenttop += FontManager.GetLadder().FontSize + 32;
+                if (network.IsBriefExpand)
+                    currenttop += network.BriefRowCount * FontManager.GetLadder().FontSize;
+                network.UnitBaseTop = currenttop;
+                currenttop += (network.IsExpand ? network.RowCount : 0) * unitheight + 48;
+                network.ViewHeight = currenttop - network.CanvasTop;
+                currenttop += 12;
+            }
+            canvasheight = currenttop;
+            ViewPropertyChanged(this, new PropertyChangedEventArgs("CanvasHeight"));
+        }
+        
         #endregion
 
         #region Load & Save

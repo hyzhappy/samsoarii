@@ -166,7 +166,12 @@ namespace SamSoarII.Shell.Models
                         if (unit.View == null)
                         {
                             unit.View = LadderUnitViewModel.Create(unit);
-                            LadderCanvas.Children.Add(unit.View);
+                            if (unit.View.Parent != LadderCanvas)
+                            {
+                                if (unit.View.Parent is Canvas)
+                                    ((Canvas)(unit.View.Parent)).Children.Remove(unit.View);
+                                LadderCanvas.Children.Add(unit.View);
+                            }
                         }
                     }
                 });
@@ -187,7 +192,6 @@ namespace SamSoarII.Shell.Models
                     {
                         if (unit.View != null)
                         {
-                            LadderCanvas.Children.Remove(unit.View);
                             unit.View.Dispose();
                         }
                     }

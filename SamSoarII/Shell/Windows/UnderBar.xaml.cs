@@ -270,16 +270,16 @@ namespace SamSoarII.Shell.Windows
                     break;
                 case SelectStatus.MultiSelecting:
                 case SelectStatus.MultiSelected:
-                    LadderNetworkViewModel network = view.SelectStartNetwork;
+                    LadderNetworkViewModel network = view.SelectStartNetwork.View;
                     if (network == null)
                     {
                         TB_Item2.Text = Properties.Resources.MainWindow_Select_All;
                         TB_Item1.Text = "";
                         break;
                     }
-                    switch (view.CrossNetState)
+                    switch (view.SelectionArea.Core.State)
                     {
-                        case CrossNetworkState.NoCross:
+                        case SelectAreaCore.Status.SelectRange:
                             TB_Item2.Text = String.Format("{0:s} {1:d}", Properties.Resources.Network, network.Core.ID);
                             TB_Item1.Text = String.Format("(X1={0:d},X2={1:d},Y1={2:d},Y2={3:d})",
                                 Math.Min(network.SelectAreaFirstX, network.SelectAreaSecondX),
@@ -287,22 +287,9 @@ namespace SamSoarII.Shell.Windows
                                 Math.Min(network.SelectAreaFirstY, network.SelectAreaSecondY),
                                 Math.Max(network.SelectAreaFirstY, network.SelectAreaSecondY));
                             break;
-                        case CrossNetworkState.CrossUp:
+                        case SelectAreaCore.Status.SelectCross:
                             TB_Item2.Text = String.Format("{0:s} ({1:d}~{2:d})", 
-                                Properties.Resources.Network,
-                                view.SelectAllNetworks.Count() > 0
-                                    ? view.SelectAllNetworks.Select(n => n.Core.ID).Min()
-                                    : view.SelectStartNetwork.Core.ID,
-                                view.SelectStartNetwork.Core.ID);
-                            TB_Item1.Text = "";
-                            break;
-                        case CrossNetworkState.CrossDown:
-                            TB_Item2.Text = String.Format("{0:s} ({1:d}~{2:d})",
-                                Properties.Resources.Network,
-                                view.SelectStartNetwork.Core.ID,
-                                view.SelectAllNetworks.Count() > 0
-                                    ? view.SelectAllNetworks.Select(n => n.Core.ID).Max()
-                                    : view.SelectStartNetwork.Core.ID);
+                                Properties.Resources.Network, view.SelectionArea.Core.NetStart, view.SelectionArea.Core.NetEnd);
                             TB_Item1.Text = "";
                             break;
                     }

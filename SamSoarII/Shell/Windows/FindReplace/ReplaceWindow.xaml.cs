@@ -194,15 +194,7 @@ namespace SamSoarII.Shell.Windows
             if (Mode == MODE_SELECT)
             {
                 if (current?.View == null || current.View.SelectionStatus != Models.SelectStatus.MultiSelected) return;
-                if (current.View.CrossNetState == Models.CrossNetworkState.NoCross)
-                    Find(current.View.SelectStartNetwork.GetSelectedElements());
-                else
-                {
-                    if (current.View.SelectStartNetwork != null)
-                        Find(current.View.SelectStartNetwork.Core.Children);
-                    foreach (LadderNetworkViewModel netview in current.View.SelectAllNetworks)
-                        Find(netview.Core.Children);
-                }
+                Find(current.View.SelectionArea.Core.SelectUnits);
             }
             // 遍历所有网络
             else

@@ -767,7 +767,7 @@ namespace SamSoarII.Core.Generate
                         case "BIN": sw.Write("{1:s} = _BCD_to_WORD({0:s});\n", inst[1], inst[2]); break;
                         case "BWBIN": sw.Write("{1:s} _BCD_to_WORD({0:s}));\n", inst[1], inst[2]); break;
                         case "BCD": sw.Write("{1:s} = _WORD_to_BCD({0:s});\n", inst[1], inst[2]); break;
-                        case "WBBCD": sw.Write("{1:s} _WORD_to_BCD({0:s}));\n", inst[1], inst[2]); break;
+                        case "BWBCD": sw.Write("{1:s} _WORD_to_BCD({0:s}));\n", inst[1], inst[2]); break;
                         case "ROUND": sw.Write("{1:s} = _FLOAT_to_ROUND({0:s});\n", inst[1], inst[2]); break;
                         case "BDROUND": sw.Write("{1:s} _FLOAT_to_ROUND({0:s}));\n", inst[1], inst[2]); break;
                         case "TRUNC": sw.Write("{1:s} = _FLOAT_to_TRUNC({0:s});\n", inst[1], inst[2]); break;
