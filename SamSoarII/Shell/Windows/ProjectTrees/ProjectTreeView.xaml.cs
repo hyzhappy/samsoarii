@@ -888,10 +888,7 @@ namespace SamSoarII.Shell.Windows
                 int netid_old = lnmodel_old.ID;
                 int netid_new = 0;
                 if (lnmodel_old.View != null)
-                {
                     lnmodel_old.View.ReleaseSelectRect();
-                    lnmodel_old.View.IsSelectAreaMode = false;
-                }
                 //XElement xele = new XElement("Network");
                 //lnmodel_old.Save(xele);
                 switch (CurrentItem.Flags & 0xf)

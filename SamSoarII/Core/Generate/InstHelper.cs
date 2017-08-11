@@ -921,17 +921,47 @@ namespace SamSoarII.Core.Generate
                         case "FACT": sw.Write("{1:s} = _fact({0:s});\n", inst[1], inst[2]); break;
                         case "SQRT": sw.Write("{1:s} = _sqrt({0:s});\n", inst[1], inst[2]); break;
                         case "CMP": sw.Write("_cmpw({0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "WBCMP": sw.Write("_cmpw_wbit({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst.ToCParas(3)); break;
+                        case "WBCMP":
+                            if (simumode)
+                                sw.Write("_cmpw_wbit({0:s}, {1:s}, {2:s}, &{3:s});\n", inst[1], inst[2], inst.ToCParas(3), inst.EnBit);
+                            else
+                                sw.Write("_cmpw_wbit({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst.ToCParas(3));
+                            break;
                         case "CMPD": sw.Write("_cmpd({0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "WBCMPD": sw.Write("_cmpd_wbit({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst.ToCParas(3)); break;
+                        case "WBCMPD":
+                            if (simumode)
+                                sw.Write("_cmpd_wbit({0:s}, {1:s}, {2:s}, &{3:s});\n", inst[1], inst[2], inst.ToCParas(3), inst.EnBit);
+                            else
+                                sw.Write("_cmpd_wbit({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst.ToCParas(3));
+                            break;
                         case "CMPF": sw.Write("_cmpf({0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "WBCMPF": sw.Write("_cmpf_wbit({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst.ToCParas(3)); break;
+                        case "WBCMPF":
+                            if (simumode)
+                                sw.Write("_cmpf_wbit({0:s}, {1:s}, {2:s}, &{3:s});\n", inst[1], inst[2], inst.ToCParas(3), inst.EnBit);
+                            else
+                                sw.Write("_cmpf_wbit({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst.ToCParas(3));
+                            break;
                         case "ZCP": sw.Write("_zcpw({0:s}, {1:s}, {2:s}, &{3:s});\n", inst[1], inst[2], inst[3], inst[4]); break;
-                        case "WBZCP": sw.Write("_zcpw_wbit({0:s}, {1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst.ToCParas(4)); break;
+                        case "WBZCP":
+                            if (simumode)
+                                sw.Write("_zcpw_wbit({0:s}, {1:s}, {2:s}, {3:s}, &{4:s});\n", inst[1], inst[2], inst[3], inst.ToCParas(4), inst.EnBit);
+                            else
+                                sw.Write("_zcpw_wbit({0:s}, {1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst.ToCParas(4));
+                            break;
                         case "ZCPD": sw.Write("_zcpd({0:s}, {1:s}, {2:s}, &{3:s});\n", inst[1], inst[2], inst[3], inst[4]); break;
-                        case "WBZCPD": sw.Write("_zcpd_wbit({0:s}, {1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst.ToCParas(4)); break;
+                        case "WBZCPD":
+                            if (simumode)
+                                sw.Write("_zcpd_wbit({0:s}, {1:s}, {2:s}, {3:s}, &{4:s});\n", inst[1], inst[2], inst[3], inst.ToCParas(4), inst.EnBit);
+                            else
+                                sw.Write("_zcpd_wbit({0:s}, {1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst.ToCParas(4));
+                            break;
                         case "ZCPF": sw.Write("_zcpf({0:s}, {1:s}, {2:s}, &{3:s});\n", inst[1], inst[2], inst[3], inst[4]); break;
-                        case "WBZCPF": sw.Write("_zcpf_wbit({0:s}, {1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst.ToCParas(4)); break;
+                        case "WBZCPF":
+                            if (simumode)
+                                sw.Write("_zcpf_wbit({0:s}, {1:s}, {2:s}, {3:s}, &{4:s});\n", inst[1], inst[2], inst[3], inst.ToCParas(4), inst.EnBit);
+                            else
+                                sw.Write("_zcpf_wbit({0:s}, {1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst.ToCParas(4));
+                            break;
                         case "NEG": sw.Write("{1:s} = _negw({0:s});\n", inst[1], inst[2]); break;
                         case "BWNEG": sw.Write("{1:s} _negw({0:s}));\n", inst[1], inst[2]); break;
                         case "NEGD": sw.Write("{1:s} = _negd({0:s});\n", inst[1], inst[2]); break;

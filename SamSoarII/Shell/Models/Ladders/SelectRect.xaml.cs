@@ -58,7 +58,6 @@ namespace SamSoarII.Shell.Models
                 this.parent = null;
                 if (_parent != null)
                 {
-                    //_parent.View.LadderCanvas.Children.Remove(View);
                     if (_parent.Parent.View.SelectionStatus == SelectStatus.SingleSelected)
                         _parent.Parent.View.SelectionStatus = SelectStatus.Idle;
                 }
@@ -66,10 +65,6 @@ namespace SamSoarII.Shell.Models
                 if (parent != null)
                 {
                     if (!parent.IsExpand) parent.IsExpand = true;
-                    //parent.View.LadderCanvas.Children.Add(View);
-                    parent.View.SelectAreaOriginFX = X;
-                    parent.View.SelectAreaOriginFY = Y;
-                    parent.View.SelectAreaOriginSX = X;
                     if (parent.Parent.View.SelectionStatus != SelectStatus.SingleSelected)
                         parent.Parent.View.SelectionStatus = SelectStatus.SingleSelected;
                 }

@@ -461,23 +461,52 @@ namespace SamSoarII.Shell.Models
             switch (key)
             {
                 case Key.Left:
-                    ChangeViewport(BoundaryDirection.Left);
                     _selectArea.Core.MoveLeft();
+                    if (IsSelectAreaOutOfViewpoint(Directions.Left))
+                        NavigateToSelectArea(Directions.Left, Directions.None);
                     break;
                 case Key.Right:
-                    ChangeViewport(BoundaryDirection.Right);
                     _selectArea.Core.MoveRight();
+                    if (IsSelectAreaOutOfViewpoint(Directions.Right))
+                        NavigateToSelectArea(Directions.Right, Directions.None);
                     break;
                 case Key.Up:
-                    ChangeViewport(BoundaryDirection.Up);
                     _selectArea.Core.MoveUp();
+                    if (IsSelectAreaOutOfViewpoint(Directions.Up))
+                    {
+                        if (_selectArea.Core.State == SelectAreaCore.Status.SelectRange)
+                            NavigateToSelectArea(Directions.None, Directions.Up);
+                        else if (_selectArea.Core.NetOrigin == _selectArea.Core.NetEnd
+                         && _selectArea.Core.NetStart < _selectArea.Core.NetEnd)
+                            NavigateToSelectArea(Directions.None, Directions.Up);
+                        else
+                            NavigateToSelectArea(Directions.None, Directions.Bottom);
+                    }
                     break;
                 case Key.Down:
-                    ChangeViewport(BoundaryDirection.Bottom);
                     _selectArea.Core.MoveDown();
+                    if (IsSelectAreaOutOfViewpoint(Directions.Bottom))
+                    {
+                        if (_selectArea.Core.State == SelectAreaCore.Status.SelectRange)
+                            NavigateToSelectArea(Directions.None, Directions.Bottom);
+                        else if (_selectArea.Core.NetOrigin == _selectArea.Core.NetStart
+                         && _selectArea.Core.NetStart < _selectArea.Core.NetEnd)
+                            NavigateToSelectArea(Directions.None, Directions.Bottom);
+                        else
+                            NavigateToSelectArea(Directions.None, Directions.Up);
+                    }
                     break;
                 default:
                     break;
+            }
+            if (_selectArea.Core.XStart == _selectArea.Core.XEnd
+             && _selectArea.Core.YStart == _selectArea.Core.YEnd)
+            {
+                _selectRect.Core.Parent = core.Children[_selectArea.Core.NetOrigin];
+                _selectRect.Core.X = _selectArea.Core.XStart;
+                _selectRect.Core.Y = _selectArea.Core.YStart;
+                _selectArea.Core.Release();
+                _selectStatus = SelectStatus.SingleSelected;
             }
         }
         private void ChangeSingleSelectionArea(Key key)
@@ -485,34 +514,40 @@ namespace SamSoarII.Shell.Models
             switch (key)
             {
                 case Key.Left:
-                    ChangeViewport(BoundaryDirection.Left);
                     _selectArea.Core.Select(SelectRectOwner.ID,
                         _selectRect.X, _selectRect.Y, _selectRect.X - 1, _selectRect.Y);
+                    if (IsSelectAreaOutOfViewpoint(Directions.Left))
+                        NavigateToSelectArea(Directions.Left, Directions.None);
                     break;
                 case Key.Right:
-                    ChangeViewport(BoundaryDirection.Right);
                     _selectArea.Core.Select(SelectRectOwner.ID,
                         _selectRect.X, _selectRect.Y, _selectRect.X + 1, _selectRect.Y);
+                    if (IsSelectAreaOutOfViewpoint(Directions.Right))
+                        NavigateToSelectArea(Directions.Right, Directions.None);
                     break;
                 case Key.Up:
-                    ChangeViewport(BoundaryDirection.Up);
                     if (_selectRect.Y == 0)
                         _selectArea.Core.Select(SelectRectOwner.ID, SelectRectOwner.ID - 1);
                     else
                         _selectArea.Core.Select(SelectRectOwner.ID,
                             _selectRect.X, _selectRect.Y, _selectRect.X, _selectRect.Y - 1);
+                    if (IsSelectAreaOutOfViewpoint(Directions.Up))
+                        NavigateToSelectArea(Directions.None, Directions.Up);
                     break;
                 case Key.Down:
-                    ChangeViewport(BoundaryDirection.Bottom);
                     if (_selectRect.Y == SelectRectOwner.RowCount - 1)
                         _selectArea.Core.Select(SelectRectOwner.ID, SelectRectOwner.ID + 1);
                     else
                         _selectArea.Core.Select(SelectRectOwner.ID,
                             _selectRect.X, _selectRect.Y, _selectRect.X, _selectRect.Y + 1);
+                    if (IsSelectAreaOutOfViewpoint(Directions.Bottom))
+                        NavigateToSelectArea(Directions.None, Directions.Bottom);
                     break;
                 default:
                     break;
             }
+            _selectRect.Core.Parent = null;
+            _selectStatus = SelectStatus.MultiSelected;
         }
         
         #endregion
@@ -529,7 +564,6 @@ namespace SamSoarII.Shell.Models
         {
             if (SelectRectOwner != null)
             {
-                ChangeViewport(BoundaryDirection.Up);
                 if (_selectRect.Y > 0)
                 {
                     _selectRect.Y--;
@@ -553,14 +587,14 @@ namespace SamSoarII.Shell.Models
                         _selectRect.Y = lnmodel.RowCount - 1;
                     }
                 }
-                //VScrollToRect(SelectRectOwner.ID, _selectRect.Y);
+                if (IsSelectRectOutOfViewpoint(Directions.Up))
+                    NavigateToSelectRect(Directions.None, Directions.Up);
             }
         }
         private void SelectRectDown()
         {
             if (SelectRectOwner != null)
             {
-                ChangeViewport(BoundaryDirection.Bottom);
                 if (_selectRect.Y + 1 < SelectRectOwner.RowCount)
                 {
                     _selectRect.Y++;
@@ -584,7 +618,8 @@ namespace SamSoarII.Shell.Models
                         _selectRect.Y = 0;
                     }
                 }
-                //VScrollToRect(SelectRectOwner.ID, _selectRect.Y);
+                if (IsSelectRectOutOfViewpoint(Directions.Bottom))
+                    NavigateToSelectRect(Directions.None, Directions.Bottom);
             }
         }
         private void SelectRectLeft()
@@ -593,9 +628,9 @@ namespace SamSoarII.Shell.Models
             {
                 if (_selectRect.X > 0)
                 {
-                    ChangeViewport(BoundaryDirection.Left);
                     _selectRect.X--;
-                    //HScrollToRect(_selectRect.X);
+                    if (IsSelectRectOutOfViewpoint(Directions.Left))
+                        NavigateToSelectRect(Directions.Left, Directions.None);
                 }
             }
         }
@@ -605,9 +640,9 @@ namespace SamSoarII.Shell.Models
             {
                 if (_selectRect.X < GlobalSetting.LadderXCapacity - 1)
                 {
-                    ChangeViewport(BoundaryDirection.Right);
                     _selectRect.X++;
-                    //HScrollToRect(_selectRect.X);
+                    if (IsSelectRectOutOfViewpoint(Directions.Right))
+                        NavigateToSelectRect(Directions.Right, Directions.None);
                 }
             }
         }
@@ -957,417 +992,14 @@ namespace SamSoarII.Shell.Models
 
         #region Navigate & Select
 
-        private enum BoundaryDirection
+        public enum Directions
         {
             Up,
             Right,
             Left,
             Bottom,
+            Center,
             None
-        }
-        private double _offset = 0;
-        /// <summary>
-        /// 当光标跨网络时，计算横跨的距离
-        /// </summary>
-        /// <param name="networkNum">起始网络号</param>
-        /// <param name="_up">是否向上收集</param>
-        /// <param name="_add">true 代表直到收集到第一个非屏蔽的网路，false 代表收集连续的屏蔽网络直到碰到非屏蔽的网络终止</param>
-        /// <returns></returns>
-        private double GetNextNetworkOffset(int networkNum, bool _up, bool _add)
-        {
-            double offset = 0;
-            if (_up)
-            {
-                if (_add)
-                {
-                    if (networkNum == 0) return 0;
-                    int i = 1;
-                    var network = Core.Children[networkNum - i++].View;
-                    offset += network.ActualHeight;
-                    while (network.IsMasked && i <= networkNum)
-                    {
-                        network = Core.Children[networkNum - i++].View;
-                        offset += network.ActualHeight;
-                    }
-                    if (network.IsMasked) return 0;
-                    else return offset;
-                }
-                else
-                {
-                    if (networkNum == 0) return 0;
-                    int i = 1;
-                    var network = Core.Children[networkNum - i++].View;
-                    if (network.IsMasked)
-                        offset += network.ActualHeight;
-                    while (network.IsMasked && i <= networkNum)
-                    {
-                        network = Core.Children[networkNum - i++].View;
-                        if (network.IsMasked)
-                            offset += network.ActualHeight;
-                        else break;
-                    }
-                    if (network.IsMasked && network.Core.ID == Core.NetworkCount - 1) return 0;
-                    return offset;
-                }
-            }
-            else
-            {
-                if (_add)
-                {
-                    if (Core.NetworkCount == networkNum + 1) return 0;
-                    int i = 1;
-                    var network = Core.Children[networkNum + i++].View;
-                    offset += network.ActualHeight;
-                    while (network.IsMasked && i + networkNum < Core.NetworkCount)
-                    {
-                        network = Core.Children[networkNum + i++].View;
-                        offset += network.ActualHeight;
-                    }
-                    if (network.IsMasked) return 0;
-                    else return offset;
-                }
-                else
-                {
-                    if (Core.NetworkCount == networkNum + 1) return 0;
-                    int i = 1;
-                    var network = Core.Children[networkNum + i++].View;
-                    if (network.IsMasked)
-                        offset += network.ActualHeight;
-                    while (network.IsMasked && i + networkNum < Core.NetworkCount)
-                    {
-                        network = Core.Children[networkNum + i++].View;
-                        if (network.IsMasked)
-                            offset += network.ActualHeight;
-                        else break;
-                    }
-                    if (network.IsMasked && network.Core.ID == 0) return 0;
-                    return offset;
-                }
-            }
-        }
-        /// <summary>
-        /// 计算光标移动时距离可视界面的边距
-        /// </summary>
-        /// <param name="direction">代表光标移动的方向</param>
-        /// <param name="_isSingleSelected">是否是单选</param>
-        /// <param name="_isCrossed">网络的横跨状态</param>
-        /// <returns></returns>
-        private double ComputeOffset(BoundaryDirection direction, bool _isSingleSelected, bool _isCrossed = false)
-        {
-            double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
-            double scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
-            Point point;
-            switch (direction)
-            {
-                case BoundaryDirection.Up:
-                    if (_isSingleSelected)
-                    {
-                        point = _selectRect.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                        if (_selectRect.Y == 0)
-                        {
-                            var value = GetNextNetworkOffset(SelectRectOwner.ID, true, false);
-                            if (point.Y < (100 + _selectRect.ActualHeight + value) * scaleY)
-                            {
-                                return point.Y - (100 + _selectRect.ActualHeight + value) * scaleY;
-                            }
-                            if (point.Y < 100 * scaleY)
-                            {
-                                return point.Y - 100 * scaleY;
-                            }
-                            if (point.Y + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
-                            {
-                                return point.Y + _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
-                            }
-                        }
-                        if (_selectRect.Y != 0)
-                        {
-                            if (point.Y < _selectRect.ActualHeight * scaleY)
-                            {
-                                return point.Y - _selectRect.ActualHeight * scaleY;
-                            }
-                            if (point.Y + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
-                            {
-                                return point.Y + _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
-                            }
-                        }
-                    }
-                    else if (!_isCrossed)
-                    {
-                        point = _selectArea.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                        if (_selectArea.Core.YStart == 0 && _selectArea.Core.YOrigin == _selectArea.Core.YEnd)
-                        {
-                            if (point.Y < 100 * scaleY || SelectStartNetwork.View.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
-                            {
-                                return point.Y - 100 * scaleY;
-                            }
-                            if (point.Y + SelectStartNetwork.View.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
-                            {
-                                return point.Y + SelectStartNetwork.View.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
-                            }
-                        }
-                        else
-                        {
-                            if (_selectArea.Core.YOrigin == _selectArea.Core.YEnd)
-                            {
-                                if (point.Y < (_selectRect.ActualHeight + 30) * scaleY || (_selectArea.ActualHeight + _selectRect.ActualHeight) * scaleY > MainScrollViewer.ViewportHeight)
-                                {
-                                    return point.Y - (_selectRect.ActualHeight + 30) * scaleY;
-                                }
-                                if (point.Y + 30 * scaleY > MainScrollViewer.ViewportHeight)
-                                {
-                                    return point.Y + 30 * scaleY - MainScrollViewer.ViewportHeight;
-                                }
-                            }
-                            if (_selectArea.Core.YOrigin == _selectArea.Core.YStart)
-                            {
-                                if (point.Y + (_selectArea.ActualHeight - _selectRect.ActualHeight) * scaleY > MainScrollViewer.ViewportHeight)
-                                {
-                                    return point.Y + (_selectArea.ActualHeight - _selectRect.ActualHeight) * scaleY - MainScrollViewer.ViewportHeight;
-                                }
-                                if (point.Y + (_selectArea.ActualHeight - 2 * _selectRect.ActualHeight) * scaleY < 0)
-                                {
-                                    return point.Y + (_selectArea.ActualHeight - 2 * _selectRect.ActualHeight) * scaleY;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        switch (CrossNetState)
-                        {
-                            case CrossNetworkState.CrossUp:
-                                double value;
-                                if (SelectAllNetworks.Count() == 0)
-                                {
-                                    point = SelectStartNetwork.View.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    value = GetNextNetworkOffset(SelectStartNetwork.ID, true, true);
-                                }
-                                else
-                                {
-                                    point = SelectAllNetworks.First().TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    value = GetNextNetworkOffset(SelectAllNetworks.First().Core.ID, true, true);
-                                }
-                                if (point.Y < value * scaleY)
-                                    return point.Y - value * scaleY;
-                                break;
-                            case CrossNetworkState.CrossDown:
-                                if (SelectAllNetworks.Count() == 0)
-                                {
-                                    point = SelectStartNetwork.View.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    return point.Y + SelectStartNetwork.View.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
-                                }
-                                else
-                                {
-                                    point = SelectAllNetworks.Last().TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    value = GetNextNetworkOffset(SelectAllNetworks.Last().Core.ID, false, false);
-                                }
-                                return point.Y - value * scaleY - MainScrollViewer.ViewportHeight;
-                        }
-                    }
-                    break;
-                case BoundaryDirection.Right:
-                    if (_isSingleSelected)
-                    {
-                        point = _selectRect.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                        if (point.X < 0) return point.X;
-                        if (point.X + 2 * _selectRect.ActualWidth * scaleX > MainScrollViewer.ViewportWidth)
-                        {
-                            return point.X + 2 * _selectRect.ActualWidth * scaleX - MainScrollViewer.ViewportWidth;
-                        }
-                    }
-                    else if (!_isCrossed)
-                    {
-                        point = _selectArea.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                        if (point.X < 0) return point.X;
-                        if (point.X + (_selectRect.ActualWidth + _selectArea.ActualWidth) * scaleX > MainScrollViewer.ViewportWidth)
-                        {
-                            return point.X + (_selectRect.ActualWidth + _selectArea.ActualWidth) * scaleX - MainScrollViewer.ViewportWidth;
-                        }
-                    }
-                    break;
-                case BoundaryDirection.Left:
-                    if (_isSingleSelected)
-                    {
-                        point = _selectRect.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                        if (point.X + _selectRect.ActualWidth * scaleX > MainScrollViewer.ViewportWidth)
-                        {
-                            return point.X + _selectRect.ActualWidth * scaleX - MainScrollViewer.ViewportWidth;
-                        }
-                        if (point.X - _selectRect.ActualWidth * scaleX < 0)
-                        {
-                            return point.X - _selectRect.ActualWidth * scaleX;
-                        }
-                    }
-                    else if (!_isCrossed)
-                    {
-                        point = _selectArea.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                        if (point.X + _selectArea.ActualWidth * scaleX > MainScrollViewer.ViewportWidth)
-                        {
-                            return point.X + _selectArea.ActualWidth * scaleX - MainScrollViewer.ViewportWidth;
-                        }
-                        if (point.X - _selectRect.ActualWidth * scaleX < 0)
-                        {
-                            return point.X - _selectRect.ActualWidth * scaleX;
-                        }
-                    }
-                    break;
-                case BoundaryDirection.Bottom:
-                    if (_isSingleSelected)
-                    {
-                        point = _selectRect.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                        if (_selectRect.Y == SelectRectOwner.RowCount - 1)
-                        {
-                            var value = GetNextNetworkOffset(SelectRectOwner.ID, false, false);
-                            if (point.Y + (2 * _selectRect.ActualHeight + 100 + value) * scaleY > MainScrollViewer.ViewportHeight)
-                            {
-                                return point.Y + (2 * _selectRect.ActualHeight + 100 + value) * scaleY - MainScrollViewer.ViewportHeight;
-                            }
-                            if (point.Y + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
-                            {
-                                return point.Y + _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
-                            }
-                            if (point.Y < 0) return point.Y;
-                        }
-                        if (_selectRect.Y != SelectRectOwner.RowCount - 1)
-                        {
-                            if (point.Y + 2 * _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
-                            {
-                                return point.Y + 2 * _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
-                            }
-                            if (point.Y < 0) return point.Y;
-                        }
-                    }
-                    else if (!_isCrossed)
-                    {
-                        point = _selectArea.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                        if (_selectArea.Core.YEnd == SelectStartNetwork.RowCount - 1)
-                        {
-                            if (point.Y + _selectArea.ActualHeight * scaleY > MainScrollViewer.ViewportHeight || SelectStartNetwork.View.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
-                            {
-                                return point.Y + _selectArea.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
-                            }
-                            if (point.Y + _selectArea.ActualHeight * scaleY < SelectStartNetwork.RowCount * _selectRect.ActualHeight * scaleY + 100 * scaleY)
-                            {
-                                return point.Y + _selectArea.ActualHeight * scaleY - SelectStartNetwork.RowCount * _selectRect.ActualHeight * scaleY - 100 * scaleY;
-                            }
-                        }
-                        else
-                        {
-                            if (_selectArea.Core.YOrigin == _selectArea.Core.YEnd)
-                            {
-                                if (point.Y + _selectRect.ActualHeight * scaleY < 0)
-                                {
-                                    return point.Y + _selectRect.ActualHeight * scaleY;
-                                }
-                                if (point.Y + 2 * _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
-                                {
-                                    return point.Y + 2 * _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
-                                }
-                            }
-                            if (_selectArea.Core.YOrigin == _selectArea.Core.YStart)
-                            {
-                                if (point.Y + (_selectArea.ActualHeight + _selectRect.ActualHeight) * scaleY > MainScrollViewer.ViewportHeight)
-                                {
-                                    return point.Y + (_selectArea.ActualHeight + _selectRect.ActualHeight) * scaleY - MainScrollViewer.ViewportHeight;
-                                }
-                                if (point.Y + _selectArea.ActualHeight * scaleY < 0)
-                                {
-                                    return point.Y + _selectArea.ActualHeight * scaleY;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        switch (CrossNetState)
-                        {
-                            case CrossNetworkState.CrossUp:
-                                double value;
-                                if (SelectAllNetworks.Count() == 0)
-                                {
-                                    point = SelectStartNetwork.View.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    return point.Y;
-                                }
-                                else
-                                {
-                                    point = SelectAllNetworks.First().TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    value = GetNextNetworkOffset(SelectAllNetworks.First().Core.ID, true, false);
-                                }
-                                return point.Y + (value + SelectAllNetworks.First().ActualHeight) * scaleY;
-                            case CrossNetworkState.CrossDown:
-                                LadderNetworkViewModel net;
-                                if (SelectAllNetworks.Count() == 0)
-                                {
-                                    point = SelectStartNetwork.View.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    value = GetNextNetworkOffset(SelectStartNetwork.ID, false, true);
-                                    net = SelectStartNetwork.View;
-                                }
-                                else
-                                {
-                                    net = SelectAllNetworks.Last();
-                                    point = net.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    value = GetNextNetworkOffset(net.Core.ID, false, true);
-                                }
-                                return point.Y + (value + net.ActualHeight) * scaleY - MainScrollViewer.ViewportHeight;
-                        }
-                    }
-                    break;
-            }
-            return 0;
-        }
-        /// <summary>
-        /// 表示在方向direction上，是否需要移动光标
-        /// </summary>
-        /// <param name="direction">移动的方向</param>
-        /// <returns></returns>
-        private bool AssertSelectionArea(BoundaryDirection direction)
-        {
-            var tempoffset = 0.0;
-            switch (CrossNetState)
-            {
-                case CrossNetworkState.CrossUp:
-                case CrossNetworkState.CrossDown:
-                    tempoffset = ComputeOffset(direction, false, true);
-                    break;
-                case CrossNetworkState.NoCross:
-                    tempoffset = ComputeOffset(direction, SelectRectOwner != null);
-                    break;
-            }
-            if (tempoffset != 0)
-            {
-                _offset = tempoffset;
-                return false;
-            }
-            else
-            {
-                _offset = 0;
-                return true;
-            }
-        }
-        /// <summary>
-        /// 在对应方向上改变可视界面
-        /// </summary>
-        /// <param name="direction">需要改变的方向</param>
-        private void ChangeViewport(BoundaryDirection direction)
-        {
-            if (!AssertSelectionArea(direction))
-            {
-                switch (direction)
-                {
-                    case BoundaryDirection.Up:
-                    case BoundaryDirection.Bottom:
-                        MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + _offset);
-                        break;
-                    case BoundaryDirection.Left:
-                    case BoundaryDirection.Right:
-                        MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + _offset);
-                        break;
-                    case BoundaryDirection.None:
-                        break;
-                    default:
-                        break;
-                }
-            }
         }
         /// <summary>
         /// 保证指令输入框保持在视野内
@@ -1402,41 +1034,172 @@ namespace SamSoarII.Shell.Models
                 MainScrollViewer.ScrollToHorizontalOffset(0);
             }
         }
-        /// <summary>
-        /// 精确定位到指定网络号的网络
-        /// </summary>
-        /// <param name="num">网络号</param>
-        public void NavigateToNetworkByNum(int num)
+        
+        private bool IsSelectRectOutOfViewpoint(Directions dir)
         {
-            VScrollToRect(num, _selectRect.Y);
-            HScrollToRect(_selectRect.X);
+            double scalex = GlobalSetting.LadderScaleTransform.ScaleX;
+            double scaley = GlobalSetting.LadderScaleTransform.ScaleY;
+            if (SelectRectOwner == null) return false;
+            double rectx = scalex * (LeftBorder + WidthUnit * _selectRect.X);
+            double recty = scaley * (TopBorder + SelectRectOwner.UnitBaseTop + HeightUnit * _selectRect.Y);
+            Point point = _selectRect.TranslatePoint(new Point(0, 0), Scroll);
+            switch (dir)
+            {
+                case Directions.Left: return rectx - Scroll.HorizontalOffset < 0;
+                case Directions.Right: return rectx + _selectRect.ActualWidth * scalex - Scroll.HorizontalOffset > Scroll.ViewportWidth;
+                case Directions.Up: return recty - Scroll.VerticalOffset < 0;
+                case Directions.Bottom: return recty + _selectRect.ActualHeight * scaley - Scroll.VerticalOffset > Scroll.ViewportHeight;
+                case Directions.Center:
+                    return IsSelectRectOutOfViewpoint(Directions.Left)
+                        && IsSelectRectOutOfViewpoint(Directions.Right)
+                        && IsSelectRectOutOfViewpoint(Directions.Up)
+                        && IsSelectRectOutOfViewpoint(Directions.Bottom);
+                default: return false;
+            }
+        }
+
+        private bool IsSelectAreaOutOfViewpoint(Directions dir)
+        {
+            double scalex = GlobalSetting.LadderScaleTransform.ScaleX;
+            double scaley = GlobalSetting.LadderScaleTransform.ScaleY;
+            double areax1 = 0.0;
+            double areax2 = 0.0;
+            double areay1 = 0.0;
+            double areay2 = 0.0;
+            switch (_selectArea.Core.State)
+            {
+                case SelectAreaCore.Status.SelectRange:
+                    areax1 = scalex * (LeftBorder + WidthUnit * _selectArea.Core.XStart);
+                    areay1 = scaley * (TopBorder + SelectStartNetwork.UnitBaseTop + HeightUnit * _selectArea.Core.YStart);
+                    areax2 = areax1 + scalex * (_selectArea.Core.XEnd - _selectArea.Core.XStart + 1) * WidthUnit;
+                    areay2 = areay1 + scaley * (_selectArea.Core.YEnd - _selectArea.Core.YStart + 1) * HeightUnit;
+                    break;
+                case SelectAreaCore.Status.SelectCross:
+                    areax1 = scalex * LeftBorder;
+                    areax2 = areax1 + scalex * GlobalSetting.LadderXCapacity;
+                    areay1 = scaley * core.Children[_selectArea.Core.NetStart].UnitBaseTop;
+                    areay2 = scaley * (core.Children[_selectArea.Core.NetEnd].UnitBaseTop + core.Children[_selectArea.Core.NetEnd].ViewHeight);
+                    break;
+                default:
+                    return false;
+            }
+            switch (dir)
+            {
+                case Directions.Left: return areax1 - Scroll.HorizontalOffset < 0;
+                case Directions.Right: return areax2 - Scroll.HorizontalOffset > Scroll.ViewportWidth;
+                case Directions.Up: return areay1 - Scroll.VerticalOffset < 0;
+                case Directions.Bottom: return areay2 - Scroll.VerticalOffset > Scroll.ViewportHeight;
+                case Directions.Center:
+                    return IsSelectAreaOutOfViewpoint(Directions.Left)
+                        && IsSelectAreaOutOfViewpoint(Directions.Right)
+                        && IsSelectAreaOutOfViewpoint(Directions.Up)
+                        && IsSelectAreaOutOfViewpoint(Directions.Bottom);
+                default: return false;
+            }
+        }
+
+        /// <summary>
+        /// 精确定位到当前光标
+        /// </summary>
+        /// <param name="hdir">横向停靠方向</param>
+        /// <param name="vdir">纵向停靠方向</param>
+        public void NavigateToSelectRect(Directions hdir = Directions.Center, Directions vdir = Directions.Center)
+        {
+            if (vdir != Directions.None) VScrollToRect(SelectRectOwner.ID, _selectRect.Y, vdir);
+            if (hdir != Directions.None) HScrollToRect(_selectRect.X, hdir);
+        }
+        /// <summary>
+        /// 精确定位到当前选择区域
+        /// </summary>
+        /// <param name="hdir">横向停靠方向</param>
+        /// <param name="vdir">纵向停靠方向</param>
+        public void NavigateToSelectArea(Directions hdir = Directions.Center, Directions vdir = Directions.Center)
+        {
+            switch (_selectArea.Core.State)
+            {
+                case SelectAreaCore.Status.SelectCross:
+                    switch (vdir)
+                    {
+                        case Directions.Up:
+                        case Directions.Center: VScrollToNetwork(_selectArea.Core.NetStart, Directions.Up); break;
+                        case Directions.Bottom:
+                            double scale = GlobalSetting.LadderScaleTransform.ScaleY;
+                            LadderNetworkModel net = core.Children[_selectArea.Core.NetEnd];
+                            if (scale * net.ViewHeight < Scroll.ViewportHeight)
+                                VScrollToNetwork(_selectArea.Core.NetEnd, Directions.Bottom);
+                            else
+                                VScrollToNetwork(_selectArea.Core.NetEnd, Directions.Up);
+                            break;
+                    }
+                    switch (hdir)
+                    {
+                        case Directions.Left:
+                        case Directions.Center: HScrollToRect(0, Directions.Left); break;
+                        case Directions.Right: HScrollToRect(GlobalSetting.LadderXCapacity - 1, Directions.Right); break;
+                    }
+                    break;
+                case SelectAreaCore.Status.SelectRange:
+                    switch (vdir)
+                    {
+                        case Directions.Up: VScrollToRect(_selectArea.Core.NetOrigin, _selectArea.Core.YStart, Directions.Up); break;
+                        case Directions.Center: VScrollToRect(_selectArea.Core.NetOrigin, (_selectArea.Core.YStart + _selectArea.Core.YEnd) / 2, Directions.Center); break;
+                        case Directions.Bottom: VScrollToRect(_selectArea.Core.NetOrigin, _selectArea.Core.YEnd, Directions.Bottom); break;
+                    }
+                    switch (hdir)
+                    {
+                        case Directions.Left: HScrollToRect(_selectArea.Core.XStart, Directions.Left); break;
+                        case Directions.Center: HScrollToRect((_selectArea.Core.XStart + _selectArea.Core.XEnd) / 2, Directions.Center); break;
+                        case Directions.Right: HScrollToRect(_selectArea.Core.XEnd, Directions.Right); break;
+                    }
+                    break;
+            }
+        }
+        /// <summary>
+        /// 纵向精确定位到指定网络
+        /// </summary>
+        /// <param name="net">网络号</param>
+        /// <param name="row">行号</param>
+        /// <param name="dir">停靠方向</param>
+        public void VScrollToNetwork(int net, Directions dir = Directions.Up)
+        {
+            LadderNetworkModel lnmodel = core.Children[net]; 
+            double scale = GlobalSetting.LadderScaleTransform.ScaleY;
+            double offset = scale * (TopBorder + lnmodel.CanvasTop);
+            switch (dir)
+            {
+                case Directions.Center: offset -= (Scroll.ViewportHeight - scale * lnmodel.ViewHeight) / 2; break;
+                case Directions.Bottom: offset -= Scroll.ViewportHeight - scale * lnmodel.ViewHeight; break;
+            }
+            MainScrollViewer.ScrollToVerticalOffset(offset);
         }
         /// <summary>
         /// 纵向精确定位到指定网络的行
         /// </summary>
-        /// <param name="networkNumber">网络号</param>
+        /// <param name="net">网络号</param>
         /// <param name="row">行号</param>
-        public void VScrollToRect(int networkNumber, int row)
+        /// <param name="dir">停靠方向</param>
+        public void VScrollToRect(int net, int row, Directions dir = Directions.Center)
         {
             double scale = GlobalSetting.LadderScaleTransform.ScaleY;
-            double offset = scale * MainBorder.ActualHeight;
-            foreach (var network in Core.Children.Where(x => { return x.ID < networkNumber; }))
-                offset += scale * network.View.ActualHeight;
-            offset += scale * _selectRect.ActualHeight * row;
-            offset = Math.Max(0, offset);
+            double offset = scale * (TopBorder + core.Children[net].UnitBaseTop);
+            offset += scale * HeightUnit * row;
+            switch (dir)
+            {
+                case Directions.Center: offset -= (Scroll.ViewportHeight - scale * HeightUnit) / 2; break;
+                case Directions.Bottom: offset -= Scroll.ViewportHeight - scale * HeightUnit; break;
+            }
             MainScrollViewer.ScrollToVerticalOffset(offset);
         }
         /// <summary>
         /// 横向精确定位到指定网络的列
         /// </summary>
-        /// <param name="XIndex"></param>
-        public void HScrollToRect(int XIndex)
+        /// <param name="col">列号</param>
+        /// <param name="dir">停靠方向</param>
+        public void HScrollToRect(int col, Directions dir = Directions.Center)
         {
             double scale = GlobalSetting.LadderScaleTransform.ScaleX;
-            double offset = 0;
-            offset += scale * GlobalSetting.LadderWidthUnit * (XIndex + 1);
-            offset -= MainScrollViewer.ViewportWidth / 1.3;
-            if (MainScrollViewer.ViewportWidth == 0) offset = 0;
+            double offset = scale * LeftBorder;
+            offset += scale * WidthUnit * col;
             MainScrollViewer.ScrollToHorizontalOffset(offset);
         }
 
@@ -1445,7 +1208,7 @@ namespace SamSoarII.Shell.Models
             _selectRect.Core.Parent = null;
             _selectArea.Core.Select(network.ID, x1, y1, x2, y2);
             _selectStatus = SelectStatus.MultiSelected;
-            NavigateToNetworkByNum(network.ID);
+            NavigateToSelectArea();
         }
 
         public void Select(int start, int end)
@@ -1453,7 +1216,7 @@ namespace SamSoarII.Shell.Models
             _selectRect.Core.Parent = null;
             _selectArea.Core.Select(start, end);
             _selectStatus = SelectStatus.MultiSelected;
-            NavigateToNetworkByNum(start);
+            NavigateToSelectArea();
         }
 
         #endregion
@@ -1620,16 +1383,12 @@ namespace SamSoarII.Shell.Models
                     ThumbnailButton.ToolTip = null;
                     TitleStackPanel.Children.Remove(ThumbnailButton);
                 }
-                MainCanvas.Children.Clear();
-                if (_selectRect != null)
-                    MainCanvas.Children.Add(_selectRect);
-                if (_selectArea != null)
-                    MainCanvas.Children.Add(_selectArea);
                 foreach (LadderNetworkModel net in core.Children)
                 {
                     if (net.View == null)
                         net.View = new LadderNetworkViewModel(net);
-                    MainCanvas.Children.Add(net.View);
+                    if (!MainCanvas.Children.Contains(net.View))
+                        MainCanvas.Children.Add(net.View);
                 }
                 core.UpdateCanvasTop();
             }
@@ -1645,6 +1404,8 @@ namespace SamSoarII.Shell.Models
         
         private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
         private int HeightUnit { get { return IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit; } }
+        public double LeftBorder { get { return LeftStackPanel.ActualWidth; } }
+        public double TopBorder { get { return TitleStackPanel.ActualHeight; } }
 
         #endregion
 

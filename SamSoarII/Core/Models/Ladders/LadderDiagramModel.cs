@@ -234,7 +234,7 @@ namespace SamSoarII.Core.Models
                 foreach (LadderNetworkModel network in Children)
                     network.IsCommentMode = iscommentmode;
                 ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
-
+                UpdateCanvasTop();
             }
         }
 

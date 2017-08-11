@@ -1098,7 +1098,7 @@ namespace SamSoarII
             SelectRectCore rect = diagram.View.SelectionRect.Core;
             rect.X = x;
             rect.Y = y;
-            diagram.View.NavigateToNetworkByNum(network.ID);
+            diagram.View.NavigateToSelectRect();
         }
         
         private void OnViewLoadedToNavigate(object sender, RoutedEventArgs e)
