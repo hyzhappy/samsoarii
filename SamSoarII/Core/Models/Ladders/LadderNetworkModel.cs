@@ -29,6 +29,15 @@ namespace SamSoarII.Core.Models
             Parent = _parent;
         }
 
+        public LadderNetworkModel(LadderDiagramModel _parent, XElement xele)
+        {
+            children = new GridDictionary<LadderUnitModel>(GlobalSetting.LadderXCapacity);
+            vlines = new GridDictionary<LadderUnitModel>(GlobalSetting.LadderXCapacity);
+            Parent = _parent;
+            Load(xele);
+            Inst = new InstructionNetworkModel(this);
+        }
+
         public void Dispose()
         {
             foreach (LadderUnitModel unit in children)

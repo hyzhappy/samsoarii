@@ -145,8 +145,29 @@ namespace SamSoarII.Shell.Models
                     PropertyChanged(this, new PropertyChangedEventArgs("LadderComment"));
                     break;
                 case "IsExpand":
-                    Update();
                     ladderExpander.IsExpand = IsExpand;
+                    if (!IsExpand)
+                    {
+                        DynamicDispose();
+                        MainCanvas.Visibility = Visibility.Hidden;
+                        MainCanvas.Height = 0;
+                        if (ThumbnailButton.ToolTip == null)
+                        {
+                            ThumbnailButton.ToolTip = GenerateToolTipByLadder();
+                            TitleStackPanel.Children.Add(ThumbnailButton);
+                        }
+                    }
+                    else
+                    {
+                        MainCanvas.Visibility = Visibility.Visible;
+                        core.UpdateCanvasTop();
+                        if (ThumbnailButton.ToolTip != null)
+                        {
+                            RemoveToolTipByLadder((ToolTip)ThumbnailButton.ToolTip);
+                            ThumbnailButton.ToolTip = null;
+                            TitleStackPanel.Children.Remove(ThumbnailButton);
+                        }
+                    }
                     PropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
                     break;
                 case "IsCommentMode":
@@ -165,6 +186,7 @@ namespace SamSoarII.Shell.Models
                                 unit.Update(LadderUnitViewModel.UPDATE_TOP);
                         }
                     }
+                    isviewmodified = true;
                     break;
             }
         }
@@ -190,9 +212,23 @@ namespace SamSoarII.Shell.Models
                     break;
                 case NotifyCollectionChangedAction.Remove:
                     net = (LadderNetworkModel)(e.OldItems[0]);
-                    if (SelectRectOwner == net) SelectRectOwner = null;
-                    net.View.Visibility = Visibility.Hidden;
-                    net.View.Dispose();
+                    if (net.ID < loadedrowstart)
+                    {
+                        loadedrowstart--;
+                        loadedrowend--;
+                        break;
+                    }
+                    if (net.ID > loadedrowend)
+                        break;
+                    if (SelectRectOwner == net)
+                        SelectRectOwner = null;
+                    if (net.View != null)
+                    {
+                        net.View.Visibility = Visibility.Hidden;
+                        net.View.DynamicDispose();
+                        net.View.Dispose();
+                    }
+                    loadedrowend--;
                     break;
                 case NotifyCollectionChangedAction.Replace:
                     net = (LadderNetworkModel)(e.NewItems[0]);
@@ -1491,26 +1527,7 @@ namespace SamSoarII.Shell.Models
             PropertyChanged(this, new PropertyChangedEventArgs("TabHeader"));
             PropertyChanged(this, new PropertyChangedEventArgs("ProgramName"));
             PropertyChanged(this, new PropertyChangedEventArgs("LadderComment"));
-            if (!IsExpand)
-            {
-                MainCanvas.Visibility = Visibility.Hidden;
-                if (ThumbnailButton.ToolTip == null)
-                {
-                    ThumbnailButton.ToolTip = GenerateToolTipByLadder();
-                    TitleStackPanel.Children.Add(ThumbnailButton);
-                }
-            }
-            else
-            { 
-                if (ThumbnailButton.ToolTip != null)
-                {
-                    RemoveToolTipByLadder((ToolTip)ThumbnailButton.ToolTip);
-                    ThumbnailButton.ToolTip = null;
-                    TitleStackPanel.Children.Remove(ThumbnailButton);
-                }
-                MainCanvas.Visibility = Visibility.Visible;
-                core.UpdateCanvasTop();
-            }
+            OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
         }
 
         public InstructionDiagramViewModel Inst

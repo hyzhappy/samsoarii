@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace SamSoarII.Shell.Dialogs
 {
@@ -24,6 +27,7 @@ namespace SamSoarII.Shell.Dialogs
         {
             InitializeComponent();
             core = _core;
+            Store.PropertyChanged += OnStorePropertyChanged;
             TB_Name.Text = String.Format("{0:s} = ", Store.Name);
             TB_Value.Text = Store.ShowValue;
             switch (Store.Type)
@@ -48,7 +52,18 @@ namespace SamSoarII.Shell.Dialogs
 
         public void Dispose()
         {
+            Store.PropertyChanged -= OnStorePropertyChanged;
             core = null;
+        }
+        
+        private void OnStorePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "Value":
+                    //Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)(delegate () { TB_Value.Text = Store.ShowValue; }));
+                    break;
+            }
         }
 
         #region Number

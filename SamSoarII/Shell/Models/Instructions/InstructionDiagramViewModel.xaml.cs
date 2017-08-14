@@ -33,6 +33,9 @@ namespace SamSoarII.Shell.Models
             cursor = new InstSelectRect(new InstSelectRectCore(null));
             if (core.Parent?.View?.SelectionRect != null)
                 cursor.Core.Ladder = core.Parent?.View?.SelectionRect.Core;
+            MainCanvas.Children.Add(cursor);
+            loadedstart = 0;
+            loadedend = -1;
             Update();
         }
 
@@ -73,6 +76,8 @@ namespace SamSoarII.Shell.Models
             }
         }
 
+        InteractionFacade IFParent { get { return core.Parent?.Parent?.Parent; } }
+
         IModel IViewModel.Core
         {
             get { return core; }
@@ -83,6 +88,10 @@ namespace SamSoarII.Shell.Models
         {
             switch (e.PropertyName)
             {
+                case "ViewHeight":
+                    MainCanvas.Height = core.ViewHeight;
+                    isviewmodified = true;
+                    break;
             }
         }
         
@@ -93,17 +102,40 @@ namespace SamSoarII.Shell.Models
             {
                 case NotifyCollectionChangedAction.Add:
                     net = (LadderNetworkModel)(e.NewItems[0]);
+                    if (net.ID < loadedstart || net.ID > loadedend)
+                        break;
                     if (net.Inst.View == null)
-                        net.Inst.View = new InstructionNetworkViewModel(net.Inst);
-                    MainStack.Children.Insert(e.NewStartingIndex, net.Inst.View);
+                        net.Inst.View = AllResourceManager.CreateINet(net.Inst);
+                    if (net.Inst.View.Parent != MainCanvas)
+                    {
+                        if (net.Inst.View.Parent is Canvas)
+                            ((Canvas)(net.Inst.View.Parent)).Children.Remove(net.Inst.View);
+                        MainCanvas.Children.Add(net.Inst.View);
+                    }
                     break;
                 case NotifyCollectionChangedAction.Remove:
                     net = (LadderNetworkModel)(e.OldItems[0]);
-                    MainStack.Children.Remove(net.Inst.View);
+                    if (net.ID < loadedstart)
+                    {
+                        loadedstart--;
+                        loadedend--;
+                        break;
+                    }
+                    if (net.ID > loadedend)
+                        break;
+                    if (cursor.Core.Parent == net.Inst)
+                        cursor.Core.Parent = null;
+                    if (net.Inst.View != null)
+                    {
+                        net.Inst.View.Visibility = Visibility.Hidden;
+                        net.Inst.View.DynamicDispose();
+                        net.Inst.View.Dispose();
+                    }
+                    loadedend--;
                     break;
                 case NotifyCollectionChangedAction.Replace:
                     net = (LadderNetworkModel)(e.NewItems[0]);
-                    MainStack.Children[e.NewStartingIndex] = net.Inst.View;
+                    MainCanvas.Children[e.NewStartingIndex] = net.Inst.View;
                     break;
                 case NotifyCollectionChangedAction.Move:
                 case NotifyCollectionChangedAction.Reset:
@@ -118,16 +150,145 @@ namespace SamSoarII.Shell.Models
 
         public ProjectViewModel ViewParent { get { return core?.Parent.Parent.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
+
+        #region Dynamic
+
+        private int loadedstart;
+        public int LoadedStart { get { return this.loadedstart; } }
+
+        private int loadedend;
+        public int LoadedEnd { get { return this.loadedend; } }
+
+        private double oldscrolloffset;
+        private InstructionNetworkModel[] inets;
+        public void DynamicUpdate()
+        {
+            double newscrolloffset = 0;
+            double scrollheight = 0;
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                newscrolloffset = Scroll.VerticalOffset;
+                scrollheight = Scroll.ViewportHeight;
+            });
+            inets = core.Children.ToArray();
+            int _loadedstart = 0;
+            int _loadedend = inets.Length - 1;
+            InstructionNetworkModel inet = inets[_loadedstart];
+            while (inet != null && inet.CanvasTop + inet.ViewHeight - newscrolloffset < -20)
+            {
+                _loadedstart++;
+                inet = _loadedstart < inets.Length ? inets[_loadedstart] : null;
+            }
+            inet = inets[_loadedend];
+            while (inet != null && inet.CanvasTop - newscrolloffset > scrollheight + 20)
+            {
+                _loadedend--;
+                inet = _loadedend >= 0 ? inets[_loadedend] : null;
+            }
+            if (_loadedstart > _loadedend)
+            {
+                if (loadedstart <= loadedend)
+                {
+                    if (newscrolloffset > oldscrolloffset)
+                        DisposeRange(loadedstart, loadedend);
+                    else
+                        DisposeRange(loadedend, loadedstart);
+                }
+            }
+            else if (loadedstart > loadedend)
+            {
+                if (newscrolloffset > oldscrolloffset)
+                    CreateRange(_loadedstart, _loadedend);
+                else
+                    CreateRange(_loadedend, _loadedstart);
+            }
+            else
+            {
+                if (newscrolloffset > oldscrolloffset)
+                {
+                    if (_loadedstart < loadedstart)
+                        CreateRange(_loadedstart, Math.Min(_loadedend, loadedstart - 1));
+                    if (_loadedstart > loadedstart)
+                        DisposeRange(loadedstart, _loadedstart - 1);
+                    if (loadedend < _loadedend)
+                        CreateRange(Math.Max(_loadedstart, loadedend + 1), _loadedend);
+                    if (loadedend > _loadedend)
+                        DisposeRange(_loadedend + 1, loadedend);
+                }
+                else
+                {
+                    if (_loadedstart < loadedstart)
+                        CreateRange(Math.Min(_loadedend, loadedstart - 1), _loadedstart);
+                    if (_loadedstart > loadedstart)
+                        DisposeRange(_loadedstart - 1, loadedstart);
+                    if (loadedend < _loadedend)
+                        CreateRange(_loadedend, Math.Max(_loadedstart, loadedend + 1));
+                    if (loadedend > _loadedend)
+                        DisposeRange(loadedend, _loadedend + 1);
+                }
+            }
+            loadedstart = _loadedstart;
+            loadedend = _loadedend;
+            oldscrolloffset = newscrolloffset;
+            foreach (InstructionNetworkModel _inet in inets)
+                if (_inet.View != null) _inet.View.DynamicUpdate();
+        }
+
+        public void DynamicDispose()
+        {
+            if (loadedstart <= loadedend)
+            {
+                inets = core.Children.ToArray();
+                DisposeRange(loadedstart, loadedend);
+                loadedstart = 0;
+                loadedend = -1;
+            }
+        }
+
+        public void CreateRange(int start, int end)
+        {
+            int dir = (start < end ? 1 : -1);
+            for (int y = start; y != end + dir; y += dir)
+            {
+                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                {
+                    InstructionNetworkModel inet = inets[y];
+                    if (inet.View == null)
+                        inet.View = AllResourceManager.CreateINet(inet);
+                    if (inet.View.Parent != MainCanvas)
+                    {
+                        if (inet.View.Parent is Canvas)
+                            ((Canvas)(inet.View.Parent)).Children.Remove(inet.View);
+                        MainCanvas.Children.Add(inet.View);
+                    }
+                });
+            }
+        }
+
+        public void DisposeRange(int start, int end)
+        {
+            int dir = (start < end ? 1 : -1);
+            for (int y = start; y != end + dir; y += dir)
+            {
+                InstructionNetworkModel inet = inets[y];
+                if (inet.View != null)
+                {
+                    inet.View.DynamicDispose();
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                    {
+                        if (inet?.View == null) return;
+                        inet.View.Visibility = Visibility.Hidden;
+                        inet.View.Dispose();
+                    });
+                }
+            }
+        }
         
+        #endregion
+
         public void Update()
         {
-            MainStack.Children.Clear();
-            foreach (LadderNetworkModel net in core.Parent.Children)
-            {
-                if (net.Inst.View == null)
-                    net.Inst.View = new InstructionNetworkViewModel(net.Inst);
-                MainStack.Children.Add(net.Inst.View);
-            }
+            core.UpdateCanvasTop();
         }
         
         public LadderModes LadderMode { get { return core.LadderMode; } }
@@ -144,13 +305,31 @@ namespace SamSoarII.Shell.Models
 
         private InstSelectRect cursor;
         public new InstSelectRect Cursor { get { return this.cursor; } }
-
+        
+        private void MainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Point p = e.GetPosition(MainCanvas);
+            foreach (InstructionNetworkModel instnet in core.Children)
+            {
+                if (p.Y < instnet.CanvasTop || p.Y > instnet.CanvasTop + instnet.ViewHeight) continue;
+                cursor.IsNavigatable = false;
+                cursor.Core.Parent = instnet;
+                cursor.Core.Row = (int)((p.Y - instnet.CanvasTop - 26) / 20);
+                cursor.IsNavigatable = true;
+            }
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount >= 2
+             && cursor.Core.Current?.Inst?.ProtoType != null)
+            {
+                IFParent.ShowElementPropertyDialog(cursor.Core.Current.Inst.ProtoType);
+            }
+        }
+        
         #endregion
 
         #endregion
 
         #region Event Handler
-        
+
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (cursor.Core.Parent == null) return;
@@ -201,6 +380,6 @@ namespace SamSoarII.Shell.Models
         }
 
         #endregion
-
+        
     }
 }

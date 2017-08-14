@@ -940,6 +940,11 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("D", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}),
                     new ValueFormat("V", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+            vformats = new ValueFormat[] {
+                    new ValueFormat("D", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}),
+                    new ValueFormat("V", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}),
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) };
             Formats[(int)Types.PLSRD] = new LadderUnitFormat(1608, "PLSRD", Types.PLSRD, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.PLSRD_Inst,
                 "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
@@ -948,11 +953,7 @@ namespace SamSoarII.Core.Models
                 "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
                 "段内按照给定频率（D2n）和脉冲数（D2n+1)产生一段脉冲，段之间的频率按给定时间（T)内直线变化。\r\n" +
                 "若给定D0为基地址，则D0表示第一段的脉冲数，D1表示第一段的频率，D2表示第二段的脉冲数，D3表示第二段的频率。以此类推。\r\n",
-                new ValueFormat[] {
-                    new ValueFormat("D", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}),
-                    new ValueFormat("V", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}),
-                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                vformats);
             Formats[(int)Types.PLSA] = new LadderUnitFormat(1608, "PLSA", Types.PLSA, Outlines.Pulse, Shapes.OutputRect,
                 "绝对位置多段脉冲输出",
                 "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
@@ -962,11 +963,6 @@ namespace SamSoarII.Core.Models
                 "段内按照给定频率（D2n）和脉冲数（D2n+1)产生一段脉冲，段之间的频率按给定时间（T)内直线变化。\r\n" +
                 "若给定D0为基地址，则D0表示第一段的脉冲数，D1表示第一段的频率，D2表示第二段的脉冲数，D3表示第二段的频率。以此类推。\r\n",
                 vformats);
-            vformats = new ValueFormat[] {
-                    new ValueFormat("D", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}),
-                    new ValueFormat("V", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}),
-                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) };
             Formats[(int)Types.DPLSRD] = new LadderUnitFormat(1609, "DPLSRD", Types.DPLSRD, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DPLSRD_Inst,
                 "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +

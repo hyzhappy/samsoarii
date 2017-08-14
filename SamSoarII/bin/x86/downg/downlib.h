@@ -225,6 +225,7 @@ extern void CI_DDRVI(uint8_t en, uint32_t pulsenum, uint32_t freq, uint16_t Yn, 
 extern void CI_DDRVA(uint8_t en, uint32_t pulsenum, uint32_t freq, uint16_t Yn, uint16_t dir, uint16_t use_id);
 extern void CI_DPLSA(uint8_t en, uint32_t *plsParam, uint32_t timechange, uint16_t Yn, uint16_t dir, uint16_t use_id);
 
+
 void _imyset(int16_t Yn, int16_t size);
 
 void _imyrst(int16_t Yn, int16_t size);
