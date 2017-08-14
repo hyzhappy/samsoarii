@@ -337,9 +337,11 @@ namespace SamSoarII.Shell.Models
                     View?.Update();
                     break;
                 case Status.SelectCross:
-                    if (netorigin == netstart && movedir != Direction.Up) netend--; else netstart--;
-                    if (netend < netstart) Select(netorigin, xorigin, yorigin,
-                        xorigin == xstart ? xend : xstart, parent.Children[netorigin].RowCount - 1);
+                    if (netorigin == netstart && movedir != Direction.Up) netend--;
+                    else if (netstart < 0) netstart--;
+                    if (netend < netstart || netstart < 0 || netend >= parent.NetworkCount)
+                        Select(netorigin, xorigin, yorigin,
+                            xorigin == xstart ? xend : xstart, parent.Children[netorigin].RowCount - 1);
                     View?.Update();
                     break;
             }
@@ -368,9 +370,11 @@ namespace SamSoarII.Shell.Models
                     View?.Update();
                     break;
                 case Status.SelectCross:
-                    if (netorigin == netend && movedir != Direction.Down) netstart++; else netend++;
-                    if (netend < netstart) Select(netorigin, xorigin, yorigin,
-                         xorigin == xstart ? xend : xstart, 0);
+                    if (netorigin == netend && movedir != Direction.Down) netstart++;
+                    else if (netend >= parent.NetworkCount) netend++;
+                    if (netend < netstart || netstart < 0 || netend >= parent.NetworkCount)
+                        Select(netorigin, xorigin, yorigin,
+                            xorigin == xstart ? xend : xstart, 0);
                     View?.Update();
                     break;
             }
