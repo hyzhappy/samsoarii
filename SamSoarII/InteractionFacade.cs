@@ -279,7 +279,7 @@ namespace SamSoarII
             if (filename != null) SaveAsProject(filename);
         }
         
-        public void LoadProject(string filename)
+        public void LoadProject(string filename,bool _isUpload = false)
         {
             CloseProject();
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.Project_Preparing));
@@ -287,7 +287,7 @@ namespace SamSoarII
             handle.Start();
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
-                _LoadProject(filename, handle);
+                _LoadProject(filename, handle,_isUpload);
                 handle.Completed = true;
                 handle.Abort();
             });
@@ -295,14 +295,16 @@ namespace SamSoarII
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Normal, Properties.Resources.Ready));
         }
 
-        private void _LoadProject(string filename, LoadingWindowHandle handle)
+        private void _LoadProject(string filename, LoadingWindowHandle handle, bool _isUpload = false)
         {
 #if RELEASE
             try
             {
 #endif
                 mdProj = new ProjectModel(this, FileHelper.GetFileName(filename), filename);
-                ProjectFileManager.Update(filename, filename);
+                if (_isUpload)
+                    mdProj.ClearFileName();
+                else ProjectFileManager.Update(filename, filename);
                 InitializeProject();
 #if RELEASE
             }
@@ -318,7 +320,7 @@ namespace SamSoarII
 
         public void SaveProject()
         {
-            if (mdProj.FileName == null)
+            if (FileHelper.InvalidFileName(mdProj.FileName))
                 ShowSaveProjectDialog();
             else
                 mdProj.Save();
@@ -576,6 +578,17 @@ namespace SamSoarII
                                     break;
                                 default:
                                     break;
+                            }
+                            if (UploadHelper.IsUploadProgram)
+                            {
+                                if (UploadHelper.LoadProjByUploadData(this,FileHelper.GetFullFileName("tempupfile", "7z")))
+                                {
+                                    LocalizedMessageBox.Show(Properties.Resources.Project_Load_Success, LocalizedMessageIcon.Information);
+                                }
+                                else
+                                {
+                                    LocalizedMessageBox.Show(Properties.Resources.Project_Load_Failed, LocalizedMessageIcon.Information);
+                                }
                             }
                         });
                         while (!handle.Completed)
@@ -1335,10 +1348,10 @@ namespace SamSoarII
             LocalizedMessageBox.Show(message, LocalizedMessageIcon.Information);
         }
 
-        public LocalizedMessageResult ShowSaveYesNoCancelDialog()
+        public LocalizedMessageResult ShowSaveYesNoCancelDialog(string message = "")
         {
             string title = Properties.Resources.Message_Confirm_Save;
-            string text = String.Format("{0:s} {1}", mdProj.ProjName, Properties.Resources.Message_Changed);
+            string text = String.Format("{0:s} {1}", mdProj.ProjName, message != string.Empty ? message : Properties.Resources.Message_Changed);
             return LocalizedMessageBox.Show(text, title, LocalizedMessageButton.YesNoCancel, LocalizedMessageIcon.Question);
         }
 

@@ -132,7 +132,7 @@ namespace SamSoarII.Core.Communication
         public void InitializePort()
         {
             if (port.IsOpen) port.Close();
-            CommunicationParams paras = parent.IFParent.MDProj.PARAProj.PARACom;
+            CommunicationParams paras = parent.PARACom;
             if(PORTNAMES.Count() > 0)
                 PortName = PORTNAMES[paras.SerialPortIndex];
             BaudRate = BAUDRATES[paras.BaudRateIndex];
@@ -143,7 +143,7 @@ namespace SamSoarII.Core.Communication
         }
         private void SetParas()
         {
-            CommunicationParams paras = parent.IFParent.MDProj.PARAProj.PARACom;
+            CommunicationParams paras = parent.PARACom;
             paras.SerialPortIndex = PORTNAMES.ToList().IndexOf(port.PortName);
             paras.BaudRateIndex = BAUDRATES.ToList().IndexOf(port.BaudRate);
             paras.StopBitIndex = STOPBITS.ToList().IndexOf(GetStopBits(port.StopBits));
@@ -187,7 +187,7 @@ namespace SamSoarII.Core.Communication
             InitializePort();
             try
             {
-                CommunicationParams paras = parent.IFParent.MDProj.PARAProj.PARACom;
+                CommunicationParams paras = parent.PARACom;
                 if (!paras.IsAutoCheck)
                 {
                     if (!PortTest())

@@ -93,9 +93,14 @@ namespace SamSoarII.Core.Models
         }
         private string projname;
         public string ProjName { get { return this.projname; } }
-
+        
         private string filename;
         public string FileName { get { return this.filename; } }
+
+        public void ClearFileName()
+        {
+            filename = string.Empty;
+        }
 
         private Device device;
         public Device Device

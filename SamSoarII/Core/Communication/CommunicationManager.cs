@@ -289,7 +289,7 @@ namespace SamSoarII.Core.Communication
         {
             string currentpath = FileHelper.AppRootPath;
             string execfile = string.Format(@"{0:s}\downc.bin", currentpath);
-            execdata = FileHelper.GenerateBinaryFile(execfile).ToList();
+            execdata = FileHelper.GetBytesByBinaryFile(execfile).ToList();
         }
 
         public DownloadError DownloadExecute()
@@ -315,7 +315,7 @@ namespace SamSoarII.Core.Communication
             if (!hassend) return false;
             Thread.Sleep(waittime);
             if (!hasRecvData && cmd.RecvDataLen == 0) return true;
-            while (recvtime < 50)
+            while (recvtime < 20)
             {
                 if (mngCurrent.Read(cmd) == 0)
                 {
@@ -646,6 +646,5 @@ namespace SamSoarII.Core.Communication
 
         #endregion
 
-        
     }
 }

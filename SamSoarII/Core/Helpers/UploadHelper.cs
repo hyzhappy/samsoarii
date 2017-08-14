@@ -3,6 +3,7 @@ using SamSoarII.Shell.Dialogs;
 using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -58,6 +59,10 @@ namespace SamSoarII.Core.Helpers
         private static List<byte> upTable;
         /// <summary> Block表 </summary>
         private static List<byte> upBlock;
+
+        public static bool HasConfig { get { return upConfig?.Count > 0; } }
+
+        public static bool HasProj { get { return upProj?.Count > 0; } }
         #endregion
 
         //上载前用于获取当前PLC信息(PLC型号，PLC运行状态，PLC当前程序，是否需要上载密码等)
@@ -101,40 +106,41 @@ namespace SamSoarII.Core.Helpers
 
         private static UploadError UploadProjExecute(CommunicationManager communManager)
         {
-            return _UploadHandle(communManager, upProj, CommunicationDataDefine.CMD_UPLOAD_PRO);
+            return _UploadHandle(communManager, ref upProj, CommunicationDataDefine.CMD_UPLOAD_PRO);
         }
 
         private static UploadError UploadModbusTableExecute(CommunicationManager communManager)
         {
-            return _UploadHandle(communManager, upModbus, CommunicationDataDefine.CMD_UPLOAD_MODBUSTABLE);
+            return _UploadHandle(communManager, ref upModbus, CommunicationDataDefine.CMD_UPLOAD_MODBUSTABLE);
         }
 
         private static UploadError UploadPlsTableExecute(CommunicationManager communManager)
         {
-            return _UploadHandle(communManager, upTable, CommunicationDataDefine.CMD_UPLOAD_PLSTABLE);
+            return _UploadHandle(communManager, ref upTable, CommunicationDataDefine.CMD_UPLOAD_PLSTABLE);
         }
 
         private static UploadError UploadPlsBlockExecute(CommunicationManager communManager)
         {
-            return _UploadHandle(communManager, upBlock, CommunicationDataDefine.CMD_UPLOAD_PLSBLOCK);
+            return _UploadHandle(communManager, ref upBlock, CommunicationDataDefine.CMD_UPLOAD_PLSBLOCK);
         }
 
         private static UploadError UploadConfigExecute(CommunicationManager communManager)
         {
-            return _UploadHandle(communManager, upConfig, CommunicationDataDefine.CMD_UPLOAD_CONFIG);
+            return _UploadHandle(communManager, ref upConfig, CommunicationDataDefine.CMD_UPLOAD_CONFIG);
         }
 
-        private static UploadError _UploadHandle(CommunicationManager communManager,IEnumerable<byte> desdata,byte funcCode)
+        private static UploadError _UploadHandle(CommunicationManager communManager,ref List<byte> desdata,byte funcCode)
         {
             if (desdata == null) desdata = new List<byte>();
+            else if (desdata.Count() > 0) desdata.Clear();
             int time = 0;//记录重传次数
             ICommunicationCommand command = new UploadTypeStart(funcCode);
-            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
+            for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
             {
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 10) return UploadError.UploadFailed;
+            if (time >= 5) return UploadError.UploadFailed;
             Dictionary<int, byte[]> data = new Dictionary<int, byte[]>();
             if (command.RecvDataLen > 0)
             {
@@ -150,24 +156,24 @@ namespace SamSoarII.Core.Helpers
                 }
             }
             command = new UploadTypeOver(funcCode);
-            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
+            for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
             {
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 10) return UploadError.UploadFailed;
+            if (time >= 5) return UploadError.UploadFailed;
             foreach (var kvPair in data)
-                desdata = desdata.Concat(kvPair.Value);
+                desdata.AddRange(kvPair.Value);
             if(funcCode == CommunicationDataDefine.CMD_UPLOAD_PRO)
             {
                 //略去前面4字节的长度
-                desdata = desdata.Skip(4);
+                desdata = desdata.ToArray().Skip(4).ToList();
                 //将数据解密
-                desdata = CommandHelper.Decrypt(desdata.Count(),desdata.ToArray());
+                desdata = CommandHelper.Decrypt(desdata.Count(),desdata.ToArray()).ToList();
             }
             return UploadError.None;
         }
-        
+
         private static byte[] GetRetData(byte[] data)
         {
             int len = ValueConverter.GetValueByBytes(data[1],data[2]);
@@ -178,6 +184,33 @@ namespace SamSoarII.Core.Helpers
                 retData[i] = data[i + 6];
             }
             return retData;
+        }
+
+        public static bool LoadProjByUploadData(InteractionFacade ifParent, string fullFileName)
+        {
+            try
+            {
+                string dir = Directory.GetParent(fullFileName).FullName;
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                FileHelper.GenerateBinaryFile(fullFileName, upProj.ToArray());
+                FileHelper.DecompressFile(fullFileName, dir);
+                foreach (var file in Directory.GetFiles(dir))
+                {
+                    if (file.EndsWith(FileHelper.NewFileExtension))
+                    {
+                        ifParent.LoadProject(file,true);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            finally
+            {
+                Directory.Delete(Directory.GetParent(fullFileName).FullName, true);
+            }
+            return true;
         }
     }
 }

@@ -2263,12 +2263,21 @@
     <value>请选择要上载的数据！</value>
   </data>
   <data name="Project_Upload" xml:space="preserve">
-    <value>工程下载</value>
+    <value>工程上载</value>
   </data>
   <data name="MessageBox_Upload_Successd" xml:space="preserve">
     <value>上载成功</value>
   </data>
   <data name="Upload_Fail" xml:space="preserve">
     <value>上载失败！</value>
+  </data>
+  <data name="Project_Load_Success" xml:space="preserve">
+    <value>工程文件加载完成</value>
+  </data>
+  <data name="Project_Load_Failed" xml:space="preserve">
+    <value>工程文件加载失败</value>
+  </data>
+  <data name="Project_UnSaved" xml:space="preserve">
+    <value>工程尚未保存，是否保存？</value>
   </data>
 </root>

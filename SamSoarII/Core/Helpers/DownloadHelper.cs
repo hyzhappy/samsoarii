@@ -74,12 +74,7 @@ namespace SamSoarII.Core.Helpers
         static private void InitializeData(ProjectModel project)
         {
             //工程，注释，软元件等用于上载的信息直接压缩xml
-
-            //dtBinary = new List<byte>();
-            //dtProject = new List<byte>();
-            //dtComment = new List<byte>();
-            //dtEleList = new List<byte>();
-
+            
             // 初始化
             dtIcon = new List<byte>();
             dtConfig = new List<byte>();
@@ -88,15 +83,6 @@ namespace SamSoarII.Core.Helpers
             dtBlock = new List<byte>();
             
             // 条形码
-
-            // 工程
-            //ltFuncs = project.Funcs.ToList();
-            //Write(project.ValueManager);
-            //Write(dtProject, project.Diagrams.Count);
-            //foreach (LadderDiagramModel ldmodel in project.Diagrams) Write(ldmodel);
-            //Write(dtProject, project.FuncBlocks.Count);
-            //foreach (FuncBlockModel fbmodel in project.FuncBlocks) Write(fbmodel);
-            //Write(dtProject, project.Monitor.Children.Count);
 
             // 配置
             WriteConfig(project.PARAProj);
@@ -527,7 +513,7 @@ namespace SamSoarII.Core.Helpers
             string genFile = FileHelper.CompressFile(_filename);
             try
             {
-                byte[] tempdata = FileHelper.GenerateBinaryFile(genFile);
+                byte[] tempdata = FileHelper.GetBytesByBinaryFile(genFile);
                 if (tempdata.Length == 0) return DownloadError.None;
                 //先将传送的数据加密(注意密钥为数据的长度)
                 CommandHelper.Encrypt(tempdata.Length, tempdata);
@@ -577,6 +563,8 @@ namespace SamSoarII.Core.Helpers
         private static DownloadError DownloadConfigExecute(CommunicationManager communManager)
         {
             if (dtConfig.Count == 0) return DownloadError.None;
+            byte[] data = ValueConverter.GetBytes((uint)dtConfig.Count + 4, true);
+            dtConfig = data.Concat(dtConfig).ToList();
             return _DownloadHandle(communManager, dtConfig.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_CONFIG);
         }
         #endregion

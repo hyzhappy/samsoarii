@@ -2271,4 +2271,13 @@
   <data name="Upload_Fail" xml:space="preserve">
     <value>Upload fail!</value>
   </data>
+  <data name="Project_Load_Success" xml:space="preserve">
+    <value>The project file is loaded</value>
+  </data>
+  <data name="Project_Load_Failed" xml:space="preserve">
+    <value>The project file failed to load</value>
+  </data>
+  <data name="Project_UnSaved" xml:space="preserve">
+    <value>The project has not been saved,is it saved?</value>
+  </data>
 </root>
