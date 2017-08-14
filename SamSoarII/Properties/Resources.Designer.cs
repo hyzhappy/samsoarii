@@ -565,6 +565,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Upload Data 的本地化字符串。
+        /// </summary>
+        public static string Communication_Upload_Data {
+            get {
+                return ResourceManager.GetString("Communication_Upload_Data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Communication Setting 的本地化字符串。
         /// </summary>
         public static string CommunicationSetting {
@@ -889,7 +898,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Download fail 的本地化字符串。
+        ///   查找类似 Download fail! 的本地化字符串。
         /// </summary>
         public static string Download_Fail {
             get {
@@ -4111,6 +4120,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Upload Successd 的本地化字符串。
+        /// </summary>
+        public static string MessageBox_Upload_Successd {
+            get {
+                return ResourceManager.GetString("MessageBox_Upload_Successd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Minimize 的本地化字符串。
         /// </summary>
         public static string Minimize {
@@ -4894,11 +4912,29 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Please select the data to download! 的本地化字符串。
+        /// </summary>
+        public static string Please_Select_DownData {
+            get {
+                return ResourceManager.GetString("Please_Select_DownData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Please Select Range: 的本地化字符串。
         /// </summary>
         public static string Please_Select_Range {
             get {
                 return ResourceManager.GetString("Please_Select_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Please select the data to upload! 的本地化字符串。
+        /// </summary>
+        public static string Please_Select_UpData {
+            get {
+                return ResourceManager.GetString("Please_Select_UpData", resourceCulture);
             }
         }
         
@@ -5106,6 +5142,15 @@ namespace SamSoarII.Properties {
         public static string Project_Setting {
             get {
                 return ResourceManager.GetString("Project_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Project Upload 的本地化字符串。
+        /// </summary>
+        public static string Project_Upload {
+            get {
+                return ResourceManager.GetString("Project_Upload", resourceCulture);
             }
         }
         
@@ -6087,6 +6132,15 @@ namespace SamSoarII.Properties {
         public static string Upload_Encryption {
             get {
                 return ResourceManager.GetString("Upload_Encryption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Upload fail! 的本地化字符串。
+        /// </summary>
+        public static string Upload_Fail {
+            get {
+                return ResourceManager.GetString("Upload_Fail", resourceCulture);
             }
         }
         

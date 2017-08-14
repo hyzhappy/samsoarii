@@ -11,7 +11,7 @@ namespace SamSoarII.Core.Communication
         public DownloadTypeOver(byte downloadCode)
         {
             command = new byte[5];
-            command[0] = CommunicationDataDefine.CMD_DOWNLOAD_FLAG;
+            command[0] = CommunicationDataDefine.CMD_COMMU_FLAG;
             byte[] len = ValueConverter.GetBytes((ushort)(command.Length + 2),true);
             command[1] = len[0];
             command[2] = len[1];

@@ -6,26 +6,17 @@ using System.Text;
 
 namespace SamSoarII.Core.Communication
 {
-    public class IAPDESKEYCommand : ICommunicationCommand
+    public class UploadTypeStart : ICommunicationCommand
     {
-        public IAPDESKEYCommand(int filelength)
+        public UploadTypeStart(byte funcCode)
         {
-            Random random = new Random();
-            command = new byte[16];
+            command = new byte[5];
             command[0] = CommunicationDataDefine.CMD_COMMU_FLAG;
             byte[] len = ValueConverter.GetBytes((ushort)(command.Length + 2), true);
             command[1] = len[0];
             command[2] = len[1];
-            command[3] = CommunicationDataDefine.CMD_IAP_DES_KEY;
-            for (int i = 0; i < 8; i++)
-            {
-                command[4 + i] = (byte)(random.Next() & 0xFF);
-            }
-            len = ValueConverter.GetBytes((uint)filelength,true);
-            for (int i = 0; i < len.Length; i++)
-            {
-                command[12 + i] = len[i];
-            }
+            command[3] = CommunicationDataDefine.CMD_UPLOAD_START;
+            command[4] = funcCode;
             command = command.Concat(CRC16.GetCRC(command)).ToArray();
         }
         public bool IsComplete
@@ -42,7 +33,6 @@ namespace SamSoarII.Core.Communication
         {
             get; set;
         }
-
         //返回的数据
         private byte[] _retData;
         public byte[] RetData
@@ -51,13 +41,13 @@ namespace SamSoarII.Core.Communication
             {
                 return _retData;
             }
-
             set
             {
                 _retData = value;
                 CommandHelper.CheckRetData(this, _retData);
             }
         }
+
         private byte[] command;
         public byte[] GetBytes()
         {

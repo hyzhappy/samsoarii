@@ -225,6 +225,20 @@ extern void CI_DDRVI(uint8_t en, uint32_t pulsenum, uint32_t freq, uint16_t Yn, 
 extern void CI_DDRVA(uint8_t en, uint32_t pulsenum, uint32_t freq, uint16_t Yn, uint16_t dir, uint16_t use_id);
 extern void CI_DPLSA(uint8_t en, uint32_t *plsParam, uint32_t timechange, uint16_t Yn, uint16_t dir, uint16_t use_id);
 
+extern void CI_FLOAT32_ADD(uint8_t en, float in0, float in1, float *out);
+extern void CI_FLOAT32_SUB(uint8_t en, float in0, float in1, float *out);
+extern void CI_FLOAT32_MUL(uint8_t en, float in0, float in1, float *out);
+extern void CI_FLOAT32_DIV(uint8_t en, float in0, float in1, float *out);
+extern void CI_FLOAT32_SQRT(uint8_t en, float in, float *out);
+extern void CI_FLOAT32_SIN(uint8_t en, float in, float *out);
+extern void CI_FLOAT32_COS(uint8_t en, float in, float *out);
+extern void CI_FLOAT32_TAN(uint8_t en, float in, float *out);
+extern void CI_FLOAT32_LN(uint8_t en, float in, float *out);
+extern void CI_FLOAT32_EXP(uint8_t en, float in, float *out);
+extern void CI_FLOAT32_LOG(uint8_t en, float in, float *out);
+extern void CI_FLOAT32_POW(uint8_t en, float in0, float in1, float *out);
+extern void CI_FLOAT32_ABSF(uint8_t en, float in, float *out);
+extern void CI_FLOAT32_MEANF(uint8_t en, float *in, float *out, uint16_t cnt);
 
 void _imyset(int16_t Yn, int16_t size);
 

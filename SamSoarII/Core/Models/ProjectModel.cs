@@ -13,6 +13,7 @@ using SamSoarII.Utility;
 using SamSoarII.Shell.Windows;
 using System.Windows;
 using SamSoarII.Core.Communication;
+using SamSoarII.Core.Helpers;
 
 namespace SamSoarII.Core.Models
 {
@@ -349,13 +350,10 @@ namespace SamSoarII.Core.Models
             XElement xele_m = new XElement("Modbus");
             modbus.Save(xele_m);
             xele_p.Add(xele_m);
-            //if (paraCom.IsDownloadSetting)
-            //{
-                XElement xele_pp = new XElement("ProjectPropertyParams");
-                paraProj.Save(xele_pp);
-                xele_p.Add(xele_pp);
-            //}
-            if (paraCom.IsDownloadComment)
+            XElement xele_pp = new XElement("ProjectPropertyParams");
+            paraProj.Save(xele_pp);
+            xele_p.Add(xele_pp);
+            if (DownloadHelper.IsDownloadComment)
             {
                 XElement xele_vm = new XElement("ValueManager");
                 ValueManager.Save(xele_vm);

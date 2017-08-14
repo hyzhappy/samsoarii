@@ -44,7 +44,7 @@ namespace SamSoarII.Core.Communication
         public const byte SLAVE_ADDRESS = 0x01;
         #endregion
 
-        #region 下载
+        #region 上，下载
         /// <summary> 选项：是否包含程序 </summary>
         public const int OPTION_PROGRAM = 0x01;
         /// <summary> 选项：是否包含软元件 </summary>
@@ -54,7 +54,7 @@ namespace SamSoarII.Core.Communication
         /// <summary> 选项：是否包含设置 </summary>
         public const int OPTION_SETTING = 0x08;
         
-        public const byte CMD_DOWNLOAD_FLAG = 0xF0;//下载标志位
+        public const byte CMD_COMMU_FLAG = 0xF0;//下载标志位
         public const int USB_DOWNLOAD_LEN = 56;//USB下载一包的最大长度
         public const int SERIAL_DOWNLOAD_LEN = 1024;//串口下载一包的最大长度
         //功能码列表

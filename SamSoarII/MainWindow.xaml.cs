@@ -725,6 +725,7 @@ namespace SamSoarII
              || e.Command == GlobalCommand.CloseProjectCommand
              || e.Command == GlobalCommand.SimulateCommand
              || e.Command == GlobalCommand.DownloadCommand
+             || e.Command == GlobalCommand.UploadCommand
              || e.Command == GlobalCommand.MonitorCommand)
             {
                 CommandBinding_Executed_SaveHint(sender, e);
@@ -837,6 +838,8 @@ namespace SamSoarII
             }
             if (e.Command == GlobalCommand.DownloadCommand)
                 ifParent.DownloadProject();
+            if (e.Command == GlobalCommand.UploadCommand)
+                ifParent.UploadProject();
             if (e.Command == GlobalCommand.MonitorCommand)
             {
                 ret = ifParent.MonitorProject();

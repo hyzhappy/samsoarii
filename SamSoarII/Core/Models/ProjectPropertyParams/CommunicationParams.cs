@@ -95,30 +95,7 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("Timeout"));
             }
         }
-
-        private int downloadoption;
-        public int DownloadOption
-        {
-            get { return this.downloadoption; }
-            set { this.downloadoption = value; PropertyChanged(this, new PropertyChangedEventArgs("DownloadOption")); }
-        }
-        public bool IsDownloadProgram
-        {
-            get { return (downloadoption & CommunicationDataDefine.OPTION_PROGRAM) != 0; }
-        }
-        public bool IsDownloadComment
-        {
-            get { return (downloadoption & CommunicationDataDefine.OPTION_COMMENT) != 0; }
-        }
-        public bool IsDownloadInitialize
-        {
-            get { return (downloadoption & CommunicationDataDefine.OPTION_INITIALIZE) != 0; }
-        }
-        public bool IsDownloadSetting
-        {
-            get { return (downloadoption & CommunicationDataDefine.OPTION_SETTING) != 0; }
-        }
-
+        
         #endregion
 
         #region Save & Load
@@ -133,7 +110,6 @@ namespace SamSoarII.Core.Models
             xele.Add(new XElement("Timeout", timeout));
             xele.Add(new XElement("IsCOMLinked", iscomlinked));
             xele.Add(new XElement("IsAutoCheck", isautocheck));
-            xele.Add(new XElement("DownloadOption", downloadoption));
         }
 
         public void Load(XElement xele)
@@ -150,7 +126,6 @@ namespace SamSoarII.Core.Models
             } catch (Exception) {}
             try {iscomlinked = bool.Parse(xele.Element("IsCOMLinked").Value);} catch (Exception) {}
             try {isautocheck = bool.Parse(xele.Element("IsAutoCheck").Value);} catch (Exception) {}
-            try {downloadoption = int.Parse(xele.Element("DownloadOption").Value);} catch (Exception) {}
         }
 
         public IParams Clone()
@@ -178,7 +153,6 @@ namespace SamSoarII.Core.Models
                 this.Timeout = that.Timeout;
                 this.IsComLinked = that.IsComLinked;
                 this.IsAutoCheck = that.IsAutoCheck;
-                this.DownloadOption = that.DownloadOption;
             }
             LoadSuccess = true;
         }
