@@ -106,6 +106,11 @@ namespace SamSoarII.Utility
             else return 0L;
         }
 
+        public static string GetFullFileName(string filename,string extension)
+        {
+            return string.Format(@"{0}\rar\temp\{1}.{2}", StringHelper.RemoveSystemSeparator(AppRootPath), filename, extension);
+        }
+
         public static string CompressFile(string fullFileName)
         {
             Process cmd = new Process();
@@ -139,7 +144,7 @@ namespace SamSoarII.Utility
             return fullFileName == null || fullFileName == string.Empty;
         }
 
-        public static byte[] GenerateBinaryFile(string fullFileName)
+        public static byte[] GetBytesByBinaryFile(string fullFileName)
         {
             List<byte> data = new List<byte>();
             BinaryReader br = new BinaryReader(
@@ -157,6 +162,24 @@ namespace SamSoarII.Utility
             }
             br.Close();
             return data.ToArray();
+        }
+
+        public static void GenerateBinaryFile(string fullFileName,byte[] data)
+        {
+            BinaryWriter writer = new BinaryWriter(new FileStream(fullFileName, FileMode.Create,FileAccess.Write));
+            for (int i = 0; i < data.Length; i++)
+            {
+                try
+                {
+                    writer.Write(data[i]);
+                }
+                catch (Exception)
+                {
+                    break;
+                }
+            }
+            writer.Flush();
+            writer.Close();
         }
     }
 }

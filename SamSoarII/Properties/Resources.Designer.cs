@@ -5110,6 +5110,24 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 The project file failed to load 的本地化字符串。
+        /// </summary>
+        public static string Project_Load_Failed {
+            get {
+                return ResourceManager.GetString("Project_Load_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The project file is loaded 的本地化字符串。
+        /// </summary>
+        public static string Project_Load_Success {
+            get {
+                return ResourceManager.GetString("Project_Load_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Project Name 的本地化字符串。
         /// </summary>
         public static string Project_Name {
@@ -5142,6 +5160,15 @@ namespace SamSoarII.Properties {
         public static string Project_Setting {
             get {
                 return ResourceManager.GetString("Project_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The project has not been saved,is it saved? 的本地化字符串。
+        /// </summary>
+        public static string Project_UnSaved {
+            get {
+                return ResourceManager.GetString("Project_UnSaved", resourceCulture);
             }
         }
         
