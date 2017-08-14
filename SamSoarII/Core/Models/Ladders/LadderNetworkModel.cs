@@ -17,6 +17,7 @@ namespace SamSoarII.Core.Models
     {
         public LadderNetworkModel(LadderDiagramModel _parent, int _id)
         {
+            commentareaheight = 56.233;
             children = new GridDictionary<LadderUnitModel>(GlobalSetting.LadderXCapacity);
             vlines = new GridDictionary<LadderUnitModel>(GlobalSetting.LadderXCapacity);
             ID = _id;
@@ -31,6 +32,7 @@ namespace SamSoarII.Core.Models
 
         public LadderNetworkModel(LadderDiagramModel _parent, XElement xele)
         {
+            commentareaheight = 56.233;
             children = new GridDictionary<LadderUnitModel>(GlobalSetting.LadderXCapacity);
             vlines = new GridDictionary<LadderUnitModel>(GlobalSetting.LadderXCapacity);
             Parent = _parent;
@@ -212,21 +214,20 @@ namespace SamSoarII.Core.Models
             }
         }
 
-        private bool isbriefexpand;
-        public bool IsBriefExpand
+        private double commentareaheight;
+        public double CommentAreaHeight
         {
             get
             {
-                return this.isbriefexpand;
+                return this.commentareaheight;
             }
             set
             {
-                if (isbriefexpand == value) return;
-                this.isbriefexpand = value;
-                ViewPropertyChanged(this, new PropertyChangedEventArgs("IsBriefExpand"));
+                this.commentareaheight = value;
                 parent?.UpdateCanvasTop();
             }
         }
+        
         public int BriefRowCount
         {
             get
@@ -303,8 +304,6 @@ namespace SamSoarII.Core.Models
             ismasked = xatt == null ? false : bool.Parse(xatt.Value);
             xatt = xele.Attribute("IsExpand");
             isexpand = xatt == null ? true : bool.Parse(xatt.Value);
-            xatt = xele.Attribute("IsBriefExpand");
-            isbriefexpand = xatt == null ? false : bool.Parse(xatt.Value);
             XElement xele_b = xele.Element("Brief");
             brief = xele_b != null ? xele_b.Value : "";
             XElement xele_d = xele.Element("Description");
@@ -328,7 +327,6 @@ namespace SamSoarII.Core.Models
             xele.SetAttributeValue("RowCount", rowcount);
             xele.SetAttributeValue("IsMasked", ismasked);
             xele.SetAttributeValue("IsExpand", isexpand);
-            xele.SetAttributeValue("IsBriefExpand", isbriefexpand);
             xele.SetElementValue("Brief", brief);
             xele.SetElementValue("Description", description);
             XElement xele_lc = new XElement("LadderContent");

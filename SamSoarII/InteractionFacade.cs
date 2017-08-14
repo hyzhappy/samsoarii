@@ -1268,11 +1268,6 @@ namespace SamSoarII
         
         public void Select(LadderDiagramModel diagram, int start, int end)
         {
-            foreach (LadderNetworkModel network in diagram.Children)
-            {
-                if (network.ID < start || network.ID > end) continue;
-                if (network.View == null) return;
-            }
             if (diagram.Tab == null)
             {
                 _lastdia = diagram;

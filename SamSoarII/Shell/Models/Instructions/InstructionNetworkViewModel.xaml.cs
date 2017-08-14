@@ -149,7 +149,11 @@ namespace SamSoarII.Shell.Models
                             ? Visibility.Visible : Visibility.Hidden;
                     }
                     break;
-                case "ViewHeight": Expander.Height = core.ViewHeight / 0.4; break;
+                case "ViewHeight":
+                    Expander.Height = core.ViewHeight / 0.4;
+                    if (Expander.IsMouseOver)
+                        ViewParent.Rect.Height = core.ViewHeight;
+                    break;
                 case "IsExpand": BaseUpdate(); break;
             }
         }
@@ -374,12 +378,16 @@ namespace SamSoarII.Shell.Models
         {
             Expander.Rect.Fill = GlobalSetting.FoldingBrush;
             Expander.Rect.Opacity = 0.2;
+            Canvas.SetTop(ViewParent.Rect, core.CanvasTop);
+            ViewParent.Rect.Height = core.ViewHeight;
+            ViewParent.Rect.Visibility = Visibility.Visible;
         }
 
         private void OnExpanderMouseLeave(object sender, MouseEventArgs e)
         {
             Expander.Rect.Fill = Brushes.Transparent;
             Expander.Rect.Opacity = 1;
+            ViewParent.Rect.Visibility = Visibility.Hidden;
         }
 
         private void OnExpandChanged(object sender, RoutedEventArgs e)

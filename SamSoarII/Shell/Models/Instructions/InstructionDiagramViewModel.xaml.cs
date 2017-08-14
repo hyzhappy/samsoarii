@@ -311,38 +311,46 @@ namespace SamSoarII.Shell.Models
             Point p = e.GetPosition(MainCanvas);
             foreach (InstructionNetworkModel instnet in core.Children)
             {
+                if (!instnet.IsExpand || instnet.Invalid) continue;
                 if (p.Y < instnet.CanvasTop || p.Y > instnet.CanvasTop + instnet.ViewHeight) continue;
+                if (p.X < 24 || p.X > 24 + 522) continue; 
                 cursor.IsNavigatable = false;
                 cursor.Core.Parent = instnet;
                 cursor.Core.Row = (int)((p.Y - instnet.CanvasTop - 26) / 20);
                 cursor.IsNavigatable = true;
             }
             if (e.ChangedButton == MouseButton.Left && e.ClickCount >= 2
-             && cursor.Core.Current?.Inst?.ProtoType != null)
+             && cursor.Core.Current?.Inst?.ProtoType != null
+             && cursor.Core.Current.Inst.ProtoType.Children.Count > 0)
             {
                 IFParent.ShowElementPropertyDialog(cursor.Core.Current.Inst.ProtoType);
             }
         }
         
-        #endregion
-
-        #endregion
-
-        #region Event Handler
-
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        private void MainCanvas_KeyDown(object sender, KeyEventArgs e)
         {
+            InstructionNetworkModel instnet = null;
             if (cursor.Core.Parent == null) return;
             switch (e.Key)
             {
-                case Key.Down:
+                case Key.Up:
+                    e.Handled = true;
                     if (cursor.Core.Row <= 0)
                     {
-                        int id = cursor.Core.Parent.Parent.ID;
-                        if (id > 0)
+                        int id = cursor.Core.Parent.Parent.ID - 1;
+                        for ( ; id >= 0 ; id--)
                         {
-                            cursor.Core.Parent = Core.Parent.Children[id - 1].Inst;
-                            cursor.Core.Row = cursor.Core.Parent.Insts.Count - 1;
+                            instnet = Core.Parent.Children[id].Inst;
+                            if (!instnet.IsExpand) continue;
+                            if (instnet.Invalid) continue;
+                            break;
+                        }
+                        if (id >= 0)
+                        {
+                            cursor.IsNavigatable = false;
+                            cursor.Core.Parent = instnet;
+                            cursor.IsNavigatable = true;
+                            cursor.Core.Row = instnet.Insts.Count - 1;
                         }
                     }
                     else
@@ -350,14 +358,24 @@ namespace SamSoarII.Shell.Models
                         cursor.Core.Row--;
                     }
                     break;
-                case Key.Up:
+                case Key.Down:
+                    e.Handled = true;
                     if (cursor.Core.Row >= cursor.Core.Parent.Insts.Count - 1)
                     {
-                        int id = cursor.Core.Parent.Parent.ID;
-                        if (id < Core.Parent.Children.Count - 1)
+                        int id = cursor.Core.Parent.Parent.ID + 1;
+                        for (; id < Core.Parent.Children.Count; id++)
                         {
-                            cursor.Core.Parent = Core.Parent.Children[id + 1].Inst;
-                            cursor.Core.Row = cursor.Core.Parent.Insts.Count - 1;
+                            instnet = Core.Parent.Children[id].Inst;
+                            if (!instnet.IsExpand) continue;
+                            if (instnet.Invalid) continue;
+                            break;
+                        }
+                        if (id < Core.Parent.Children.Count)
+                        {
+                            cursor.IsNavigatable = false;
+                            cursor.Core.Parent = instnet;
+                            cursor.IsNavigatable = true;
+                            cursor.Core.Row = 0;
                         }
                     }
                     else
@@ -365,9 +383,23 @@ namespace SamSoarII.Shell.Models
                         cursor.Core.Row++;
                     }
                     break;
+                case Key.Enter:
+                    e.Handled = true;
+                    if (cursor.Core.Current?.Inst?.ProtoType != null
+                     && cursor.Core.Current.Inst.ProtoType.Children.Count > 0)
+                    {
+                        IFParent.ShowElementPropertyDialog(cursor.Core.Current.Inst.ProtoType);
+                    }
+                    break;
             }
         }
 
+        #endregion
+
+        #endregion
+
+        #region Event Handler
+        
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);

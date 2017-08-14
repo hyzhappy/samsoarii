@@ -248,14 +248,13 @@ namespace SamSoarII.Core.Models
             foreach (LadderNetworkModel network in children)
             {
                 network.CanvasTop = currenttop;
-                currenttop += FontManager.GetLadder().FontSize + 40;
-                if (network.IsBriefExpand)
-                    currenttop += network.BriefRowCount * FontManager.GetLadder().FontSize;
+                currenttop += network.CommentAreaHeight + 6;
                 network.UnitBaseTop = currenttop;
                 currenttop += (network.IsExpand ? network.RowCount : 0) * unitheight;
+                //currenttop += 2;
                 network.ViewHeight = currenttop - network.CanvasTop;
             }
-            canvasheight = currenttop;
+            canvasheight = currenttop + 20;
             ViewPropertyChanged(this, new PropertyChangedEventArgs("CanvasHeight"));
         }
         
@@ -598,7 +597,7 @@ namespace SamSoarII.Core.Models
             if (View != null)
             {
                 View.IsViewModified = true;
-                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) != 0)
+                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
                     area.Select(IFParent);
             }
             redos.Push(cmd);
@@ -762,7 +761,7 @@ namespace SamSoarII.Core.Models
             if (View != null)
             {
                 View.IsViewModified = true;
-                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) != 0)
+                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
                     area.Select(IFParent);
             }
             undos.Push(cmd);

@@ -4,10 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.Shell.Models"
+             xmlns:gb="clr-namespace:SamSoarII.Global"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="800"
-             KeyDown="OnKeyDown">
+             Focusable="True"
+             PreviewKeyDown="MainCanvas_KeyDown">
     <ScrollViewer x:Uid="Scroll" x:Name="Scroll" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SizeChanged="Scroll_SizeChanged">
-        <Canvas x:Uid="MainCanvas" x:Name="MainCanvas" MouseDown="MainCanvas_MouseDown"/>
+        <Canvas x:Uid="MainCanvas" x:Name="MainCanvas" Focusable="True" MouseDown="MainCanvas_MouseDown">
+            <Rectangle x:Name="Rect" Canvas.Left="24" Width="522" Panel.ZIndex="3" 
+                       Opacity="0.2" Fill="{x:Static gb:GlobalSetting.FoldingBrush}" Visibility="Hidden"/>
+        </Canvas>
     </ScrollViewer>
 </UserControl>

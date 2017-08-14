@@ -176,6 +176,7 @@ namespace SamSoarII.Shell.Models
                     break;
                 case "CanvasHeight":
                     MainCanvas.Height = core.CanvasHeight;
+                    if (_selectRect != null) _selectRect.Update();
                     if (_selectArea != null) _selectArea.Update();
                     foreach (UIElement uiele in MainCanvas.Children)
                     {
@@ -501,9 +502,9 @@ namespace SamSoarII.Shell.Models
                 case Key.Right:
                     return SelectionRect.X < GlobalSetting.LadderXCapacity - 1;
                 case Key.Up:
-                    return SelectRectOwner.ID > 0 || SelectionRect.Y > 0;
+                    return true;
                 case Key.Down:
-                    return SelectRectOwner.ID < Core.NetworkCount - 1 || SelectionRect.Y < SelectRectOwner.RowCount - 1;
+                    return true;
                 default:
                     return false;
             }
@@ -551,7 +552,8 @@ namespace SamSoarII.Shell.Models
                 default:
                     break;
             }
-            if (_selectArea.Core.XStart == _selectArea.Core.XEnd
+            if (_selectArea.Core.State == SelectAreaCore.Status.SelectRange
+             && _selectArea.Core.XStart == _selectArea.Core.XEnd
              && _selectArea.Core.YStart == _selectArea.Core.YEnd)
             {
                 _selectRect.Core.Parent = core.Children[_selectArea.Core.NetOrigin];
@@ -579,7 +581,10 @@ namespace SamSoarII.Shell.Models
                     break;
                 case Key.Up:
                     if (_selectRect.Y == 0)
-                        _selectArea.Core.Select(SelectRectOwner.ID, SelectRectOwner.ID - 1);
+                    {
+                        _selectArea.Core.Select(SelectRectOwner.ID, _selectRect.X, _selectRect.Y, _selectRect.X, _selectRect.Y);
+                        _selectArea.Core.Select(SelectRectOwner.ID, SelectRectOwner.ID, Direction.Up);
+                    }
                     else
                         _selectArea.Core.Select(SelectRectOwner.ID,
                             _selectRect.X, _selectRect.Y, _selectRect.X, _selectRect.Y - 1);
@@ -588,7 +593,10 @@ namespace SamSoarII.Shell.Models
                     break;
                 case Key.Down:
                     if (_selectRect.Y == SelectRectOwner.RowCount - 1)
-                        _selectArea.Core.Select(SelectRectOwner.ID, SelectRectOwner.ID + 1);
+                    {
+                        _selectArea.Core.Select(SelectRectOwner.ID, _selectRect.X, _selectRect.Y, _selectRect.X, _selectRect.Y);
+                        _selectArea.Core.Select(SelectRectOwner.ID, SelectRectOwner.ID, Direction.Down);
+                    }
                     else
                         _selectArea.Core.Select(SelectRectOwner.ID,
                             _selectRect.X, _selectRect.Y, _selectRect.X, _selectRect.Y + 1);
@@ -627,10 +635,7 @@ namespace SamSoarII.Shell.Models
                     while (id >= 0)
                     {
                         lnmodel = Core.Children[id];
-                        if (lnmodel.View != null && !lnmodel.IsMasked && lnmodel.View.IsExpand)
-                        {
-                            break;
-                        }
+                        if (!lnmodel.IsMasked && lnmodel.IsExpand) break;
                         id--;
                     }
                     if (id >= 0)
@@ -658,10 +663,7 @@ namespace SamSoarII.Shell.Models
                     while (id < Core.NetworkCount)
                     {
                         lnmodel = Core.Children[id];
-                        if (lnmodel.View != null && !lnmodel.IsMasked && lnmodel.View.IsExpand)
-                        {
-                            break;
-                        }
+                        if (!lnmodel.IsMasked && lnmodel.IsExpand) break;
                         id++;
                     }
                     if (id < Core.NetworkCount)
@@ -1842,15 +1844,13 @@ namespace SamSoarII.Shell.Models
                     if (_selectArea.Core.State == SelectAreaCore.Status.SelectCross)
                     {
                         List<LadderNetworkModel> removes = _selectArea.Core.SelectNetworks.ToList();
+                        ReleaseSelect();
                         Core.ReplaceN(removes, new LadderNetworkModel[] { });
-                        _selectArea.Core.Release();
-                        _selectStatus = SelectStatus.Idle;
                     }
                     else if (_selectArea.Core.State == SelectAreaCore.Status.SelectRange)
                     {
                         Core.RemoveU(SelectStartNetwork, _selectArea.Core.SelectUnits);
-                        _selectArea.Core.Release();
-                        _selectStatus = SelectStatus.Idle;
+                        ReleaseSelect();
                     }
                 }
             }
@@ -1890,9 +1890,9 @@ namespace SamSoarII.Shell.Models
                             xele_ns.Add(xele_n);
                             removes.Add(lnmodel);
                         }
+                        ReleaseSelect();
                         if (cut) Core.ReplaceN(removes, new LadderNetworkModel[] { });
                         Clipboard.SetData("LadderContent", xele.ToString());
-                        _selectStatus = SelectStatus.Idle;
                     }
                     else if (_selectArea.Core.State == SelectAreaCore.Status.SelectRange)
                     {
@@ -1911,8 +1911,8 @@ namespace SamSoarII.Shell.Models
                             xele_us.Add(xele_u);
                         }
                         Clipboard.SetData("LadderContent", xele.ToString());
+                        ReleaseSelect();
                         if (cut) Core.RemoveU(SelectStartNetwork, units);
-                        _selectStatus = SelectStatus.Idle;
                     }
                 }
             }
@@ -2128,10 +2128,12 @@ namespace SamSoarII.Shell.Models
                         else if (obj is LadderNetworkModel)
                         {
                             LadderNetworkModel net = (LadderNetworkModel)obj;
+                            _selectArea.Core.Select(SelectRectOwner.ID, _selectRect.X, _selectRect.Y, _selectRect.X, _selectRect.Y);
                             _selectArea.Core.Select(SelectRectOwner.ID, net.ID);
                         }
                         else if (_selectArea.Core.State != SelectAreaCore.Status.SelectCross)
                         {
+                            _selectArea.Core.Select(SelectRectOwner.ID, _selectRect.X, _selectRect.Y, _selectRect.X, _selectRect.Y);
                             _selectArea.Core.Select(SelectRectOwner.ID, SelectRectOwner.ID);
                         }
                         if (_selectArea.Core.State != SelectAreaCore.Status.NotSelected)
@@ -2160,7 +2162,8 @@ namespace SamSoarII.Shell.Models
                         {
                             _selectArea.Core.Select(SelectStartNetwork.ID, SelectStartNetwork.ID);
                         }
-                        if (_selectArea.Core.XStart == _selectArea.Core.XEnd
+                        if (_selectArea.Core.State == SelectAreaCore.Status.SelectRange
+                         && _selectArea.Core.XStart == _selectArea.Core.XEnd
                          && _selectArea.Core.YStart == _selectArea.Core.YEnd)
                         {
                             _selectRect.Core.Parent = SelectStartNetwork;
