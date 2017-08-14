@@ -251,15 +251,7 @@ namespace SamSoarII.Shell.Models
             switch (e.PropertyName)
             {
                 case "Parent": case "X": case "Y":
-                    if (Core?.Parent != null)
-                    {
-                        Visibility = Visibility.Visible;
-                        Canvas.SetLeft(this, Global.GlobalSetting.LadderWidthUnit * Core.X);
-                        Canvas.SetTop(this, Core.Parent.UnitBaseTop + (isCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) * Core.Y);
-                    }
-                    else
-                        Visibility = Visibility.Hidden;
-                    break;
+                    Update(); break;
             }
             PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
         }
@@ -267,6 +259,18 @@ namespace SamSoarII.Shell.Models
         #endregion
 
         #region Shell
+
+        public void Update()
+        {
+            if (Core?.Parent != null)
+            {
+                Visibility = Visibility.Visible;
+                Canvas.SetLeft(this, Global.GlobalSetting.LadderWidthUnit * Core.X);
+                Canvas.SetTop(this, Core.Parent.UnitBaseTop + (isCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) * Core.Y);
+            }
+            else
+                Visibility = Visibility.Hidden;
+        }
 
         public LadderNetworkViewModel ViewParent { get { return core?.Parent?.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }

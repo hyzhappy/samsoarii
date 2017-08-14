@@ -184,9 +184,6 @@ namespace SamSoarII.Shell.Models
                     PropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
                     ViewParent.IsViewModified = true;
                     break;
-                case "IsBriefExpand":
-                    CommentAreaExpander.IsExpanded = core.IsBriefExpand;
-                    break;
                 case "IsMasked":
                     if (IsMasked)
                     {
@@ -673,18 +670,14 @@ namespace SamSoarII.Shell.Models
         {
             IFParent.ShowEditNetworkCommentDialog(Core);
         }
-
-        private void CommentAreaExpander_Expanded(object sender, RoutedEventArgs e)
+        
+        private void CommentAreaExpander_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            core.IsBriefExpand = true;
-        }
-
-        private void CommentAreaExpander_Collapsed(object sender, RoutedEventArgs e)
-        {
-            core.IsBriefExpand = false;
+            if (core != null)
+                core.CommentAreaHeight = CommentAreaExpander.ActualHeight;
         }
 
         #endregion
-        
+
     }
 }

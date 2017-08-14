@@ -28,7 +28,7 @@
                 <Grid x:Name="CommentAreaGrid" Background="Transparent">
                     <Border x:Name="CommentAreaBorder" BorderThickness="4" BorderBrush="Brown" Width="1500" Margin="20,0,0,0" HorizontalAlignment="Left">
                         <Expander x:Name="CommentAreaExpander" Width="1500" Background="LightCyan" MouseDoubleClick="OnEditComment"
-                                  Expanded="CommentAreaExpander_Expanded" Collapsed="CommentAreaExpander_Collapsed">
+                                  SizeChanged="CommentAreaExpander_SizeChanged">
                             <Expander.Header>
                                 <Grid x:Uid="Grid_2" Width="1500" ContextMenu="{StaticResource CommentAreaContextMenu}">
                                     <Grid.ColumnDefinitions>

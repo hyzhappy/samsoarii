@@ -93,7 +93,9 @@ namespace SamSoarII.Shell.Models
                     if (_current?.Inst?.Origin != null)
                     {
                         isnavigatable = false;
+                        View.IsNavigatable = false;
                         Parent = _current?.Parent?.Inst;
+                        View.IsNavigatable = true;
                         Row = Parent != null ? Parent.Insts.IndexOf(_current.Inst.Origin) : -1;
                         isnavigatable = true;
                     }
@@ -216,10 +218,10 @@ namespace SamSoarII.Shell.Models
                         if (idmodel?.View != null && inmodel != null)
                         {
                             ScrollViewer scroll = idmodel.View.Scroll;
-                            if (inmodel.CanvasTop + 32 + core.Row * 20 - scroll.VerticalOffset < 0
-                             || inmodel.CanvasTop + 32 + (core.Row + 1) * 20 - scroll.VerticalOffset > scroll.ViewportHeight)
+                            if (inmodel.CanvasTop + 26 + core.Row * 20 - scroll.VerticalOffset < 0
+                             || inmodel.CanvasTop + 26 + (core.Row + 1) * 20 - scroll.VerticalOffset > scroll.ViewportHeight)
                             {
-                                scroll.ScrollToVerticalOffset(Math.Max(0, inmodel.CanvasTop + 32 + core.Row * 20 - scroll.ViewportHeight / 2));
+                                scroll.ScrollToVerticalOffset(Math.Max(0, inmodel.CanvasTop + 26 + core.Row * 20 - scroll.ViewportHeight / 2));
                             }
                         }
                     }

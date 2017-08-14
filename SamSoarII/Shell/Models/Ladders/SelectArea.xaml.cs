@@ -153,16 +153,17 @@ namespace SamSoarII.Shell.Models
 
         #region Base
 
-        public void Select(int _netstart, int _netend)
+        internal void Select(int _netstart, int _netend, Direction _movedir = Direction.Down)
         {
             state = Status.SelectCross;
             netorigin = _netstart;
             netstart = Math.Min(_netstart, _netend);
             netend = Math.Max(_netstart, _netend);
+            movedir = netstart < netend ? (netorigin == netstart ? Direction.Down : Direction.Up) : _movedir;
             view?.Update();
         }
 
-        public void Select(int _netid, int _xstart, int _ystart, int _xend, int _yend)
+        internal void Select(int _netid, int _xstart, int _ystart, int _xend, int _yend)
         {
             state = Status.SelectRange;
             netorigin = netstart = netend = _netid;
@@ -174,8 +175,8 @@ namespace SamSoarII.Shell.Models
             yend = Math.Max(_ystart, _yend);
             view?.Update();
         }
-        
-        public void Release()
+
+        internal void Release()
         {
             if (state == Status.NotSelected) return;
             state = Status.NotSelected;
@@ -244,10 +245,7 @@ namespace SamSoarII.Shell.Models
             switch (state)
             {
                 case Status.SelectRange:
-                    if (yorigin == ystart)
-                        return yorigin > 0 || yend > ystart || netorigin > 0;
-                    else
-                        return ystart > 0 || netorigin > 0;
+                    return true;
                 case Status.SelectCross:
                     if (netorigin == netstart)
                         return true;
@@ -263,10 +261,7 @@ namespace SamSoarII.Shell.Models
             switch (state)
             {
                 case Status.SelectRange:
-                    if (yorigin == yend)
-                        return yorigin < parent.Children[netorigin].RowCount - 1 || ystart < yend || netorigin < parent.NetworkCount - 1;
-                    else
-                        return yend < parent.Children[netorigin].RowCount - 1 || netorigin < parent.NetworkCount - 1;
+                    return true;
                 case Status.SelectCross:
                     if (netorigin == netend)
                         return true;
@@ -337,8 +332,7 @@ namespace SamSoarII.Shell.Models
                     }
                     if (ystart < 0)
                     {
-                        Select(netorigin, netorigin);
-                        movedir = Direction.Up;
+                        Select(netorigin, netorigin, Direction.Up);
                     }
                     View?.Update();
                     break;
@@ -369,8 +363,7 @@ namespace SamSoarII.Shell.Models
                     }
                     if (yend >= parent.Children[netorigin].RowCount)
                     {
-                        Select(netorigin, netorigin);
-                        movedir = Direction.Down;
+                        Select(netorigin, netorigin, Direction.Down);
                     }
                     View?.Update();
                     break;
