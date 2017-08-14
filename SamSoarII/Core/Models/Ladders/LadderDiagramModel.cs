@@ -85,6 +85,7 @@ namespace SamSoarII.Core.Models
             ChildrenChanged(this, e);
             UpdateCanvasTop();
         }
+
         private void OnChildrenPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (isexecuting) return;
