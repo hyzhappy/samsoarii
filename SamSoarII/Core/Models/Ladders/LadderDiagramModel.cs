@@ -87,7 +87,7 @@ namespace SamSoarII.Core.Models
         }
         private void OnChildrenPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "IsExpand" || e.PropertyName == "LadderMode") return;
+            if (isexecuting) return;
             parent.InvokeModify((LadderNetworkModel)sender);
         }
 
@@ -282,8 +282,7 @@ namespace SamSoarII.Core.Models
             children.Clear();
             foreach (XElement xele_ch in xele.Elements("Network"))
             {
-                LadderNetworkModel lnmodel = new LadderNetworkModel(this, children.Count());
-                lnmodel.Load(xele_ch);
+                LadderNetworkModel lnmodel = new LadderNetworkModel(this, xele_ch);
                 children.Add(lnmodel);
             }
         }
@@ -459,6 +458,8 @@ namespace SamSoarII.Core.Models
             }
         }
 
+        private bool isexecuting;
+        public bool IsExecuting { get { return this.isexecuting; } }
         private Stack<Command> undos = new Stack<Command>();
         private Stack<Command> redos = new Stack<Command>();
         public bool CanUndo { get { return LadderMode == LadderModes.Edit && undos != null && undos.Count() > 0; } }
@@ -471,6 +472,7 @@ namespace SamSoarII.Core.Models
         public void Undo()
         {
             if (!CanUndo) return;
+            isexecuting = true;
             Command cmd = undos.Pop();
             RelativeArea area = new RelativeArea();
             LadderNetworkModel net = null;
@@ -600,12 +602,14 @@ namespace SamSoarII.Core.Models
                     area.Select(IFParent);
             }
             redos.Push(cmd);
+            isexecuting = false;
             Parent.InvokeModify(this, true);
         }
 
         public void Redo()
         {
             if (!CanRedo) return;
+            isexecuting = true;
             Command cmd = redos.Pop();
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
             {
@@ -762,6 +766,7 @@ namespace SamSoarII.Core.Models
                     area.Select(IFParent);
             }
             undos.Push(cmd);
+            isexecuting = false;
             Parent.InvokeModify(this);
         }
 

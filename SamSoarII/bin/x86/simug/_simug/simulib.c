@@ -332,8 +332,8 @@ EXPORT int SetDoubleWord(char* name, int size, int32_t* input)
 	if (ret) return ret;
 	while (size--) 
 	{
-		*(((int16_t*)addr)+offset+size*2+1) = (input[size]>>16);
-		*(((int16_t*)addr)+offset+size*2) = (input[size]&0xffff);
+		*(((int16_t*)addr)+offset+size*2+1) = (((uint32_t)(input[size]))>>16);
+		*(((int16_t*)addr)+offset+size*2) = (((uint32_t)(input[size]))&0xffff);
 	}
 	return 0;
 }

@@ -45,10 +45,10 @@ namespace SamSoarII.Shell.Models
             set
             {
                 if (parent == value) return;
-                InstructionNetworkModel _parent = parent;
                 this.parent = value;
-                if (_parent?.View != null) _parent?.View.CV_Inst.Children.Remove(view);
-                if (parent?.View != null) parent?.View.CV_Inst.Children.Add(view);
+                if (parent != null) parent.IsExpand = true;
+                PropertyChanged(this, new PropertyChangedEventArgs("Parent"));
+                PropertyChanged(this, new PropertyChangedEventArgs("Current"));
             }
         }
         IModel IModel.Parent { get { return Parent; } }
@@ -131,17 +131,6 @@ namespace SamSoarII.Shell.Models
             {
                 if (row == value) return;
                 this.row = value;
-                InstructionDiagramViewModel idvmodel = parent?.Parent?.Parent?.Inst?.View;
-                InstructionNetworkViewModel invmodel = parent?.Parent?.Inst?.View;
-                if (idvmodel != null)
-                {
-                    ScrollViewer scroll = idvmodel.Scroll;
-                    Point p = invmodel.CV_Inst.TranslatePoint(new Point(0, 0), scroll);
-                    if (p.Y + row * 20 < 0)
-                        scroll.ScrollToVerticalOffset(scroll.VerticalOffset + (p.Y + row * 20));
-                    if (p.Y + (row + 1) * 20 > scroll.ViewportHeight)
-                        scroll.ScrollToVerticalOffset(scroll.VerticalOffset + (p.Y + (row + 1) * 20) - scroll.ViewportHeight);
-                }
                 PropertyChanged(this, new PropertyChangedEventArgs("Row"));
                 PropertyChanged(this, new PropertyChangedEventArgs("Current"));
             }
@@ -174,6 +163,7 @@ namespace SamSoarII.Shell.Models
             InitializeComponent();
             Core = _core;
             Canvas.SetZIndex(this, 1);
+            Visibility = Visibility.Hidden;
         }
 
         public void Dispose()
@@ -214,8 +204,25 @@ namespace SamSoarII.Shell.Models
         {
             switch (e.PropertyName)
             {
+                case "Parent":
                 case "Row":
-                    Canvas.SetTop(this, 20 * core.Row);
+                    if (core.Parent != null)
+                    {
+                        Canvas.SetLeft(this, 24);
+                        Canvas.SetTop(this, core.Parent.CanvasTop + 26 + 20 * core.Row);
+                        if (!isnavigatable) break;
+                        InstructionDiagramModel idmodel = core.Parent?.Parent?.Parent?.Inst;
+                        InstructionNetworkModel inmodel = core.Parent?.Parent?.Inst;
+                        if (idmodel?.View != null && inmodel != null)
+                        {
+                            ScrollViewer scroll = idmodel.View.Scroll;
+                            if (inmodel.CanvasTop + 32 + core.Row * 20 - scroll.VerticalOffset < 0
+                             || inmodel.CanvasTop + 32 + (core.Row + 1) * 20 - scroll.VerticalOffset > scroll.ViewportHeight)
+                            {
+                                scroll.ScrollToVerticalOffset(Math.Max(0, inmodel.CanvasTop + 32 + core.Row * 20 - scroll.ViewportHeight / 2));
+                            }
+                        }
+                    }
                     break;
                 case "Current":
                     Visibility = core.Current != null 
@@ -230,6 +237,13 @@ namespace SamSoarII.Shell.Models
         
         public InstructionNetworkViewModel ViewParent { get { return core?.Parent?.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
+
+        private bool isnavigatable;
+        public bool IsNavigatable
+        {
+            get { return this.isnavigatable; }
+            set { this.isnavigatable = value; }
+        }
 
         #endregion
     }

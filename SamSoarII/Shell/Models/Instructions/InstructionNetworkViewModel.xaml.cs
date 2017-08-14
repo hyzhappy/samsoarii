@@ -19,46 +19,75 @@ using System.Windows.Shapes;
 using System.Collections.Specialized;
 using System.Windows.Threading;
 using System.Threading;
+using SamSoarII.Utility;
+using SamSoarII.Global;
 
 namespace SamSoarII.Shell.Models
 {
     /// <summary>
     /// InstructionNetworkViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class InstructionNetworkViewModel : UserControl, IViewModel
+    public partial class InstructionNetworkViewModel : UserControl, IViewModel, IResource, INotifyPropertyChanged
     {
+        #region IResource
+
+        private int resourceid;
+        public int ResourceID
+        {
+            get { return this.resourceid; }
+            set { this.resourceid = value; }
+        }
+
+        public IResource Create(params object[] args)
+        {
+            return new InstructionNetworkViewModel((InstructionNetworkModel)args[0]);
+        }
+
+        public virtual void Recreate(params object[] args)
+        {
+            Visibility = Visibility.Visible;
+            Core = (InstructionNetworkModel)args[0];
+            loadedrowstart = 0;
+            loadedrowend = -1;
+            oldscrolloffset = 0;
+            if (Core != null)
+            {
+                SetPosition(tberr, 0);
+                tberr.Visibility = Visibility.Visible;
+                if (tberr.Parent != ViewParent.MainCanvas)
+                {
+                    if (tberr.Parent is Canvas)
+                        ((Canvas)(tberr.Parent)).Children.Remove(tberr);
+                    ViewParent.MainCanvas.Children.Add(tberr);
+                }
+                Expander.IsExpand = core.IsExpand;
+                BaseUpdate();
+            }
+        }
+
+        #endregion
+
         public InstructionNetworkViewModel(InstructionNetworkModel _core)
         {
             InitializeComponent();
             DataContext = this;
-            Core = _core;
-
+            Expander.MouseEnter += OnExpanderMouseEnter;
+            Expander.MouseLeave += OnExpanderMouseLeave;
+            Expander.expandButton.IsExpandChanged += OnExpandChanged;
             children = new ObservableCollection<InstructionRowViewModel>();
             children.CollectionChanged += OnChildrenCollectionChanged;
-            loadedrowstart = 0;
-            loadedrowend = -1;
-            oldscrolloffset = 0;
-
             tberr = new TextBlock();
             tberr.Background = Brushes.Red;
-            SetPosition(tberr, 0);
-            CV_Inst.Children.Add(tberr);
-
-            BaseUpdate();
+            Recreate(_core);
         }
         
         public void Dispose()
         {
             Core = null;
-
             foreach (InstructionRowViewModel row in children.ToArray())
                 children.Remove(row);
-            children.CollectionChanged -= OnChildrenCollectionChanged;
-            children = null;
-
-            CV_Inst.Children.Remove(tberr);
-            tberr = null;
-
+            tberr.Visibility = Visibility.Hidden;
+            AllResourceManager.Dispose(this);
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -110,6 +139,18 @@ namespace SamSoarII.Shell.Models
                         row.TextBlocks[7].Visibility = IsCommentMode
                             ? Visibility.Visible : Visibility.Hidden;
                     break;
+                case "CanvasTop":
+                    Canvas.SetTop(this, core.CanvasTop);
+                    foreach (InstructionRowViewModel row in children)
+                    {
+                        for (int i = 0; i < row.TextBlocks.Count; i++)
+                            SetPosition(row.TextBlocks[i], row.ID, i);
+                        row.TextBlocks[7].Visibility = IsCommentMode
+                            ? Visibility.Visible : Visibility.Hidden;
+                    }
+                    break;
+                case "ViewHeight": Expander.Height = core.ViewHeight / 0.4; break;
+                case "IsExpand": BaseUpdate(); break;
             }
         }
         
@@ -126,7 +167,7 @@ namespace SamSoarII.Shell.Models
 
         public string Header { get { return String.Format("Network {0:d}", core != null ? core.Parent.ID : 0); } }
 
-        public int RowCount { get { return (int)(CV_Inst.Height / 20); } }
+        public int RowCount { get { return !core.IsExpand ? 0 : core.Invalid ? 1 : core.Insts.Count; } }
 
         public bool Invalid { get { return core == null || Core.IsMasked || Core.IsOpenCircuit || Core.IsShortCircuit || Core.IsFusionCircuit; } }
 
@@ -134,19 +175,20 @@ namespace SamSoarII.Shell.Models
         
         private void SetPosition(FrameworkElement ctrl, int row, int column = -1)
         {
-            Canvas.SetTop(ctrl, row * 20 + 1);
+            ctrl.Margin = new Thickness(2, 2, 0, 0);
+            Canvas.SetTop(ctrl, core.CanvasTop + 26 + row * 20 + 1);
             ctrl.Height = 18;
             switch (column)
             {
-                case -1: Canvas.SetLeft(ctrl, 1); ctrl.Width = 600; break;
-                case 0: Canvas.SetLeft(ctrl, 1); ctrl.Width = 38; break;
-                case 1: Canvas.SetLeft(ctrl, 41); ctrl.Width = 78; break;
-                case 2: Canvas.SetLeft(ctrl, 121); ctrl.Width = 78; break;
-                case 3: Canvas.SetLeft(ctrl, 201); ctrl.Width = 78; break;
-                case 4: Canvas.SetLeft(ctrl, 281); ctrl.Width = 78; break;
-                case 5: Canvas.SetLeft(ctrl, 361); ctrl.Width = 78; break;
-                case 6: Canvas.SetLeft(ctrl, 441); ctrl.Width = 78; break;
-                case 7: Canvas.SetLeft(ctrl, 521); ctrl.Width = 238; break;
+                case -1: Canvas.SetLeft(ctrl,24+1); ctrl.Width = 600; break;
+                case 0: Canvas.SetLeft(ctrl, 24+1); ctrl.Width = 38; break;
+                case 1: Canvas.SetLeft(ctrl, 24+41); ctrl.Width = 78; break;
+                case 2: Canvas.SetLeft(ctrl, 24+121); ctrl.Width = 78; break;
+                case 3: Canvas.SetLeft(ctrl, 24+201); ctrl.Width = 78; break;
+                case 4: Canvas.SetLeft(ctrl, 24+281); ctrl.Width = 78; break;
+                case 5: Canvas.SetLeft(ctrl, 24+361); ctrl.Width = 78; break;
+                case 6: Canvas.SetLeft(ctrl, 24+441); ctrl.Width = 78; break;
+                case 7: Canvas.SetLeft(ctrl, 24+521); ctrl.Width = 238; break;
             }
         }
 
@@ -170,7 +212,13 @@ namespace SamSoarII.Shell.Models
                     for (int i = 0; i < row.TextBlocks.Count; i++)
                     {
                         SetPosition(row.TextBlocks[i], row.ID, i);
-                        CV_Inst.Children.Add(row.TextBlocks[i]);
+                        row.TextBlocks[i].Visibility = Visibility.Visible;
+                        if (row.TextBlocks[i].Parent != ViewParent.MainCanvas)
+                        {
+                            if (row.TextBlocks[i].Parent is Canvas)
+                                ((Canvas)(row.TextBlocks[i].Parent)).Children.Remove(row.TextBlocks[i]);
+                            ViewParent.MainCanvas.Children.Add(row.TextBlocks[i]);
+                        }
                     }
                     row.TextBlocks[7].Visibility = IsCommentMode
                         ? Visibility.Visible : Visibility.Hidden;
@@ -179,7 +227,7 @@ namespace SamSoarII.Shell.Models
                 foreach (InstructionRowViewModel row in e.OldItems)
                 {
                     for (int i = 0; i < row.TextBlocks.Count; i++)
-                        CV_Inst.Children.Remove(row.TextBlocks[i]);
+                        row.TextBlocks[i].Visibility = Visibility.Hidden;
                     row.Dispose();
                 }
         }
@@ -188,10 +236,9 @@ namespace SamSoarII.Shell.Models
         {
             tberr.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
-                CV_Inst.Height = Invalid ? 20 : Core.Insts.Count * 20;
-                tberr.Visibility = Invalid ? Visibility.Visible : Visibility.Hidden;
+                tberr.Visibility = core.IsExpand && core.Invalid ? Visibility.Visible : Visibility.Hidden;
                 tberr.Background = Core.IsMasked ? Brushes.Gray : Brushes.Red;
-                if (ViewParent.Cursor.Core.Parent == Core)
+                if (!core.IsExpand && ViewParent.Cursor.Core.Parent == Core)
                     ViewParent.Cursor.Core.Parent = null;
                 if (Core.IsMasked)
                 {
@@ -224,27 +271,29 @@ namespace SamSoarII.Shell.Models
             });
             DynamicDispose();
             DynamicUpdate();
+            PropertyChanged(this, new PropertyChangedEventArgs("Header"));
+            OnCorePropertyChanged(this, new PropertyChangedEventArgs("CanvasTop"));
+            OnCorePropertyChanged(this, new PropertyChangedEventArgs("ViewHeight"));
+            ViewParent.IsViewModified = true;
         }
 
         public void DynamicUpdate()
         {
-            if (!Invalid)
+            if (core.IsExpand && !Invalid)
             {
                 ScrollViewer scroll = null;
-                Point p = new Point();
                 double newscrolloffset = 0;
-                CV_Inst.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                 {
                     scroll = ViewParent?.Scroll;
                     if (scroll == null) return;
-                    p = CV_Inst.TranslatePoint(new Point(0, 0), scroll);
                     newscrolloffset = scroll.VerticalOffset;
                 });
                 if (scroll == null) return;
                 int _loadedrowstart = 0;
                 int _loadedrowend = Core.Insts.Count - 1;
-                _loadedrowstart = Math.Max(_loadedrowstart, (int)(-p.Y / 20) - 3);
-                _loadedrowend = Math.Min(_loadedrowend, (int)((-p.Y + scroll.ViewportHeight) / 20) + 3);
+                _loadedrowstart = Math.Max(_loadedrowstart, (int)((newscrolloffset - (core.CanvasTop + 28)) / 20) - 3);
+                _loadedrowend = Math.Min(_loadedrowend, (int)((newscrolloffset - (core.CanvasTop + 28) + scroll.ViewportHeight) / 20) + 3);
                 if (_loadedrowstart > _loadedrowend)
                 {
                     if (loadedrowstart <= loadedrowend)
@@ -281,7 +330,6 @@ namespace SamSoarII.Shell.Models
             {
                 foreach (InstructionRowViewModel row in children.ToArray())
                     children.Remove(row);
-                //children.Clear();
                 loadedrowstart = 0;
                 loadedrowend = -1;
             });
@@ -313,22 +361,34 @@ namespace SamSoarII.Shell.Models
         #endregion
 
         #region Event Handler
-
-        private void CV_Inst_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Point p = e.GetPosition(CV_Inst);
-            if (p.Y >= 0 && p.Y < 20 * core.Insts.Count)
-            {
-                ViewParent.Cursor.Core.Parent = Core;
-                ViewParent.Cursor.Core.Row = (int)(p.Y / 20);
-            }
-        }
-
+        
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
             ViewParent.IsViewModified = true;
         }
+        
+        #region Expander
+
+        private void OnExpanderMouseEnter(object sender, MouseEventArgs e)
+        {
+            Expander.Rect.Fill = GlobalSetting.FoldingBrush;
+            Expander.Rect.Opacity = 0.2;
+        }
+
+        private void OnExpanderMouseLeave(object sender, MouseEventArgs e)
+        {
+            Expander.Rect.Fill = Brushes.Transparent;
+            Expander.Rect.Opacity = 1;
+        }
+
+        private void OnExpandChanged(object sender, RoutedEventArgs e)
+        {
+            if (core != null)
+                core.IsExpand = Expander.IsExpand;
+        }
+
+        #endregion
 
         #endregion
     }

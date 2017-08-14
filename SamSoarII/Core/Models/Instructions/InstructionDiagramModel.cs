@@ -125,6 +125,24 @@ namespace SamSoarII.Core.Models
                 ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
             }
         }
+        
+        private double viewheight;
+        public double ViewHeight { get { return this.viewheight; } }
+        
+        public void UpdateCanvasTop()
+        {
+            double currenttop = 0;
+            foreach (InstructionNetworkModel instnet in Children)
+            {
+                instnet.CanvasTop = currenttop;
+                currenttop += 26;
+                if (instnet.IsExpand)
+                    currenttop += instnet.Invalid ? 20 : 20 * instnet.Insts.Count;
+                instnet.ViewHeight = currenttop - instnet.CanvasTop;
+            }
+            viewheight = currenttop;
+            ViewPropertyChanged(this, new PropertyChangedEventArgs("ViewHeight"));
+        }
 
         #endregion
 
@@ -491,6 +509,7 @@ namespace SamSoarII.Core.Models
             }
             */
             ChildrenChanged(this, e);
+            UpdateCanvasTop();
         }
         
         private void OnParentPropertyChanged(object sender, PropertyChangedEventArgs e)

@@ -6,19 +6,12 @@
              xmlns:local="clr-namespace:SamSoarII.Shell.Models"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="800">
-    <Grid x:Uid="G_Main" x:Name="G_Main">
-        <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="24"/>
-            <RowDefinition x:Uid="RowDefinition_2" Height="1*"/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" x:Name="NetworkHeader" FontSize="16" VerticalAlignment="Center" Margin="5,2,0,2" Text="{Binding Header}"></TextBlock>
-        <Canvas x:Uid="CV_Inst" x:Name="CV_Inst" Grid.Row="1"
-                MouseDown="CV_Inst_MouseDown">
-            <Canvas.Resources>
-                <Style x:Uid="Style_1" TargetType="{x:Type TextBlock}">
-                    <Setter x:Uid="Setter_1" Property="Margin" Value="2,2,0,0"></Setter>
-                </Style>
-            </Canvas.Resources>
-        </Canvas>
-    </Grid>
+    <Canvas x:Uid="CV_Main" x:Name="CV_Main">
+        <local:LadderExpander x:Name="Expander" VerticalAlignment="Top" IsExpand="True">
+            <local:LadderExpander.LayoutTransform>
+                <ScaleTransform ScaleX="0.4" ScaleY="0.4"/>
+            </local:LadderExpander.LayoutTransform>
+        </local:LadderExpander>
+        <TextBlock Canvas.Left="28" x:Name="NetworkHeader" FontSize="16" VerticalAlignment="Center" Margin="5,2,0,2" Text="{Binding Header}"></TextBlock>
+    </Canvas>
 </UserControl>

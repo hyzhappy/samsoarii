@@ -17,7 +17,8 @@ namespace SamSoarII.Core.Models
         public InstructionNetworkModel(LadderNetworkModel _parent)
         {
             Parent = _parent;
-            ismodify = true;
+            isexpand = true;
+            ismodify = false;
         }
 
         public void Dispose()
@@ -44,14 +45,17 @@ namespace SamSoarII.Core.Models
                 if (_parent != null)
                 {
                     _parent.PropertyChanged -= OnParentPropertyChanged;
+                    _parent.ViewPropertyChanged -= OnParentPropertyChanged;
                     _parent.ChildrenChanged -= OnParentChildrenChanged;
                     if (_parent.Inst != null) _parent.Inst = null;
                 }
                 if (parent != null)
                 {
                     parent.PropertyChanged += OnParentPropertyChanged;
+                    parent.ViewPropertyChanged += OnParentPropertyChanged;
                     parent.ChildrenChanged += OnParentChildrenChanged;
                     if (parent.Inst != this) parent.Inst = this;
+                    Compile();
                 }
             }
         }
@@ -111,7 +115,28 @@ namespace SamSoarII.Core.Models
             get { return this.iscommentmode; }
             set { this.iscommentmode = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode")); }
         }
+        
+        private bool isexpand;
+        public bool IsExpand
+        {
+            get { return this.isexpand; }
+            set { this.isexpand = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("IsExpand")); parent.Parent.Inst.UpdateCanvasTop(); }
+        }
 
+        private double canvastop;
+        public double CanvasTop
+        {
+            get { return this.canvastop; }
+            set { this.canvastop = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("CanvasTop")); }
+        }
+
+        private double viewheight;
+        public double ViewHeight
+        {
+            get { return this.viewheight; }
+            set { this.viewheight = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("ViewHeight")); }
+        }
+        
         #endregion
 
         #region Save & Load
@@ -137,6 +162,10 @@ namespace SamSoarII.Core.Models
 
         private void OnParentPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            switch (e.PropertyName)
+            {
+                case "IsMasked": parent?.Parent?.Inst?.UpdateCanvasTop(); break;
+            }
             PropertyChanged(this, e);
         }
 
@@ -154,12 +183,14 @@ namespace SamSoarII.Core.Models
         public bool IsShortCircuit { get { return this.isshortcircuit; } }
         private bool isfusioncircuit;
         public bool IsFusionCircuit { get { return this.isfusioncircuit; } }
-        
+        public bool Invalid { get { return IsMasked || IsOpenCircuit || IsShortCircuit || IsFusionCircuit; } }
+
         public void Update()
         {
             ismodify = false;
             Compile();
             if (View != null) View.BaseUpdate();
+            parent.Parent.Inst.UpdateCanvasTop();
         }
 
         private void Compile()
