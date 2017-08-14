@@ -400,7 +400,7 @@ namespace SamSoarII.Core.Helpers
             InitializeData(communManager.IFParent.MDProj);
             //首先通信测试获取底层PLC的状态
             CommunicationTestCommand CTCommand = new CommunicationTestCommand();
-            if (!communManager.DownloadHandle(CTCommand))
+            if (!communManager.CommunicationHandle(CTCommand))
                 return DownloadError.CommuicationFailed;
             else plcMessage = new PLCMessage(CTCommand);
             //首先判断PLC运行状态
@@ -408,7 +408,7 @@ namespace SamSoarII.Core.Helpers
             {
                 if (LocalizedMessageBox.Show(Properties.Resources.PLC_Status_To_Stop, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information) == LocalizedMessageResult.Yes)
                 {
-                    if (!communManager.DownloadHandle(new SwitchPLCStatusCommand()))
+                    if (!communManager.CommunicationHandle(new SwitchPLCStatusCommand()))
                         return DownloadError.CommuicationFailed;
                 }
                 else return DownloadError.Cancel;
@@ -463,44 +463,44 @@ namespace SamSoarII.Core.Helpers
         {
             int time = 0;
             ICommunicationCommand command = new SwitchToIAPCommand();
-            for (time = 0; time < 10 && !communManager.DownloadHandle(command);)
+            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
             {
-                Thread.Sleep(500);
+                Thread.Sleep(200);
                 time++;
             }
             if (time >= 10) return DownloadError.DownloadFailed;
             command = new IAPDESKEYCommand(communManager.ExecLen);
-            for (time = 0; time < 10 && !communManager.DownloadHandle(command);)
+            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
             {
-                Thread.Sleep(500);
+                Thread.Sleep(200);
                 time++;
             }
             if (time >= 10) return DownloadError.DownloadFailed;
             byte[] data = communManager.ExecData.ToArray();
-            byte[] pack = new byte[communManager.DOWNLOAD_MAX_DATALEN];
-            int len = data.Length / communManager.DOWNLOAD_MAX_DATALEN;
-            int rem = data.Length % communManager.DOWNLOAD_MAX_DATALEN;
+            byte[] pack = new byte[communManager.COMMU_MAX_DATALEN];
+            int len = data.Length / communManager.COMMU_MAX_DATALEN;
+            int rem = data.Length % communManager.COMMU_MAX_DATALEN;
             for (int i = 0; i < len; i++)
             {
-                for (int j = 0; j < communManager.DOWNLOAD_MAX_DATALEN; j++)
-                    pack[j] = data[i * communManager.DOWNLOAD_MAX_DATALEN + j];
+                for (int j = 0; j < communManager.COMMU_MAX_DATALEN; j++)
+                    pack[j] = data[i * communManager.COMMU_MAX_DATALEN + j];
                 command = new TransportBinCommand(i, pack);
-                for (time = 0; time < 3 && !communManager.DownloadHandle(command);) time++;
+                for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
                 if (time >= 3) return DownloadError.DownloadFailed;
             }
             if (rem > 0)
             {
                 pack = new byte[rem];
                 for (int j = 0; j < rem; j++)
-                    pack[j] = data[len * communManager.DOWNLOAD_MAX_DATALEN + j];
+                    pack[j] = data[len * communManager.COMMU_MAX_DATALEN + j];
                 command = new TransportBinCommand(len, pack);
-                for (time = 0; time < 3 && !communManager.DownloadHandle(command);) time++;
+                for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
                 if (time >= 3) return DownloadError.DownloadFailed;
             }
             command = new BinFinishedCommand();
-            for (time = 0; time < 10 && !communManager.DownloadHandle(command);)
+            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
             {
-                Thread.Sleep(500);
+                Thread.Sleep(200);
                 time++;
             }
             if (time >= 10) return DownloadError.DownloadFailed;
@@ -532,9 +532,9 @@ namespace SamSoarII.Core.Helpers
                 //先将传送的数据加密(注意密钥为数据的长度)
                 CommandHelper.Encrypt(tempdata.Length, tempdata);
                 //传送前，须在传送数据前加上4字节的数据长度，供上载时使用。
-                byte[] data = ValueConverter.GetBytes((uint)tempdata.Length, true);
+                byte[] data = ValueConverter.GetBytes((uint)tempdata.Length + 4, true);
                 data = data.Concat(tempdata).ToArray();
-                return _DownloadHandle(communManager, data,CommunicationDataDefine.CMD_DOWNLOAD_PRO);
+                return _DownloadHandle(communManager, data, CommunicationDataDefine.CMD_DOWNLOAD_PRO);
             }
             catch (Exception)
             {
@@ -587,36 +587,36 @@ namespace SamSoarII.Core.Helpers
             if (data.Length == 0) return DownloadError.None;
             int time = 0;
             ICommunicationCommand command = new DownloadTypeStart(funcCode, data.Length);
-            for (time = 0; time < 10 && !communManager.DownloadHandle(command);)
+            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
             {
-                Thread.Sleep(500);
+                Thread.Sleep(200);
                 time++;
             }
             if (time >= 10) return DownloadError.DownloadFailed;
-            byte[] pack = new byte[communManager.DOWNLOAD_MAX_DATALEN];
-            int len = data.Length / communManager.DOWNLOAD_MAX_DATALEN;
-            int rem = data.Length % communManager.DOWNLOAD_MAX_DATALEN;
+            byte[] pack = new byte[communManager.COMMU_MAX_DATALEN];
+            int len = data.Length / communManager.COMMU_MAX_DATALEN;
+            int rem = data.Length % communManager.COMMU_MAX_DATALEN;
             for (int i = 0; i < len; i++)
             {
-                for (int j = 0; j < communManager.DOWNLOAD_MAX_DATALEN; j++)
-                    pack[j] = data[i * communManager.DOWNLOAD_MAX_DATALEN + j];
+                for (int j = 0; j < communManager.COMMU_MAX_DATALEN; j++)
+                    pack[j] = data[i * communManager.COMMU_MAX_DATALEN + j];
                 command = new DownloadTypeData(i, pack, funcCode);
-                for (time = 0; time < 3 && !communManager.DownloadHandle(command);) time++;
+                for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
                 if (time >= 3) return DownloadError.DownloadFailed;
             }
             if (rem > 0)
             {
                 pack = new byte[rem];
                 for (int j = 0; j < rem; j++)
-                    pack[j] = data[len * communManager.DOWNLOAD_MAX_DATALEN + j];
+                    pack[j] = data[len * communManager.COMMU_MAX_DATALEN + j];
                 command = new DownloadTypeData(len, pack, funcCode);
-                for (time = 0; time < 3 && !communManager.DownloadHandle(command);) time++;
+                for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
                 if (time >= 3) return DownloadError.DownloadFailed;
             }
             command = new DownloadTypeOver(funcCode);
-            for (time = 0; time < 10 && !communManager.DownloadHandle(command);)
+            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
             {
-                Thread.Sleep(500);
+                Thread.Sleep(200);
                 time++;
             }
             if (time >= 10) return DownloadError.DownloadFailed;

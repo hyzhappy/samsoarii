@@ -1,9 +1,11 @@
 ﻿using SamSoarII.Core.Communication;
 using SamSoarII.Shell.Dialogs;
+using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace SamSoarII.Core.Helpers
 {
@@ -64,13 +66,13 @@ namespace SamSoarII.Core.Helpers
         {
             //首先通信测试获取底层PLC的状态
             CommunicationTestCommand CTCommand = new CommunicationTestCommand();
-            if (!communManager.DownloadHandle(CTCommand))
+            if (!communManager.CommunicationHandle(CTCommand))
                 return UploadError.CommuicationFailed;
             else plcMessage = new PLCMessage(CTCommand);
             //首先判断PLC运行状态,为Iap时需要切换到App模式
             if (plcMessage.RunStatus == RunStatus.Iap)
             {
-                if (!communManager.DownloadHandle(new SwitchPLCStatusCommand()))
+                if (!communManager.CommunicationHandle(new SwitchPLCStatusCommand()))
                     return UploadError.CommuicationFailed;
             }
             //验证是否需要上载密码
@@ -84,21 +86,6 @@ namespace SamSoarII.Core.Helpers
             {
                 //上载经过压缩的XML文件（包括程序，注释（可选），软元件表（可选）等）
                 ret = UploadProjExecute(communManager);
-                if (ret != UploadError.None)
-                    return ret;
-
-                //上载Modbus表格
-                ret = UploadModbusTableExecute(communManager);
-                if (ret != UploadError.None)
-                    return ret;
-
-                //上载 PlsTable
-                ret = UploadPlsTableExecute(communManager);
-                if (ret != UploadError.None)
-                    return ret;
-
-                //上载 PlsBlock
-                ret = UploadPlsBlockExecute(communManager);
                 if (ret != UploadError.None)
                     return ret;
             }
@@ -137,9 +124,60 @@ namespace SamSoarII.Core.Helpers
             return _UploadHandle(communManager, upConfig, CommunicationDataDefine.CMD_UPLOAD_CONFIG);
         }
 
-        private static UploadError _UploadHandle(CommunicationManager communManager,List<byte> desdata,byte funcCode)
+        private static UploadError _UploadHandle(CommunicationManager communManager,IEnumerable<byte> desdata,byte funcCode)
         {
+            if (desdata == null) desdata = new List<byte>();
+            int time = 0;//记录重传次数
+            ICommunicationCommand command = new UploadTypeStart(funcCode);
+            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
+            {
+                Thread.Sleep(200);
+                time++;
+            }
+            if (time >= 10) return UploadError.UploadFailed;
+            Dictionary<int, byte[]> data = new Dictionary<int, byte[]>();
+            if (command.RecvDataLen > 0)
+            {
+                int len = command.RecvDataLen / communManager.COMMU_MAX_DATALEN;
+                int rem = command.RecvDataLen % communManager.COMMU_MAX_DATALEN;
+                if (rem > 0) len++;
+                for (int i = 0; i < len; i++)
+                {
+                    command = new UploadTypeData(funcCode,i);
+                    for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
+                    if (time >= 3) return UploadError.UploadFailed;
+                    data.Add(i,GetRetData(command.RetData));
+                }
+            }
+            command = new UploadTypeOver(funcCode);
+            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
+            {
+                Thread.Sleep(200);
+                time++;
+            }
+            if (time >= 10) return UploadError.UploadFailed;
+            foreach (var kvPair in data)
+                desdata = desdata.Concat(kvPair.Value);
+            if(funcCode == CommunicationDataDefine.CMD_UPLOAD_PRO)
+            {
+                //略去前面4字节的长度
+                desdata = desdata.Skip(4);
+                //将数据解密
+                desdata = CommandHelper.Decrypt(desdata.Count(),desdata.ToArray());
+            }
             return UploadError.None;
+        }
+        
+        private static byte[] GetRetData(byte[] data)
+        {
+            int len = ValueConverter.GetValueByBytes(data[1],data[2]);
+            len -= 8;
+            byte[] retData = new byte[len];
+            for (int i = 0; i < len; i++)
+            {
+                retData[i] = data[i + 6];
+            }
+            return retData;
         }
     }
 }

@@ -262,19 +262,19 @@ namespace SamSoarII.Core.Communication
         #endregion
 
         #region Download
-        //下载一包数据的最大长度
-        public int DOWNLOAD_MAX_DATALEN
+        //通信时，传送一包数据的最大长度
+        public int COMMU_MAX_DATALEN
         {
             get
             {
                 switch (PortType)
                 {
                     case PortTypes.SerialPort:
-                        return CommunicationDataDefine.SERIAL_DOWNLOAD_LEN;
+                        return CommunicationDataDefine.SERIAL_COMMU_LEN;
                     case PortTypes.USB:
-                        return CommunicationDataDefine.USB_DOWNLOAD_LEN;
+                        return CommunicationDataDefine.USB_COMMU_LEN;
                     default:
-                        return CommunicationDataDefine.USB_DOWNLOAD_LEN;
+                        return CommunicationDataDefine.USB_COMMU_LEN;
                 }
             }
         }
@@ -297,7 +297,7 @@ namespace SamSoarII.Core.Communication
             return DownloadHelper.DownloadExecute(this);
         }
 
-        public bool DownloadHandle(ICommunicationCommand cmd, bool hasRecvData = true, int waittime = 10)
+        public bool CommunicationHandle(ICommunicationCommand cmd, bool hasRecvData = true, int waittime = 10)
         {
             bool hassend = false;
             bool hasrecv = false;

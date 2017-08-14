@@ -8,18 +8,17 @@ namespace SamSoarII.Core.Communication
 {
     public class DownloadTypeData : ICommunicationCommand
     {
-        public DownloadTypeData(int id, byte[] data, byte downloadCode)
+        public DownloadTypeData(int id, byte[] data, byte funcCode)
         {
             command = new byte[6];
             command[0] = CommunicationDataDefine.CMD_COMMU_FLAG;
             byte[] len = ValueConverter.GetBytes((ushort)(command.Length + data.Length + 2), true);
             command[1] = len[0];
             command[2] = len[1];
-            command[3] = downloadCode;
+            command[3] = funcCode;
             len = ValueConverter.GetBytes((ushort)id,true);
             command[4] = len[0];
             command[5] = len[1];
-            CommandHelper.Encrypt(id, data);
             command = command.Concat(data).ToArray();
             command = command.Concat(CRC16.GetCRC(command)).ToArray();
         }

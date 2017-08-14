@@ -159,7 +159,7 @@ namespace SamSoarII.Core.Communication
             }
         }
 
-        public static void Decrypt(int id, byte[] data)
+        public static byte[] Decrypt(int id, byte[] data)
         {
             for (int i = 0; i < data.Length; i++)
             {
@@ -174,6 +174,7 @@ namespace SamSoarII.Core.Communication
                     bs <<= 1; os -= 2;
                 }
             }
+            return data;
         }
         public static void CheckRetData(ICommunicationCommand command, byte[] _retData)
         {
@@ -210,6 +211,10 @@ namespace SamSoarII.Core.Communication
             {
                 FGs_ERR_CODE errCodeType = GetERRCODEType(_retData[3]);
                 command.IsSuccess = errCodeType == FGs_ERR_CODE.COMCODE_CARRY_OK;
+                if(command is UploadTypeStart)
+                {
+                    command.RecvDataLen = command.IsSuccess ? ValueConverter.GetValueByBytes(_retData[6], _retData[7], _retData[8], _retData[9]) : -1;
+                }
             }
             else command.IsSuccess = false;
         }

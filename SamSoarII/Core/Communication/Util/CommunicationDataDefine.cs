@@ -55,8 +55,8 @@ namespace SamSoarII.Core.Communication
         public const int OPTION_SETTING = 0x08;
         
         public const byte CMD_COMMU_FLAG = 0xF0;//下载标志位
-        public const int USB_DOWNLOAD_LEN = 56;//USB下载一包的最大长度
-        public const int SERIAL_DOWNLOAD_LEN = 1024;//串口下载一包的最大长度
+        public const int USB_COMMU_LEN = 56;//USB下载一包的最大长度
+        public const int SERIAL_COMMU_LEN = 1024;//串口下载一包的最大长度
         //功能码列表
 
         public const byte CMD_COM_TEST = 0x01;//通信测试

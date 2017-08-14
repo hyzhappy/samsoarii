@@ -45,7 +45,12 @@ namespace SamSoarII.Utility
 
         public static int GetValueByBytes(params byte[] value)
         {
-            return (value[1] << 8) + value[0];
+            int retvalue = 0;
+            for (int i = 0; i < value.Length; i++)
+            {
+                retvalue += (value[i] << (8 * i));
+            }
+            return retvalue;
         }
 
         public static byte[] GetBytes(uint value,bool isLowHead = false)
