@@ -1257,6 +1257,7 @@ namespace SamSoarII.Core.Models
                 case Types.LINEI: return new LINEIModel(_parent);
                 case Types.ARCF: return new ARCHFModel(_parent);
                 case Types.ARCI: return new ARCHIModel(_parent);
+                case Types.TBL: return new TBLModel(_parent);
                 default: return new LadderUnitModel(_parent, _type);
             }
         }
@@ -1588,7 +1589,7 @@ namespace SamSoarII.Core.Models
 
         #region Load & Save
 
-        public void Load(XElement xele)
+        public virtual void Load(XElement xele)
         {
             type = LadderUnitModel.TypeOfNames[xele.Attribute("Type").Value];
             x = int.Parse(xele.Attribute("X").Value);
@@ -1601,7 +1602,7 @@ namespace SamSoarII.Core.Models
             Parse(xele_vs.Select(x => x.Value).ToArray());
         }
 
-        public void Save(XElement xele)
+        public virtual void Save(XElement xele)
         {
             xele.SetAttributeValue("Type", InstName);
             xele.SetAttributeValue("X", x);

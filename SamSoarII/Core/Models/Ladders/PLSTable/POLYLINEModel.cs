@@ -13,17 +13,14 @@ namespace SamSoarII.Core.Models
     {
         public POLYLINEModel(LadderNetworkModel _parent, LadderUnitModel.Types _type) : base(_parent, _type)
         {
-            //reflictlocation = new ValueModel(this, new ValueFormat("LOC", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3 }));
         }
 
         public POLYLINEModel(LadderNetworkModel _parent, XElement xele) : base(_parent, xele)
         {
-            //reflictlocation = new ValueModel(this, new ValueFormat("LOC", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3 }));
         }
         
         public override void Dispose()
         {
-            //reflictlocation.Dispose();
             base.Dispose();
         }
 

@@ -223,6 +223,9 @@ namespace SamSoarII.Shell.Models
                     ladderExpander.Height = core.ViewHeight;
                     Rect.Height = core.ViewHeight;
                     break;
+                case "IsBriefExpand":
+                    CommentAreaExpander.IsExpanded = core.IsBriefExpand;
+                    break;
             }
         }
         
@@ -673,8 +676,17 @@ namespace SamSoarII.Shell.Models
         
         private void CommentAreaExpander_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (core != null)
-                core.CommentAreaHeight = CommentAreaExpander.ActualHeight;
+            if (core != null) core.CommentAreaHeight = CommentAreaExpander.ActualHeight;
+        }
+        
+        private void CommentAreaExpander_Expanded(object sender, RoutedEventArgs e)
+        {
+            if (core != null) core.IsBriefExpand = true;
+        }
+
+        private void CommentAreaExpander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            if (core != null) core.IsBriefExpand = false;
         }
 
         #endregion

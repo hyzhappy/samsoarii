@@ -222,6 +222,7 @@
     <Compile Include="Core\Models\Ladders\PLSTable\POLYLINEFModel.cs" />
     <Compile Include="Core\Models\Ladders\PLSTable\POLYLINEIModel.cs" />
     <Compile Include="Core\Models\Ladders\PLSTable\POLYLINEModel.cs" />
+    <Compile Include="Core\Models\Ladders\PLSTable\TBLModel.cs" />
     <Compile Include="Core\Models\Monitor\MonitorModel.cs" />
     <Compile Include="Core\Models\PolylineAxisModel.cs" />
     <Compile Include="Core\Models\PolylineSystemModel.cs" />
@@ -431,6 +432,9 @@
     </Compile>
     <Compile Include="Shell\Dialogs\ReplaceReportWindow.xaml.cs">
       <DependentUpon>ReplaceReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\TBLDialog.xaml.cs">
+      <DependentUpon>TBLDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Dialogs\ValueModify\ValueModifyDialog.xaml.cs">
       <DependentUpon>ValueModifyDialog.xaml</DependentUpon>
@@ -983,6 +987,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Dialogs\ReplaceReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\TBLDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
