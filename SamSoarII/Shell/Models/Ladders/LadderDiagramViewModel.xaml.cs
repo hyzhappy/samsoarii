@@ -1436,14 +1436,13 @@ namespace SamSoarII.Shell.Models
                 {
                     LadderNetworkModel net = core.Children[y];
                     if (net.View == null)
-                    {
                         net.View = AllResourceManager.CreateNet(net);
-                        if (net.View.Parent != MainCanvas)
-                        {
-                            if (net.View.Parent is Canvas)
-                                ((Canvas)(net.View.Parent)).Children.Remove(net.View);
-                            MainCanvas.Children.Add(net.View);
-                        }
+                    net.View.Visibility = Visibility.Visible;
+                    if (net.View.Parent != MainCanvas)
+                    {
+                        if (net.View.Parent is Canvas)
+                            ((Canvas)(net.View.Parent)).Children.Remove(net.View);
+                        MainCanvas.Children.Add(net.View);
                     }
                 });
             }

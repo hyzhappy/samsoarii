@@ -10,6 +10,7 @@ using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
 using SamSoarII.Global;
 using SamSoarII.Shell.Managers;
+using System.Threading;
 
 namespace SamSoarII.Core.Models
 {
@@ -482,6 +483,9 @@ namespace SamSoarII.Core.Models
         public void Undo()
         {
             if (!CanUndo) return;
+            IFParent.ThMNGView.Pause();
+            while (IFParent.ThMNGView.IsActive)
+                Thread.Sleep(20);
             isexecuting = true;
             Command cmd = undos.Pop();
             RelativeArea area = new RelativeArea();
@@ -617,11 +621,15 @@ namespace SamSoarII.Core.Models
                 if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
                     area.Select(IFParent);
             }
+            IFParent.ThMNGView.Start();
         }
 
         public void Redo()
         {
             if (!CanRedo) return;
+            IFParent.ThMNGView.Pause();
+            while (IFParent.ThMNGView.IsActive)
+                Thread.Sleep(20);
             isexecuting = true;
             Command cmd = redos.Pop();
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
@@ -784,6 +792,7 @@ namespace SamSoarII.Core.Models
                 if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
                     area.Select(IFParent);
             }
+            IFParent.ThMNGView.Start();
         }
 
         private void Execute(int _type, object _target, IList<object> _olds, IList<object> _news)

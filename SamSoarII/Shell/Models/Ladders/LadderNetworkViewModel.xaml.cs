@@ -153,7 +153,6 @@ namespace SamSoarII.Shell.Models
                         }
                     }
                     LadderCanvas.Height = RowCount * HeightUnit;
-                    DynamicUpdate();
                     PropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
                     break;
                 case "IsExpand":

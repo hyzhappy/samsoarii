@@ -417,7 +417,7 @@ namespace SamSoarII.Core.Simulate
             //PLCDevice.Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             //SetBaseBit(device.BitNumber);
             SetBPEnable(1);
-            SetClockRate(1);
+            SetClockRate(2);
             try
             {
                 InitRunLadder();
