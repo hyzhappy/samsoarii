@@ -518,92 +518,134 @@ namespace SamSoarII
         
         public bool UploadProject()
         {
-            if (mdProj != null)
+            if (UploadHelper.HasConfig)
             {
-                if (vmdProj.LadderMode == LadderModes.Simulate) _CloseSimulate();
-                if (vmdProj.LadderMode == LadderModes.Monitor) _CloseMonitor();
-                if (!CheckLadder(false)) return false;
-                if (!CheckFuncBlock(false)) return false;
+                if (mdProj != null && mdProj.IsLoaded)
+                {
+                    var ret = LocalizedMessageBox.Show(Properties.Resources.Config_Applied, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
+                    if (ret == LocalizedMessageResult.Yes)
+                        mdProj.PARAProj.Load(UploadHelper.ProjectParams);
+                }
+                else if (mdProj == null)
+                {
+                    var ret = LocalizedMessageBox.Show(Properties.Resources.Config_Applied_NewProj, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
+                    if (ret == LocalizedMessageResult.Yes)
+                    {
+                        CreateProject("New Project");
+                        mdProj.PARAProj.Load(UploadHelper.ProjectParams);
+                    }
+                }
             }
-            mngComu.IsEnable = true;
-            CommunicationParams paraCom = mngComu.PARACom;
-            using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom,
-                CommunicationSettingDialogMode.UPLOAD))
+            if (!UploadHelper.HasConfig || LocalizedMessageBox.Show(Properties.Resources.Continue_Upload, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information) == LocalizedMessageResult.Yes)
             {
-                ComBaseSetting basesetting = dialog.GetBaseSetting();
-                basesetting.SettingButtonClick += (sender1, e1) =>
+                if (mdProj != null)
                 {
-                    using (CommunicationParamsDialog dialog1 = new CommunicationParamsDialog(paraCom))
-                    {
-                        dialog1.ShowDialog();
-                    }
-                };
-                dialog.CommunicationTest += (sender2, e2) =>
+                    if (vmdProj.LadderMode == LadderModes.Simulate) _CloseSimulate();
+                    if (vmdProj.LadderMode == LadderModes.Monitor) _CloseMonitor();
+                    if (!CheckLadder(false)) return false;
+                    if (!CheckFuncBlock(false)) return false;
+                }
+                mngComu.IsEnable = true;
+                CommunicationParams paraCom = mngComu.PARACom;
+                using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom,
+                    CommunicationSettingDialogMode.UPLOAD))
                 {
-                    if (mngComu.CheckLink())
-                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Success, LocalizedMessageIcon.Information);
-                    else
-                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
-                };
-                dialog.Ensure += (sender3, e3) =>
-                {
-                    if (UploadHelper.UploadOption == 0)
+                    ComBaseSetting basesetting = dialog.GetBaseSetting();
+                    basesetting.SettingButtonClick += (sender1, e1) =>
                     {
-                        LocalizedMessageBox.Show(Properties.Resources.Please_Select_UpData, LocalizedMessageIcon.Information);
-                        return;
-                    }
-
-                    LoadingWindowHandle handle;
-
-                    if (mngComu.CheckLink())
-                    {
-                        handle = new LoadingWindowHandle(Properties.Resources.Project_Upload);
-                        Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
+                        using (CommunicationParamsDialog dialog1 = new CommunicationParamsDialog(paraCom))
                         {
-                            handle.Start();
-                            var ret = mngComu.UploadExecute();
-                            mngComu.AbortAll();
-                            handle.Abort();
-                            handle.Completed = true;
-                            switch (ret)
-                            {
-                                case UploadError.None:
-                                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Upload_Successd, LocalizedMessageIcon.Information);
-                                    break;
-                                case UploadError.CommuicationFailed:
-                                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
-                                    break;
-                                case UploadError.UploadFailed:
-                                    LocalizedMessageBox.Show(Properties.Resources.Upload_Fail, LocalizedMessageIcon.Information);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            if (UploadHelper.IsUploadProgram)
-                            {
-                                if (UploadHelper.LoadProjByUploadData(this,FileHelper.GetFullFileName("tempupfile", "7z")))
-                                {
-                                    LocalizedMessageBox.Show(Properties.Resources.Project_Load_Success, LocalizedMessageIcon.Information);
-                                }
-                                else
-                                {
-                                    LocalizedMessageBox.Show(Properties.Resources.Project_Load_Failed, LocalizedMessageIcon.Information);
-                                }
-                            }
-                        });
-                        while (!handle.Completed)
-                        {
-                            Thread.Sleep(10);
+                            dialog1.ShowDialog();
                         }
-                    }
-                    else
+                    };
+                    dialog.CommunicationTest += (sender2, e2) =>
                     {
-                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
-                    }
-                };
-                dialog.ShowDialog();
+                        if (mngComu.CheckLink())
+                            LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Success, LocalizedMessageIcon.Information);
+                        else
+                            LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                    };
+                    dialog.Ensure += (sender3, e3) =>
+                    {
+                        if (UploadHelper.UploadOption == 0)
+                        {
+                            LocalizedMessageBox.Show(Properties.Resources.Please_Select_UpData, LocalizedMessageIcon.Information);
+                            return;
+                        }
+
+                        LoadingWindowHandle handle;
+
+                        if (mngComu.CheckLink())
+                        {
+                            LocalizedMessageResult ret = LocalizedMessageResult.Yes;
+                            if (UploadHelper.HasConfig && UploadHelper.IsUploadSetting)
+                                ret = LocalizedMessageBox.Show(Properties.Resources.Config_Override, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
+                            if (ret == LocalizedMessageResult.Yes)
+                            {
+                                handle = new LoadingWindowHandle(Properties.Resources.Project_Upload);
+                                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
+                                {
+                                    handle.Start();
+                                    var ret1 = mngComu.UploadExecute();
+                                    mngComu.AbortAll();
+                                    handle.Abort();
+                                    handle.Completed = true;
+                                    switch (ret1)
+                                    {
+                                        case UploadError.None:
+                                            LocalizedMessageBox.Show(Properties.Resources.MessageBox_Upload_Successd, LocalizedMessageIcon.Information);
+                                            break;
+                                        case UploadError.CommuicationFailed:
+                                            LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                                            break;
+                                        case UploadError.UploadFailed:
+                                            LocalizedMessageBox.Show(Properties.Resources.Upload_Fail, LocalizedMessageIcon.Information);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    if (UploadHelper.IsUploadProgram)
+                                    {
+                                        HandleCurrentProj();
+                                        if (UploadHelper.LoadProjByUploadData(this, FileHelper.GetFullFileName("tempupfile", "7z")))
+                                            LocalizedMessageBox.Show(Properties.Resources.Project_Load_Success, LocalizedMessageIcon.Information);
+                                        else
+                                            LocalizedMessageBox.Show(Properties.Resources.Project_Load_Failed, LocalizedMessageIcon.Information);
+                                    }
+                                    if (UploadHelper.IsUploadSetting)
+                                    {
+                                        if (mdProj != null && mdProj.IsLoaded)
+                                        {
+                                            ret = LocalizedMessageBox.Show(Properties.Resources.Config_Applied, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
+                                            if (ret == LocalizedMessageResult.Yes)
+                                                mdProj.PARAProj.Load(UploadHelper.ProjectParams);
+                                        }
+                                        else if (mdProj == null)
+                                        {
+                                            ret = LocalizedMessageBox.Show(Properties.Resources.Config_Applied_NewProj, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
+                                            if (ret == LocalizedMessageResult.Yes)
+                                            {
+                                                CreateProject("New Project");
+                                                mdProj.PARAProj.Load(UploadHelper.ProjectParams);
+                                            }
+                                        }
+                                    }
+                                });
+                                while (!handle.Completed)
+                                {
+                                    Thread.Sleep(10);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                        }
+                    };
+                    dialog.ShowDialog();
+                }
+                mngComu.IsEnable = false;
             }
-            mngComu.IsEnable = false;
             return true;
         }
 
@@ -688,7 +730,34 @@ namespace SamSoarII
                     break;
             }
         }
-       
+        
+        public void HandleCurrentProj()
+        {
+            if (mdProj != null && (mdProj.IsModified == true || FileHelper.InvalidFileName(mdProj.FileName)))
+            {
+                LocalizedMessageResult mbret;
+                if (mdProj.FileName == string.Empty)
+                {
+                    mbret = ShowSaveYesNoCancelDialog(Properties.Resources.Project_UnSaved);
+                }
+                else
+                {
+                    mbret = ShowSaveYesNoCancelDialog();
+                }
+                switch (mbret)
+                {
+                    case LocalizedMessageResult.Yes:
+                        SaveProject();
+                        break;
+                    case LocalizedMessageResult.No:
+                        break;
+                    case LocalizedMessageResult.Cancel:
+                    default:
+                        return;
+                }
+            }
+        }
+
         private void _CloseSimulate()
         {
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus,

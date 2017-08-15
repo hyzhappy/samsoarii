@@ -2280,4 +2280,19 @@
   <data name="Project_UnSaved" xml:space="preserve">
     <value>工程尚未保存，是否保存？</value>
   </data>
+  <data name="Config_Applied" xml:space="preserve">
+    <value>检测到您上载的配置，是否应用到当前工程？</value>
+  </data>
+  <data name="Project_Applied" xml:space="preserve">
+    <value>检测到您上载的工程，是否加载该工程？</value>
+  </data>
+  <data name="Continue_Upload" xml:space="preserve">
+    <value>是否继续进行上载？</value>
+  </data>
+  <data name="Config_Override" xml:space="preserve">
+    <value>此次上载将会覆盖之前上载的数据，是否继续？</value>
+  </data>
+  <data name="Config_Applied_NewProj" xml:space="preserve">
+    <value>检测到您上载的配置，是否创建新工程应用此配置？</value>
+  </data>
 </root>

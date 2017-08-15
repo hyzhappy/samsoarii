@@ -2280,4 +2280,19 @@
   <data name="Project_UnSaved" xml:space="preserve">
     <value>The project has not been saved,is it saved?</value>
   </data>
+  <data name="Config_Applied" xml:space="preserve">
+    <value>We have detected that you have uploaded the configuration,do you apply the configuration to the current project?</value>
+  </data>
+  <data name="Project_Applied" xml:space="preserve">
+    <value>We have detected that you have uploaded the project,do you load this project?</value>
+  </data>
+  <data name="Continue_Upload" xml:space="preserve">
+    <value>Do you want to continue uploading?</value>
+  </data>
+  <data name="Config_Override" xml:space="preserve">
+    <value>The upload will overwrite the previously uploaded configuration,whether to continue?</value>
+  </data>
+  <data name="Config_Applied_NewProj" xml:space="preserve">
+    <value>We have detected that you have uploaded the configuration,do you want to create a new project to apply this configuration?</value>
+  </data>
 </root>

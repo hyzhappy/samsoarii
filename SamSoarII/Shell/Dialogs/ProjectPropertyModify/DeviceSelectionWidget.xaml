@@ -12,7 +12,7 @@
     <UserControl.Resources>
         <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="PLCTypeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
             <ObjectDataProvider.MethodParameters>
-                <x:Type x:Uid="x:Type_1" TypeName="dev:PLCDeviceType"></x:Type>
+                <x:Type x:Uid="x:Type_1" TypeName="dev:PLC_FGs_Type"></x:Type>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>

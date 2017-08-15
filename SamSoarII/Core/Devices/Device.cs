@@ -14,7 +14,7 @@ namespace SamSoarII.PLCDevice
     {
         public abstract string DeviceName { get; }
         public abstract int BitNumber { get; }
-        public abstract PLCDeviceType Type { get; }
+        public abstract PLC_FGs_Type Type { get; }
         private static BroadDevice _defaultDevice;
         private static MaxRangeDevice _maxRangeDevice;
         public static Device DefaultDevice { get { return _defaultDevice; } }
@@ -38,7 +38,7 @@ namespace SamSoarII.PLCDevice
         static Device()
         {
             _defaultDevice = new BroadDevice();
-            _maxRangeDevice = new MaxRangeDevice(PLCDeviceType.FGs_64MT_D);
+            _maxRangeDevice = new MaxRangeDevice(PLC_FGs_Type.FGs_64MT_D);
             //SpecialRegisters = new List<SpecialRegister>();
         }
         public static void InitializeSpecialRegisters()

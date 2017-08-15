@@ -125,6 +125,15 @@ namespace SamSoarII.Core.Helpers
             }
         }
 
+        static private void Write(List<byte> data, Int64 value)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                data.Add((byte)(value & 0xff));
+                value >>= 8;
+            }
+        }
+
         static private void Write8(List<byte> data, string value)
         {
             data.Add((byte)(value.Length));
@@ -489,49 +498,49 @@ namespace SamSoarII.Core.Helpers
             dtConfig.Add(0);
             dtConfig.Add(0);
             dtConfig.Add(0);
-            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, ValueConverter.DoubleToInt64(0.0));
             Write(dtConfig, (short)emparams.ExpansionUnitParams[0].FilterTime_Index);
 
             dtConfig.Add(0);
             dtConfig.Add(0);
             dtConfig.Add(0);
-            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, ValueConverter.DoubleToInt64(0.0));
             Write(dtConfig, (short)emparams.ExpansionUnitParams[1].FilterTime_Index);
 
             dtConfig.Add(0);
             dtConfig.Add(0);
             dtConfig.Add(0);
-            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, ValueConverter.DoubleToInt64(0.0));
             Write(dtConfig, (short)emparams.ExpansionUnitParams[2].FilterTime_Index);
 
             dtConfig.Add(0);
             dtConfig.Add(0);
             dtConfig.Add(0);
-            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, ValueConverter.DoubleToInt64(0.0));
             Write(dtConfig, (short)emparams.ExpansionUnitParams[3].FilterTime_Index);
 
             dtConfig.Add(0);
             dtConfig.Add(0);
             dtConfig.Add(0);
-            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, ValueConverter.DoubleToInt64(0.0));
             Write(dtConfig, (short)emparams.ExpansionUnitParams[4].FilterTime_Index);
 
             dtConfig.Add(0);
             dtConfig.Add(0);
             dtConfig.Add(0);
-            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, ValueConverter.DoubleToInt64(0.0));
             Write(dtConfig, (short)emparams.ExpansionUnitParams[5].FilterTime_Index);
 
             dtConfig.Add(0);
             dtConfig.Add(0);
             dtConfig.Add(0);
-            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, ValueConverter.DoubleToInt64(0.0));
             Write(dtConfig, (short)emparams.ExpansionUnitParams[6].FilterTime_Index);
 
             dtConfig.Add(0);
             dtConfig.Add(0);
             dtConfig.Add(0);
-            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, ValueConverter.DoubleToInt64(0.0));
             Write(dtConfig, (short)emparams.ExpansionUnitParams[7].FilterTime_Index);
 
             Write(dtConfig, 4);

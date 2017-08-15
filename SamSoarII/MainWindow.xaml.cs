@@ -552,29 +552,7 @@ namespace SamSoarII
                     LocalizedMessageBox.Show(string.Format("{0}", Properties.Resources.Message_Project_Loaded), LocalizedMessageIcon.Information);
                 else
                 {
-                    if (Project != null && (Project.IsModified == true || FileHelper.InvalidFileName(Project.FileName)))
-                    {
-                        LocalizedMessageResult mbret;
-                        if (Project?.FileName == string.Empty)
-                        {
-                            mbret = ifParent.ShowSaveYesNoCancelDialog(Properties.Resources.Project_UnSaved);
-                        }
-                        else
-                        {
-                            mbret = ifParent.ShowSaveYesNoCancelDialog();
-                        }
-                        switch (mbret)
-                        {
-                            case LocalizedMessageResult.Yes:
-                                ifParent.SaveProject();
-                                break;
-                            case LocalizedMessageResult.No:
-                                break;
-                            case LocalizedMessageResult.Cancel:
-                            default:
-                                return;
-                        }
-                    }
+                    ifParent.HandleCurrentProj();
                     ifParent.LoadProject(projectMessage.Value.Item2);
                     LACProj.Show();
                 }
@@ -594,30 +572,7 @@ namespace SamSoarII
                 LocalizedMessageBox.Show(Properties.Resources.Item_Rename, LocalizedMessageIcon.Warning);
                 e.Cancel = true;
             }
-            if (Project != null && (Project.IsModified == true || FileHelper.InvalidFileName(Project.FileName)))
-            {
-                LocalizedMessageResult mbret;
-                if (Project?.FileName == string.Empty)
-                {
-                    mbret = ifParent.ShowSaveYesNoCancelDialog(Properties.Resources.Project_UnSaved);
-                }
-                else
-                {
-                    mbret = ifParent.ShowSaveYesNoCancelDialog();
-                }
-                switch (mbret)
-                {
-                    case LocalizedMessageResult.Yes:
-                        ifParent.SaveProject();
-                        break;
-                    case LocalizedMessageResult.No:
-                        break;
-                    case LocalizedMessageResult.Cancel:
-                    default:
-                        e.Cancel = true;
-                        return;
-                }
-            }
+            ifParent.HandleCurrentProj();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -826,35 +781,13 @@ namespace SamSoarII
              || e.Command == ApplicationCommands.Close
              || e.Command == GlobalCommand.CloseProjectCommand)
             {
-                if (Project != null && (Project.IsModified == true || FileHelper.InvalidFileName(Project.FileName)))
-                {
-                    LocalizedMessageResult mbret;
-                    if (Project?.FileName == string.Empty)
-                    {
-                        mbret = ifParent.ShowSaveYesNoCancelDialog(Properties.Resources.Project_UnSaved);
-                    }
-                    else
-                    {
-                        mbret = ifParent.ShowSaveYesNoCancelDialog();
-                    }
-                    switch (mbret)
-                    {
-                        case LocalizedMessageResult.Yes:
-                            ifParent.SaveProject();
-                            break;
-                        case LocalizedMessageResult.No:
-                            break;
-                        case LocalizedMessageResult.Cancel:
-                        default:
-                            return;
-                    }
-                }
+                ifParent.HandleCurrentProj();
                 CommandBinding_Executed_ReturnEditMode(sender, e);
                 return;
             }
             bool ret;
-            if (Project?.IsModified == true)
-                ifParent.SaveProject();
+            //if (Project?.IsModified == true)
+            //    ifParent.SaveProject();
             if (e.Command == GlobalCommand.SimulateCommand)
             {
                 ret = ifParent.SimulateProject();

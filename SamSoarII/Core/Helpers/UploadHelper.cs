@@ -1,4 +1,5 @@
 ﻿using SamSoarII.Core.Communication;
+using SamSoarII.Core.Models;
 using SamSoarII.Shell.Dialogs;
 using SamSoarII.Utility;
 using System;
@@ -60,11 +61,16 @@ namespace SamSoarII.Core.Helpers
         /// <summary> Block表 </summary>
         private static List<byte> upBlock;
 
-        public static bool HasConfig { get { return upConfig?.Count > 0; } }
+        public static bool HasConfig { get { return ProjectParams != null; } }
 
-        public static bool HasProj { get { return upProj?.Count > 0; } }
+        private static ProjectPropertyParams projectParams;
+        public static ProjectPropertyParams ProjectParams
+        {
+            get { return projectParams; }
+            private set { projectParams = value; }
+        }
         #endregion
-
+        
         //上载前用于获取当前PLC信息(PLC型号，PLC运行状态，PLC当前程序，是否需要上载密码等)
         private static PLCMessage plcMessage;
         public static UploadError UploadExecute(CommunicationManager communManager)
@@ -171,6 +177,8 @@ namespace SamSoarII.Core.Helpers
                 //将数据解密
                 desdata = CommandHelper.Decrypt(desdata.Count(),desdata.ToArray()).ToList();
             }
+            else if (funcCode == CommunicationDataDefine.CMD_UPLOAD_CONFIG)
+                LoadConfig();
             return UploadError.None;
         }
 
@@ -211,6 +219,270 @@ namespace SamSoarII.Core.Helpers
                 Directory.Delete(Directory.GetParent(fullFileName).FullName, true);
             }
             return true;
+        }
+
+        private static void LoadConfig()
+        {
+            ProjectPropertyParams projectParams = new ProjectPropertyParams(null);
+            CommunicationInterfaceParams com232params = projectParams.PARACom232;
+            CommunicationInterfaceParams com485params = projectParams.PARACom485;
+            USBCommunicationParams usbparams = projectParams.PARAUsb;
+            PasswordParams pwparams = projectParams.PARAPassword;
+            FilterParams ftparams = projectParams.PARAFilter;
+            HoldingSectionParams hsparams = projectParams.PARAHolding;
+            AnalogQuantityParams aqparams = projectParams.PARAAnalog;
+            ExpansionModuleParams emparams = projectParams.PARAExpansion;
+            try
+            {
+                //跳过前面6字节的长度
+                int cursor = 6, value = 0;
+                byte[] pack;
+                com232params.BaudRateIndex = upConfig[cursor++];
+                com232params.DataBitIndex = 0;
+                cursor++;
+                com232params.StopBitIndex = upConfig[cursor++];
+                com232params.CheckCodeIndex = upConfig[cursor++];
+
+                com485params.BaudRateIndex = upConfig[cursor++];
+                com485params.DataBitIndex = 0;
+                cursor++;
+                com485params.StopBitIndex = upConfig[cursor++];
+                com485params.CheckCodeIndex = upConfig[cursor++];
+
+                projectParams.StationNumber = upConfig[cursor++];
+                usbparams.Timeout = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+
+                pwparams.PWENUpload = upConfig[cursor++] == 1;
+                value = upConfig[cursor++];
+                pack = new byte[value];
+                for (int i = 0; i < value; i++)
+                {
+                    pack[i] = upConfig[cursor++];
+                }
+                pwparams.PWUpload = StringParse(pack);
+
+                com232params.ComType = (CommunicationInterfaceParams.ComTypes)Enum.ToObject(typeof(CommunicationInterfaceParams.ComTypes), upConfig[cursor++]);
+                com485params.ComType = (CommunicationInterfaceParams.ComTypes)Enum.ToObject(typeof(CommunicationInterfaceParams.ComTypes), upConfig[cursor++]);
+
+                pwparams.PWENDownload = upConfig[cursor++] == 1;
+                value = upConfig[cursor++];
+                pack = new byte[value];
+                for (int i = 0; i < value; i++)
+                {
+                    pack[i] = upConfig[cursor++];
+                }
+                pwparams.PWDownload = StringParse(pack);
+
+                pwparams.PWENMonitor = upConfig[cursor++] == 1;
+                value = upConfig[cursor++];
+                pack = new byte[value];
+                for (int i = 0; i < value; i++)
+                {
+                    pack[i] = upConfig[cursor++];
+                }
+                pwparams.PWMonitor = StringParse(pack);
+
+                ftparams.IsChecked = upConfig[cursor++] == 1;
+                value = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                ftparams.FilterTimeIndex = (int)Math.Log(value, 2) - 1;
+
+                hsparams.MStartAddr = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                hsparams.MLength = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                hsparams.DStartAddr = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                hsparams.DLength = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                hsparams.SStartAddr = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                hsparams.SLength = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                hsparams.CVStartAddr = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                hsparams.CVLength = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+
+                cursor += 4;
+
+                aqparams.IP_Channel_CB_Enabled1 = upConfig[cursor++] == 1;
+                aqparams.IP_Mode_Index1 = upConfig[cursor++];
+                aqparams.IP_EndRange1 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.IP_StartRange1 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.IP_SampleTime_Index1 = upConfig[cursor++];
+                aqparams.SampleValue1 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]).ToString();
+
+                aqparams.IP_Channel_CB_Enabled2 = upConfig[cursor++] == 1;
+                aqparams.IP_Mode_Index2 = upConfig[cursor++];
+                aqparams.IP_EndRange2 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.IP_StartRange2 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.IP_SampleTime_Index2 = upConfig[cursor++];
+                aqparams.SampleValue2 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]).ToString();
+
+                aqparams.IP_Channel_CB_Enabled3 = upConfig[cursor++] == 1;
+                aqparams.IP_Mode_Index3 = upConfig[cursor++];
+                aqparams.IP_EndRange3 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.IP_StartRange3 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.IP_SampleTime_Index3 = upConfig[cursor++];
+                aqparams.SampleValue3 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]).ToString();
+
+                aqparams.IP_Channel_CB_Enabled4 = upConfig[cursor++] == 1;
+                aqparams.IP_Mode_Index4 = upConfig[cursor++];
+                aqparams.IP_EndRange4 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.IP_StartRange4 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.IP_SampleTime_Index4 = upConfig[cursor++];
+                aqparams.SampleValue4 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]).ToString();
+
+                cursor += 4;
+
+                aqparams.OP_Channel_CB_Enabled1 = upConfig[cursor++] == 1;
+                aqparams.OP_EndRange1 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.OP_StartRange1 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.OP_Mode_Index1 = upConfig[cursor++];
+
+                aqparams.OP_Channel_CB_Enabled2 = upConfig[cursor++] == 1;
+                aqparams.OP_EndRange2 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.OP_StartRange2 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.OP_Mode_Index2 = upConfig[cursor++];
+
+                aqparams.OP_Channel_CB_Enabled3 = upConfig[cursor++] == 1;
+                aqparams.OP_EndRange3 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.OP_StartRange3 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.OP_Mode_Index3 = upConfig[cursor++];
+
+                aqparams.OP_Channel_CB_Enabled4 = upConfig[cursor++] == 1;
+                aqparams.OP_EndRange4 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.OP_StartRange4 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                aqparams.OP_Mode_Index4 = upConfig[cursor++];
+
+                emparams.UseExpansionModule = upConfig[cursor++] == 1;
+
+                emparams.ExpansionUnitParams[0].UseModule = upConfig[cursor++] == 1;
+                emparams.ExpansionUnitParams[0].ModuleTypeIndex = upConfig[cursor++];
+                emparams.ExpansionUnitParams[1].UseModule = upConfig[cursor++] == 1;
+                emparams.ExpansionUnitParams[1].ModuleTypeIndex = upConfig[cursor++];
+                emparams.ExpansionUnitParams[2].UseModule = upConfig[cursor++] == 1;
+                emparams.ExpansionUnitParams[2].ModuleTypeIndex = upConfig[cursor++];
+                emparams.ExpansionUnitParams[3].UseModule = upConfig[cursor++] == 1;
+                emparams.ExpansionUnitParams[3].ModuleTypeIndex = upConfig[cursor++];
+                emparams.ExpansionUnitParams[4].UseModule = upConfig[cursor++] == 1;
+                emparams.ExpansionUnitParams[4].ModuleTypeIndex = upConfig[cursor++];
+                emparams.ExpansionUnitParams[5].UseModule = upConfig[cursor++] == 1;
+                emparams.ExpansionUnitParams[5].ModuleTypeIndex = upConfig[cursor++];
+                emparams.ExpansionUnitParams[6].UseModule = upConfig[cursor++] == 1;
+                emparams.ExpansionUnitParams[6].ModuleTypeIndex = upConfig[cursor++];
+                emparams.ExpansionUnitParams[7].UseModule = upConfig[cursor++] == 1;
+                emparams.ExpansionUnitParams[7].ModuleTypeIndex = upConfig[cursor++];
+
+                com232params.DataBitIndex = upConfig[cursor++];
+                com485params.DataBitIndex = upConfig[cursor++];
+
+                hsparams.NotClear = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]) == 1;
+
+                com232params.Timeout = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                com485params.Timeout = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+
+                cursor += 11;
+                emparams.ExpansionUnitParams[0].FilterTime_Index = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                cursor += 11;
+                emparams.ExpansionUnitParams[1].FilterTime_Index = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                cursor += 11;
+                emparams.ExpansionUnitParams[2].FilterTime_Index = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                cursor += 11;
+                emparams.ExpansionUnitParams[3].FilterTime_Index = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                cursor += 11;
+                emparams.ExpansionUnitParams[4].FilterTime_Index = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                cursor += 11;
+                emparams.ExpansionUnitParams[5].FilterTime_Index = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                cursor += 11;
+                emparams.ExpansionUnitParams[6].FilterTime_Index = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                cursor += 11;
+                emparams.ExpansionUnitParams[7].FilterTime_Index = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+
+                cursor += 4;
+
+                aqparams.IP_Channel_CB_Enabled5 = upConfig[cursor++] == 1;
+                aqparams.IP_Mode_Index5 = upConfig[cursor++];
+                cursor += 4;
+                aqparams.IP_SampleTime_Index5 = upConfig[cursor++];
+                aqparams.SampleValue5 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]).ToString();
+
+                aqparams.IP_Channel_CB_Enabled6 = upConfig[cursor++] == 1;
+                aqparams.IP_Mode_Index6 = upConfig[cursor++];
+                cursor += 4;
+                aqparams.IP_SampleTime_Index6 = upConfig[cursor++];
+                aqparams.SampleValue6 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]).ToString();
+
+                aqparams.IP_Channel_CB_Enabled7 = upConfig[cursor++] == 1;
+                aqparams.IP_Mode_Index7 = upConfig[cursor++];
+                cursor += 4;
+                aqparams.IP_SampleTime_Index7 = upConfig[cursor++];
+                aqparams.SampleValue7 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]).ToString();
+
+                aqparams.IP_Channel_CB_Enabled8 = upConfig[cursor++] == 1;
+                aqparams.IP_Mode_Index8 = upConfig[cursor++];
+                cursor += 4;
+                aqparams.IP_SampleTime_Index8 = upConfig[cursor++];
+                aqparams.SampleValue8 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]).ToString();
+
+                cursor += 16;
+
+                for (int i = 0; i < 8; i++)
+                {
+                    cursor += 4;
+
+                    emparams.ExpansionUnitParams[i].IP_Channel_CB_Enabled1 = upConfig[cursor++] == 1;
+                    emparams.ExpansionUnitParams[i].IP_Mode_Index1 = upConfig[cursor++];
+                    emparams.ExpansionUnitParams[i].IP_EndRange1 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                    emparams.ExpansionUnitParams[i].IP_StartRange1 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                    emparams.ExpansionUnitParams[i].IP_SampleTime_Index1 = (int)Math.Log(upConfig[cursor++], 2) - 2;
+                    emparams.ExpansionUnitParams[i].SampleValue1 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]).ToString();
+
+                    emparams.ExpansionUnitParams[i].IP_Channel_CB_Enabled2 = upConfig[cursor++] == 1;
+                    emparams.ExpansionUnitParams[i].IP_Mode_Index2 = upConfig[cursor++];
+                    emparams.ExpansionUnitParams[i].IP_EndRange2 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                    emparams.ExpansionUnitParams[i].IP_StartRange2 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                    emparams.ExpansionUnitParams[i].IP_SampleTime_Index2 = (int)Math.Log(upConfig[cursor++], 2) - 2;
+                    emparams.ExpansionUnitParams[i].SampleValue2 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]).ToString();
+
+                    emparams.ExpansionUnitParams[i].IP_Channel_CB_Enabled3 = upConfig[cursor++] == 1;
+                    emparams.ExpansionUnitParams[i].IP_Mode_Index3 = upConfig[cursor++];
+                    emparams.ExpansionUnitParams[i].IP_EndRange3 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                    emparams.ExpansionUnitParams[i].IP_StartRange3 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                    emparams.ExpansionUnitParams[i].IP_SampleTime_Index3 = (int)Math.Log(upConfig[cursor++], 2) - 2;
+                    emparams.ExpansionUnitParams[i].SampleValue3 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]).ToString();
+
+                    emparams.ExpansionUnitParams[i].IP_Channel_CB_Enabled4 = upConfig[cursor++] == 1;
+                    emparams.ExpansionUnitParams[i].IP_Mode_Index4 = upConfig[cursor++];
+                    emparams.ExpansionUnitParams[i].IP_EndRange4 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                    emparams.ExpansionUnitParams[i].IP_StartRange4 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                    emparams.ExpansionUnitParams[i].IP_SampleTime_Index4 = (int)Math.Log(upConfig[cursor++], 2) - 2;
+                    emparams.ExpansionUnitParams[i].SampleValue4 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]).ToString();
+
+                    cursor += 4;
+
+                    emparams.ExpansionUnitParams[i].OP_Channel_CB_Enabled1 = upConfig[cursor++] == 1;
+                    emparams.ExpansionUnitParams[i].OP_Mode_Index1 = upConfig[cursor++];
+                    emparams.ExpansionUnitParams[i].OP_EndRange1 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                    emparams.ExpansionUnitParams[i].OP_StartRange1 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                    cursor += 3;
+
+                    emparams.ExpansionUnitParams[i].OP_Channel_CB_Enabled2 = upConfig[cursor++] == 1;
+                    emparams.ExpansionUnitParams[i].OP_Mode_Index2 = upConfig[cursor++];
+                    emparams.ExpansionUnitParams[i].OP_EndRange2 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                    emparams.ExpansionUnitParams[i].OP_StartRange2 = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
+                    cursor += 3;
+
+                    cursor += 18;
+                }
+            }
+            catch (Exception)
+            {
+                UploadHelper.projectParams = null;
+            }
+            UploadHelper.projectParams = projectParams;
+        }
+
+        private static string StringParse(params byte[] data)
+        {
+            char[] pack = new char[data.Length];
+            for (int i = 0; i < data.Length; i++)
+            {
+                pack[i] = (char)data[i];
+            }
+            return new string(pack);
         }
     }
 }

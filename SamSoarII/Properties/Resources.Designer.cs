@@ -583,6 +583,33 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 We have detected that you have uploaded the configuration,do you apply the configuration to the current project? 的本地化字符串。
+        /// </summary>
+        public static string Config_Applied {
+            get {
+                return ResourceManager.GetString("Config_Applied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 We have detected that you have uploaded the configuration,do you want to create a new project to apply this configuration? 的本地化字符串。
+        /// </summary>
+        public static string Config_Applied_NewProj {
+            get {
+                return ResourceManager.GetString("Config_Applied_NewProj", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The upload will overwrite the previously uploaded configuration,whether to continue? 的本地化字符串。
+        /// </summary>
+        public static string Config_Override {
+            get {
+                return ResourceManager.GetString("Config_Override", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Connection failed, please check your network settings! 的本地化字符串。
         /// </summary>
         public static string Connect_Failed {
@@ -615,6 +642,15 @@ namespace SamSoarII.Properties {
         public static string Content {
             get {
                 return ResourceManager.GetString("Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Do you want to continue uploading? 的本地化字符串。
+        /// </summary>
+        public static string Continue_Upload {
+            get {
+                return ResourceManager.GetString("Continue_Upload", resourceCulture);
             }
         }
         
@@ -5052,6 +5088,15 @@ namespace SamSoarII.Properties {
         public static string Project {
             get {
                 return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 We have detected that you have uploaded the project,do you load this project? 的本地化字符串。
+        /// </summary>
+        public static string Project_Applied {
+            get {
+                return ResourceManager.GetString("Project_Applied", resourceCulture);
             }
         }
         
