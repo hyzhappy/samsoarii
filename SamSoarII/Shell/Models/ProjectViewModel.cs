@@ -37,6 +37,7 @@ namespace SamSoarII.Shell.Models
             foreach (FuncBlockModel funcblock in core.FuncBlocks)
                 funcblock?.View?.Dispose();
             core.Modbus?.View?.Dispose();
+            if (Core != null) Core.IsLoaded = false;
             Core = null;
         }
         

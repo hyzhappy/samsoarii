@@ -333,8 +333,10 @@ namespace SamSoarII
                 try
                 {
                     vmdProj.Dispose();
-                    if (mdProj.UndoDiagram != null && mdProj.UndoDiagram.CanRedo) mdProj.UndoDiagram.Redo();
-                    if (mdProj.RedoDiagram != null && mdProj.RedoDiagram.CanUndo) mdProj.RedoDiagram.Undo();
+                    if (mdProj.RedoDiagram != null && mdProj.RedoDiagram.CanUndo)
+                        mdProj.RedoDiagram.Undo();
+                    if (mdProj.UndoDiagram != null && mdProj.UndoDiagram.CanRedo)
+                        mdProj.UndoDiagram.Redo();
                 }
                 catch (Exception)
                 {

@@ -84,6 +84,7 @@ namespace SamSoarII.Shell.Models
         public void Dispose()
         {
             _selectRect.Dispose();
+            _selectArea.Dispose();
             outline.Dispose();
             cmEdit.Post -= OnLadderEdit;
             cmEdit.Dispose();
