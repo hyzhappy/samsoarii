@@ -214,6 +214,21 @@ namespace SamSoarII.Core.Models
             }
         }
 
+        private bool isbriefexpand;
+        public bool IsBriefExpand
+        {
+            get
+            {
+                return this.isbriefexpand;
+            }
+            set
+            {
+                if (isbriefexpand == value) return;
+                this.isbriefexpand = value;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("IsBriefExpand"));
+            }
+        }
+
         private double commentareaheight;
         public double CommentAreaHeight
         {

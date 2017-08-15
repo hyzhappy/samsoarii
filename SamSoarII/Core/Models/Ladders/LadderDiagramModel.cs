@@ -81,10 +81,14 @@ namespace SamSoarII.Core.Models
             if (e.NewItems != null)
                 foreach (LadderNetworkModel lnmodel in e.NewItems)
                     lnmodel.PropertyChanged += OnChildrenPropertyChanged;
-            PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
             ChildrenChanged(this, e);
-            UpdateCanvasTop();
+            if (!isexecuting)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
+                UpdateCanvasTop();
+            }
         }
+
         private void OnChildrenPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (isexecuting) return;
@@ -248,11 +252,12 @@ namespace SamSoarII.Core.Models
             foreach (LadderNetworkModel network in children)
             {
                 network.CanvasTop = currenttop;
-                currenttop += network.CommentAreaHeight + 6;
+                currenttop += network.CommentAreaHeight + 20;
                 network.UnitBaseTop = currenttop;
                 currenttop += (network.IsExpand ? network.RowCount : 0) * unitheight;
-                //currenttop += 2;
+                currenttop += 4;
                 network.ViewHeight = currenttop - network.CanvasTop;
+                currenttop += 4;
             }
             canvasheight = currenttop + 20;
             ViewPropertyChanged(this, new PropertyChangedEventArgs("CanvasHeight"));
@@ -602,6 +607,9 @@ namespace SamSoarII.Core.Models
             }
             redos.Push(cmd);
             isexecuting = false;
+            PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
+            ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            UpdateCanvasTop();
             Parent.InvokeModify(this, true);
         }
 
@@ -766,6 +774,9 @@ namespace SamSoarII.Core.Models
             }
             undos.Push(cmd);
             isexecuting = false;
+            PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
+            ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            UpdateCanvasTop();
             Parent.InvokeModify(this);
         }
 

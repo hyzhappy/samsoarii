@@ -1466,6 +1466,29 @@ namespace SamSoarII
                 }
                 return;
             }
+            if (current is TBLModel)
+            {
+                using (TBLDialog dialog = new TBLDialog(((TBLModel)current).Clone()))
+                {
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    dialog.Ensure += (sender, e) =>
+                    {
+                        try
+                        {
+                            dialog.SaveToCore();
+                            current.Parent.Parent.AddSingleUnit(dialog.Core, current.Parent);
+                            dialog.Close();
+                        }
+                        catch (ValueParseException exce)
+                        {
+                            LocalizedMessageBox.Show(string.Format(exce.Message), LocalizedMessageIcon.Error);
+                        }
+                    };
+                    dialog.Cancel += (sender, e) => { dialog.Close(); };
+                    dialog.ShowDialog();
+                }
+                return;
+            }
             if (current.Type == LadderUnitModel.Types.PID) return;
             using (ElementPropertyDialog dialog = new ElementPropertyDialog(current))
             {
@@ -1523,6 +1546,30 @@ namespace SamSoarII
                         ret = true;
                         dialog.Close();
                     };
+                    dialog.ShowDialog();
+                }
+                return ret;
+            }
+            if (current is TBLModel)
+            {
+                using (TBLDialog dialog = new TBLDialog(((TBLModel)current).Clone()))
+                {
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    dialog.Ensure += (sender, e) =>
+                    {
+                        try
+                        {
+                            dialog.SaveToCore();
+                            current.Parent.Parent.AddSingleUnit(dialog.Core, current.Parent);
+                            ret = true;
+                            dialog.Close();
+                        }
+                        catch (ValueParseException exce)
+                        {
+                            LocalizedMessageBox.Show(string.Format(exce.Message), LocalizedMessageIcon.Error);
+                        }
+                    };
+                    dialog.Cancel += (sender, e) => { dialog.Close(); };
                     dialog.ShowDialog();
                 }
                 return ret;

@@ -822,9 +822,9 @@ namespace SamSoarII
         private void CommandBinding_Executed_SaveHint(object sender, ExecutedRoutedEventArgs e)
         {
             if (e.Command == ApplicationCommands.New
-                || e.Command == ApplicationCommands.Open
-                || e.Command == ApplicationCommands.Close
-                || e.Command == GlobalCommand.CloseProjectCommand)
+             || e.Command == ApplicationCommands.Open
+             || e.Command == ApplicationCommands.Close
+             || e.Command == GlobalCommand.CloseProjectCommand)
             {
                 if (Project != null && (Project.IsModified == true || FileHelper.InvalidFileName(Project.FileName)))
                 {
