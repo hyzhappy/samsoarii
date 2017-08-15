@@ -155,31 +155,53 @@ namespace SamSoarII.Shell.Models
 
         internal void Select(int _netstart, int _netend, Direction _movedir = Direction.Down)
         {
-            state = Status.SelectCross;
-            netorigin = _netstart;
-            netstart = Math.Min(_netstart, _netend);
-            netend = Math.Max(_netstart, _netend);
-            movedir = netstart < netend ? (netorigin == netstart ? Direction.Down : Direction.Up) : _movedir;
-            view?.Update();
+            int _netorigin = _netstart;
+            int __netstart = Math.Min(_netstart, _netend);
+            int __netend = Math.Max(_netstart, _netend);
+            _movedir = netstart < netend ? (netorigin == netstart ? Direction.Down : Direction.Up) : _movedir;
+            if (state != Status.SelectCross || netorigin != _netorigin 
+             || netstart != __netstart || netend != __netend || movedir != _movedir)
+            {
+                state = Status.SelectCross;
+                netorigin = _netorigin;
+                netstart = __netstart;
+                netend = __netend;
+                movedir = _movedir;
+                SelectionChanged(this, new RoutedEventArgs());
+                view?.Update();
+            }
         }
 
         internal void Select(int _netid, int _xstart, int _ystart, int _xend, int _yend)
         {
-            state = Status.SelectRange;
-            netorigin = netstart = netend = _netid;
-            xorigin = _xstart;
-            yorigin = _ystart;
-            xstart = Math.Min(_xstart, _xend);
-            xend = Math.Max(_xstart, _xend);
-            ystart = Math.Min(_ystart, _yend);
-            yend = Math.Max(_ystart, _yend);
-            view?.Update();
+            int _netorigin = netstart = netend = _netid;
+            int _xorigin = _xstart;
+            int _yorigin = _ystart;
+            int __xstart = Math.Min(_xstart, _xend);
+            int __xend = Math.Max(_xstart, _xend);
+            int __ystart = Math.Min(_ystart, _yend);
+            int __yend = Math.Max(_ystart, _yend);
+            if (state != Status.SelectRange || netorigin != _netorigin || xorigin != _xorigin || yorigin != _yorigin
+             || xstart != __xstart || ystart != __ystart || xend != __xend || yend != __yend)
+            {
+                state = Status.SelectRange;
+                netorigin = _netorigin;
+                xorigin = _xorigin;
+                yorigin = _yorigin;
+                xstart = __xstart;
+                xend = __xend;
+                ystart = __ystart;
+                yend = __yend;
+                SelectionChanged(this, new RoutedEventArgs());
+                view?.Update();
+            }
         }
 
         internal void Release()
         {
             if (state == Status.NotSelected) return;
             state = Status.NotSelected;
+            SelectionChanged(this, new RoutedEventArgs());
             view?.Update();
         }
 
@@ -383,6 +405,12 @@ namespace SamSoarII.Shell.Models
         #endregion
 
         #endregion
+
+        #region Event Handler
+
+        public event RoutedEventHandler SelectionChanged = delegate { };
+
+        #endregion
     }
 
     /// <summary>
@@ -430,10 +458,11 @@ namespace SamSoarII.Shell.Models
         public LadderDiagramViewModel ViewParent { get { return core?.Parent?.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
 
+        public LadderNetworkModel this[int id] { get { return id >= 0 && id < CoreParent.Children.Count ? CoreParent.Children[id] : null; } }
         public LadderDiagramModel CoreParent { get { return core?.Parent; } }
-        public LadderNetworkModel NetOrigin { get { return CoreParent.Children[core.NetOrigin]; } }
-        public LadderNetworkModel NetStart { get { return CoreParent.Children[core.NetStart]; } }
-        public LadderNetworkModel NetEnd { get { return CoreParent.Children[core.NetEnd]; } }
+        public LadderNetworkModel NetOrigin { get { return this[core.NetOrigin]; } }
+        public LadderNetworkModel NetStart { get { return this[core.NetStart]; } }
+        public LadderNetworkModel NetEnd { get { return this[core.NetEnd]; } }
         
         #endregion
 
@@ -456,7 +485,7 @@ namespace SamSoarII.Shell.Models
         public void Update()
         {
             int unitwidth = GlobalSetting.LadderWidthUnit;
-            int unitheight = IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit;
+            int unitheight = IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit;   
             switch (core.State)
             {
                 case SelectAreaCore.Status.NotSelected:
@@ -470,6 +499,11 @@ namespace SamSoarII.Shell.Models
                     Height = (core.YEnd - core.YStart + 1) * unitheight;
                     break;
                 case SelectAreaCore.Status.SelectCross:
+                    if (NetStart == null || NetEnd == null || NetOrigin == null)
+                    {
+                        core.Release();
+                        break;
+                    }
                     Visibility = Visibility.Visible;
                     Canvas.SetLeft(this, 0);
                     Canvas.SetTop(this, NetStart.CanvasTop);

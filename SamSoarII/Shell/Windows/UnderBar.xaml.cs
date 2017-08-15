@@ -189,8 +189,8 @@ namespace SamSoarII.Shell.Windows
                     if (_current is LadderDiagramViewModel)
                     {
                         LadderDiagramViewModel ldvmodel = (LadderDiagramViewModel)_current;
-                        ldvmodel.SelectionChanged -= OnLadderSelectionChanged;
                         ldvmodel.SelectionRect.Core.PropertyChanged -= OnLadderSelectionRectPropertyChanged;
+                        ldvmodel.SelectionArea.Core.SelectionChanged -= OnLadderSelectionAreaSelectionChanged;
                     }
                     if (_current is FuncBlockViewModel)
                     {
@@ -207,8 +207,8 @@ namespace SamSoarII.Shell.Windows
                     if (current is LadderDiagramViewModel)
                     {
                         LadderDiagramViewModel ldvmodel = (LadderDiagramViewModel)current;
-                        ldvmodel.SelectionChanged += OnLadderSelectionChanged;
                         ldvmodel.SelectionRect.Core.PropertyChanged += OnLadderSelectionRectPropertyChanged;
+                        ldvmodel.SelectionArea.Core.SelectionChanged += OnLadderSelectionAreaSelectionChanged;
                     }
                     if (current is FuncBlockViewModel)
                     {
@@ -270,24 +270,17 @@ namespace SamSoarII.Shell.Windows
                     break;
                 case SelectStatus.MultiSelecting:
                 case SelectStatus.MultiSelected:
-                    LadderNetworkViewModel network = view.SelectStartNetwork.View;
-                    if (network == null)
-                    {
-                        TB_Item2.Text = Properties.Resources.MainWindow_Select_All;
-                        TB_Item1.Text = "";
-                        break;
-                    }
-                    switch (view.SelectionArea.Core.State)
+                    SelectAreaCore area = view.SelectionArea.Core;
+                    switch (area.State)
                     {
                         case SelectAreaCore.Status.SelectRange:
-                            TB_Item2.Text = String.Format("{0:s} {1:d}", Properties.Resources.Network, view.SelectionArea.Core.NetOrigin);
+                            TB_Item2.Text = String.Format("{0:s} {1:d}", Properties.Resources.Network, area.NetOrigin);
                             TB_Item1.Text = String.Format("(X1={0:d},X2={1:d},Y1={2:d},Y2={3:d})",
-                                view.SelectionArea.Core.XStart, view.SelectionArea.Core.XEnd,
-                                view.SelectionArea.Core.YStart, view.SelectionArea.Core.YEnd);
+                                area.XStart, area.XEnd, area.YStart, area.YEnd);
                             break;
                         case SelectAreaCore.Status.SelectCross:
                             TB_Item2.Text = String.Format("{0:s} ({1:d}~{2:d})", 
-                                Properties.Resources.Network, view.SelectionArea.Core.NetStart, view.SelectionArea.Core.NetEnd);
+                                Properties.Resources.Network, area.NetStart, area.NetEnd);
                             TB_Item1.Text = "";
                             break;
                     }
@@ -365,7 +358,7 @@ namespace SamSoarII.Shell.Windows
                 TB_Header.Text = Properties.Resources.Project_Changed;
         }
 
-        private void OnLadderSelectionChanged(object sender, RoutedEventArgs e)
+        private void OnLadderSelectionAreaSelectionChanged(object sender, RoutedEventArgs e)
         {
             Update((LadderDiagramViewModel)current);
         }

@@ -10,6 +10,7 @@ using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
 using SamSoarII.Global;
 using SamSoarII.Shell.Managers;
+using System.Threading;
 
 namespace SamSoarII.Core.Models
 {
@@ -357,7 +358,7 @@ namespace SamSoarII.Core.Models
             {
                 int unit_x = unit.X;
                 int unit_y = unit.Y;
-                if (unit.Shape == LadderUnitModel.Shapes.VLine) unit_x++;
+                //if (unit.Shape == LadderUnitModel.Shapes.VLine) unit_x++;
                 switch (status)
                 {
                     case Status.NULL:
@@ -458,6 +459,12 @@ namespace SamSoarII.Core.Models
                     case Status.MULTINET:
                         ifparent.Select(diagram, start, end);
                         break;
+                    default:
+                        if (diagram?.View != null)
+                            diagram.View.ReleaseSelect();
+                        else if (network?.Parent?.View != null)
+                            network.Parent.View.ReleaseSelect();
+                        break;
                 }
             }
         }
@@ -476,6 +483,9 @@ namespace SamSoarII.Core.Models
         public void Undo()
         {
             if (!CanUndo) return;
+            IFParent.ThMNGView.Pause();
+            while (IFParent.ThMNGView.IsActive)
+                Thread.Sleep(20);
             isexecuting = true;
             Command cmd = undos.Pop();
             RelativeArea area = new RelativeArea();
@@ -599,23 +609,27 @@ namespace SamSoarII.Core.Models
                     }
                 }
             }
-            if (View != null)
-            {
-                View.IsViewModified = true;
-                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
-                    area.Select(IFParent);
-            }
             redos.Push(cmd);
             isexecuting = false;
             PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
             ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             UpdateCanvasTop();
             Parent.InvokeModify(this, true);
+            if (View != null)
+            {
+                View.IsViewModified = true;
+                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
+                    area.Select(IFParent);
+            }
+            IFParent.ThMNGView.Start();
         }
 
         public void Redo()
         {
             if (!CanRedo) return;
+            IFParent.ThMNGView.Pause();
+            while (IFParent.ThMNGView.IsActive)
+                Thread.Sleep(20);
             isexecuting = true;
             Command cmd = redos.Pop();
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
@@ -766,18 +780,19 @@ namespace SamSoarII.Core.Models
                 }
                 area.Update(cmd.NewNetworks);
             }
-            if (View != null)
-            {
-                View.IsViewModified = true;
-                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
-                    area.Select(IFParent);
-            }
             undos.Push(cmd);
             isexecuting = false;
             PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
             ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             UpdateCanvasTop();
             Parent.InvokeModify(this);
+            if (View != null)
+            {
+                View.IsViewModified = true;
+                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
+                    area.Select(IFParent);
+            }
+            IFParent.ThMNGView.Start();
         }
 
         private void Execute(int _type, object _target, IList<object> _olds, IList<object> _news)

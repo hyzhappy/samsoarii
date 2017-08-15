@@ -91,13 +91,16 @@ namespace SamSoarII.Core.Simulate
             // 若检查到暂停状态的改变则进行处理
             if (SimulateDllModel.GetBPPause() > 0 && cursor.Address < 0)
             {
-                cursor.Address = SimulateDllModel.GetBPAddr();
-                if (cursor.Current != null)
-                    BreakpointPaused(this, new BreakpointPauseEventArgs(cursor));
-                else if (SimulateDllModel.GetCallCount() <= 256)
-                    SimulateDllModel.SetBPPause(0);
                 if (SimulateDllModel.GetCallCount() > 256)
                     OnSimulateException(new StackOverflowException("子程序 & 用户函数嵌套调用超过了上限（256）。"), new RoutedEventArgs());
+                else
+                {
+                    cursor.Address = SimulateDllModel.GetBPAddr();
+                    if (cursor.Current != null)
+                        BreakpointPaused(this, new BreakpointPauseEventArgs(cursor));
+                    else if (SimulateDllModel.GetCallCount() <= 256)
+                        SimulateDllModel.SetBPPause(0);
+                }
             }
         }
 
@@ -285,6 +288,9 @@ namespace SamSoarII.Core.Simulate
                 DllModel.Abort();
                 return;
             }
+            cursor.Address = SimulateDllModel.GetBPAddr();
+            if (cursor.Current != null)
+                BreakpointPaused(this, new BreakpointPauseEventArgs(cursor));
             System.Windows.Application.Current.Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
             {
                 Exception exc = (Exception)sender;
@@ -292,22 +298,34 @@ namespace SamSoarII.Core.Simulate
                 dialog.TB_Message.Text = exc.Message;
                 //bool iscritical = (sender is StackOverflowException || sender is AccessViolationException);
                 bool iscritical = true;
+                bool handled = false;
                 dialog.B_Continue.IsEnabled = !iscritical;
                 dialog.B_Pause.IsEnabled = !iscritical;
                 dialog.B_Continue.Click += (_sender, _e) =>
                 {
+                    handled = true;
                     DllModel.Start();
                     dialog.Close();
                 };
                 dialog.B_Pause.Click += (_sender, _e) =>
                 {
+                    handled = true;
                     DllModel.Pause();
                     dialog.Close();
                 };
                 dialog.B_Abort.Click += (_sender, _e) =>
                 {
+                    handled = true;
                     DllModel.Abort();
                     dialog.Close();
+                };
+                dialog.Closed += (_sender, _e) =>
+                {
+                    if (!handled)
+                    {
+                        handled = true;
+                        DllModel.Abort();
+                    }
                 };
                 dialog.ShowDialog();
             }));
