@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.PLCDevice
 {
-    public enum PLCDeviceType
+    public enum PLC_FGs_Type : int
     {
         FGs_16MR_A,
         FGs_16MR_D,
@@ -23,5 +23,12 @@ namespace SamSoarII.PLCDevice
         FGs_32MR_YTJ,
         FGs_32MT_YTJ,
         FGs_20MR_BYK
+    }
+
+    public enum PLC_FGm_Type : int
+    {
+        FGm_32MT_A = 15,
+        FGm_48MT_A,
+        FGm_64MT_A
     }
 }

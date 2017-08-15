@@ -139,11 +139,11 @@ namespace SamSoarII.PLCDevice
                 return new IntRange(uint.MinValue, uint.MaxValue);
             }
         }
-        public override PLCDeviceType Type
+        public override PLC_FGs_Type Type
         {
             get
             {
-                return PLCDeviceType.FGs_16MR_A;
+                return PLC_FGs_Type.FGs_16MR_A;
             }
         }
     }

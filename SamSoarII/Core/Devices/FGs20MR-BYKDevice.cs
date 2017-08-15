@@ -10,7 +10,7 @@ namespace SamSoarII.PLCDevice
     class FGs20MR_BYKDevice : Device
     {
         public FGs20MR_BYKDevice() { }
-        public FGs20MR_BYKDevice(PLCDeviceType type)
+        public FGs20MR_BYKDevice(PLC_FGs_Type type)
         {
             _type = type;
         }
@@ -110,8 +110,8 @@ namespace SamSoarII.PLCDevice
                 return new IntRange(0, 256);
             }
         }
-        private PLCDeviceType _type;
-        public override PLCDeviceType Type
+        private PLC_FGs_Type _type;
+        public override PLC_FGs_Type Type
         {
             get
             {

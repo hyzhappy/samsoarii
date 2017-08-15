@@ -10,7 +10,7 @@ namespace SamSoarII.PLCDevice
     class FGs32MTDevice : Device
     {
         public FGs32MTDevice() { }
-        public FGs32MTDevice(PLCDeviceType type)
+        public FGs32MTDevice(PLC_FGs_Type type)
         {
             _type = type;
         }
@@ -142,8 +142,8 @@ namespace SamSoarII.PLCDevice
                 return new IntRange(0, 8);
             }
         }
-        private PLCDeviceType _type;
-        public override PLCDeviceType Type
+        private PLC_FGs_Type _type;
+        public override PLC_FGs_Type Type
         {
             get
             {

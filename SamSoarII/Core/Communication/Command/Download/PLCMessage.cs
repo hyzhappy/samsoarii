@@ -34,7 +34,7 @@ namespace SamSoarII.Core.Communication
         public int StationNumber;
 
         //PLC类型
-        public PLCDeviceType PLCType;
+        public object PLCType;
 
         //通信端口类型
         public PortType PortType;
@@ -60,15 +60,14 @@ namespace SamSoarII.Core.Communication
             Ver2 = ValueConverter.GetValueByBytes(data[cursor++], data[cursor++]);
             Ver3 = ValueConverter.GetValueByBytes(data[cursor++], data[cursor++]);
             StationNumber = data[cursor++];
-            //PLCType = PLCDeviceType.FGs_16MR_A;
-            cursor += 2;
+            PLCType = GetPLCType(ValueConverter.GetValueByBytes(data[cursor++], data[cursor++]));
             IsUPNeed = data[cursor++] == 1;
             IsDPNeed = data[cursor++] == 1;
             IsMPNeed = data[cursor++] == 1;
             PortType = GetPortType(data[cursor]);
         }
 
-        private RunStatus GetRunStatus(byte data)
+        private static RunStatus GetRunStatus(byte data)
         {
             switch (data)
             {
@@ -82,7 +81,7 @@ namespace SamSoarII.Core.Communication
                     return RunStatus.Stop;
             }
         }
-        private PortType GetPortType(byte data)
+        private static PortType GetPortType(byte data)
         {
             switch (data)
             {
@@ -94,6 +93,45 @@ namespace SamSoarII.Core.Communication
                     return PortType.USB;
                 default:
                     return PortType.Unknown;
+            }
+        }
+
+        private static object GetPLCType(int value)
+        {
+            switch (value)
+            {
+                case 0x0000:
+                    return PLC_FGs_Type.FGs_32MR_D;
+                case 0x0001:
+                    return PLC_FGs_Type.FGs_32MR_A;
+                case 0x0002:
+                    return PLC_FGs_Type.FGs_32MT_D;
+                case 0x0003:
+                    return PLC_FGs_Type.FGs_32MT_A;
+                case 0x0100:
+                    return PLC_FGs_Type.FGs_16MR_D;
+                case 0x0101:
+                    return PLC_FGs_Type.FGs_16MR_A;
+                case 0x0102:
+                    return PLC_FGs_Type.FGs_16MT_D;
+                case 0x0103:
+                    return PLC_FGs_Type.FGs_16MT_A;
+                case 0x0200:
+                    return PLC_FGs_Type.FGs_64MR_D;
+                case 0x0201:
+                    return PLC_FGs_Type.FGs_64MR_A;
+                case 0x0202:
+                    return PLC_FGs_Type.FGs_64MT_D;
+                case 0x0203:
+                    return PLC_FGs_Type.FGs_64MT_A;
+                case 0x0204:
+                    return PLC_FGm_Type.FGm_64MT_A;
+                case 0x0205:
+                    return PLC_FGm_Type.FGm_48MT_A;
+                case 0x0206:
+                    return PLC_FGm_Type.FGm_32MT_A;
+                default:
+                    return PLC_FGs_Type.FGs_16MT_A;
             }
         }
     }

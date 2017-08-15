@@ -96,9 +96,14 @@ namespace SamSoarII.Utility
             }
         }
         unsafe
-        public static int DoubleToInt(double value)
+        public static Int64 DoubleToInt64(double value)
         {
-            return *((int*)&value);
+            return *((Int64*)&value);
+        }
+        unsafe
+        public static double Int64ToDouble(Int64 value)
+        {
+            return *((double*)&value);
         }
         unsafe
         public static uint FloatToUInt(float value)

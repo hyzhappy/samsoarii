@@ -377,12 +377,12 @@ namespace SamSoarII.Core.Models
             projname = xele.Attribute("Name").Value;
             try
             {
-                PLCDeviceType deviceType = (PLCDeviceType)Enum.Parse(typeof(PLCDeviceType), xele.Attribute("DeviceType").Value);
+                PLC_FGs_Type deviceType = (PLC_FGs_Type)Enum.Parse(typeof(PLC_FGs_Type), xele.Attribute("DeviceType").Value);
                 PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(deviceType);
             }
             catch (Exception)
             {
-                PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(PLCDeviceType.FGs_16MR_A);
+                PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(PLC_FGs_Type.FGs_16MR_A);
             }
             Device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             foreach (XElement xele_f in xele.Elements("FuncBlock"))
