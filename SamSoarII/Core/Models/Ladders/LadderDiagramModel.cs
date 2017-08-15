@@ -357,7 +357,7 @@ namespace SamSoarII.Core.Models
             {
                 int unit_x = unit.X;
                 int unit_y = unit.Y;
-                if (unit.Shape == LadderUnitModel.Shapes.VLine) unit_x++;
+                //if (unit.Shape == LadderUnitModel.Shapes.VLine) unit_x++;
                 switch (status)
                 {
                     case Status.NULL:
@@ -599,18 +599,18 @@ namespace SamSoarII.Core.Models
                     }
                 }
             }
-            if (View != null)
-            {
-                View.IsViewModified = true;
-                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
-                    area.Select(IFParent);
-            }
             redos.Push(cmd);
             isexecuting = false;
             PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
             ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             UpdateCanvasTop();
             Parent.InvokeModify(this, true);
+            if (View != null)
+            {
+                View.IsViewModified = true;
+                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
+                    area.Select(IFParent);
+            }
         }
 
         public void Redo()
@@ -766,18 +766,18 @@ namespace SamSoarII.Core.Models
                 }
                 area.Update(cmd.NewNetworks);
             }
-            if (View != null)
-            {
-                View.IsViewModified = true;
-                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
-                    area.Select(IFParent);
-            }
             undos.Push(cmd);
             isexecuting = false;
             PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
             ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             UpdateCanvasTop();
             Parent.InvokeModify(this);
+            if (View != null)
+            {
+                View.IsViewModified = true;
+                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
+                    area.Select(IFParent);
+            }
         }
 
         private void Execute(int _type, object _target, IList<object> _olds, IList<object> _news)

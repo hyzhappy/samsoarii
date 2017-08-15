@@ -231,44 +231,21 @@ namespace SamSoarII.Shell.Models
         
         private void OnCoreChildrenChanged(LadderUnitModel sender, LadderUnitChangedEventArgs e)
         {
-            if (!IsExpand) IsExpand = true;
             switch (e.Action)
             {
-                case LadderUnitAction.ADD:
-                    if (sender.Y < loadedrowstart || sender.Y > loadedrowend)
-                        break;
-                    if (sender.View == null)
-                        sender.View = LadderUnitViewModel.Create(sender);
-                    if (sender.View.Parent != ViewParent.MainCanvas)
-                    {
-                        if (sender.View.Parent is Canvas)
-                            ((Canvas)(sender.View.Parent)).Children.Remove(sender.View);
-                        ViewParent.MainCanvas.Children.Add(sender.View);
-                    }
-                    break;
                 case LadderUnitAction.REMOVE:
-                    if (sender.View == null) break;
-                    sender.View.Visibility = Visibility.Hidden;
-                    sender.View.Dispose();
-                    break;
-                case LadderUnitAction.MOVE:
-                    if (sender.Y >= loadedrowstart && sender.Y <= loadedrowend)
+                    if (sender.View != null)
                     {
-                        if (sender.View == null)
-                            sender.View = LadderUnitViewModel.Create(sender);
-                        if (!LadderCanvas.Children.Contains(sender.View))
-                            LadderCanvas.Children.Add(sender.View);
-                    }
-                    else
-                    {
-                        if (sender.View != null)
-                        {
-                            LadderCanvas.Children.Remove(sender.View);
-                            sender.View.Dispose();
-                        }
+                        sender.View.Visibility = Visibility.Hidden;
+                        sender.View.Dispose();
                     }
                     break;
-                case LadderUnitAction.UPDATE:
+                default:
+                    if (ViewParent != null && !core.Parent.IsExecuting)
+                    {
+                        DynamicDispose();
+                        ViewParent.IsViewModified = true;
+                    }
                     break;
             }
         }
