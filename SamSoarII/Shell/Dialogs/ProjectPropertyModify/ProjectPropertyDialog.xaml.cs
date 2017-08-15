@@ -30,7 +30,7 @@ namespace SamSoarII.Shell.Dialogs
             oldParams = core.PARAProj;
             newParams = oldParams.Clone(null);
             wgDevice = new DeviceSelectionWidget(_core);
-            wgCommunication = new CommunicationSettingWidget(newParams.PARACom232, newParams.PARACom485);
+            wgCommunication = new CommunicationSettingWidget(newParams.PARACom232, newParams.PARACom485,newParams.PARAUsb);
             wgPassword = new PasswordSettingWidget(newParams.PARAPassword);
             wgAnalog = new AnalogQuantitySettingWidget(newParams.PARAAnalog);
             wgFilter = new FilterSettingWidget(newParams.PARAFilter);

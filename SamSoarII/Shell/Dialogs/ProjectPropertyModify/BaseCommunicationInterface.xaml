@@ -9,7 +9,7 @@
              d:DesignHeight="600" d:DesignWidth="390">
     <Grid x:Uid="Grid_1">
         <Grid.Resources>
-            <Style x:Uid="Style_1" TargetType="StackPanel">
+            <Style TargetType="StackPanel">
                 <Style.Triggers>
                     <Trigger Property="IsEnabled" Value="False">
                         <Setter Property="Visibility" Value="Hidden"></Setter>
@@ -32,16 +32,16 @@
         <Canvas>
             <TextBlock Canvas.Top="10" Canvas.Left="20" Text="{x:Static properties:Resources.Baud_Rate}"></TextBlock>
             <ComboBox Canvas.Top="10" Canvas.Left="120" x:Name="Combox1" Margin="10,0,0,0" IsEditable="False" Width="80" SelectedIndex="{Binding BaudRateIndex}">
-                <ComboBoxItem x:Uid="ComboBoxItem_1">4800</ComboBoxItem>
-                <ComboBoxItem x:Uid="ComboBoxItem_2">9600</ComboBoxItem>
-                <ComboBoxItem x:Uid="ComboBoxItem_3">19200</ComboBoxItem>
-                <ComboBoxItem x:Uid="ComboBoxItem_4">38400</ComboBoxItem>
-                <ComboBoxItem x:Uid="ComboBoxItem_5">57600</ComboBoxItem>
-                <ComboBoxItem x:Uid="ComboBoxItem_6">115200</ComboBoxItem>
+                <ComboBoxItem>4800</ComboBoxItem>
+                <ComboBoxItem>9600</ComboBoxItem>
+                <ComboBoxItem>19200</ComboBoxItem>
+                <ComboBoxItem>38400</ComboBoxItem>
+                <ComboBoxItem>57600</ComboBoxItem>
+                <ComboBoxItem>115200</ComboBoxItem>
             </ComboBox>
             <TextBlock Canvas.Top="50" Canvas.Left="20" Text="{x:Static properties:Resources.Data_Bits}"></TextBlock>
             <ComboBox Canvas.Top="50" Canvas.Left="120" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding DataBitIndex}">
-                <ComboBoxItem x:Uid="ComboBoxItem_7">8</ComboBoxItem>
+                <ComboBoxItem>8</ComboBoxItem>
             </ComboBox>
             <TextBlock Canvas.Top="90" Canvas.Left="20" Text="{x:Static properties:Resources.Stop_Bit}"></TextBlock>
             <ComboBox Canvas.Top="90" Canvas.Left="120" x:Name="Combox3" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding StopBitIndex}">
@@ -79,13 +79,13 @@
         <Canvas Grid.Row="2">
             <StackPanel Canvas.Top="10">
                 <TextBlock FontSize="16" Text="{x:Static properties:Resources.Station_Number_Setting}"></TextBlock>
-                <local:RangeTextBox x:Uid="rangeTextbox1" x:Name="rangeTextbox1" Margin="5,-2,0,0" LowRange="1" TopRange="128" DefaultValue="-1"></local:RangeTextBox>
+                <local:RangeTextBox x:Name="rangeTextbox1" Margin="5,-2,0,0" LowRange="1" TopRange="128" DefaultValue="-1"></local:RangeTextBox>
                 <TextBlock FontSize="16" Text="(1-128)"></TextBlock>
             </StackPanel>
             <StackPanel Canvas.Top="50">
                 <TextBlock FontSize="16" Text="{x:Static properties:Resources.Timeout}"></TextBlock>
-                <local:RangeTextBox x:Name="rangeTextbox2" Margin="5,-2,0,0" LowRange="1" TopRange="255" DefaultValue="-1"></local:RangeTextBox>
-                <TextBlock FontSize="16" Text="*10ms    (1-255)"></TextBlock>
+                <local:RangeTextBox x:Name="rangeTextbox2" Margin="5,-2,0,0" LowRange="20" TopRange="255" DefaultValue="-1"></local:RangeTextBox>
+                <TextBlock FontSize="16" Text="*10ms    (20-255)"></TextBlock>
             </StackPanel>
         </Canvas>
         <Button x:Uid="Button_1" Grid.Row="3" Width="80" Height="24" HorizontalAlignment="Left" FontSize="16" Margin="20,0,0,0" Click="DefaultButtonClick" Content="{x:Static properties:Resources.Default}"/>

@@ -552,7 +552,7 @@ namespace SamSoarII
                     LocalizedMessageBox.Show(string.Format("{0}", Properties.Resources.Message_Project_Loaded), LocalizedMessageIcon.Information);
                 else
                 {
-                    if (Project?.IsModified == true || FileHelper.InvalidFileName(Project?.FileName))
+                    if (Project != null && (Project.IsModified == true || FileHelper.InvalidFileName(Project.FileName)))
                     {
                         LocalizedMessageResult mbret;
                         if (Project?.FileName == string.Empty)
@@ -594,7 +594,7 @@ namespace SamSoarII
                 LocalizedMessageBox.Show(Properties.Resources.Item_Rename, LocalizedMessageIcon.Warning);
                 e.Cancel = true;
             }
-            if (Project?.IsModified == true || FileHelper.InvalidFileName(Project?.FileName))
+            if (Project != null && (Project.IsModified == true || FileHelper.InvalidFileName(Project.FileName)))
             {
                 LocalizedMessageResult mbret;
                 if (Project?.FileName == string.Empty)
@@ -826,7 +826,7 @@ namespace SamSoarII
                 || e.Command == ApplicationCommands.Close
                 || e.Command == GlobalCommand.CloseProjectCommand)
             {
-                if (Project?.IsModified == true || FileHelper.InvalidFileName(Project?.FileName))
+                if (Project != null && (Project.IsModified == true || FileHelper.InvalidFileName(Project.FileName)))
                 {
                     LocalizedMessageResult mbret;
                     if (Project?.FileName == string.Empty)

@@ -235,6 +235,7 @@
     <Compile Include="Core\Models\ProjectPropertyParams\FilterParams.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\HoldingSectionParams.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\PasswordParams.cs" />
+    <Compile Include="Core\Models\ProjectPropertyParams\USBCommunicationParams.cs" />
     <Compile Include="Core\Models\Values\FindReplace\FindFormat.cs" />
     <Compile Include="Core\Models\Values\FindReplace\ReplaceFormat.cs" />
     <Compile Include="Core\Models\Values\FindReplace\ReplaceCommand.cs" />
@@ -316,6 +317,9 @@
     </Compile>
     <Compile Include="Shell\Dialogs\Monitor\QuickAddElementDialog.xaml.cs">
       <DependentUpon>QuickAddElementDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ProjectPropertyModify\USBCommunicationInterface.xaml.cs">
+      <DependentUpon>USBCommunicationInterface.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Dialogs\SimulateExceptionDialog.xaml.cs">
       <DependentUpon>SimulateExceptionDialog.xaml</DependentUpon>
@@ -847,6 +851,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Dialogs\Monitor\QuickAddElementDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ProjectPropertyModify\USBCommunicationInterface.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

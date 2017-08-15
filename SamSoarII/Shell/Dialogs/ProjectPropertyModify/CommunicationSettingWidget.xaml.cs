@@ -20,19 +20,20 @@ namespace SamSoarII.Shell.Dialogs
     /// </summary>
     public partial class CommunicationSettingWidget : UserControl, IDisposable
     {
-        private List<BaseCommunicationInterface> _widget = new List<BaseCommunicationInterface>();
+        private List<UserControl> _widget = new List<UserControl>();
         
-        public CommunicationSettingWidget(CommunicationInterfaceParams com232, CommunicationInterfaceParams com485)
+        public CommunicationSettingWidget(CommunicationInterfaceParams com232, CommunicationInterfaceParams com485,USBCommunicationParams usbParams)
         {
             InitializeComponent();
             _widget.Add(new BaseCommunicationInterface(com232));
             _widget.Add(new BaseCommunicationInterface(com485));
+            _widget.Add(new USBCommunicationInterface(usbParams));
             ShowWidget(0);
         }
 
         public void Dispose()
         {
-            foreach (var item in _widget) item.Dispose();
+            foreach (var item in _widget) ((IDisposable)item).Dispose();
             _widget.Clear();
             _widget = null;
         }
@@ -56,7 +57,9 @@ namespace SamSoarII.Shell.Dialogs
         {
             foreach (var item in _widget)
             {
-                item.Save();
+                if(item is BaseCommunicationInterface)
+                    ((BaseCommunicationInterface)item).Save();
+                else ((USBCommunicationInterface)item).Save();
             }
         }
     }

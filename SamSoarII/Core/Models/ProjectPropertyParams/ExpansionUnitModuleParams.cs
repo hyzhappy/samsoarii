@@ -186,10 +186,10 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("IP_Mode_Index"));
             }
         }
-        private int IP_Mode_Index1;
-        private int IP_Mode_Index2;
-        private int IP_Mode_Index3;
-        private int IP_Mode_Index4;
+        internal int IP_Mode_Index1;
+        internal int IP_Mode_Index2;
+        internal int IP_Mode_Index3;
+        internal int IP_Mode_Index4;
         public string[] IP_Channel
         {
             get
@@ -251,10 +251,10 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("IP_Channel_CB_Enabled"));
             }
         }
-        private bool IP_Channel_CB_Enabled1;
-        private bool IP_Channel_CB_Enabled2;
-        private bool IP_Channel_CB_Enabled3;
-        private bool IP_Channel_CB_Enabled4;
+        internal bool IP_Channel_CB_Enabled1;
+        internal bool IP_Channel_CB_Enabled2;
+        internal bool IP_Channel_CB_Enabled3;
+        internal bool IP_Channel_CB_Enabled4;
 
         public string[] IP_SampleTime
         {
@@ -299,15 +299,15 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("IP_SampleTime_Index"));
             }
         }
-        private int IP_SampleTime_Index1;
-        private int IP_SampleTime_Index2;
-        private int IP_SampleTime_Index3;
-        private int IP_SampleTime_Index4;
+        internal int IP_SampleTime_Index1;
+        internal int IP_SampleTime_Index2;
+        internal int IP_SampleTime_Index3;
+        internal int IP_SampleTime_Index4;
 
-        private string SampleValue1;
-        private string SampleValue2;
-        private string SampleValue3;
-        private string SampleValue4;
+        internal string SampleValue1;
+        internal string SampleValue2;
+        internal string SampleValue3;
+        internal string SampleValue4;
         public string SampleValue
         {
             get
@@ -342,10 +342,10 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("SampleValue"));
             }
         }
-        private int IP_StartRange1;
-        private int IP_StartRange2;
-        private int IP_StartRange3;
-        private int IP_StartRange4;
+        internal int IP_StartRange1;
+        internal int IP_StartRange2;
+        internal int IP_StartRange3;
+        internal int IP_StartRange4;
         public int IP_StartRange
         {
             get
@@ -380,10 +380,10 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("IP_StartRange"));
             }
         }
-        private int IP_EndRange1;
-        private int IP_EndRange2;
-        private int IP_EndRange3;
-        private int IP_EndRange4;
+        internal int IP_EndRange1;
+        internal int IP_EndRange2;
+        internal int IP_EndRange3;
+        internal int IP_EndRange4;
         public int IP_EndRange
         {
             get
@@ -473,8 +473,8 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("OP_Channel_CB_Enabled"));
             }
         }
-        private bool OP_Channel_CB_Enabled1;
-        private bool OP_Channel_CB_Enabled2;
+        internal bool OP_Channel_CB_Enabled1;
+        internal bool OP_Channel_CB_Enabled2;
 
         public string[] OP_Mode
         {
@@ -511,11 +511,11 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("OP_Mode_Index"));
             }
         }
-        private int OP_Mode_Index1;
-        private int OP_Mode_Index2;
+        internal int OP_Mode_Index1;
+        internal int OP_Mode_Index2;
 
-        private int OP_StartRange1;
-        private int OP_StartRange2;
+        internal int OP_StartRange1;
+        internal int OP_StartRange2;
         public int OP_StartRange
         {
             get
@@ -542,8 +542,8 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("OP_StartRange"));
             }
         }
-        private int OP_EndRange1;
-        private int OP_EndRange2;
+        internal int OP_EndRange1;
+        internal int OP_EndRange2;
         public int OP_EndRange
         {
             get
