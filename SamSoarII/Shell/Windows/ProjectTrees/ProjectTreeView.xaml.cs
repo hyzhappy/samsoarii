@@ -315,17 +315,30 @@ namespace SamSoarII.Shell.Windows
         private void Rebuild(ProjectTreeViewItem ptvitem, LadderDiagramModel ldmodel)
         {
             ptvitem.RelativeObject = ldmodel;
-            Clear(ptvitem);
-            foreach (LadderNetworkModel lnvmodel in ldmodel.Children)
+            foreach (ProjectTreeViewItem subitem in ptvitem.Items.Cast<ProjectTreeViewItem>().ToArray())
             {
-                CreatePTVItem(
-                        ptvitem,
+                LadderNetworkModel lnmodel = (LadderNetworkModel)(subitem.RelativeObject);
+                if (lnmodel.Parent == null)
+                {
+                    Dispose(subitem);
+                    ptvitem.Items.Remove(subitem);
+                }
+            }
+            List<LadderNetworkModel> lnmodels = ldmodel.Children.ToList();
+            lnmodels.Sort((n1, n2) => (n1.ID.CompareTo(n2.ID)));
+            foreach (LadderNetworkModel lnmodel in lnmodels)
+            {
+                if (lnmodel.PTVItem != null) continue;
+                ProjectTreeViewItem subitem = CreatePTVItem(
+                        null,
                         ProjectTreeViewItem.TYPE_NETWORK
                       | ProjectTreeViewItem.FLAG_REMOVE
                       | ProjectTreeViewItem.FLAG_CREATENETWORKBEFORE
                       | ProjectTreeViewItem.FLAG_CREATENETWORKAFTER
                       | ProjectTreeViewItem.FLAG_CONFIG,
-                        lnvmodel, false);
+                        lnmodel, false);
+                ptvitem.Items.Insert(lnmodel.ID, subitem);
+                lnmodel.PTVItem = subitem;
             }
         }
 
@@ -536,7 +549,11 @@ namespace SamSoarII.Shell.Windows
                         }
                     break;
                 case ProjectTreeViewItem.TYPE_NETWORK:
-                    Rebuild(sender, (LadderDiagramModel)(sender.RelativeObject));
+                    {
+                        LadderDiagramModel ldmodel = (LadderDiagramModel)(sender.RelativeObject);
+                        if (ldmodel.IsExecuting) break;
+                        Rebuild(sender, ldmodel);
+                    }
                     break;
                 case ProjectTreeViewItem.TYPE_MODBUS:
                     Rebuild(sender, (ModbusTableModel)(sender.RelativeObject));
@@ -868,6 +885,18 @@ namespace SamSoarII.Shell.Windows
         private void OnPTVIDragOver(object sender, DragEventArgs e)
         {
             CurrentItem = GetPTVIParent(e.OriginalSource);
+            var p = e.GetPosition(Scroll);
+            if (Scroll.ViewportHeight < p.Y)
+                Scroll.ScrollToVerticalOffset(Scroll.VerticalOffset + 10.0);
+            else if (p.Y < 10)
+                Scroll.ScrollToVerticalOffset(Scroll.VerticalOffset - 10.0);
+            else if (p.X < 10)
+                Scroll.ScrollToHorizontalOffset(Scroll.HorizontalOffset - 10.0);
+            else if (Scroll.ViewportWidth < p.X)
+            {
+                Scroll.ScrollToHorizontalOffset(Scroll.HorizontalOffset + 10.0);
+                //Scroll.ScrollToVerticalOffset(TV_Main.ActualHeight * (p.Y - Scroll.VerticalOffset) / Scroll.ViewportHeight);
+            }
         }
 
         private void TV_Main_Drop(object sender, DragEventArgs e)
@@ -959,6 +988,11 @@ namespace SamSoarII.Shell.Windows
             CurrentItem = null;
             if (e.Source == TV_Main)
                 ifParent.WNDMain.LACProj.Hide();
+        }
+        
+        private void OnPTVIMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            Scroll.ScrollToVerticalOffset(Scroll.VerticalOffset + e.Delta);
         }
 
         #endregion

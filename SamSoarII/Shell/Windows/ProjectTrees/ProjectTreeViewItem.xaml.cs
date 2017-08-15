@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.Specialized;
 using SamSoarII.Shell.Models;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace SamSoarII.Shell.Windows
 {
@@ -564,10 +566,13 @@ namespace SamSoarII.Shell.Windows
                     if (RelativeObject is LadderNetworkModel)
                     {
                         LadderNetworkModel lnmodel = (LadderNetworkModel)RelativeObject;
-                        if (lnmodel.Brief == null || lnmodel.Brief.Length == 0)
-                            Text = String.Format("{0} {1:d}", Properties.Resources.Network, lnmodel.ID);
-                        else
-                            Text = String.Format("{0:d}-{1:s}", lnmodel.ID, lnmodel.Brief);
+                        //Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)(delegate ()
+                        //{
+                            if (lnmodel.Brief == null || lnmodel.Brief.Length == 0)
+                                Text = String.Format("{0} {1:d}", Properties.Resources.Network, lnmodel.ID);
+                            else
+                                Text = String.Format("{0:d}-{1:s}", lnmodel.ID, lnmodel.Brief);
+                        //}));
                     }
                     break;
                 case "ProjName":
