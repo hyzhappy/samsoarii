@@ -458,6 +458,12 @@ namespace SamSoarII.Core.Models
                     case Status.MULTINET:
                         ifparent.Select(diagram, start, end);
                         break;
+                    default:
+                        if (diagram?.View != null)
+                            diagram.View.ReleaseSelect();
+                        else if (network?.Parent?.View != null)
+                            network.Parent.View.ReleaseSelect();
+                        break;
                 }
             }
         }

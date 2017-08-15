@@ -430,10 +430,11 @@ namespace SamSoarII.Shell.Models
         public LadderDiagramViewModel ViewParent { get { return core?.Parent?.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
 
+        public LadderNetworkModel this[int id] { get { return id >= 0 && id < CoreParent.Children.Count ? CoreParent.Children[id] : null; } }
         public LadderDiagramModel CoreParent { get { return core?.Parent; } }
-        public LadderNetworkModel NetOrigin { get { return CoreParent.Children[core.NetOrigin]; } }
-        public LadderNetworkModel NetStart { get { return CoreParent.Children[core.NetStart]; } }
-        public LadderNetworkModel NetEnd { get { return CoreParent.Children[core.NetEnd]; } }
+        public LadderNetworkModel NetOrigin { get { return this[core.NetOrigin]; } }
+        public LadderNetworkModel NetStart { get { return this[core.NetStart]; } }
+        public LadderNetworkModel NetEnd { get { return this[core.NetEnd]; } }
         
         #endregion
 
@@ -456,7 +457,7 @@ namespace SamSoarII.Shell.Models
         public void Update()
         {
             int unitwidth = GlobalSetting.LadderWidthUnit;
-            int unitheight = IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit;
+            int unitheight = IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit;   
             switch (core.State)
             {
                 case SelectAreaCore.Status.NotSelected:
@@ -470,6 +471,11 @@ namespace SamSoarII.Shell.Models
                     Height = (core.YEnd - core.YStart + 1) * unitheight;
                     break;
                 case SelectAreaCore.Status.SelectCross:
+                    if (NetStart == null || NetEnd == null || NetOrigin == null)
+                    {
+                        core.Release();
+                        break;
+                    }
                     Visibility = Visibility.Visible;
                     Canvas.SetLeft(this, 0);
                     Canvas.SetTop(this, NetStart.CanvasTop);

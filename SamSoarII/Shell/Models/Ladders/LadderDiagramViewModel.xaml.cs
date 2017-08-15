@@ -1412,6 +1412,7 @@ namespace SamSoarII.Shell.Models
             int dir = (rowstart < rowend ? 1 : -1);
             for (int y = rowstart; y != rowend + dir; y += dir)
             {
+                if (y >= core.Children.Count) continue;
                 LadderNetworkModel net = core.Children[y];
                 if (net.View != null)
                 {
