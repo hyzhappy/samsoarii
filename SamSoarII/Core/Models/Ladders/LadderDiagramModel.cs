@@ -260,7 +260,7 @@ namespace SamSoarII.Core.Models
                 network.ViewHeight = currenttop - network.CanvasTop;
                 currenttop += 4;
             }
-            canvasheight = currenttop + 20;
+            canvasheight = currenttop + 18;
             ViewPropertyChanged(this, new PropertyChangedEventArgs("CanvasHeight"));
         }
         

@@ -97,50 +97,24 @@ namespace SamSoarII.Shell.Models
         
         private void OnCoreChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            LadderNetworkModel net = null;
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    net = (LadderNetworkModel)(e.NewItems[0]);
-                    if (net.ID < loadedstart || net.ID > loadedend)
-                        break;
-                    if (net.Inst.View == null)
-                        net.Inst.View = AllResourceManager.CreateINet(net.Inst);
-                    if (net.Inst.View.Parent != MainCanvas)
-                    {
-                        if (net.Inst.View.Parent is Canvas)
-                            ((Canvas)(net.Inst.View.Parent)).Children.Remove(net.Inst.View);
-                        MainCanvas.Children.Add(net.Inst.View);
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    net = (LadderNetworkModel)(e.OldItems[0]);
-                    if (net.ID < loadedstart)
-                    {
-                        loadedstart--;
-                        loadedend--;
-                        break;
-                    }
-                    if (net.ID > loadedend)
-                        break;
-                    if (cursor.Core.Parent == net.Inst)
+            if (e.OldItems != null)
+                foreach (LadderNetworkModel lnmodel in e.OldItems)
+                {
+                    if (cursor.Core.Parent == lnmodel.Inst)
                         cursor.Core.Parent = null;
-                    if (net.Inst.View != null)
+                    if (lnmodel.Inst.View != null)
                     {
-                        net.Inst.View.Visibility = Visibility.Hidden;
-                        net.Inst.View.DynamicDispose();
-                        net.Inst.View.Dispose();
+                        lnmodel.Inst.View.Visibility = Visibility.Hidden;
+                        lnmodel.Inst.View.DynamicDispose();
+                        lnmodel.Inst.View.Dispose();
                     }
-                    loadedend--;
-                    break;
-                case NotifyCollectionChangedAction.Replace:
-                    net = (LadderNetworkModel)(e.NewItems[0]);
-                    MainCanvas.Children[e.NewStartingIndex] = net.Inst.View;
-                    break;
-                case NotifyCollectionChangedAction.Move:
-                case NotifyCollectionChangedAction.Reset:
-                    Update();
-                    break;
+                }
+            if (!Core.Parent.IsExecuting)
+            {
+                loadedstart = 0;
+                loadedend = core.Children.Count() - 1;
+                DynamicDispose();
+                isviewmodified = true;
             }
         }
 
@@ -255,6 +229,7 @@ namespace SamSoarII.Shell.Models
                     InstructionNetworkModel inet = inets[y];
                     if (inet.View == null)
                         inet.View = AllResourceManager.CreateINet(inet);
+                    inet.View.Visibility = Visibility.Visible;
                     if (inet.View.Parent != MainCanvas)
                     {
                         if (inet.View.Parent is Canvas)
@@ -270,6 +245,7 @@ namespace SamSoarII.Shell.Models
             int dir = (start < end ? 1 : -1);
             for (int y = start; y != end + dir; y += dir)
             {
+                if (y > inets.Length) continue;
                 InstructionNetworkModel inet = inets[y];
                 if (inet.View != null)
                 {

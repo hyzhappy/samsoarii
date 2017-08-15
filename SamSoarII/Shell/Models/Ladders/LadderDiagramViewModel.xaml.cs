@@ -197,14 +197,20 @@ namespace SamSoarII.Shell.Models
         {
             if (e.OldItems != null)
                 foreach (LadderNetworkModel lnmodel in e.OldItems)
+                {
+                    if (SelectRectOwner == lnmodel)
+                        ReleaseSelect();
                     if (lnmodel.View != null)
                     {
                         lnmodel.View.DynamicDispose();
                         lnmodel.View.Visibility = Visibility.Hidden;
                         lnmodel.View.Dispose();
                     }
+                }
             if (!core.IsExecuting)
             {
+                loadedrowstart = 0;
+                loadedrowend = core.Children.Count - 1;
                 DynamicDispose();
                 isviewmodified = true;
             }
