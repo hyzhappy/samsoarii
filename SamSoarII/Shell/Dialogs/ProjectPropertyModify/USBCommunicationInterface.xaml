@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="SamSoarII.Shell.Dialogs.USBCommunicationInterface"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:properties="clr-namespace:SamSoarII.Properties"
+             xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="390">
+    <Grid>
+        <StackPanel Margin="10,20,0,0" Orientation="Horizontal">
+            <TextBlock FontSize="16" Text="{x:Static properties:Resources.Timeout}"></TextBlock>
+            <local:RangeTextBox x:Name="RT_box" VerticalAlignment="Top" Margin="5,0,0,0" LowRange="20" TopRange="255" DefaultValue="-1"/>
+            <TextBlock FontSize="16" Text="*10ms    (20-255)"></TextBlock>
+        </StackPanel>
+    </Grid>
+</UserControl>

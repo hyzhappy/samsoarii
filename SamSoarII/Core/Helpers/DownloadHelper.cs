@@ -107,6 +107,15 @@ namespace SamSoarII.Core.Helpers
             }
         }
 
+        static private void Write(List<byte> data, ushort value)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                data.Add((byte)(value & 0xff));
+                value >>= 8;
+            }
+        }
+
         static private void Write(List<byte> data, int value)
         {
             for (int i = 0; i < 4; i++)
@@ -130,6 +139,68 @@ namespace SamSoarII.Core.Helpers
                 data.Add((byte)value[i]);
         }
 
+        static private void Write(List<byte> data, ExpansionUnitModuleParams eumparams)
+        {
+            Write(data, 4);
+
+            Write(data, eumparams.IP_Channel_CB_Enabled1);
+            data.Add((byte)eumparams.IP_Mode_Index1);
+            Write(data, (ushort)eumparams.IP_EndRange1);
+            Write(data, (ushort)eumparams.IP_StartRange1);
+            data.Add((byte)Math.Pow(2,eumparams.IP_SampleTime_Index1 + 2));
+            Write(data, short.Parse(eumparams.SampleValue1));
+
+            Write(data, eumparams.IP_Channel_CB_Enabled2);
+            data.Add((byte)eumparams.IP_Mode_Index2);
+            Write(data, (ushort)eumparams.IP_EndRange2);
+            Write(data, (ushort)eumparams.IP_StartRange2);
+            data.Add((byte)Math.Pow(2, eumparams.IP_SampleTime_Index2 + 2));
+            Write(data, short.Parse(eumparams.SampleValue2));
+
+            Write(data, eumparams.IP_Channel_CB_Enabled3);
+            data.Add((byte)eumparams.IP_Mode_Index3);
+            Write(data, (ushort)eumparams.IP_EndRange3);
+            Write(data, (ushort)eumparams.IP_StartRange3);
+            data.Add((byte)Math.Pow(2, eumparams.IP_SampleTime_Index3 + 2));
+            Write(data, short.Parse(eumparams.SampleValue3));
+
+            Write(data, eumparams.IP_Channel_CB_Enabled4);
+            data.Add((byte)eumparams.IP_Mode_Index4);
+            Write(data, (ushort)eumparams.IP_EndRange4);
+            Write(data, (ushort)eumparams.IP_StartRange4);
+            data.Add((byte)Math.Pow(2, eumparams.IP_SampleTime_Index4 + 2));
+            Write(data, short.Parse(eumparams.SampleValue4));
+
+            Write(data, 4);
+
+            Write(data, eumparams.OP_Channel_CB_Enabled1);
+            data.Add((byte)eumparams.OP_Mode_Index1);
+            Write(data, (ushort)eumparams.OP_EndRange1);
+            Write(data, (ushort)eumparams.OP_StartRange1);
+            data.Add(4);
+            Write(data, (short)1000);
+
+            Write(data, eumparams.OP_Channel_CB_Enabled2);
+            data.Add((byte)eumparams.OP_Mode_Index2);
+            Write(data, (ushort)eumparams.OP_EndRange2);
+            Write(data, (ushort)eumparams.OP_StartRange2);
+            data.Add(4);
+            Write(data, (short)1000);
+
+            Write(data, eumparams.OP_Channel_CB_Enabled1);
+            data.Add((byte)eumparams.OP_Mode_Index1);
+            Write(data, (ushort)eumparams.OP_EndRange1);
+            Write(data, (ushort)eumparams.OP_StartRange1);
+            data.Add(4);
+            Write(data, (short)1000);
+
+            Write(data, eumparams.OP_Channel_CB_Enabled2);
+            data.Add((byte)eumparams.OP_Mode_Index2);
+            Write(data, (ushort)eumparams.OP_EndRange2);
+            Write(data, (ushort)eumparams.OP_StartRange2);
+            data.Add(4);
+            Write(data, (short)1000);
+        }
         #endregion
         
         //工程，注释，软元件等用于上载的信息直接压缩xml
@@ -286,49 +357,231 @@ namespace SamSoarII.Core.Helpers
         
         static private void WriteConfig(ProjectPropertyParams pparams)
         {
-            dtConfig.Add(0x00);
-            dtConfig.Add(0x00);
             CommunicationInterfaceParams com232params = pparams.PARACom232;
             CommunicationInterfaceParams com485params = pparams.PARACom485;
+            USBCommunicationParams usbparams = pparams.PARAUsb;
             PasswordParams pwparams = pparams.PARAPassword;
             FilterParams ftparams = pparams.PARAFilter;
             HoldingSectionParams hsparams = pparams.PARAHolding;
+            AnalogQuantityParams aqparams = pparams.PARAAnalog;
+            ExpansionModuleParams emparams = pparams.PARAExpansion;
+            
+            //空6个字节留作长度使用
+            dtConfig.AddRange(new byte[6]);
+            //com1
+            dtConfig.Add((byte)com232params.BaudRateIndex);
+            dtConfig.Add(0);
+            dtConfig.Add((byte)com232params.StopBitIndex);
+            dtConfig.Add((byte)com232params.CheckCodeIndex);
+            //com2
+            dtConfig.Add((byte)com485params.BaudRateIndex);
+            dtConfig.Add(0);
+            dtConfig.Add((byte)com485params.StopBitIndex);
+            dtConfig.Add((byte)com485params.CheckCodeIndex);
 
-            dtConfig.Add((byte)(com232params.BaudRateIndex));
-            dtConfig.Add((byte)(com232params.DataBitIndex));
-            dtConfig.Add((byte)(com232params.StopBitIndex));
-            dtConfig.Add((byte)(com232params.CheckCodeIndex));
-            dtConfig.Add((byte)(com485params.BaudRateIndex));
-            dtConfig.Add((byte)(com485params.DataBitIndex));
-            dtConfig.Add((byte)(com485params.StopBitIndex));
-            dtConfig.Add((byte)(com485params.CheckCodeIndex));
-            dtConfig.Add((byte)(com232params.StationNumber));
-            Write(dtConfig, (short)(com232params.Timeout));
-            dtConfig.Add((byte)(pwparams.PWENUpload ? 1 : 0));
+            dtConfig.Add((byte)pparams.StationNumber);
+
+            Write(dtConfig,(short)usbparams.Timeout);
+
+            Write(dtConfig,pwparams.PWENUpload);
             Write8(dtConfig, pwparams.PWUpload);
-            dtConfig.Add((byte)(com232params.ComType));
-            dtConfig.Add((byte)(com485params.ComType));
 
-            dtConfig.Add((byte)(pwparams.PWENDownload ? 1 : 0));
+            dtConfig.Add((byte)com232params.ComType);
+            dtConfig.Add((byte)com485params.ComType);
+
+            Write(dtConfig, pwparams.PWENDownload);
             Write8(dtConfig, pwparams.PWDownload);
-            dtConfig.Add((byte)(pwparams.PWENMonitor ? 1 : 0));
+
+            Write(dtConfig, pwparams.PWENMonitor);
             Write8(dtConfig, pwparams.PWMonitor);
-            dtConfig.Add((byte)(ftparams.IsChecked ? 1 : 0));
-            int fttime = 1 << (ftparams.FilterTimeIndex + 1);
-            Write(dtConfig, (short)(fttime));
 
-            Write(dtConfig, (short)(hsparams.MStartAddr));
-            Write(dtConfig, (short)(hsparams.MLength));
-            Write(dtConfig, (short)(hsparams.SStartAddr));
-            Write(dtConfig, (short)(hsparams.SLength));
-            Write(dtConfig, (short)(hsparams.DStartAddr));
-            Write(dtConfig, (short)(hsparams.DLength));
-            Write(dtConfig, (short)(hsparams.CVStartAddr));
-            Write(dtConfig, (short)(hsparams.CVLength));
+            Write(dtConfig, ftparams.IsChecked);
+            Write(dtConfig, (short)Math.Pow(2, ftparams.FilterTimeIndex + 1));
 
-            int sz = dtConfig.Count() - 2;
-            dtConfig[0] = (byte)(sz & 0xff);
-            dtConfig[1] = (byte)(sz >> 8);
+            Write(dtConfig, (short)hsparams.MStartAddr);
+            Write(dtConfig, (short)hsparams.MLength);
+            Write(dtConfig, (short)hsparams.DStartAddr);
+            Write(dtConfig, (short)hsparams.DLength);
+            Write(dtConfig, (short)hsparams.SStartAddr);
+            Write(dtConfig, (short)hsparams.SLength);
+            Write(dtConfig, (short)hsparams.CVStartAddr);
+            Write(dtConfig, (short)hsparams.CVLength);
+
+            Write(dtConfig, 4);
+
+            Write(dtConfig, aqparams.IP_Channel_CB_Enabled1);
+            dtConfig.Add((byte)aqparams.IP_Mode_Index1);
+            Write(dtConfig, (ushort)aqparams.IP_EndRange1);
+            Write(dtConfig, (ushort)aqparams.IP_StartRange1);
+            dtConfig.Add((byte)aqparams.IP_SampleTime_Index1);
+            Write(dtConfig, short.Parse(aqparams.SampleValue1));
+
+            Write(dtConfig, aqparams.IP_Channel_CB_Enabled2);
+            dtConfig.Add((byte)aqparams.IP_Mode_Index2);
+            Write(dtConfig, (ushort)aqparams.IP_EndRange2);
+            Write(dtConfig, (ushort)aqparams.IP_StartRange2);
+            dtConfig.Add((byte)aqparams.IP_SampleTime_Index2);
+            Write(dtConfig, short.Parse(aqparams.SampleValue2));
+
+            Write(dtConfig, aqparams.IP_Channel_CB_Enabled3);
+            dtConfig.Add((byte)aqparams.IP_Mode_Index3);
+            Write(dtConfig, (ushort)aqparams.IP_EndRange3);
+            Write(dtConfig, (ushort)aqparams.IP_StartRange3);
+            dtConfig.Add((byte)aqparams.IP_SampleTime_Index3);
+            Write(dtConfig, short.Parse(aqparams.SampleValue3));
+
+            Write(dtConfig, aqparams.IP_Channel_CB_Enabled4);
+            dtConfig.Add((byte)aqparams.IP_Mode_Index4);
+            Write(dtConfig, (ushort)aqparams.IP_EndRange4);
+            Write(dtConfig, (ushort)aqparams.IP_StartRange4);
+            dtConfig.Add((byte)aqparams.IP_SampleTime_Index4);
+            Write(dtConfig, short.Parse(aqparams.SampleValue4));
+
+            Write(dtConfig, 4);
+
+            Write(dtConfig, aqparams.OP_Channel_CB_Enabled1);
+            Write(dtConfig, (ushort)aqparams.OP_EndRange1);
+            Write(dtConfig, (ushort)aqparams.OP_StartRange1);
+            dtConfig.Add((byte)aqparams.OP_Mode_Index1);
+
+            Write(dtConfig, aqparams.OP_Channel_CB_Enabled2);
+            Write(dtConfig, (ushort)aqparams.OP_EndRange2);
+            Write(dtConfig, (ushort)aqparams.OP_StartRange2);
+            dtConfig.Add((byte)aqparams.OP_Mode_Index2);
+
+            Write(dtConfig, aqparams.OP_Channel_CB_Enabled3);
+            Write(dtConfig, (ushort)aqparams.OP_EndRange3);
+            Write(dtConfig, (ushort)aqparams.OP_StartRange3);
+            dtConfig.Add((byte)aqparams.OP_Mode_Index3);
+
+            Write(dtConfig, aqparams.OP_Channel_CB_Enabled4);
+            Write(dtConfig, (ushort)aqparams.OP_EndRange4);
+            Write(dtConfig, (ushort)aqparams.OP_StartRange4);
+            dtConfig.Add((byte)aqparams.OP_Mode_Index4);
+
+            Write(dtConfig, emparams.UseExpansionModule);
+
+            Write(dtConfig, emparams.ExpansionUnitParams[0].UseModule);
+            dtConfig.Add((byte)emparams.ExpansionUnitParams[0].ModuleTypeIndex);
+            Write(dtConfig, emparams.ExpansionUnitParams[1].UseModule);
+            dtConfig.Add((byte)emparams.ExpansionUnitParams[1].ModuleTypeIndex);
+            Write(dtConfig, emparams.ExpansionUnitParams[2].UseModule);
+            dtConfig.Add((byte)emparams.ExpansionUnitParams[2].ModuleTypeIndex);
+            Write(dtConfig, emparams.ExpansionUnitParams[3].UseModule);
+            dtConfig.Add((byte)emparams.ExpansionUnitParams[3].ModuleTypeIndex);
+            Write(dtConfig, emparams.ExpansionUnitParams[4].UseModule);
+            dtConfig.Add((byte)emparams.ExpansionUnitParams[4].ModuleTypeIndex);
+            Write(dtConfig, emparams.ExpansionUnitParams[5].UseModule);
+            dtConfig.Add((byte)emparams.ExpansionUnitParams[5].ModuleTypeIndex);
+            Write(dtConfig, emparams.ExpansionUnitParams[6].UseModule);
+            dtConfig.Add((byte)emparams.ExpansionUnitParams[6].ModuleTypeIndex);
+            Write(dtConfig, emparams.ExpansionUnitParams[7].UseModule);
+            dtConfig.Add((byte)emparams.ExpansionUnitParams[7].ModuleTypeIndex);
+
+            dtConfig.Add((byte)com232params.DataBitIndex);
+            dtConfig.Add((byte)com485params.DataBitIndex);
+
+            Write(dtConfig, (short)(hsparams.NotClear ? 1 : 0));
+
+            Write(dtConfig, (short)com232params.Timeout);
+            Write(dtConfig, (short)com485params.Timeout);
+
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, (short)emparams.ExpansionUnitParams[0].FilterTime_Index);
+
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, (short)emparams.ExpansionUnitParams[1].FilterTime_Index);
+
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, (short)emparams.ExpansionUnitParams[2].FilterTime_Index);
+
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, (short)emparams.ExpansionUnitParams[3].FilterTime_Index);
+
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, (short)emparams.ExpansionUnitParams[4].FilterTime_Index);
+
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, (short)emparams.ExpansionUnitParams[5].FilterTime_Index);
+
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, (short)emparams.ExpansionUnitParams[6].FilterTime_Index);
+
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            dtConfig.Add(0);
+            Write(dtConfig, ValueConverter.DoubleToInt(0.0));
+            Write(dtConfig, (short)emparams.ExpansionUnitParams[7].FilterTime_Index);
+
+            Write(dtConfig, 4);
+
+            Write(dtConfig, aqparams.IP_Channel_CB_Enabled5);
+            dtConfig.Add((byte)aqparams.IP_Mode_Index5);
+            Write(dtConfig, (ushort)65535);
+            Write(dtConfig, (ushort)0);
+            dtConfig.Add((byte)aqparams.IP_SampleTime_Index5);
+            Write(dtConfig, short.Parse(aqparams.SampleValue5));
+
+            Write(dtConfig, aqparams.IP_Channel_CB_Enabled6);
+            dtConfig.Add((byte)aqparams.IP_Mode_Index6);
+            Write(dtConfig, (ushort)65535);
+            Write(dtConfig, (ushort)0);
+            dtConfig.Add((byte)aqparams.IP_SampleTime_Index6);
+            Write(dtConfig, short.Parse(aqparams.SampleValue6));
+
+            Write(dtConfig, aqparams.IP_Channel_CB_Enabled7);
+            dtConfig.Add((byte)aqparams.IP_Mode_Index7);
+            Write(dtConfig, (ushort)65535);
+            Write(dtConfig, (ushort)0);
+            dtConfig.Add((byte)aqparams.IP_SampleTime_Index7);
+            Write(dtConfig, short.Parse(aqparams.SampleValue7));
+
+            Write(dtConfig, aqparams.IP_Channel_CB_Enabled8);
+            dtConfig.Add((byte)aqparams.IP_Mode_Index8);
+            Write(dtConfig, (ushort)65535);
+            Write(dtConfig, (ushort)0);
+            dtConfig.Add((byte)aqparams.IP_SampleTime_Index8);
+            Write(dtConfig, short.Parse(aqparams.SampleValue8));
+
+            Write(dtConfig, 4);
+
+            Write(dtConfig, (short)1000);
+            Write(dtConfig, (short)1000);
+            Write(dtConfig, (short)1000);
+            Write(dtConfig, (short)1000);
+
+            Write(dtConfig, 8);
+
+            for (int i = 0; i < 8; i++)
+                Write(dtConfig, emparams.ExpansionUnitParams[i]);
+
+            byte[] lens = ValueConverter.GetBytes((uint)dtConfig.Count,true);
+            for (int i = 0; i < 4; i++)
+                dtConfig[i] = lens[i];
+            lens = ValueConverter.GetBytes((ushort)(dtConfig.Count - 4), true);
+            for (int i = 0; i < 2; i++)
+                dtConfig[i + 4] = lens[i];
         }
 
         #endregion
@@ -563,8 +816,8 @@ namespace SamSoarII.Core.Helpers
         private static DownloadError DownloadConfigExecute(CommunicationManager communManager)
         {
             if (dtConfig.Count == 0) return DownloadError.None;
-            byte[] data = ValueConverter.GetBytes((uint)dtConfig.Count + 4, true);
-            dtConfig = data.Concat(dtConfig).ToList();
+            //byte[] data = ValueConverter.GetBytes((uint)dtConfig.Count + 4, true);
+            //dtConfig = data.Concat(dtConfig).ToList();
             return _DownloadHandle(communManager, dtConfig.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_CONFIG);
         }
         #endregion

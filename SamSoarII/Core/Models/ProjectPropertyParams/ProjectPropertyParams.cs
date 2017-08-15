@@ -20,6 +20,7 @@ namespace SamSoarII.Core.Models
             paraAnalog = new AnalogQuantityParams(this);
             paraExpansion = new ExpansionModuleParams(this);
             paraCom = new CommunicationParams(this);
+            paraUsb = new USBCommunicationParams(this);
             paraCom232.PropertyChanged += OnChildrenPropertyChanged;
             paraCom485.PropertyChanged += OnChildrenPropertyChanged;
             paraPassword.PropertyChanged += OnChildrenPropertyChanged;
@@ -28,6 +29,7 @@ namespace SamSoarII.Core.Models
             paraAnalog.PropertyChanged += OnChildrenPropertyChanged;
             paraExpansion.PropertyChanged += OnChildrenPropertyChanged;
             paraCom.PropertyChanged += OnChildrenPropertyChanged;
+            paraUsb.PropertyChanged += OnChildrenPropertyChanged;
         }
         
         public void Dispose()
@@ -50,6 +52,7 @@ namespace SamSoarII.Core.Models
             paraAnalog.PropertyChanged -= OnChildrenPropertyChanged;
             paraExpansion.PropertyChanged -= OnChildrenPropertyChanged;
             paraCom.PropertyChanged -= OnChildrenPropertyChanged;
+            paraUsb.PropertyChanged -= OnChildrenPropertyChanged;
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -62,8 +65,17 @@ namespace SamSoarII.Core.Models
         private CommunicationInterfaceParams paraCom232;
         public CommunicationInterfaceParams PARACom232 { get { return this.paraCom232; } }
 
+        private int stationnumber;
+        public int StationNumber
+        {
+            get { return this.stationnumber; }
+            set { this.stationnumber = value; PropertyChanged(this, new PropertyChangedEventArgs("StationNumber")); }
+        }
         private CommunicationInterfaceParams paraCom485;
         public CommunicationInterfaceParams PARACom485 { get { return this.paraCom485; } }
+
+        private USBCommunicationParams paraUsb;
+        public USBCommunicationParams PARAUsb { get { return paraUsb; } }
 
         private PasswordParams paraPassword;
         public PasswordParams PARAPassword { get { return this.paraPassword; } }
@@ -96,6 +108,9 @@ namespace SamSoarII.Core.Models
             xele_c = new XElement("CommunicationInterfaceParams485");
             paraCom485.Save(xele_c);
             xele.Add(xele_c);
+            xele_c = new XElement("USBCommunicationParams");
+            paraUsb.Save(xele_c);
+            xele.Add(xele_c);
             xele_c = new XElement("PasswordParams");
             paraPassword.Save(xele_c);
             xele.Add(xele_c);
@@ -119,14 +134,34 @@ namespace SamSoarII.Core.Models
         public void Load(XElement xele)
         {
             if (xele == null) return;
-            paraCom232.Load(xele.Element("CommunicationInterfaceParams232"));
-            paraCom485.Load(xele.Element("CommunicationInterfaceParams485"));
-            paraPassword.Load(xele.Element("PasswordParams"));
-            paraFilter.Load(xele.Element("FilterParams"));
-            paraHolding.Load(xele.Element("HoldingSectionParams"));
-            paraAnalog.Load(xele.Element("AnalogQuantityParams"));
-            paraExpansion.Load(xele.Element("ExpansionModuleParams"));
-            paraCom.Load(xele.Element("CommunicationParams"));
+            XElement xeleParams;
+            xeleParams = xele.Element("CommunicationInterfaceParams232");
+            if(xeleParams != null)
+                paraCom232.Load(xeleParams);
+            xeleParams = xele.Element("CommunicationInterfaceParams485");
+            if (xeleParams != null)
+                paraCom232.Load(xeleParams);
+            xeleParams = xele.Element("USBCommunicationParams");
+            if (xeleParams != null)
+                paraCom232.Load(xeleParams);
+            xeleParams = xele.Element("PasswordParams");
+            if (xeleParams != null)
+                paraCom232.Load(xeleParams);
+            xeleParams = xele.Element("FilterParams");
+            if (xeleParams != null)
+                paraCom232.Load(xeleParams);
+            xeleParams = xele.Element("HoldingSectionParams");
+            if (xeleParams != null)
+                paraCom232.Load(xeleParams);
+            xeleParams = xele.Element("AnalogQuantityParams");
+            if (xeleParams != null)
+                paraCom232.Load(xeleParams);
+            xeleParams = xele.Element("ExpansionModuleParams");
+            if (xeleParams != null)
+                paraCom232.Load(xeleParams);
+            xeleParams = xele.Element("CommunicationParams");
+            if (xeleParams != null)
+                paraCom232.Load(xeleParams);
         }
 
         public IParams Clone()
@@ -147,7 +182,7 @@ namespace SamSoarII.Core.Models
                 return PARACom232.LoadSuccess && PARACom485.LoadSuccess && 
                     PARAPassword.LoadSuccess && PARAFilter.LoadSuccess &&
                     PARAHolding.LoadSuccess && PARAAnalog.LoadSuccess &&
-                    PARAExpansion.LoadSuccess && PARACom.LoadSuccess;
+                    PARAExpansion.LoadSuccess && PARACom.LoadSuccess && PARAUsb.LoadSuccess;
             }
             set
             {
@@ -160,6 +195,7 @@ namespace SamSoarII.Core.Models
                 ProjectPropertyParams that = (ProjectPropertyParams)iparams;
                 this.PARACom232.Load(that.PARACom232);
                 this.PARACom485.Load(that.PARACom485);
+                this.PARAUsb.Load(that.PARAUsb);
                 this.PARAPassword.Load(that.PARAPassword);
                 this.PARAFilter.Load(that.PARAFilter);
                 this.PARAHolding.Load(that.PARAHolding);

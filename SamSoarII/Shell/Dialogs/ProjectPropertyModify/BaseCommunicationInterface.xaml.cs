@@ -34,7 +34,7 @@ namespace SamSoarII.Shell.Dialogs
             SetCommunicationType(core.ComType);
             Binding binding = new Binding();
             binding.Source = _core;
-            binding.Path = new PropertyPath("StationNumber");
+            binding.Path = new PropertyPath("Parent.StationNumber");
             rangeTextbox1.GetTextBox().SetBinding(TextBox.TextProperty, binding);
             binding = new Binding();
             binding.Source = _core;

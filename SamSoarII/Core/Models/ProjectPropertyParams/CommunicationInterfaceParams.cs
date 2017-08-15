@@ -21,7 +21,7 @@ namespace SamSoarII.Core.Models
             stopbitindex = 0;
             checkcodeindex = 0;
             bufferbitindex = 0;
-            stationnumber = 2;
+            StationNumber = 2;
             timeout = 20;
             comtype = ComTypes.Master;
         }
@@ -39,7 +39,7 @@ namespace SamSoarII.Core.Models
         private ProjectPropertyParams parent;
         public ProjectPropertyParams Parent { get { return this.parent; } }
         
-        public enum ComTypes { Master, Slave, FreePort };
+        public enum ComTypes { Slave, Master, FreePort };
         private ComTypes comtype;
         public ComTypes ComType
         {
@@ -81,12 +81,10 @@ namespace SamSoarII.Core.Models
             get { return this.bufferbitindex; }
             set { this.bufferbitindex = value; PropertyChanged(this, new PropertyChangedEventArgs("BufferBitIndex")); }
         }
-
-        private int stationnumber;
         public int StationNumber
         {
-            get { return this.stationnumber; }
-            set { this.stationnumber = value; PropertyChanged(this, new PropertyChangedEventArgs("StationNumber")); }
+            get { return parent.StationNumber; }
+            set { parent.StationNumber = value; }
         }
 
         private int timeout;
@@ -107,7 +105,7 @@ namespace SamSoarII.Core.Models
             xele.Add(new XElement("StopBitIndex", stopbitindex));
             xele.Add(new XElement("CheckCodeIndex", checkcodeindex));
             xele.Add(new XElement("BufferBitIndex", bufferbitindex));
-            xele.Add(new XElement("StationNumber", stationnumber));
+            xele.Add(new XElement("StationNumber", StationNumber));
             xele.Add(new XElement("Timeout", timeout));
             xele.Add(new XElement("ComType", (int)comtype));
         }
@@ -119,7 +117,7 @@ namespace SamSoarII.Core.Models
             try { stopbitindex = int.Parse(xele.Element("StopBitIndex").Value); } catch (Exception) { }
             try { checkcodeindex = int.Parse(xele.Element("CheckCodeIndex").Value); } catch (Exception) { }
             try { bufferbitindex = int.Parse(xele.Element("BufferBitIndex").Value); } catch (Exception) { }
-            try { stationnumber = int.Parse(xele.Element("StationNumber").Value); } catch (Exception) { }
+            try { StationNumber = int.Parse(xele.Element("StationNumber").Value); } catch (Exception) { }
             try
             {
                 int value = int.Parse(xele.Element("Timeout").Value);

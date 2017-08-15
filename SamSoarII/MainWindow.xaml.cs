@@ -552,7 +552,7 @@ namespace SamSoarII
                     LocalizedMessageBox.Show(string.Format("{0}", Properties.Resources.Message_Project_Loaded), LocalizedMessageIcon.Information);
                 else
                 {
-                    if (Project?.IsModified == true || FileHelper.InvalidFileName(Project?.FileName))
+                    if (Project != null && (Project.IsModified == true || FileHelper.InvalidFileName(Project.FileName)))
                     {
                         LocalizedMessageResult mbret;
                         if (Project?.FileName == string.Empty)

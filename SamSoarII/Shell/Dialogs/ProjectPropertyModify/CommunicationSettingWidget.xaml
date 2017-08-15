@@ -8,23 +8,24 @@
              d:DesignHeight="600" d:DesignWidth="600">
     <Grid x:Uid="Grid_1" Margin="30">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="3*"/>
-            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="7*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Uid="ListBox_1" Grid.Column="0" SelectionChanged="ListBox_SelectionChanged">
+        <ListBox Grid.Column="0" SelectionChanged="ListBox_SelectionChanged">
             <ListBox.Resources>
-                <Style x:Uid="Style_1" TargetType="{x:Type ListBoxItem}">
+                <Style TargetType="{x:Type ListBoxItem}">
                     <Style.Triggers>
-                        <Trigger x:Uid="Trigger_1" Property="IsMouseOver" Value="True">
-                            <Setter x:Uid="Setter_1" Property="FontWeight" Value="Heavy"></Setter>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="FontWeight" Value="Heavy"></Setter>
                         </Trigger>
                     </Style.Triggers>
-                    <Setter x:Uid="Setter_2" Property="FontSize" Value="16"></Setter>
-                    <Setter x:Uid="Setter_3" Property="Height" Value="30"></Setter>
+                    <Setter Property="FontSize" Value="16"></Setter>
+                    <Setter Property="Height" Value="30"></Setter>
                 </Style>
             </ListBox.Resources>
-            <ListBoxItem x:Uid="ListBoxItem_1">COM0(232)</ListBoxItem>
-            <ListBoxItem x:Uid="ListBoxItem_2">COM1(485)</ListBoxItem>
+            <ListBoxItem>COM0(232)</ListBoxItem>
+            <ListBoxItem>COM1(485)</ListBoxItem>
+            <ListBoxItem>USB</ListBoxItem>
         </ListBox>
         <Grid x:Uid="ContentGrid" Grid.Column="1" x:Name="ContentGrid"></Grid>
     </Grid>
