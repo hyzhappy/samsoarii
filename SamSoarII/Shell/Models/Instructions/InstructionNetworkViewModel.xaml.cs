@@ -194,7 +194,7 @@ namespace SamSoarII.Shell.Models
         
         private void SetPosition(FrameworkElement ctrl, int row, int column = -1)
         {
-            ctrl.Margin = new Thickness(2, 2, 0, 0);
+            //ctrl.Margin = new Thickness(2, 2, 0, 0);
             Canvas.SetTop(ctrl, core.CanvasTop + 26 + row * 20 + 1);
             Canvas.SetZIndex(ctrl, -1);
             ctrl.Height = 18;
@@ -256,6 +256,7 @@ namespace SamSoarII.Shell.Models
         {
             Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
+                if (core == null) return;
                 tberr.Visibility = core.IsExpand && core.Invalid ? Visibility.Visible : Visibility.Hidden;
                 tberr.Background = Core.IsMasked ? Brushes.Gray : Brushes.Red;
                 if (!core.IsExpand && ViewParent.Cursor.Core.Parent == Core)
