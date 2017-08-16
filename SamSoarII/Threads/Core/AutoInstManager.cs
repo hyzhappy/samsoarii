@@ -30,7 +30,7 @@ namespace SamSoarII.Threads
                     {
                         foreach (LadderNetworkModel lnmodel in ldmodel.Children)
                         {
-                            if (lnmodel.Inst.IsModify)
+                            if (lnmodel.Inst.IsModified)
                                 lnmodel.Inst.Update();
                             if (!ThAlive || !ThActive) return;
                         }

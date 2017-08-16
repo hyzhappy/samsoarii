@@ -13,6 +13,24 @@ using System.Xml.Linq;
 
 namespace SamSoarII.Core.Models
 {
+    public class RowChangedEventArgs : EventArgs
+    {
+        public enum Actions { INSERT, REMOVE };
+        public Actions Action { get; private set; }
+        public int Start { get; private set; }
+        public int Count { get; private set; }
+        public int End { get { return Start + Count - 1; } }
+
+        public RowChangedEventArgs(Actions _action, int _start, int _count)
+        {
+            Action = _action;
+            Start = _start;
+            Count = _count;
+        }
+    }
+
+    public delegate void RowChangedEventHandler(LadderNetworkModel sender, RowChangedEventArgs e);
+
     public class LadderNetworkModel : IModel
     {
         public LadderNetworkModel(LadderDiagramModel _parent, int _id)
@@ -524,6 +542,8 @@ namespace SamSoarII.Core.Models
 
         #region Row Modify
 
+        public event RowChangedEventHandler RowChanged = delegate { };
+
         public void InsertR(int y1, int y2)
         {
             RowCount += y2 - y1 + 1;
@@ -532,6 +552,7 @@ namespace SamSoarII.Core.Models
                 Move(children.SelectRange(0, 11, y1, RowCount - 1).ToArray(), 0, y2 - y1 + 1);
                 MoveV(vlines.SelectRange(0, 11, y1, RowCount - 1).ToArray(), 0, y2 - y1 + 1);
             }
+            RowChanged(this, new RowChangedEventArgs(RowChangedEventArgs.Actions.INSERT, y1, y2 - y1 + 1));
         }
 
         public IEnumerable<LadderUnitModel> RemoveR(int y1, int y2)
@@ -544,6 +565,7 @@ namespace SamSoarII.Core.Models
             Move(children.SelectRange(0, 11, y2 + 1, RowCount - 1).ToArray(), 0, -(y2 - y1 + 1));
             MoveV(vlines.SelectRange(0, 11, y2 + 1, RowCount - 1).ToArray(), 0, -(y2 - y1 + 1));
             RowCount -= y2 - y1 + 1;
+            RowChanged(this, new RowChangedEventArgs(RowChangedEventArgs.Actions.REMOVE, y1, y2 - y1 + 1));
             return removes;
         }
 

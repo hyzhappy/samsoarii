@@ -11,6 +11,8 @@ using SamSoarII.Shell.Windows;
 using SamSoarII.Global;
 using SamSoarII.Shell.Managers;
 using System.Threading;
+using System.Windows.Threading;
+using System.Windows;
 
 namespace SamSoarII.Core.Models
 {
@@ -260,7 +262,7 @@ namespace SamSoarII.Core.Models
                 network.ViewHeight = currenttop - network.CanvasTop;
                 currenttop += 4;
             }
-            canvasheight = currenttop + 20;
+            canvasheight = currenttop + 18;
             ViewPropertyChanged(this, new PropertyChangedEventArgs("CanvasHeight"));
         }
         
@@ -340,7 +342,7 @@ namespace SamSoarII.Core.Models
             public IList<string> NewComments;
         }
 
-        private class RelativeArea
+        private class RelativeArea : IDisposable
         {
             public enum Status { NULL, SINGLE, MULTIUNIT, MULTINET};
             private Status status;
@@ -349,9 +351,15 @@ namespace SamSoarII.Core.Models
             private int x1, x2, y1, y2;
             private int start, end;
 
-            public RelativeArea()
+            public RelativeArea(LadderDiagramModel _diagram)
             {
+                diagram = _diagram;
                 status = Status.NULL;
+            }
+
+            public void Dispose()
+            {
+                diagram = null;
             }
 
             public void Update(LadderUnitModel unit)
@@ -470,7 +478,11 @@ namespace SamSoarII.Core.Models
         }
 
         private bool isexecuting;
-        public bool IsExecuting { get { return this.isexecuting; } }
+        public bool IsExecuting
+        {
+            get { return this.isexecuting; }
+            set { this.isexecuting = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("IsExecuting")); }
+        }
         private Stack<Command> undos = new Stack<Command>();
         private Stack<Command> redos = new Stack<Command>();
         public bool CanUndo { get { return LadderMode == LadderModes.Edit && undos != null && undos.Count() > 0; } }
@@ -480,15 +492,28 @@ namespace SamSoarII.Core.Models
             undos.Clear();
             redos.Clear();
         }
+
         public void Undo()
         {
             if (!CanUndo) return;
+            IsExecuting = true;
             IFParent.ThMNGView.Pause();
-            while (IFParent.ThMNGView.IsActive)
-                Thread.Sleep(20);
-            isexecuting = true;
+            if (IFParent.ThMNGView.IsActive)
+                IFParent.ThMNGView.Paused += OnViewThreadPauseToUndo;
+            else
+                _Undo();
+        }
+
+        private void OnViewThreadPauseToUndo(object sender, RoutedEventArgs e)
+        {
+            IFParent.ThMNGView.Paused -= OnViewThreadPauseToUndo;
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate () { _Undo(); }));
+        }
+
+        private void _Undo()
+        {
             Command cmd = undos.Pop();
-            RelativeArea area = new RelativeArea();
+            RelativeArea area = new RelativeArea(this);
             LadderNetworkModel net = null;
             int i1 = 0, i2 = 0;
             IList<int> newrows = null;
@@ -610,27 +635,40 @@ namespace SamSoarII.Core.Models
                 }
             }
             redos.Push(cmd);
-            isexecuting = false;
             PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
-            ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             UpdateCanvasTop();
-            Parent.InvokeModify(this, true);
             if (View != null)
             {
                 View.IsViewModified = true;
                 if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
                     area.Select(IFParent);
             }
+            Parent.InvokeModify(this, true);
             IFParent.ThMNGView.Start();
+            area.Dispose();
+            IsExecuting = false;
+            ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public void Redo()
         {
             if (!CanRedo) return;
+            IsExecuting = true;
             IFParent.ThMNGView.Pause();
-            while (IFParent.ThMNGView.IsActive)
-                Thread.Sleep(20);
-            isexecuting = true;
+            if (IFParent.ThMNGView.IsActive)
+                IFParent.ThMNGView.Paused += OnViewThreadPauseToRedo;
+            else
+                _Redo();
+        }
+
+        private void OnViewThreadPauseToRedo(object sender, RoutedEventArgs e)
+        {
+            IFParent.ThMNGView.Paused -= OnViewThreadPauseToRedo;
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate () { _Redo(); }));
+        }
+
+        private void _Redo()
+        {
             Command cmd = redos.Pop();
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
             {
@@ -647,7 +685,7 @@ namespace SamSoarII.Core.Models
                 }
             }
             LadderNetworkModel net = null;
-            RelativeArea area = new RelativeArea();
+            RelativeArea area = new RelativeArea(this);
             int i1 = 0, i2 = 0;
             IList<int> oldrows = null;
             if ((cmd.Type & CMDTYPE_ChangeProperty) != 0)
@@ -781,18 +819,19 @@ namespace SamSoarII.Core.Models
                 area.Update(cmd.NewNetworks);
             }
             undos.Push(cmd);
-            isexecuting = false;
             PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
-            ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             UpdateCanvasTop();
-            Parent.InvokeModify(this);
             if (View != null)
             {
                 View.IsViewModified = true;
                 if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
                     area.Select(IFParent);
             }
+            Parent.InvokeModify(this);
             IFParent.ThMNGView.Start();
+            area.Dispose();
+            IsExecuting = false;
+            ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         private void Execute(int _type, object _target, IList<object> _olds, IList<object> _news)

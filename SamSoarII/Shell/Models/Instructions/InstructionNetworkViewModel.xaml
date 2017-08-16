@@ -13,5 +13,7 @@
             </local:LadderExpander.LayoutTransform>
         </local:LadderExpander>
         <TextBlock Canvas.Left="28" x:Name="NetworkHeader" FontSize="16" VerticalAlignment="Center" Margin="5,2,0,2" Text="{Binding Header}"></TextBlock>
+        <Rectangle x:Name="RN_Wait" Canvas.Left="24" Canvas.Top="26" Panel.ZIndex="3" Width="520" Opacity="0.5" Fill="White" Visibility="Hidden" IsEnabled="False"/>
+        <TextBlock x:Name="TB_Wait" Canvas.Left="26" Canvas.Top="28" Panel.ZIndex="4" Visibility="Hidden">点击更新......</TextBlock>
     </Canvas>
 </UserControl>

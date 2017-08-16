@@ -322,14 +322,14 @@ namespace SamSoarII.Shell.Windows
                 {
                     Dispose(subitem);
                     ptvitem.Items.Remove(subitem);
+                    lnmodel.PTVItem = null;
                 }
             }
-            List<LadderNetworkModel> lnmodels = ldmodel.Children.ToList();
-            lnmodels.Sort((n1, n2) => (n1.ID.CompareTo(n2.ID)));
-            foreach (LadderNetworkModel lnmodel in lnmodels)
+            ptvitem.Items.Clear();
+            foreach (LadderNetworkModel lnmodel in ldmodel.Children)
             {
-                if (lnmodel.PTVItem != null) continue;
-                ProjectTreeViewItem subitem = CreatePTVItem(
+                if (lnmodel.PTVItem == null)
+                    lnmodel.PTVItem = CreatePTVItem(
                         null,
                         ProjectTreeViewItem.TYPE_NETWORK
                       | ProjectTreeViewItem.FLAG_REMOVE
@@ -337,8 +337,7 @@ namespace SamSoarII.Shell.Windows
                       | ProjectTreeViewItem.FLAG_CREATENETWORKAFTER
                       | ProjectTreeViewItem.FLAG_CONFIG,
                         lnmodel, false);
-                ptvitem.Items.Insert(lnmodel.ID, subitem);
-                lnmodel.PTVItem = subitem;
+                ptvitem.Items.Add(lnmodel.PTVItem);
             }
         }
 

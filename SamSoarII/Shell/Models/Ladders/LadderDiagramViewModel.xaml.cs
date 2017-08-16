@@ -190,22 +190,55 @@ namespace SamSoarII.Shell.Models
                     }
                     isviewmodified = true;
                     break;
+                case "IsExecuting":
+                    if (!core.IsExecuting) isnavigatable = true;
+                    break;
             }
         }
         
         private void OnCoreChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            if (loadedrowstart <= loadedrowend)
+            {
+                if (e.NewItems != null)
+                {
+                    if (e.NewStartingIndex <= loadedrowstart)
+                    {
+                        loadedrowstart += e.NewItems.Count;
+                        loadedrowend += e.NewItems.Count;
+                    }
+                    else if (e.NewStartingIndex <= loadedrowend)
+                    {
+                        loadedrowend += e.NewItems.Count;
+                    }
+                }
+                if (e.OldItems != null)
+                {
+                    if (e.OldStartingIndex + e.OldItems.Count - 1 < loadedrowstart)
+                    {
+                        loadedrowstart -= e.OldItems.Count;
+                        loadedrowend -= e.OldItems.Count;
+                    }
+                    else if (e.OldStartingIndex <= loadedrowend)
+                    {
+                        DynamicDispose();
+                    }
+                }
+            }
             if (e.OldItems != null)
                 foreach (LadderNetworkModel lnmodel in e.OldItems)
+                {
+                    if (SelectRectOwner == lnmodel)
+                        ReleaseSelect();
                     if (lnmodel.View != null)
                     {
                         lnmodel.View.DynamicDispose();
                         lnmodel.View.Visibility = Visibility.Hidden;
                         lnmodel.View.Dispose();
                     }
+                }
             if (!core.IsExecuting)
             {
-                DynamicDispose();
                 isviewmodified = true;
             }
         }
@@ -238,7 +271,6 @@ namespace SamSoarII.Shell.Models
                         if (IFParent.ShowElementPropertyDialog(type, _selectRect.Core))
                             SelectRectRight();
                     }
-                    isnavigatable = true;
                     break;
                 case SelectStatus.MultiSelecting: break;
                 case SelectStatus.MultiSelected:
@@ -274,7 +306,6 @@ namespace SamSoarII.Shell.Models
                             }
                             break;
                     }
-                    isnavigatable = true;
                     break;
                 case SelectStatus.MultiSelecting: break;
                 case SelectStatus.MultiSelected:
@@ -670,6 +701,7 @@ namespace SamSoarII.Shell.Models
         }
         private void SelectRectLeftWithLine(bool expand = false)
         {
+            if (core.IsExecuting) return;
             if (LadderMode != LadderModes.Edit)
             {
                 SelectRectLeft();
@@ -682,7 +714,6 @@ namespace SamSoarII.Shell.Models
                 if (expand)
                 {
                     PushLeft(_selectRect.X, _selectRect.Y);
-                    isnavigatable = true;
                     return;
                 }
                 if (_selectRect.Current != null)
@@ -694,11 +725,11 @@ namespace SamSoarII.Shell.Models
                 {
                     Core.QuickInsertElement(LadderUnitModel.Types.HLINE, _selectRect.Core);
                 }
-                isnavigatable = true;
             }
         }
         private void SelectRectRightWithLine(bool expand = false)
         {
+            if (core.IsExecuting) return;
             if (LadderMode != LadderModes.Edit)
             {
                 SelectRectRight();
@@ -713,7 +744,6 @@ namespace SamSoarII.Shell.Models
                 {
                     SelectRectRight();
                     PushRight(_selectRect.X, _selectRect.Y);
-                    isnavigatable = true;
                     return;
                 }
                 if (_selectRect.Current != null)
@@ -726,11 +756,11 @@ namespace SamSoarII.Shell.Models
                     Core.QuickInsertElement(LadderUnitModel.Types.HLINE, _selectRect.Core);
                 }
                 SelectRectRight();
-                isnavigatable = true;
             }
         }
         private void SelectRectUpWithLine(bool expand = false)
         {
+            if (core.IsExecuting) return;
             if (LadderMode != LadderModes.Edit)
             {
                 SelectRectUp();
@@ -745,7 +775,6 @@ namespace SamSoarII.Shell.Models
                 {
                     PushUp(_selectRect.X, _selectRect.Y);
                     SelectRectUp();
-                    isnavigatable = true;
                     return;
                 }
                 if (y >= 0)
@@ -760,11 +789,11 @@ namespace SamSoarII.Shell.Models
                             Core.QuickInsertElement(LadderUnitModel.Types.VLINE, SelectRectOwner, x, y);
                     }
                 }
-                isnavigatable = true;
             }
         }
         private void SelectRectDownWithLine(bool expand = false)
         {
+            if (core.IsExecuting) return;
             if (LadderMode != LadderModes.Edit)
             {
                 SelectRectDown();
@@ -779,7 +808,6 @@ namespace SamSoarII.Shell.Models
                 {
                     SelectRectDown();
                     PushDown(_selectRect.X, _selectRect.Y);
-                    isnavigatable = true;
                     return;
                 }
                 if (x >= 0)
@@ -791,7 +819,6 @@ namespace SamSoarII.Shell.Models
                         Core.QuickInsertElement(LadderUnitModel.Types.VLINE, SelectRectOwner, x, y);
                     SelectRectDown();
                 }
-                isnavigatable = true;
             }
         }
         
@@ -1377,6 +1404,8 @@ namespace SamSoarII.Shell.Models
                             CreateRange(Math.Max(_loadedrowstart, loadedrowend + 1), _loadedrowend);
                         if (loadedrowend > _loadedrowend)
                             DisposeRange(_loadedrowend + 1, loadedrowend);
+                        if (!(_loadedrowstart > loadedrowend) && !(_loadedrowend < loadedrowstart))
+                            CreateRange(_loadedrowstart, _loadedrowend);
                     }
                     else
                     {
@@ -1388,6 +1417,8 @@ namespace SamSoarII.Shell.Models
                             CreateRange(_loadedrowend, Math.Max(_loadedrowstart, loadedrowend + 1));
                         if (loadedrowend > _loadedrowend)
                             DisposeRange(loadedrowend, _loadedrowend + 1);
+                        if (!(_loadedrowstart > loadedrowend) && !(_loadedrowend < loadedrowstart))
+                            CreateRange(_loadedrowend, _loadedrowstart);
                     }
                 }
                 loadedrowstart = _loadedrowstart;
@@ -1432,19 +1463,19 @@ namespace SamSoarII.Shell.Models
             int dir = (rowstart < rowend ? 1 : -1);
             for (int y = rowstart; y != rowend + dir; y += dir)
             {
-                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
-                {
-                    LadderNetworkModel net = core.Children[y];
-                    if (net.View == null)
-                        net.View = AllResourceManager.CreateNet(net);
-                    net.View.Visibility = Visibility.Visible;
-                    if (net.View.Parent != MainCanvas)
+                LadderNetworkModel net = core.Children[y];
+                if (net.View == null)
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
-                        if (net.View.Parent is Canvas)
-                            ((Canvas)(net.View.Parent)).Children.Remove(net.View);
-                        MainCanvas.Children.Add(net.View);
-                    }
-                });
+                        net.View = AllResourceManager.CreateNet(net);
+                        net.View.Visibility = Visibility.Visible;
+                        if (net.View.Parent != MainCanvas)
+                        {
+                            if (net.View.Parent is Canvas)
+                                ((Canvas)(net.View.Parent)).Children.Remove(net.View);
+                            MainCanvas.Children.Add(net.View);
+                        }
+                    });
             }
         }
 
@@ -1753,7 +1784,6 @@ namespace SamSoarII.Shell.Models
                         _selectRect.X = 0;
                         _selectRect.Y = SelectRectOwner.RowCount - 1;
                         NavigateByInstructionInputDialog();
-                        isnavigatable = true;
                         return;
                     }
                 }
@@ -1975,10 +2005,12 @@ namespace SamSoarII.Shell.Models
         }
         private void OnUndoCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
+            if (core.IsExecuting) return;
             Core.Undo();
         }
         private void OnRedoCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
+            if (core.IsExecuting) return;
             Core.Redo();
         }
         private void OnSelectAllCommandExecute(object sender, ExecutedRoutedEventArgs e)
@@ -2431,6 +2463,7 @@ namespace SamSoarII.Shell.Models
 
         private void OnLadderEdit(object sender, LadderEditEventArgs e)
         {
+            if (core.IsExecuting) return;
             switch (e.Type)
             {
                 case LadderEditEventArgs.Types.Delete:

@@ -281,6 +281,8 @@ namespace SamSoarII.Core.Simulate
             Cursor.Address = -1;
         }
 
+        private SimulateExceptionDialog excedialog;
+        private bool excehandled;
         private void OnSimulateException(object sender, RoutedEventArgs e)
         {
             if (!IsEnable || !DllModel.IsAlive)
@@ -294,41 +296,53 @@ namespace SamSoarII.Core.Simulate
             System.Windows.Application.Current.Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
             {
                 Exception exc = (Exception)sender;
-                SimulateExceptionDialog dialog = new SimulateExceptionDialog();
-                dialog.TB_Message.Text = exc.Message;
+                excedialog = new SimulateExceptionDialog();
+                excedialog.TB_Message.Text = exc.Message;
                 //bool iscritical = (sender is StackOverflowException || sender is AccessViolationException);
                 bool iscritical = true;
-                bool handled = false;
-                dialog.B_Continue.IsEnabled = !iscritical;
-                dialog.B_Pause.IsEnabled = !iscritical;
-                dialog.B_Continue.Click += (_sender, _e) =>
-                {
-                    handled = true;
-                    DllModel.Start();
-                    dialog.Close();
-                };
-                dialog.B_Pause.Click += (_sender, _e) =>
-                {
-                    handled = true;
-                    DllModel.Pause();
-                    dialog.Close();
-                };
-                dialog.B_Abort.Click += (_sender, _e) =>
-                {
-                    handled = true;
-                    DllModel.Abort();
-                    dialog.Close();
-                };
-                dialog.Closed += (_sender, _e) =>
-                {
-                    if (!handled)
-                    {
-                        handled = true;
-                        DllModel.Abort();
-                    }
-                };
-                dialog.ShowDialog();
+                excehandled = false;
+                excedialog.B_Continue.IsEnabled = !iscritical;
+                excedialog.B_Pause.IsEnabled = !iscritical;
+                excedialog.B_Continue.Click += OnExceptionDialogContinue;
+                excedialog.B_Pause.Click += OnExceptionDialogPause;
+                excedialog.B_Abort.Click += OnExceptionDialogAbort;
+                excedialog.Closed += OnExceptionDialogClosed;
+                excedialog.ShowDialog();
             }));
+        }
+
+        private void OnExceptionDialogContinue(object sender, RoutedEventArgs e)
+        {
+            excehandled = true;
+            DllModel.Start();
+            excedialog.Close();
+        }
+        
+        private void OnExceptionDialogPause(object sender, RoutedEventArgs e)
+        {
+            excehandled = true;
+            DllModel.Pause();
+            excedialog.Close();
+        }
+        
+        private void OnExceptionDialogAbort(object sender, RoutedEventArgs e)
+        {
+            excehandled = true;
+            DllModel.Abort();
+            excedialog.Close();
+        }
+
+        private void OnExceptionDialogClosed(object sender, EventArgs e)
+        {
+            excedialog.B_Continue.Click -= OnExceptionDialogContinue;
+            excedialog.B_Pause.Click -= OnExceptionDialogPause;
+            excedialog.B_Abort.Click -= OnExceptionDialogAbort;
+            excedialog.Closed -= OnExceptionDialogClosed;
+            if (!excehandled)
+            {
+                excehandled = true;
+                DllModel.Abort();
+            }
         }
 
         #endregion

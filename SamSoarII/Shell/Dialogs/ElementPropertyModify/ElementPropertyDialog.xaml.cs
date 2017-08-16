@@ -266,7 +266,7 @@ namespace SamSoarII.Shell.Dialogs
                     for (int i = 1; i < orpmodel.Count; i++)
                     {
                         orpmodel.SetPropertyLabel(i, msg[i * 2 + 2]);
-                        orpmodel.SetPropertyText(i, "");
+                        //orpmodel.SetPropertyText(i, "");
                     }
                 }
             }

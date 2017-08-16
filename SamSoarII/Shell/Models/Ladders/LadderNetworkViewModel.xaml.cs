@@ -115,6 +115,7 @@ namespace SamSoarII.Shell.Models
                     _core.PropertyChanged -= OnCorePropertyChanged;
                     _core.ViewPropertyChanged -= OnCorePropertyChanged;
                     _core.ChildrenChanged -= OnCoreChildrenChanged;
+                    _core.RowChanged -= OnCoreRowChanged;
                     if (_core.View != null) _core.View = null;
                 }
                 this.core = value;
@@ -123,11 +124,12 @@ namespace SamSoarII.Shell.Models
                     core.PropertyChanged += OnCorePropertyChanged;
                     core.ViewPropertyChanged += OnCorePropertyChanged;
                     core.ChildrenChanged += OnCoreChildrenChanged;
+                    core.RowChanged += OnCoreRowChanged;
                     if (core.View != this) core.View = this;
                 }
             }
         }
-        
+
         IModel IViewModel.Core
         {
             get { return core; }
@@ -232,18 +234,45 @@ namespace SamSoarII.Shell.Models
         {
             switch (e.Action)
             {
+                case LadderUnitAction.MOVE:
                 case LadderUnitAction.REMOVE:
                     if (sender.View != null)
                     {
-                        sender.View.Visibility = Visibility.Hidden;
-                        sender.View.Dispose();
+                        Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                        {
+                            sender.View.Visibility = Visibility.Hidden;
+                            sender.View.Dispose();
+                        });
                     }
                     break;
-                default:
-                    if (ViewParent != null && !core.Parent.IsExecuting)
+            }
+        }
+        
+        private void OnCoreRowChanged(LadderNetworkModel sender, RowChangedEventArgs e)
+        {
+            if (loadedrowstart > loadedrowend) return;
+            switch (e.Action)
+            {
+                case RowChangedEventArgs.Actions.INSERT:
+                    if (e.Start <= loadedrowstart)
+                    {
+                        loadedrowstart += e.Count;
+                        loadedrowend += e.Count;
+                    }
+                    else if (e.Start < loadedrowend)
+                    {
+                        loadedrowend += e.Count;
+                    }
+                    break;
+                case RowChangedEventArgs.Actions.REMOVE:
+                    if (e.End < loadedrowstart)
+                    {
+                        loadedrowstart -= e.Count;
+                        loadedrowend -= e.Count;
+                    }
+                    else if (e.Start <= loadedrowend)
                     {
                         DynamicDispose();
-                        ViewParent.IsViewModified = true;
                     }
                     break;
             }
@@ -420,6 +449,8 @@ namespace SamSoarII.Shell.Models
                             CreateRange(Math.Max(_loadedrowstart, loadedrowend + 1), _loadedrowend);
                         if (loadedrowend > _loadedrowend)
                             DisposeRange(_loadedrowend + 1, loadedrowend);
+                        if (!(_loadedrowstart > loadedrowend) && !(_loadedrowend < loadedrowstart))
+                            CreateRange(_loadedrowstart, _loadedrowend);
                     }
                     else
                     {
@@ -431,6 +462,8 @@ namespace SamSoarII.Shell.Models
                             CreateRange(_loadedrowend, Math.Max(_loadedrowstart, loadedrowend + 1));
                         if (loadedrowend > _loadedrowend)
                             DisposeRange(loadedrowend, _loadedrowend + 1);
+                        if (!(_loadedrowstart > loadedrowend) && !(_loadedrowend < loadedrowstart))
+                            CreateRange(_loadedrowend, _loadedrowstart);
                     }
                 }
                 loadedrowstart = _loadedrowstart;
@@ -454,13 +487,13 @@ namespace SamSoarII.Shell.Models
             int dir = (rowstart < rowend ? 1 : -1);
             for (int y = rowstart; y != rowend + dir; y += dir)
             {
-                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
-                {
-                    IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
-                    units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
-                    foreach (LadderUnitModel unit in units)
+                IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
+                units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
+                units = units.Where(u => u.View == null);
+                if (units.Count() > 0)
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
-                        if (unit.View == null)
+                        foreach (LadderUnitModel unit in units)
                         {
                             unit.View = LadderUnitViewModel.Create(unit);
                             if (unit.View.Parent != ViewParent.MainCanvas)
@@ -470,8 +503,7 @@ namespace SamSoarII.Shell.Models
                                 ViewParent.MainCanvas.Children.Add(unit.View);
                             }
                         }
-                    }
-                });
+                    });
             }
         }
 
@@ -480,19 +512,18 @@ namespace SamSoarII.Shell.Models
             int dir = (rowstart < rowend ? 1 : -1);
             for (int y = rowstart; y != rowend + dir; y += dir)
             {
-                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
-                {
-                    IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
-                    units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
-                    foreach (LadderUnitModel unit in units)
+                IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
+                units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
+                units = units.Where(u => u.View != null);
+                if (units.Count() > 0)
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
-                        if (unit.View != null)
+                        foreach (LadderUnitModel unit in units)
                         {
                             if (hide) unit.View.Visibility = Visibility.Hidden;
                             unit.View.Dispose();
                         }
-                    }
-                });
+                    });
             }
         }
 

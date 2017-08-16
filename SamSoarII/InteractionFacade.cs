@@ -1833,7 +1833,7 @@ namespace SamSoarII
         {
             if (dlgOption == null)
             {
-                dlgOption = new OptionDialog();
+                dlgOption = new OptionDialog(this);
                 dlgOption.EnsureButtonClick += (sender, e) =>
                 {
                     if (VMDProj != null) VMDProj.UpdateUnit(LadderUnitViewModel.UPDATE_STYLE);
