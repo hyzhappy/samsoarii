@@ -478,7 +478,11 @@ namespace SamSoarII.Core.Models
         }
 
         private bool isexecuting;
-        public bool IsExecuting { get { return this.isexecuting; } }
+        public bool IsExecuting
+        {
+            get { return this.isexecuting; }
+            set { this.isexecuting = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("IsExecuting")); }
+        }
         private Stack<Command> undos = new Stack<Command>();
         private Stack<Command> redos = new Stack<Command>();
         public bool CanUndo { get { return LadderMode == LadderModes.Edit && undos != null && undos.Count() > 0; } }
@@ -492,7 +496,7 @@ namespace SamSoarII.Core.Models
         public void Undo()
         {
             if (!CanUndo) return;
-            isexecuting = true;
+            IsExecuting = true;
             IFParent.ThMNGView.Pause();
             if (IFParent.ThMNGView.IsActive)
                 IFParent.ThMNGView.Paused += OnViewThreadPauseToUndo;
@@ -631,25 +635,25 @@ namespace SamSoarII.Core.Models
                 }
             }
             redos.Push(cmd);
-            isexecuting = false;
             PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
-            ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             UpdateCanvasTop();
-            Parent.InvokeModify(this, true);
             if (View != null)
             {
                 View.IsViewModified = true;
                 if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
                     area.Select(IFParent);
             }
+            Parent.InvokeModify(this, true);
             IFParent.ThMNGView.Start();
             area.Dispose();
+            IsExecuting = false;
+            ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public void Redo()
         {
             if (!CanRedo) return;
-            isexecuting = true;
+            IsExecuting = true;
             IFParent.ThMNGView.Pause();
             if (IFParent.ThMNGView.IsActive)
                 IFParent.ThMNGView.Paused += OnViewThreadPauseToRedo;
@@ -815,19 +819,19 @@ namespace SamSoarII.Core.Models
                 area.Update(cmd.NewNetworks);
             }
             undos.Push(cmd);
-            isexecuting = false;
             PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
-            ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             UpdateCanvasTop();
-            Parent.InvokeModify(this);
             if (View != null)
             {
                 View.IsViewModified = true;
                 if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
                     area.Select(IFParent);
             }
+            Parent.InvokeModify(this);
             IFParent.ThMNGView.Start();
             area.Dispose();
+            IsExecuting = false;
+            ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         private void Execute(int _type, object _target, IList<object> _olds, IList<object> _news)

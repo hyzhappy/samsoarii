@@ -159,7 +159,7 @@ namespace SamSoarII.Core.Models
             
             foreach (InstructionNetworkModel invmodel in Children.Where(inv => !inv.Parent.IsMasked))
             {
-                if (invmodel.IsModify) invmodel.Update();
+                if (invmodel.IsModified) invmodel.Update();
                 if (invmodel.IsOpenCircuit || invmodel.IsShortCircuit || invmodel.IsFusionCircuit) continue;
                 stkcount = invmodel.Insts.Where(i => i[0].StartsWith("LD")).Count();
                 outcount = invmodel.Insts.Where(i => i.Inst.ProtoType != null

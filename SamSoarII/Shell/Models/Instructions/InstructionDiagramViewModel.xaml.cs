@@ -287,9 +287,14 @@ namespace SamSoarII.Shell.Models
             Point p = e.GetPosition(MainCanvas);
             foreach (InstructionNetworkModel instnet in core.Children)
             {
-                if (!instnet.IsExpand || instnet.Invalid) continue;
                 if (p.Y < instnet.CanvasTop || p.Y > instnet.CanvasTop + instnet.ViewHeight) continue;
-                if (p.X < 24 || p.X > 24 + 522) continue; 
+                if (p.X < 24 || p.X > 24 + 522) continue;
+                if (instnet.IsModified)
+                {
+                    instnet.Update();
+                    continue;
+                }
+                if (!instnet.IsExpand || instnet.Invalid) continue;
                 cursor.IsNavigatable = false;
                 cursor.Core.Parent = instnet;
                 cursor.Core.Row = (int)((p.Y - instnet.CanvasTop - 26) / 20);

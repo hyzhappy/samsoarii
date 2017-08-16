@@ -18,7 +18,7 @@ namespace SamSoarII.Core.Models
         {
             Parent = _parent;
             isexpand = true;
-            ismodify = false;
+            IsModified = false;
         }
 
         public void Dispose()
@@ -64,8 +64,12 @@ namespace SamSoarII.Core.Models
         public int ID { get { return parent != null ? parent.ID : 0; } }
         public bool IsMasked { get { return parent != null ? parent.IsMasked : false; } }
 
-        private bool ismodify;
-        public bool IsModify { get { return this.ismodify; } }
+        private bool ismodified;
+        public bool IsModified
+        {
+            get { return this.ismodified; }
+            private set { this.ismodified = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("IsModified")); }
+        }
         
         #endregion
         
@@ -157,7 +161,7 @@ namespace SamSoarII.Core.Models
 
         private void OnParentChildrenChanged(LadderUnitModel sender, LadderUnitChangedEventArgs e)
         {
-            ismodify = true;
+            IsModified = true;
         }
 
         private void OnParentPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -187,12 +191,9 @@ namespace SamSoarII.Core.Models
 
         public void Update()
         {
-            ismodify = false;
+            IsModified = false;
             Compile();
-            InstSelectRectCore cursor = Parent?.Parent?.Inst?.View?.Cursor?.Core;
-            if (cursor != null && cursor.Parent == this)
-                cursor.View.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate () { cursor.Parent = null; }));
-                View?.BaseUpdate();
+            View?.BaseUpdate();
             if (parent.Parent.Inst.View != null)
                 parent.Parent.Inst.View.Dispatcher.Invoke(
                     DispatcherPriority.Normal, (ThreadStart)(delegate () { parent.Parent.Inst.UpdateCanvasTop(); }));

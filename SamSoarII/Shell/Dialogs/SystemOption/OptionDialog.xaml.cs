@@ -1,4 +1,5 @@
-﻿using SamSoarII.Shell.Managers;
+﻿using SamSoarII.Global;
+using SamSoarII.Shell.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +21,16 @@ namespace SamSoarII.Shell.Dialogs
     /// </summary>
     public partial class OptionDialog : Window
     {
+        private InteractionFacade ifparent;
         private FontSettingWidget wdFont;
         private OtherSettingWidget wdOther;
         private List<UserControl> _widget = new List<UserControl>();
 
         public event RoutedEventHandler EnsureButtonClick = delegate { };
 
-        public OptionDialog()
+        public OptionDialog(InteractionFacade _ifparent)
         {
+            ifparent = _ifparent;
             InitializeComponent();
             wdFont = new FontSettingWidget();
             wdOther = new OtherSettingWidget();
@@ -60,6 +63,8 @@ namespace SamSoarII.Shell.Dialogs
             FontManager.GetFunc().Setup(
                 DemoFontManager.GetFunc());
             wdOther.Save();
+            ifparent.ThMNGCore.MNGInst.TimeSpan = GlobalSetting.InstTimeSpan;
+            ifparent.ThMNGCore.MNGSave.TimeSpan = GlobalSetting.SaveTimeSpan;
             EnsureButtonClick.Invoke(this, new RoutedEventArgs(ButtonBase.ClickEvent));
             Close();
         }

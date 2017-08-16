@@ -151,10 +151,25 @@ namespace SamSoarII.Shell.Models
                     break;
                 case "ViewHeight":
                     Expander.Height = core.ViewHeight / 0.4;
+                    RN_Wait.Height = core.ViewHeight - 24;
                     if (Expander.IsMouseOver)
                         ViewParent.Rect.Height = core.ViewHeight;
                     break;
                 case "IsExpand": BaseUpdate(); break;
+                case "IsModified":
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate ()
+                    {
+                        TB_Wait.Visibility = RN_Wait.Visibility = core.IsModified 
+                            ? Visibility.Visible : Visibility.Hidden;
+                        if (core.IsModified)
+                        {
+                            tberr.Visibility = Visibility.Hidden;
+                            InstSelectRectCore cursor = core.Parent?.Parent?.Inst?.View?.Cursor?.Core;
+                            if (cursor != null && cursor.Parent == core)
+                                cursor.Parent = null;
+                        }
+                    }));
+                    break;
             }
         }
         
@@ -181,10 +196,11 @@ namespace SamSoarII.Shell.Models
         {
             ctrl.Margin = new Thickness(2, 2, 0, 0);
             Canvas.SetTop(ctrl, core.CanvasTop + 26 + row * 20 + 1);
+            Canvas.SetZIndex(ctrl, -1);
             ctrl.Height = 18;
             switch (column)
             {
-                case -1: Canvas.SetLeft(ctrl,24+1); ctrl.Width = 600; break;
+                case -1: Canvas.SetLeft(ctrl,24+1); ctrl.Width = 520; break;
                 case 0: Canvas.SetLeft(ctrl, 24+1); ctrl.Width = 38; break;
                 case 1: Canvas.SetLeft(ctrl, 24+41); ctrl.Width = 78; break;
                 case 2: Canvas.SetLeft(ctrl, 24+121); ctrl.Width = 78; break;
@@ -280,6 +296,7 @@ namespace SamSoarII.Shell.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("Header"));
                 OnCorePropertyChanged(this, new PropertyChangedEventArgs("CanvasTop"));
                 OnCorePropertyChanged(this, new PropertyChangedEventArgs("ViewHeight"));
+                OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsModified"));
             }));
             ViewParent.IsViewModified = true;
         }
