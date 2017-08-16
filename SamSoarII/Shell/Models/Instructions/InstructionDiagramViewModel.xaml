@@ -10,7 +10,7 @@
              Focusable="True"
              PreviewKeyDown="MainCanvas_KeyDown">
     <ScrollViewer x:Uid="Scroll" x:Name="Scroll" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SizeChanged="Scroll_SizeChanged">
-        <Canvas x:Uid="MainCanvas" x:Name="MainCanvas" Focusable="True" MouseDown="MainCanvas_MouseDown">
+        <Canvas x:Uid="MainCanvas" x:Name="MainCanvas" Focusable="True" MouseDown="MainCanvas_MouseDown" VerticalAlignment="Top">
             <Rectangle x:Name="Rect" Canvas.Left="24" Width="522" Panel.ZIndex="3" 
                        Opacity="0.2" Fill="{x:Static gb:GlobalSetting.FoldingBrush}" Visibility="Hidden"/>
         </Canvas>

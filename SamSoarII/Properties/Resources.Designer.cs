@@ -430,6 +430,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Click to update...... 的本地化字符串。
+        /// </summary>
+        public static string ClickToUpdate {
+            get {
+                return ResourceManager.GetString("ClickToUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Close 的本地化字符串。
         /// </summary>
         public static string Close {
@@ -2059,7 +2068,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Enhanced high counter 的本地化字符串。
+        ///   查找类似 Enhanced HighCount 的本地化字符串。
         /// </summary>
         public static string Inst_EHCNT {
             get {

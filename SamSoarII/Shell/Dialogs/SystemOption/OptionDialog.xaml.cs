@@ -63,8 +63,8 @@ namespace SamSoarII.Shell.Dialogs
             FontManager.GetFunc().Setup(
                 DemoFontManager.GetFunc());
             wdOther.Save();
-            ifparent.ThMNGCore.MNGInst.TimeSpan = GlobalSetting.InstTimeSpan;
-            ifparent.ThMNGCore.MNGSave.TimeSpan = GlobalSetting.SaveTimeSpan;
+            ifparent.ThMNGCore.MNGInst.TimeSpan = GlobalSetting.InstTimeSpan * 1000;
+            ifparent.ThMNGCore.MNGSave.TimeSpan = GlobalSetting.SaveTimeSpan * 1000 * 60;
             EnsureButtonClick.Invoke(this, new RoutedEventArgs(ButtonBase.ClickEvent));
             Close();
         }

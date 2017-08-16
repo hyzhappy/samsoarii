@@ -549,8 +549,9 @@ namespace SamSoarII.Core.Models
             RowCount += y2 - y1 + 1;
             if (y1 < RowCount)
             {
-                Move(children.SelectRange(0, 11, y1, RowCount - 1).ToArray(), 0, y2 - y1 + 1);
-                MoveV(vlines.SelectRange(0, 11, y1, RowCount - 1).ToArray(), 0, y2 - y1 + 1);
+                List<LadderUnitModel> olds = new List<LadderUnitModel>();
+                olds.AddRange(Move(children.SelectRange(0, 11, y1, RowCount - 1).ToArray(), 0, y2 - y1 + 1));
+                olds.AddRange(MoveV(vlines.SelectRange(0, 11, y1, RowCount - 1).ToArray(), 0, y2 - y1 + 1));
             }
             RowChanged(this, new RowChangedEventArgs(RowChangedEventArgs.Actions.INSERT, y1, y2 - y1 + 1));
         }
@@ -562,8 +563,10 @@ namespace SamSoarII.Core.Models
             removes = removes.ToArray();
             Remove(children.SelectRange(0, 11, y1, y2));
             RemoveV(vlines.SelectRange(0, 11, y1, y2));
-            Move(children.SelectRange(0, 11, y2 + 1, RowCount - 1).ToArray(), 0, -(y2 - y1 + 1));
-            MoveV(vlines.SelectRange(0, 11, y2 + 1, RowCount - 1).ToArray(), 0, -(y2 - y1 + 1));
+            List<LadderUnitModel> olds = new List<LadderUnitModel>();
+            olds.AddRange(Move(children.SelectRange(0, 11, y2 + 1, RowCount - 1).ToArray(), 0, -(y2 - y1 + 1)));
+            olds.AddRange(MoveV(vlines.SelectRange(0, 11, y2 + 1, RowCount - 1).ToArray(), 0, -(y2 - y1 + 1)));
+            removes = removes.Concat(olds).Where(u => u != null).ToArray();
             RowCount -= y2 - y1 + 1;
             RowChanged(this, new RowChangedEventArgs(RowChangedEventArgs.Actions.REMOVE, y1, y2 - y1 + 1));
             return removes;
