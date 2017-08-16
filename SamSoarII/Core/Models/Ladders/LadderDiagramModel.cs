@@ -574,7 +574,7 @@ namespace SamSoarII.Core.Models
                     cmd.Network.InsertR(y1, y2);
                     for (i1 = 0; i1 < newrows.Count; i1++)
                         if (newrows[i1] >= y1) newrows[i1] += y2 - y1 + 1;
-                    area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity, y1, y2);
+                    area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity - 1, y1, y2);
                 }
             }
             if ((cmd.Type & CMDTYPE_MoveUnit) != 0)
@@ -748,7 +748,7 @@ namespace SamSoarII.Core.Models
                         if (y == y2 + 1) { y2++; i2++; } else break;
                     }
                     cmd.Network.InsertR(y1, y2);
-                    area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity, y1, y2);
+                    area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity - 1, y1, y2);
                     for (i1 = 0; i1 < oldrows.Count; i1++)
                         if (oldrows[i1] >= y1) oldrows[i1] += y2 - y1 + 1;
                 }
