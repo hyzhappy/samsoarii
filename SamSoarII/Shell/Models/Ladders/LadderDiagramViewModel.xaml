@@ -80,15 +80,15 @@
                     <Canvas x:Name="MainCanvas" Width="3600" HorizontalAlignment="Left" 
                             AllowDrop="True" Drop="OnMainCanvasDrop" DragLeave="OnMainCanvasDragLeave" DragOver="OnMainCanvasDragOver" 
                             MouseMove="OnMainCanvasMouseMove" MouseDown="OnMainCanvasMouseDown" MouseUp="OnMainCanvasMouseUp"/>
-                    <Line x:Name="line2" Stroke="Black" Margin="-25,0,0,0" StrokeThickness="3" X1="0" Y1="0" X2="20" Y2="0"></Line>
+                    <Line x:Name="line2" Stroke="Black" Margin="-25,-8,0,0" StrokeThickness="3" X1="0" Y1="0" X2="20" Y2="0"/>
                 </StackPanel>
             </Grid>
             <StackPanel Orientation="Vertical">
                 <Line Stroke="Black" StrokeThickness="3" X1="0" X2="0" Y1="0" Margin="20,0,20,0">
                     <Line.Y2>
-                        <MultiBinding x:Uid="MultiBinding_3" Converter="{StaticResource converter1}">
-                            <Binding x:Uid="Binding_5" ElementName="MainBorder" Path="ActualHeight"></Binding>
-                            <Binding x:Uid="Binding_6" ElementName="MainCanvas" Path="ActualHeight"></Binding>
+                        <MultiBinding Converter="{StaticResource converter1}">
+                            <Binding ElementName="MainBorder" Path="ActualHeight"></Binding>
+                            <Binding ElementName="MainCanvas" Path="ActualHeight"></Binding>
                         </MultiBinding>
                     </Line.Y2>
                 </Line>

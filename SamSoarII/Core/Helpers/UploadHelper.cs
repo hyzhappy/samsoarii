@@ -73,11 +73,6 @@ namespace SamSoarII.Core.Helpers
         
         public static UploadError UploadExecute(CommunicationManager communManager)
         {
-            //首先通信测试获取底层PLC的状态
-            CommunicationTestCommand CTCommand = new CommunicationTestCommand();
-            if (!communManager.CommunicationHandle(CTCommand))
-                return UploadError.CommuicationFailed;
-            else communManager.PLCMessage = new PLCMessage(CTCommand);
             //首先判断PLC运行状态,为Iap时需要切换到App模式
             if (communManager.PLCMessage.RunStatus == RunStatus.Iap)
             {
@@ -88,48 +83,6 @@ namespace SamSoarII.Core.Helpers
                     time++;
                 }
                 if (time >= 5) return UploadError.UploadFailed;
-            }
-            //验证是否需要上载密码
-            if (communManager.PLCMessage.IsUPNeed)
-            {
-                bool retp = false;
-                LocalizedMessageResult retcl = LocalizedMessageResult.None;
-                PasswordDialog dialog = new PasswordDialog();
-
-                dialog.EnsureButtonClick += (sender, e) =>
-                {
-                    if (dialog.Password.Length > 12 || dialog.Password.Length < 5)
-                        LocalizedMessageBox.Show(Properties.Resources.Password_Length_Error);
-                    else
-                    {
-                        int time = 0;
-                        ICommunicationCommand command = new PasswordCheckCommand(CommunicationDataDefine.CMD_PASSWD_UPLOAD, dialog.Password);
-                        for (time = 0; time < 3 && !communManager.CommunicationHandle(command);)
-                        {
-                            Thread.Sleep(200);
-                            time++;
-                        }
-                        if (time >= 3) retp = false;
-                        else
-                        {
-                            retp = true;
-                            dialog.Close();
-                        }
-                    }
-                };
-
-                dialog.Closing += (sender, e) =>
-                {
-                    if (!retp)
-                    {
-                        retcl = LocalizedMessageBox.Show(string.Format("{0}{1}", Properties.Resources.Dialog_Closing, Properties.Resources.MainWindow_Upload), LocalizedMessageButton.OKCancel);
-                        if (retcl == LocalizedMessageResult.No) e.Cancel = true;
-                    }
-                    else retcl = LocalizedMessageResult.None;
-                };
-
-                dialog.ShowDialog();
-                if (retcl == LocalizedMessageResult.Yes) return UploadError.Cancel;
             }
 
             UploadError ret = UploadError.None;

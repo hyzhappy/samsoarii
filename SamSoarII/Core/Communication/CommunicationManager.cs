@@ -12,11 +12,12 @@ using SamSoarII.Utility;
 using System.IO;
 using System.ComponentModel;
 using SamSoarII.Core.Helpers;
+using SamSoarII.Shell.Dialogs;
 
 namespace SamSoarII.Core.Communication
 {
     public enum PortTypes { SerialPort, USB, NULL}
-
+    public enum CommunicationType {Download,Upload,Monitor }
     public class CommunicationManager : BaseThreadManager
     {
         public CommunicationManager(InteractionFacade _ifParent) : base(false)
@@ -306,6 +307,110 @@ namespace SamSoarII.Core.Communication
         {
             return UploadHelper.UploadExecute(this);
         }
+
+        public bool PasswordHandle(CommunicationType commuType)
+        {
+            //首先通信测试获取底层PLC的状态
+            CommunicationTestCommand CTCommand = new CommunicationTestCommand();
+            if (!CommunicationHandle(CTCommand))
+                return false;
+            else PLCMessage = new PLCMessage(CTCommand);
+
+            if(commuType == CommunicationType.Monitor)
+            {
+                //设置从站站号
+                CommunicationDataDefine.SLAVE_ADDRESS = PLCMessage.StationNumber;
+            }
+
+            bool passwordNeed = false;
+            byte passwordType = 0;
+            string message = string.Empty;
+            switch (commuType)
+            {
+                case CommunicationType.Download:
+                    passwordNeed = PLCMessage.IsDPNeed;
+                    break;
+                case CommunicationType.Upload:
+                    passwordNeed = PLCMessage.IsUPNeed;
+                    break;
+                case CommunicationType.Monitor:
+                    passwordNeed = PLCMessage.IsMPNeed;
+                    break;
+            }
+
+            //验证是否需要上载(或下载，监视)密码
+            if (passwordNeed)
+            {
+                bool retp = false;
+                LocalizedMessageResult retcl = LocalizedMessageResult.None;
+                PasswordDialog pwdialog = new PasswordDialog();
+
+                pwdialog.EnsureButtonClick += (sender, e) =>
+                {
+                    if (pwdialog.Password.Length > 12 || pwdialog.Password.Length < 5)
+                        LocalizedMessageBox.Show(Properties.Resources.Password_Length_Error);
+                    else
+                    {
+                        switch (commuType)
+                        {
+                            case CommunicationType.Download:
+                                passwordType = CommunicationDataDefine.CMD_PASSWD_DOWNLOAD;
+                                break;
+                            case CommunicationType.Upload:
+                                passwordType = CommunicationDataDefine.CMD_PASSWD_UPLOAD;
+                                break;
+                            case CommunicationType.Monitor:
+                                passwordType = CommunicationDataDefine.CMD_PASSWD_MONITOR;
+                                break;
+                        }
+                        int time = 0;
+                        ICommunicationCommand command = new PasswordCheckCommand(passwordType, pwdialog.Password);
+                        for (time = 0; time < 3 && !CommunicationHandle(command);)
+                        {
+                            Thread.Sleep(200);
+                            time++;
+                        }
+                        if (time >= 3)
+                        {
+                            retp = false;
+                            LocalizedMessageBox.Show(Properties.Resources.Password_Error, LocalizedMessageIcon.Error);
+                        }
+                        else
+                        {
+                            retp = true;
+                            pwdialog.Close();
+                        }
+                    }
+                };
+
+                pwdialog.Closing += (sender, e) =>
+                {
+                    if (!retp)
+                    {
+                        switch (commuType)
+                        {
+                            case CommunicationType.Download:
+                                message = Properties.Resources.MainWindow_Download;
+                                break;
+                            case CommunicationType.Upload:
+                                message = Properties.Resources.MainWindow_Upload;
+                                break;
+                            case CommunicationType.Monitor:
+                                message = Properties.Resources.MainWindow_Monitor;
+                                break;
+                        }
+                        retcl = LocalizedMessageBox.Show(string.Format("{0}{1}", Properties.Resources.Dialog_Closing, message), LocalizedMessageButton.OKCancel);
+                        if (retcl == LocalizedMessageResult.No) e.Cancel = true;
+                    }
+                    else retcl = LocalizedMessageResult.None;
+                };
+
+                pwdialog.ShowDialog();
+                if (retcl == LocalizedMessageResult.Yes) return false;
+            }
+            return true;
+        }
+
         public bool CommunicationHandle(ICommunicationCommand cmd, bool hasRecvData = true, int waittime = 10)
         {
             bool hassend = false;

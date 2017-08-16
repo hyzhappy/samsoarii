@@ -478,6 +478,8 @@ namespace SamSoarII
 
                     if (mngComu.CheckLink())
                     {
+                        if (!mngComu.PasswordHandle(CommunicationType.Download)) return;
+                        
                         handle = new LoadingWindowHandle(Properties.Resources.Project_Download);
                         vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                         {
@@ -584,6 +586,8 @@ namespace SamSoarII
 
                         if (mngComu.CheckLink())
                         {
+                            if (!mngComu.PasswordHandle(CommunicationType.Upload)) return;
+
                             LocalizedMessageResult ret = LocalizedMessageResult.Yes;
                             if (UploadHelper.HasConfig && UploadHelper.IsUploadSetting)
                                 ret = LocalizedMessageBox.Show(Properties.Resources.Config_Override, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
@@ -711,7 +715,7 @@ namespace SamSoarII
             }
             if (!CheckLadder(false)) return false;
             //if (!CheckFuncBlock(false)) return false;
-            mngComu.IsEnable = true;
+            
             if (!mngComu.CheckLink())
             {
                 PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
@@ -723,58 +727,11 @@ namespace SamSoarII
                 mngComu.IsEnable = false;
                 return false;
             }
-            
-            CommunicationTestCommand CTCommand = new CommunicationTestCommand();
-            if (!mngComu.CommunicationHandle(CTCommand))
+
+            if (!mngComu.PasswordHandle(CommunicationType.Monitor))
                 return false;
-            else mngComu.PLCMessage = new PLCMessage(CTCommand);
 
-            //设置从站站号
-            CommunicationDataDefine.SLAVE_ADDRESS = mngComu.PLCMessage.StationNumber;
-
-            //验证是否需要监视密码
-            if (mngComu.PLCMessage.IsMPNeed)
-            {
-                bool retp = false;
-                LocalizedMessageResult retcl = LocalizedMessageResult.None;
-                PasswordDialog dialog = new PasswordDialog();
-
-                dialog.EnsureButtonClick += (sender, e) =>
-                {
-                    if (dialog.Password.Length > 12 || dialog.Password.Length < 5)
-                        LocalizedMessageBox.Show(Properties.Resources.Password_Length_Error);
-                    else
-                    {
-                        int time = 0;
-                        ICommunicationCommand command = new PasswordCheckCommand(CommunicationDataDefine.CMD_PASSWD_MONITOR, dialog.Password);
-                        for (time = 0; time < 3 && !mngComu.CommunicationHandle(command);)
-                        {
-                            Thread.Sleep(200);
-                            time++;
-                        }
-                        if (time >= 3) retp = false;
-                        else
-                        {
-                            retp = true;
-                            dialog.Close();
-                        }
-                    }
-                };
-
-                dialog.Closing += (sender, e) =>
-                {
-                    if (!retp)
-                    {
-                        retcl = LocalizedMessageBox.Show(string.Format("{0}{1}", Properties.Resources.Dialog_Closing, Properties.Resources.MainWindow_Monitor), LocalizedMessageButton.OKCancel);
-                        if (retcl == LocalizedMessageResult.No) e.Cancel = true;
-                    }
-                    else retcl = LocalizedMessageResult.None;
-                };
-
-                dialog.ShowDialog();
-                if (retcl == LocalizedMessageResult.Yes) return false;
-            }
-
+            mngComu.IsEnable = true;
             vmdProj.LadderMode = LadderModes.Monitor;
             return true;
         }

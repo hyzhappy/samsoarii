@@ -15,7 +15,7 @@
             <Rectangle x:Name="Rect" Fill="Transparent" VerticalAlignment="Top" Height="{Binding ElementName=canvas,Path=ActualHeight}"/>
             <StackPanel Orientation="Vertical">
                 <local:CanExpandButton x:Name="expandButton" IsExpand="{Binding IsExpand,Mode=TwoWay}" Width="50" Height="50" Template="{StaticResource ExpandButton}"></local:CanExpandButton>
-                <Line x:Name="line" Stroke="Black" Margin="25,0,0,0" StrokeThickness="3" X1="0" X2="0" Y1="0" Y2="{Binding ElementName=canvas,Path=ActualHeight,Converter={StaticResource Converter}}"></Line>
+                <Line x:Name="line" Stroke="Black" Margin="25,-7,0,0" StrokeThickness="3" X1="0" X2="0" Y1="0" Y2="{Binding ElementName=canvas,Path=ActualHeight,Converter={StaticResource Converter}}"></Line>
                 <Line x:Name="line1" Stroke="Black" Margin="25,-20,0,0" StrokeThickness="3" X1="0" Y1="0" X2="20" Y2="0"></Line>
             </StackPanel>
         </Grid>

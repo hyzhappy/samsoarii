@@ -8,21 +8,21 @@
              xmlns:gb="clr-namespace:SamSoarII.Global"
              xmlns:properties="clr-namespace:SamSoarII.Properties"
              xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="{x:Static gb:GlobalSetting.WholeWidth}" x:Name="LadderNetworkUserControl"
              AllowDrop="True">
     <UserControl.Resources>
-        <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="FontData" ObjectType="{x:Type mg:FontManager}" MethodName="GetTitle"/>
-        <util:BoolToVisibilityConverter2 x:Uid="util:BoolToVisibilityConverter2_1" x:Key="converter"></util:BoolToVisibilityConverter2>
+        <ObjectDataProvider x:Key="FontData" ObjectType="{x:Type mg:FontManager}" MethodName="GetTitle"/>
+        <util:BoolToVisibilityConverter2 x:Key="converter"></util:BoolToVisibilityConverter2>
     </UserControl.Resources>
-    <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
-        <local:LadderExpander x:Uid="ladderExpander" x:Name="ladderExpander" VerticalAlignment="Top" IsExpand="True" Margin="-50,0,0,0"/>
-        <Grid x:Uid="Grid_1">
+    <StackPanel Orientation="Horizontal">
+        <local:LadderExpander x:Name="ladderExpander" VerticalAlignment="Top" IsExpand="True" Margin="-50,0,0,0"/>
+        <Grid>
             <Rectangle x:Name="Rect" VerticalAlignment="Top"/>
             <StackPanel x:Name="mainstack" Margin="0,0,0,20">
                 <StackPanel.Resources>
-                    <ContextMenu x:Uid="ContextMenu_1" x:Key="CommentAreaContextMenu" DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.Tag}">
-                        <MenuItem x:Uid="MenuItem_1" Header="{x:Static properties:Resources.LadderNetwork_Edit_Network_Comment}"></MenuItem>
+                    <ContextMenu x:Key="CommentAreaContextMenu" DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.Tag}">
+                        <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Edit_Network_Comment}"></MenuItem>
                     </ContextMenu>
                 </StackPanel.Resources>
                 <Grid x:Name="CommentAreaGrid" Background="Transparent">
@@ -32,19 +32,19 @@
                                   Expanded="CommentAreaExpander_Expanded"
                                   Collapsed="CommentAreaExpander_Collapsed">
                             <Expander.Header>
-                                <Grid x:Uid="Grid_2" Width="1500" ContextMenu="{StaticResource CommentAreaContextMenu}">
+                                <Grid Width="1500" ContextMenu="{StaticResource CommentAreaContextMenu}">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition x:Uid="ColumnDefinition_1" Width="1*"></ColumnDefinition>
-                                        <ColumnDefinition x:Uid="ColumnDefinition_2" Width="1*"></ColumnDefinition>
-                                        <ColumnDefinition x:Uid="ColumnDefinition_3" Width="3*"></ColumnDefinition>
-                                        <ColumnDefinition x:Uid="ColumnDefinition_4" Width="1*"></ColumnDefinition>
+                                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                                        <ColumnDefinition Width="1*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Label x:Uid="NetworkNumberLabel" x:Name="NetworkNumberLabel" DataContext="{StaticResource FontData}" FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}" Foreground="{Binding FontColor}" Grid.Column="0" Grid.Row="0"></Label>
-                                    <Label x:Uid="NetworkStepCountLabel" x:Name="NetworkStepCountLabel" DataContext="{StaticResource FontData}" FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}" Foreground="{Binding FontColor}" Grid.Column="1" Grid.Row="0">Step:</Label>
-                                    <Label x:Uid="NetworkBriefLabel" x:Name="NetworkBriefLabel" FontSize="32" Grid.Column="2" Grid.Row="0" Content="{Binding NetworkBrief}"></Label>
+                                    <Label x:Name="NetworkNumberLabel" DataContext="{StaticResource FontData}" FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}" Foreground="{Binding FontColor}" Grid.Column="0" Grid.Row="0"></Label>
+                                    <Label x:Name="NetworkStepCountLabel" DataContext="{StaticResource FontData}" FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}" Foreground="{Binding FontColor}" Grid.Column="1" Grid.Row="0">Step:</Label>
+                                    <Label x:Name="NetworkBriefLabel" FontSize="32" Grid.Column="2" Grid.Row="0" Content="{Binding NetworkBrief}"></Label>
                                 </Grid>
                             </Expander.Header>
-                            <TextBlock x:Uid="NetworkDescriptionTextBlock" x:Name="NetworkDescriptionTextBlock" FontSize="32" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding NetworkDescription}"></TextBlock>
+                            <TextBlock x:Name="NetworkDescriptionTextBlock" FontSize="32" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding NetworkDescription}"></TextBlock>
                         </Expander>
                     </Border>
                     <Button x:Name="ThumbnailButton" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="1540,0,0,0" Width="65" Height="55" 
