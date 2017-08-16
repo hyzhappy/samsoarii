@@ -700,6 +700,7 @@ namespace SamSoarII.Shell.Models
         }
         private void SelectRectLeftWithLine(bool expand = false)
         {
+            if (core.IsExecuting) return;
             if (LadderMode != LadderModes.Edit)
             {
                 SelectRectLeft();
@@ -729,6 +730,7 @@ namespace SamSoarII.Shell.Models
         }
         private void SelectRectRightWithLine(bool expand = false)
         {
+            if (core.IsExecuting) return;
             if (LadderMode != LadderModes.Edit)
             {
                 SelectRectRight();
@@ -761,6 +763,7 @@ namespace SamSoarII.Shell.Models
         }
         private void SelectRectUpWithLine(bool expand = false)
         {
+            if (core.IsExecuting) return;
             if (LadderMode != LadderModes.Edit)
             {
                 SelectRectUp();
@@ -795,6 +798,7 @@ namespace SamSoarII.Shell.Models
         }
         private void SelectRectDownWithLine(bool expand = false)
         {
+            if (core.IsExecuting) return;
             if (LadderMode != LadderModes.Edit)
             {
                 SelectRectDown();
@@ -2009,10 +2013,12 @@ namespace SamSoarII.Shell.Models
         }
         private void OnUndoCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
+            if (core.IsExecuting) return;
             Core.Undo();
         }
         private void OnRedoCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
+            if (core.IsExecuting) return;
             Core.Redo();
         }
         private void OnSelectAllCommandExecute(object sender, ExecutedRoutedEventArgs e)
@@ -2465,6 +2471,7 @@ namespace SamSoarII.Shell.Models
 
         private void OnLadderEdit(object sender, LadderEditEventArgs e)
         {
+            if (core.IsExecuting) return;
             switch (e.Type)
             {
                 case LadderEditEventArgs.Types.Delete:

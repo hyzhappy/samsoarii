@@ -342,7 +342,7 @@ namespace SamSoarII.Core.Models
             public IList<string> NewComments;
         }
 
-        private class RelativeArea
+        private class RelativeArea : IDisposable
         {
             public enum Status { NULL, SINGLE, MULTIUNIT, MULTINET};
             private Status status;
@@ -351,9 +351,15 @@ namespace SamSoarII.Core.Models
             private int x1, x2, y1, y2;
             private int start, end;
 
-            public RelativeArea()
+            public RelativeArea(LadderDiagramModel _diagram)
             {
+                diagram = _diagram;
                 status = Status.NULL;
+            }
+
+            public void Dispose()
+            {
+                diagram = null;
             }
 
             public void Update(LadderUnitModel unit)
@@ -486,6 +492,7 @@ namespace SamSoarII.Core.Models
         public void Undo()
         {
             if (!CanUndo) return;
+            isexecuting = true;
             IFParent.ThMNGView.Pause();
             if (IFParent.ThMNGView.IsActive)
                 IFParent.ThMNGView.Paused += OnViewThreadPauseToUndo;
@@ -501,9 +508,8 @@ namespace SamSoarII.Core.Models
 
         private void _Undo()
         {
-            isexecuting = true;
             Command cmd = undos.Pop();
-            RelativeArea area = new RelativeArea();
+            RelativeArea area = new RelativeArea(this);
             LadderNetworkModel net = null;
             int i1 = 0, i2 = 0;
             IList<int> newrows = null;
@@ -637,11 +643,13 @@ namespace SamSoarII.Core.Models
                     area.Select(IFParent);
             }
             IFParent.ThMNGView.Start();
+            area.Dispose();
         }
 
         public void Redo()
         {
             if (!CanRedo) return;
+            isexecuting = true;
             IFParent.ThMNGView.Pause();
             if (IFParent.ThMNGView.IsActive)
                 IFParent.ThMNGView.Paused += OnViewThreadPauseToRedo;
@@ -657,7 +665,6 @@ namespace SamSoarII.Core.Models
 
         private void _Redo()
         {
-            isexecuting = true;
             Command cmd = redos.Pop();
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
             {
@@ -674,7 +681,7 @@ namespace SamSoarII.Core.Models
                 }
             }
             LadderNetworkModel net = null;
-            RelativeArea area = new RelativeArea();
+            RelativeArea area = new RelativeArea(this);
             int i1 = 0, i2 = 0;
             IList<int> oldrows = null;
             if ((cmd.Type & CMDTYPE_ChangeProperty) != 0)
@@ -820,6 +827,7 @@ namespace SamSoarII.Core.Models
                     area.Select(IFParent);
             }
             IFParent.ThMNGView.Start();
+            area.Dispose();
         }
 
         private void Execute(int _type, object _target, IList<object> _olds, IList<object> _news)
