@@ -66,7 +66,7 @@ namespace SamSoarII.Core.Models
             MBUS, SEND, REV,
             PLSF, DPLSF, PWM, DPWM, PLSY, DPLSY, PLSR, DPLSR, PLSRD, DPLSRD, PLSA, DPLSA, PLSNEXT, PLSSTOP, ZRN, ZRND, DZRN, DZRND, PTO, DRVI, DDRVI, DRVA, DDRVA,
             TBL, POLYLINEF, POLYLINEI, LINEF, LINEI, ARCF, ARCI, BLOCK, HMIBLOCK, PAUSE,
-            HCNT,
+            HCNT, EHCNT,
             LOG, POW, FACT, CMP, CMPD, CMPF, ZCP, ZCPD, ZCPF, NEG, NEGD, XCH, XCHD, XCHF, CML, CMLD, SMOV, FMOV, FMOVD,
             PID,
             VLINE, HLINE, NULL
@@ -689,6 +689,14 @@ namespace SamSoarII.Core.Models
                 new ValueFormat[] {
                     new ValueFormat("C", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}),
                     new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}) });
+            Formats[(int)Types.EHCNT] = new LadderUnitFormat(1701, "EHCNT", Types.EHCNT, Outlines.HighCount, Shapes.OutputRect,
+                Properties.Resources.Inst_HighCount,
+                "", "",
+                new ValueFormat[] {
+                    new ValueFormat("C", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}),
+                    new ValueFormat("CM", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex}),
+                    new ValueFormat("TM", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyIntKValueRegex}),
+                    new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 3, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}) });
             Formats[(int)Types.FOR] = new LadderUnitFormat(1100, "FOR", Types.FOR, Outlines.ProgramControl, Shapes.OutputRect,
                 Properties.Resources.FOR_Inst,
                 "如果指令前条件导通，则执行此条指令。此条指令必须和NEXT指令配合使用，FOR和NEXT指令允许了一个程序的区域指定。\r\n" +
@@ -1369,7 +1377,7 @@ namespace SamSoarII.Core.Models
         {
             PropertyChanged(this, new PropertyChangedEventArgs(propertyname));
         }
-
+        
         #region Number
 
         private LadderNetworkModel oldparent;
