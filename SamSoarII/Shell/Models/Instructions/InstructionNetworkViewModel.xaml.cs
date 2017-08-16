@@ -238,7 +238,7 @@ namespace SamSoarII.Shell.Models
 
         public void BaseUpdate()
         {
-            tberr.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
                 tberr.Visibility = core.IsExpand && core.Invalid ? Visibility.Visible : Visibility.Hidden;
                 tberr.Background = Core.IsMasked ? Brushes.Gray : Brushes.Red;
@@ -275,9 +275,12 @@ namespace SamSoarII.Shell.Models
             });
             DynamicDispose();
             DynamicUpdate();
-            PropertyChanged(this, new PropertyChangedEventArgs("Header"));
-            OnCorePropertyChanged(this, new PropertyChangedEventArgs("CanvasTop"));
-            OnCorePropertyChanged(this, new PropertyChangedEventArgs("ViewHeight"));
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate ()
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("Header"));
+                OnCorePropertyChanged(this, new PropertyChangedEventArgs("CanvasTop"));
+                OnCorePropertyChanged(this, new PropertyChangedEventArgs("ViewHeight"));
+            }));
             ViewParent.IsViewModified = true;
         }
 

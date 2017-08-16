@@ -195,6 +195,33 @@ namespace SamSoarII.Shell.Models
         
         private void OnCoreChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            if (loadedrowstart <= loadedrowend)
+            {
+                if (e.NewItems != null)
+                {
+                    if (e.NewStartingIndex <= loadedrowstart)
+                    {
+                        loadedrowstart += e.NewItems.Count;
+                        loadedrowend += e.NewItems.Count;
+                    }
+                    else if (e.NewStartingIndex <= loadedrowend)
+                    {
+                        loadedrowend += e.NewItems.Count;
+                    }
+                }
+                if (e.OldItems != null)
+                {
+                    if (e.OldStartingIndex + e.OldItems.Count - 1 < loadedrowstart)
+                    {
+                        loadedrowstart -= e.OldItems.Count;
+                        loadedrowend -= e.OldItems.Count;
+                    }
+                    else if (e.OldStartingIndex <= loadedrowend)
+                    {
+                        DynamicDispose();
+                    }
+                }
+            }
             if (e.OldItems != null)
                 foreach (LadderNetworkModel lnmodel in e.OldItems)
                 {
@@ -209,9 +236,6 @@ namespace SamSoarII.Shell.Models
                 }
             if (!core.IsExecuting)
             {
-                loadedrowstart = 0;
-                loadedrowend = core.Children.Count - 1;
-                DynamicDispose();
                 isviewmodified = true;
             }
         }
@@ -1383,6 +1407,8 @@ namespace SamSoarII.Shell.Models
                             CreateRange(Math.Max(_loadedrowstart, loadedrowend + 1), _loadedrowend);
                         if (loadedrowend > _loadedrowend)
                             DisposeRange(_loadedrowend + 1, loadedrowend);
+                        if (!(_loadedrowstart > loadedrowend) && !(_loadedrowend < loadedrowstart))
+                            CreateRange(_loadedrowstart, _loadedrowend);
                     }
                     else
                     {
@@ -1394,6 +1420,8 @@ namespace SamSoarII.Shell.Models
                             CreateRange(_loadedrowend, Math.Max(_loadedrowstart, loadedrowend + 1));
                         if (loadedrowend > _loadedrowend)
                             DisposeRange(loadedrowend, _loadedrowend + 1);
+                        if (!(_loadedrowstart > loadedrowend) && !(_loadedrowend < loadedrowstart))
+                            CreateRange(_loadedrowend, _loadedrowstart);
                     }
                 }
                 loadedrowstart = _loadedrowstart;
@@ -1438,19 +1466,19 @@ namespace SamSoarII.Shell.Models
             int dir = (rowstart < rowend ? 1 : -1);
             for (int y = rowstart; y != rowend + dir; y += dir)
             {
-                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
-                {
-                    LadderNetworkModel net = core.Children[y];
-                    if (net.View == null)
-                        net.View = AllResourceManager.CreateNet(net);
-                    net.View.Visibility = Visibility.Visible;
-                    if (net.View.Parent != MainCanvas)
+                LadderNetworkModel net = core.Children[y];
+                if (net.View == null)
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
-                        if (net.View.Parent is Canvas)
-                            ((Canvas)(net.View.Parent)).Children.Remove(net.View);
-                        MainCanvas.Children.Add(net.View);
-                    }
-                });
+                        net.View = AllResourceManager.CreateNet(net);
+                        net.View.Visibility = Visibility.Visible;
+                        if (net.View.Parent != MainCanvas)
+                        {
+                            if (net.View.Parent is Canvas)
+                                ((Canvas)(net.View.Parent)).Children.Remove(net.View);
+                            MainCanvas.Children.Add(net.View);
+                        }
+                    });
             }
         }
 

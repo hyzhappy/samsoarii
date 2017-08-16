@@ -39,7 +39,7 @@ namespace SamSoarII.Shell.Models
                 tbs[i].Text = i == 0 ? id.ToString() : core[i - 1];
             }
             StringBuilder tbtext = new StringBuilder("");
-            if (unit != null)
+            if (unit != null && unit.ValueManager != null)
             {
                 tbtext.Append("// ");
                 foreach (ValueModel value in unit.Children)

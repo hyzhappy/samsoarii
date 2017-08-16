@@ -11,6 +11,8 @@ using SamSoarII.Shell.Windows;
 using SamSoarII.Global;
 using SamSoarII.Shell.Managers;
 using System.Threading;
+using System.Windows.Threading;
+using System.Windows;
 
 namespace SamSoarII.Core.Models
 {
@@ -480,12 +482,25 @@ namespace SamSoarII.Core.Models
             undos.Clear();
             redos.Clear();
         }
+
         public void Undo()
         {
             if (!CanUndo) return;
             IFParent.ThMNGView.Pause();
-            while (IFParent.ThMNGView.IsActive)
-                Thread.Sleep(20);
+            if (IFParent.ThMNGView.IsActive)
+                IFParent.ThMNGView.Paused += OnViewThreadPauseToUndo;
+            else
+                _Undo();
+        }
+
+        private void OnViewThreadPauseToUndo(object sender, RoutedEventArgs e)
+        {
+            IFParent.ThMNGView.Paused -= OnViewThreadPauseToUndo;
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate () { _Undo(); }));
+        }
+
+        private void _Undo()
+        {
             isexecuting = true;
             Command cmd = undos.Pop();
             RelativeArea area = new RelativeArea();
@@ -628,8 +643,20 @@ namespace SamSoarII.Core.Models
         {
             if (!CanRedo) return;
             IFParent.ThMNGView.Pause();
-            while (IFParent.ThMNGView.IsActive)
-                Thread.Sleep(20);
+            if (IFParent.ThMNGView.IsActive)
+                IFParent.ThMNGView.Paused += OnViewThreadPauseToRedo;
+            else
+                _Redo();
+        }
+
+        private void OnViewThreadPauseToRedo(object sender, RoutedEventArgs e)
+        {
+            IFParent.ThMNGView.Paused -= OnViewThreadPauseToRedo;
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate () { _Redo(); }));
+        }
+
+        private void _Redo()
+        {
             isexecuting = true;
             Command cmd = redos.Pop();
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)

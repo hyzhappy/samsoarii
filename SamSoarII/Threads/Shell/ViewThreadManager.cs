@@ -56,8 +56,10 @@ namespace SamSoarII.Threads
                 oldinstoffset = 0;
                 return;
             }
+#if RELEASE
             try
             {
+#endif
                 double newscrolloffset = current.Scroll.VerticalOffset;
                 if (current.IsViewModified || Math.Abs(newscrolloffset - oldscrolloffset) > 5.0)
                 {
@@ -81,39 +83,49 @@ namespace SamSoarII.Threads
                     current.Outline.DynamicUpdate();
                     oldoutlineoffset = newoutlineoffset;
                 }
+#if RELEASE
             }
             catch (Exception)
             {
             }
+#endif
         }
         
         private void DestoryCurrent()
         {
+#if RELEASE
             try
             {
+#endif
                 current.Outline.DynamicDispose();
                 current.Inst.DynamicDispose();
                 current.DynamicDispose();
+#if RELEASE
             }
             catch (Exception)
             {
             }
+#endif
         }
 
         private void GenerateCurrent()
         {
+#if RELEASE
             try
             {
-                oldscrolloffset = current.Scroll.VerticalOffset;
+#endif
+            oldscrolloffset = current.Scroll.VerticalOffset;
                 oldinstoffset = current.Core.Inst.View.Scroll.VerticalOffset;
                 oldoutlineoffset = current.Outline.Scroll.VerticalOffset;
                 current.DynamicUpdate();
                 current.Inst.DynamicUpdate();
                 current.Outline.DynamicUpdate();
+#if RELEASE
             }
             catch (Exception)
             {
             }
+#endif
         }
 
 

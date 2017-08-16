@@ -199,13 +199,13 @@ namespace SamSoarII.Shell.Models
             switch (e.Action)
             {
                 case LadderUnitAction.ADD:
-                    if (ViewParent != null)
-                        ViewParent.LadderCanvas.Children.Add(this);
+                    //if (ViewParent != null)
+                    //    ViewParent.LadderCanvas.Children.Add(this);
                     Update(UPDATE_PROPERTY);
                     break;
                 case LadderUnitAction.REMOVE:
-                    if (ViewParent != null)
-                        ViewParent.LadderCanvas.Children.Remove(this);
+                    //if (ViewParent != null)
+                    //    ViewParent.LadderCanvas.Children.Remove(this);
                     break;
                 case LadderUnitAction.MOVE:
                     //Update(UPDATE_TOP | UPDATE_LEFT);

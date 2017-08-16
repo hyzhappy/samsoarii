@@ -20,8 +20,10 @@ namespace SamSoarII.Threads
         
         protected override void Handle()
         {
+#if RELEASE
             try
             {
+#endif
                 if (!GlobalSetting.IsInstByTime) return;
                 ProjectModel proj = parent.MDProj;
                 if (proj != null)
@@ -37,10 +39,12 @@ namespace SamSoarII.Threads
                         if (!ThAlive || !ThActive) return;
                     }
                 }
+#if RELEASE
             }
             catch (Exception e)
             {
             }
+#endif
         }
     }
 }

@@ -189,8 +189,16 @@ namespace SamSoarII.Core.Models
         {
             ismodify = false;
             Compile();
-            if (View != null) View.BaseUpdate();
-            parent.Parent.Inst.UpdateCanvasTop();
+            if (View != null)
+            {
+                InstSelectRectCore cursor = Parent?.Parent?.Inst?.View?.Cursor.Core;
+                if (cursor != null && cursor.Parent == this)
+                    cursor.View.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate () { cursor.Parent = null; }));
+                View.BaseUpdate();
+            }
+            if (parent.Parent.Inst.View != null)
+                parent.Parent.Inst.View.Dispatcher.Invoke(
+                    DispatcherPriority.Normal, (ThreadStart)(delegate () { parent.Parent.Inst.UpdateCanvasTop(); }));
         }
 
         private void Compile()
