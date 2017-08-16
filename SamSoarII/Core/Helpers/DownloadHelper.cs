@@ -644,11 +644,7 @@ namespace SamSoarII.Core.Helpers
         {
             //初始化要下载的数据
             InitializeData(communManager.IFParent.MDProj);
-            //首先通信测试获取底层PLC的状态
-            CommunicationTestCommand CTCommand = new CommunicationTestCommand();
-            if (!communManager.CommunicationHandle(CTCommand))
-                return DownloadError.CommuicationFailed;
-            else communManager.PLCMessage = new PLCMessage(CTCommand);
+
             //首先判断PLC运行状态
             if (communManager.PLCMessage.RunStatus == RunStatus.Run)
             {
@@ -658,48 +654,6 @@ namespace SamSoarII.Core.Helpers
                         return DownloadError.CommuicationFailed;
                 }
                 else return DownloadError.Cancel;
-            }
-            //验证是否需要下载密码
-            if (communManager.PLCMessage.IsDPNeed)
-            {
-                bool retp = false;
-                LocalizedMessageResult retcl = LocalizedMessageResult.None;
-                PasswordDialog dialog = new PasswordDialog();
-
-                dialog.EnsureButtonClick += (sender,e) =>
-                {
-                    if (dialog.Password.Length > 12 || dialog.Password.Length < 5)
-                        LocalizedMessageBox.Show(Properties.Resources.Password_Length_Error);
-                    else
-                    {
-                        int time = 0;
-                        ICommunicationCommand command = new PasswordCheckCommand(CommunicationDataDefine.CMD_PASSWD_DOWNLOAD, dialog.Password);
-                        for (time = 0; time < 3 && !communManager.CommunicationHandle(command);)
-                        {
-                            Thread.Sleep(200);
-                            time++;
-                        }
-                        if (time >= 3) retp = false;
-                        else
-                        {
-                            retp = true;
-                            dialog.Close();
-                        }
-                    }
-                };
-
-                dialog.Closing += (sender, e) =>
-                {
-                    if (!retp)
-                    {
-                        retcl = LocalizedMessageBox.Show(string.Format("{0}{1}", Properties.Resources.Dialog_Closing, Properties.Resources.MainWindow_Download), LocalizedMessageButton.OKCancel);
-                        if (retcl == LocalizedMessageResult.No) e.Cancel = true;
-                    }
-                    else retcl = LocalizedMessageResult.None;
-                };
-
-                dialog.ShowDialog();
-                if (retcl == LocalizedMessageResult.Yes) return DownloadError.Cancel;
             }
 
             DownloadError ret = DownloadError.None;
