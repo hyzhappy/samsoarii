@@ -10,7 +10,7 @@ namespace SamSoarII.Core.Communication
 {
     public class IntrasegmentWriteCommand : ICommunicationCommand
     {
-        private const byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
+        private byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
         private const byte commandType = CommunicationDataDefine.FGS_WRITE;
         private byte addrTypeNum = 0x00;
         private byte addrType1;

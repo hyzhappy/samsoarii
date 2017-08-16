@@ -777,7 +777,6 @@ namespace SamSoarII.Core.Models
         {
             return Clone(null);
         }
-        public bool LoadSuccess { get; set; }
         public AnalogQuantityParams Clone(ProjectPropertyParams parent)
         {
             AnalogQuantityParams that = new AnalogQuantityParams(parent);
@@ -839,13 +838,6 @@ namespace SamSoarII.Core.Models
                 SampleValue7 = that.SampleValue7;
                 SampleValue8 = that.SampleValue8;
                 
-                if(that.IP_StartRange1 > that.IP_EndRange1 || that.IP_StartRange2 > that.IP_EndRange2
-                    || that.IP_StartRange3 > that.IP_EndRange3 || that.IP_StartRange4 > that.IP_EndRange4)
-                {
-                    LoadSuccess = false;
-                    LocalizedMessageBox.Show(Properties.Resources.Range_Error, LocalizedMessageIcon.Error);
-                    return;
-                }
                 IP_StartRange1 = that.IP_StartRange1;
                 IP_EndRange1 = that.IP_EndRange1;
                 IP_StartRange2 = that.IP_StartRange2;
@@ -854,15 +846,7 @@ namespace SamSoarII.Core.Models
                 IP_EndRange3 = that.IP_EndRange3;
                 IP_StartRange4 = that.IP_StartRange4;
                 IP_EndRange4 = that.IP_EndRange4;
-
-                if (that.OP_StartRange1 > that.OP_EndRange1 || that.OP_StartRange2 > that.OP_EndRange2
-                    || that.OP_StartRange3 > that.OP_EndRange3 || that.OP_StartRange4 > that.OP_EndRange4)
-                {
-                    LoadSuccess = false;
-                    LocalizedMessageBox.Show(Properties.Resources.Range_Error, LocalizedMessageIcon.Error);
-                    return;
-                }
-
+                
                 OP_StartRange1 = that.OP_StartRange1;
                 OP_EndRange1 = that.OP_EndRange1;
                 OP_StartRange2 = that.OP_StartRange2;
@@ -872,7 +856,14 @@ namespace SamSoarII.Core.Models
                 OP_StartRange4 = that.OP_StartRange4;
                 OP_EndRange4 = that.OP_EndRange4;
             }
-            LoadSuccess = true;
+        }
+
+        public bool CheckParams()
+        {
+            return IP_StartRange1 <= IP_EndRange1 && IP_StartRange2 <= IP_EndRange2
+                    && IP_StartRange3 <= IP_EndRange3 && IP_StartRange4 <= IP_EndRange4
+                    && OP_StartRange1 <= OP_EndRange1 && OP_StartRange2 <= OP_EndRange2
+                    && OP_StartRange3 <= OP_EndRange3 && OP_StartRange4 <= OP_EndRange4;
         }
         #endregion
     }

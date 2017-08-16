@@ -55,8 +55,10 @@ namespace SamSoarII.Core.Communication
             }
         }
         public MonitorModel MDMoni { get { return ifParent.MDProj?.Monitor; } }
-        
+
         #region Port & USB
+        //下载（或上载，监视）前用于获取当前PLC信息(PLC型号，PLC运行状态，PLC当前程序，是否需要下载密码等)
+        public PLCMessage PLCMessage;
 
         private SerialPortManager mngPort;
         private USBManager mngUSB;
@@ -181,7 +183,7 @@ namespace SamSoarII.Core.Communication
                     {
                         ValueManager.ReadMonitorData();
                         readcmds = ValueManager.GetReadCommands().ToArray();
-                        readindex = 0;   
+                        readindex = 0;
                     }
                     current = readcmds.Count() == 0 ? null : readcmds[readindex++];
                 }
@@ -189,7 +191,6 @@ namespace SamSoarII.Core.Communication
             bool hassend = false;
             bool hasrecv = false;
             int sendtime = 0;
-            int recvtime = 0;
             if (current != null)
             {
                 while (ThAlive && ThActive
@@ -208,21 +209,25 @@ namespace SamSoarII.Core.Communication
                 {
                     itvtime = 100;
                 }
-                //_Thread_WaitForActive(itvtime);
                 Thread.Sleep(itvtime);
-                while (hassend && recvtime < 5)
+                while (hassend)
                 {
-                    if (Recv(current) || current.IsComplete)
+                    if (Recv(current))
                     {
                         hasrecv = true;
+                        Thread.Sleep(2);
                         break;
                     }
-                    recvtime++;
                 }
             }
             if (ThAlive && hassend && hasrecv)
             {
-                Execute(current);
+                if (!current.IsSuccess)
+                {
+                    if (current is GeneralWriteCommand || current is IntrasegmentWriteCommand)
+                        writecmds.Enqueue(current);
+                    else readindex--;
+                }else Execute(current);
                 current = null;
             }
         }
@@ -261,7 +266,7 @@ namespace SamSoarII.Core.Communication
         
         #endregion
 
-        #region Download
+        #region Download & Upload
         //通信时，传送一包数据的最大长度
         public int COMMU_MAX_DATALEN
         {
@@ -297,6 +302,10 @@ namespace SamSoarII.Core.Communication
             return DownloadHelper.DownloadExecute(this);
         }
 
+        public UploadError UploadExecute()
+        {
+            return UploadHelper.UploadExecute(this);
+        }
         public bool CommunicationHandle(ICommunicationCommand cmd, bool hasRecvData = true, int waittime = 10)
         {
             bool hassend = false;
@@ -315,7 +324,7 @@ namespace SamSoarII.Core.Communication
             if (!hassend) return false;
             Thread.Sleep(waittime);
             if (!hasRecvData && cmd.RecvDataLen == 0) return true;
-            while (recvtime < 20)
+            while (true)
             {
                 if (mngCurrent.Read(cmd) == 0)
                 {
@@ -329,15 +338,7 @@ namespace SamSoarII.Core.Communication
 
 
         #endregion
-
-        #region Upload
-
-        public UploadError UploadExecute()
-        {
-            return UploadHelper.UploadExecute(this);
-        }
-
-        #endregion
+        
 
         #region Arrange
         /*

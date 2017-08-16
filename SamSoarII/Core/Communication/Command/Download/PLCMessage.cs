@@ -31,7 +31,7 @@ namespace SamSoarII.Core.Communication
         public int Ver3;
 
         //站号
-        public int StationNumber;
+        public byte StationNumber;
 
         //PLC类型
         public object PLCType;

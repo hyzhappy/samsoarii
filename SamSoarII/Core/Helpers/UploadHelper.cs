@@ -21,7 +21,7 @@ namespace SamSoarII.Core.Helpers
     public static class UploadHelper
     {
         #region option
-        private static int uploadoption;
+        private static int uploadoption = 9;
         public static int UploadOption
         {
             get { return uploadoption; }
@@ -71,28 +71,68 @@ namespace SamSoarII.Core.Helpers
         }
         #endregion
         
-        //上载前用于获取当前PLC信息(PLC型号，PLC运行状态，PLC当前程序，是否需要上载密码等)
-        private static PLCMessage plcMessage;
         public static UploadError UploadExecute(CommunicationManager communManager)
         {
             //首先通信测试获取底层PLC的状态
             CommunicationTestCommand CTCommand = new CommunicationTestCommand();
             if (!communManager.CommunicationHandle(CTCommand))
                 return UploadError.CommuicationFailed;
-            else plcMessage = new PLCMessage(CTCommand);
+            else communManager.PLCMessage = new PLCMessage(CTCommand);
             //首先判断PLC运行状态,为Iap时需要切换到App模式
-            if (plcMessage.RunStatus == RunStatus.Iap)
+            if (communManager.PLCMessage.RunStatus == RunStatus.Iap)
             {
-                if (!communManager.CommunicationHandle(new SwitchPLCStatusCommand()))
-                    return UploadError.CommuicationFailed;
+                int time;
+                for (time = 0; time < 5 && !communManager.CommunicationHandle(new SwitchPLCStatusCommand());)
+                {
+                    Thread.Sleep(200);
+                    time++;
+                }
+                if (time >= 5) return UploadError.UploadFailed;
             }
             //验证是否需要上载密码
-            if (plcMessage.IsUPNeed)
+            if (communManager.PLCMessage.IsUPNeed)
             {
+                bool retp = false;
+                LocalizedMessageResult retcl = LocalizedMessageResult.None;
+                PasswordDialog dialog = new PasswordDialog();
 
+                dialog.EnsureButtonClick += (sender, e) =>
+                {
+                    if (dialog.Password.Length > 12 || dialog.Password.Length < 5)
+                        LocalizedMessageBox.Show(Properties.Resources.Password_Length_Error);
+                    else
+                    {
+                        int time = 0;
+                        ICommunicationCommand command = new PasswordCheckCommand(CommunicationDataDefine.CMD_PASSWD_UPLOAD, dialog.Password);
+                        for (time = 0; time < 3 && !communManager.CommunicationHandle(command);)
+                        {
+                            Thread.Sleep(200);
+                            time++;
+                        }
+                        if (time >= 3) retp = false;
+                        else
+                        {
+                            retp = true;
+                            dialog.Close();
+                        }
+                    }
+                };
+
+                dialog.Closing += (sender, e) =>
+                {
+                    if (!retp)
+                    {
+                        retcl = LocalizedMessageBox.Show(string.Format("{0}{1}", Properties.Resources.Dialog_Closing, Properties.Resources.MainWindow_Upload), LocalizedMessageButton.OKCancel);
+                        if (retcl == LocalizedMessageResult.No) e.Cancel = true;
+                    }
+                    else retcl = LocalizedMessageResult.None;
+                };
+
+                dialog.ShowDialog();
+                if (retcl == LocalizedMessageResult.Yes) return UploadError.Cancel;
             }
-            UploadError ret = UploadError.None;
 
+            UploadError ret = UploadError.None;
             if (IsUploadProgram)
             {
                 //上载经过压缩的XML文件（包括程序，注释（可选），软元件表（可选）等）

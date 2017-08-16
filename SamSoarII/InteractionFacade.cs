@@ -479,7 +479,6 @@ namespace SamSoarII
                     if (mngComu.CheckLink())
                     {
                         handle = new LoadingWindowHandle(Properties.Resources.Project_Download);
-                        //StatusBarHepler.UpdateMessageAsync(Properties.Resources.Downloading);
                         vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                         {
                             handle.Start();
@@ -490,7 +489,13 @@ namespace SamSoarII
                             switch (ret)
                             {
                                 case DownloadError.None:
-                                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Download_Successd, LocalizedMessageIcon.Information);
+                                    {
+                                        if (LocalizedMessageBox.Show(string.Format("{0},{1}", Properties.Resources.MessageBox_Download_Successd, Properties.Resources.PLC_Status_To_Run), LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information) == LocalizedMessageResult.Yes)
+                                        {
+                                            if (!mngComu.CommunicationHandle(new SwitchPLCStatusCommand(true)))
+                                                LocalizedMessageBox.Show(Properties.Resources.State_Failed, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
+                                        }
+                                    }
                                     break;
                                 case DownloadError.CommuicationFailed:
                                     LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
@@ -606,29 +611,32 @@ namespace SamSoarII
                                         default:
                                             break;
                                     }
-                                    if (UploadHelper.IsUploadProgram)
+                                    if(ret1 == UploadError.None)
                                     {
-                                        HandleCurrentProj();
-                                        if (UploadHelper.LoadProjByUploadData(this, FileHelper.GetFullFileName("tempupfile", "7z")))
-                                            LocalizedMessageBox.Show(Properties.Resources.Project_Load_Success, LocalizedMessageIcon.Information);
-                                        else
-                                            LocalizedMessageBox.Show(Properties.Resources.Project_Load_Failed, LocalizedMessageIcon.Information);
-                                    }
-                                    if (UploadHelper.IsUploadSetting)
-                                    {
-                                        if (mdProj != null && mdProj.IsLoaded)
+                                        if (UploadHelper.IsUploadProgram)
                                         {
-                                            ret = LocalizedMessageBox.Show(Properties.Resources.Config_Applied, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
-                                            if (ret == LocalizedMessageResult.Yes)
-                                                mdProj.PARAProj.Load(UploadHelper.ProjectParams);
+                                            HandleCurrentProj();
+                                            if (UploadHelper.LoadProjByUploadData(this, FileHelper.GetFullFileName("tempupfile", "7z")))
+                                                LocalizedMessageBox.Show(Properties.Resources.Project_Load_Success, LocalizedMessageIcon.Information);
+                                            else
+                                                LocalizedMessageBox.Show(Properties.Resources.Project_Load_Failed, LocalizedMessageIcon.Information);
                                         }
-                                        else if (mdProj == null)
+                                        if (UploadHelper.IsUploadSetting)
                                         {
-                                            ret = LocalizedMessageBox.Show(Properties.Resources.Config_Applied_NewProj, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
-                                            if (ret == LocalizedMessageResult.Yes)
+                                            if (mdProj != null && mdProj.IsLoaded)
                                             {
-                                                CreateProject("New Project");
-                                                mdProj.PARAProj.Load(UploadHelper.ProjectParams);
+                                                ret = LocalizedMessageBox.Show(Properties.Resources.Config_Applied, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
+                                                if (ret == LocalizedMessageResult.Yes)
+                                                    mdProj.PARAProj.Load(UploadHelper.ProjectParams);
+                                            }
+                                            else if (mdProj == null)
+                                            {
+                                                ret = LocalizedMessageBox.Show(Properties.Resources.Config_Applied_NewProj, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
+                                                if (ret == LocalizedMessageResult.Yes)
+                                                {
+                                                    CreateProject("New Project");
+                                                    mdProj.PARAProj.Load(UploadHelper.ProjectParams);
+                                                }
                                             }
                                         }
                                     }
@@ -715,6 +723,58 @@ namespace SamSoarII
                 mngComu.IsEnable = false;
                 return false;
             }
+            
+            CommunicationTestCommand CTCommand = new CommunicationTestCommand();
+            if (!mngComu.CommunicationHandle(CTCommand))
+                return false;
+            else mngComu.PLCMessage = new PLCMessage(CTCommand);
+
+            //设置从站站号
+            CommunicationDataDefine.SLAVE_ADDRESS = mngComu.PLCMessage.StationNumber;
+
+            //验证是否需要监视密码
+            if (mngComu.PLCMessage.IsMPNeed)
+            {
+                bool retp = false;
+                LocalizedMessageResult retcl = LocalizedMessageResult.None;
+                PasswordDialog dialog = new PasswordDialog();
+
+                dialog.EnsureButtonClick += (sender, e) =>
+                {
+                    if (dialog.Password.Length > 12 || dialog.Password.Length < 5)
+                        LocalizedMessageBox.Show(Properties.Resources.Password_Length_Error);
+                    else
+                    {
+                        int time = 0;
+                        ICommunicationCommand command = new PasswordCheckCommand(CommunicationDataDefine.CMD_PASSWD_MONITOR, dialog.Password);
+                        for (time = 0; time < 3 && !mngComu.CommunicationHandle(command);)
+                        {
+                            Thread.Sleep(200);
+                            time++;
+                        }
+                        if (time >= 3) retp = false;
+                        else
+                        {
+                            retp = true;
+                            dialog.Close();
+                        }
+                    }
+                };
+
+                dialog.Closing += (sender, e) =>
+                {
+                    if (!retp)
+                    {
+                        retcl = LocalizedMessageBox.Show(string.Format("{0}{1}", Properties.Resources.Dialog_Closing, Properties.Resources.MainWindow_Monitor), LocalizedMessageButton.OKCancel);
+                        if (retcl == LocalizedMessageResult.No) e.Cancel = true;
+                    }
+                    else retcl = LocalizedMessageResult.None;
+                };
+
+                dialog.ShowDialog();
+                if (retcl == LocalizedMessageResult.Yes) return false;
+            }
+
             vmdProj.LadderMode = LadderModes.Monitor;
             return true;
         }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using SamSoarII.Utility;
+using System.Text.RegularExpressions;
 
 namespace SamSoarII.Core.Models
 {
@@ -135,7 +136,6 @@ namespace SamSoarII.Core.Models
             that.Load(this);
             return that;
         }
-        public bool LoadSuccess { get; set; }
         public void Load(IParams iparams)
         {
             if (iparams is PasswordParams)
@@ -148,10 +148,29 @@ namespace SamSoarII.Core.Models
                 this.PWMonitor = that.PWMonitor;
                 this.PWENMonitor = that.PWENMonitor;
             }
-            LoadSuccess = true;
         }
 
+        public bool CheckParams()
+        {
+            bool ret = true;
+            Match match;
+            if (PWENUpload)
+            {
+                match = StringHelper.PasswordRegex.Match(PWUpload);
+                ret &= match.Success && (match.Length == PWUpload.Length) && match.Groups.Count == 1;
+            }
+            if (PWENDownload && ret)
+            {
+                match = StringHelper.PasswordRegex.Match(PWDownload);
+                ret &= match.Success && (match.Length == PWDownload.Length) && match.Groups.Count == 1;
+            }
+            if (PWENMonitor && ret)
+            {
+                match = StringHelper.PasswordRegex.Match(PWMonitor);
+                ret &= match.Success && (match.Length == PWMonitor.Length) && match.Groups.Count == 1;
+            }
+            return ret;
+        }
         #endregion
-
     }
 }

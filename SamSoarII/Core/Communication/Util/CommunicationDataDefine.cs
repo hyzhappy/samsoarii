@@ -41,7 +41,7 @@ namespace SamSoarII.Core.Communication
         //一包数据读写地址种类
         public const byte MAX_ADDRESS_TYPE = 0x06;
         //从站地址
-        public const byte SLAVE_ADDRESS = 0x01;
+        public static byte SLAVE_ADDRESS;
         #endregion
 
         #region 上，下载

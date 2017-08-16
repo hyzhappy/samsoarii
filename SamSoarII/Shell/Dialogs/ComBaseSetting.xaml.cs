@@ -51,7 +51,7 @@ namespace SamSoarII.Shell.Dialogs
         {
             core = null;
         }
-
+        private bool _invokeByCode = false;
         private CommunicationParams core;
         public CommunicationParams Core
         {
@@ -63,6 +63,7 @@ namespace SamSoarII.Shell.Dialogs
             {
                 this.core = value;
                 DataContext = value;
+                _invokeByCode = true;
                 if (Mode == CommunicationSettingDialogMode.DOWNLOAD)
                 {
                     CB_Program.IsChecked = DownloadHelper.IsDownloadProgram;
@@ -77,6 +78,7 @@ namespace SamSoarII.Shell.Dialogs
                     CB_Initialize.IsChecked = UploadHelper.IsUploadInitialize;
                     CB_Setting.IsChecked = UploadHelper.IsUploadSetting;
                 }
+                _invokeByCode = false;
                 UpdateDownloadOption();
             }
         }
@@ -125,7 +127,7 @@ namespace SamSoarII.Shell.Dialogs
             {
                 if (sender == checkbox)
                     SettingButton.IsEnabled = false;
-                else
+                else if(!_invokeByCode)
                     UpdateDownloadOption();
             }
             else
@@ -139,7 +141,7 @@ namespace SamSoarII.Shell.Dialogs
             {
                 if (sender == checkbox)
                     SettingButton.IsEnabled = true;
-                else
+                else if(!_invokeByCode)
                     UpdateDownloadOption();
             }
             else

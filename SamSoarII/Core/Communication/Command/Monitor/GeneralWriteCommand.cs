@@ -10,7 +10,7 @@ namespace SamSoarII.Core.Communication
 {
     public class GeneralWriteCommand : ICommunicationCommand
     {
-        private const byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
+        private byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
         private const byte commandType = CommunicationDataDefine.FGS_WRITE;
         private byte addrTypeNum;
         private byte addrType1;

@@ -72,7 +72,6 @@ namespace SamSoarII.Core.Models
             that.Load(this);
             return that;
         }
-        public bool LoadSuccess { get; set; }
         public void Load(IParams iparams)
         {
             if (iparams is FilterParams)
@@ -81,7 +80,11 @@ namespace SamSoarII.Core.Models
                 this.IsChecked = that.IsChecked;
                 this.FilterTimeIndex = that.FilterTimeIndex;
             }
-            LoadSuccess = true;
+        }
+
+        public bool CheckParams()
+        {
+            return true;
         }
 
         #endregion

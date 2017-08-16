@@ -154,6 +154,7 @@
     <Compile Include="Core\Communication\Command\ICommunicationCommand.cs" />
     <Compile Include="Core\Communication\Command\Monitor\IntrasegmentReadCommand.cs" />
     <Compile Include="Core\Communication\Command\Monitor\IntrasegmentWriteCommand.cs" />
+    <Compile Include="Core\Communication\Command\Password\PasswordCheckCommand.cs" />
     <Compile Include="Core\Communication\Command\Upload\UploadTypeData.cs" />
     <Compile Include="Core\Communication\Command\Upload\UploadTypeOver.cs" />
     <Compile Include="Core\Communication\Command\Upload\UploadTypeStart.cs" />

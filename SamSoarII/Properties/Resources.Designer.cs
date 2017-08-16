@@ -889,6 +889,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 If you close this dialog box, you can not  的本地化字符串。
+        /// </summary>
+        public static string Dialog_Closing {
+            get {
+                return ResourceManager.GetString("Dialog_Closing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Digital Quantity Range 的本地化字符串。
         /// </summary>
         public static string Digital_Quantity_Range {
@@ -4849,6 +4858,33 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Password entered incorrectly 的本地化字符串。
+        /// </summary>
+        public static string Password_Error {
+            get {
+                return ResourceManager.GetString("Password_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Password length is wrong! 的本地化字符串。
+        /// </summary>
+        public static string Password_Length_Error {
+            get {
+                return ResourceManager.GetString("Password_Length_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The length of the password is 4-12 bits and can only begin with a number or an English letter. Other characters that can be included are (_, @, #, $,%, ^, &amp;, *, +, =, -). 的本地化字符串。
+        /// </summary>
+        public static string Password_Message {
+            get {
+                return ResourceManager.GetString("Password_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Paste(_P) 的本地化字符串。
         /// </summary>
         public static string Paste {
@@ -4926,6 +4962,15 @@ namespace SamSoarII.Properties {
         public static string PLC_Retentive_Zone_Settings {
             get {
                 return ResourceManager.GetString("PLC_Retentive_Zone_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Whether to switch the current PLC status to Run? 的本地化字符串。
+        /// </summary>
+        public static string PLC_Status_To_Run {
+            get {
+                return ResourceManager.GetString("PLC_Status_To_Run", resourceCulture);
             }
         }
         
@@ -5362,7 +5407,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Input error!Max value must be bigger than min value! 的本地化字符串。
+        ///   查找类似 Digital quantity range input is incorrect!Max value must be bigger than min value! 的本地化字符串。
         /// </summary>
         public static string Range_Error {
             get {
@@ -5970,6 +6015,15 @@ namespace SamSoarII.Properties {
         public static string Start_Address {
             get {
                 return ResourceManager.GetString("Start_Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 State switch failed! 的本地化字符串。
+        /// </summary>
+        public static string State_Failed {
+            get {
+                return ResourceManager.GetString("State_Failed", resourceCulture);
             }
         }
         

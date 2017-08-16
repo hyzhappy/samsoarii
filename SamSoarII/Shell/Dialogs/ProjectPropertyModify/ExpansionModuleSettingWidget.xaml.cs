@@ -80,6 +80,11 @@ namespace SamSoarII.Shell.Dialogs
             if (_widget.Count == 0) return;
             UpdateTB_Message((ExpansionUnitModule)_widget[Modules.SelectedIndex]);
         }
+
+        public void ShowWidget(int index)
+        {
+            Modules.SelectedIndex = index;
+        }
         private void UpdateTB_Message(ExpansionUnitModule unitModule)
         {
             var message = string.Empty;

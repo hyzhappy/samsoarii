@@ -92,14 +92,38 @@ namespace SamSoarII.Shell.Dialogs
             wgCommunication.Save();
             wgPassword.Save();
             wgHolding.Save();
+
+            if (!wgAnalog.Core.CheckParams())
+            {
+                ShowWidget(3);
+                LocalizedMessageBox.Show(Properties.Resources.Range_Error, LocalizedMessageIcon.Error);
+                return false;
+            }
+            for (int i = 0; i < wgExpansion.Core.ExpansionUnitParams.Count; i++)
+            {
+                if (!wgExpansion.Core.ExpansionUnitParams[i].CheckParams())
+                {
+                    ShowWidget(6);
+                    wgExpansion.ShowWidget(i);
+                    LocalizedMessageBox.Show(Properties.Resources.Range_Error, LocalizedMessageIcon.Error);
+                    return false;
+                }
+            }
+            if (!wgPassword.Core.CheckParams())
+            {
+                ShowWidget(2);
+                LocalizedMessageBox.Show(string.Format("{0}!\n{1}", Properties.Resources.Password_Error, Properties.Resources.Password_Message), LocalizedMessageIcon.Error);
+                return false;
+            }
+            
             oldParams.Load(newParams);
-            return oldParams.LoadSuccess;
+            return true;
         }
 
         private void ShowWidget(int index)
         {
             ContentGrid.Children.Clear();
-            ContentGrid.Children.Add((UserControl)_widget[index]);
+            ContentGrid.Children.Add(_widget[index]);
         }
 
         #region Event handler

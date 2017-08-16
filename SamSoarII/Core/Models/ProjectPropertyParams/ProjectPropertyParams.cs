@@ -175,19 +175,6 @@ namespace SamSoarII.Core.Models
             that.Load(this);
             return that;
         }
-        public bool LoadSuccess
-        {
-            get
-            {
-                return PARACom232.LoadSuccess && PARACom485.LoadSuccess && 
-                    PARAPassword.LoadSuccess && PARAFilter.LoadSuccess &&
-                    PARAHolding.LoadSuccess && PARAAnalog.LoadSuccess &&
-                    PARAExpansion.LoadSuccess && PARACom.LoadSuccess && PARAUsb.LoadSuccess;
-            }
-            set
-            {
-            }
-        }
         public void Load(IParams iparams)
         {
             if (iparams is ProjectPropertyParams)
@@ -213,6 +200,11 @@ namespace SamSoarII.Core.Models
         {
             Parent?.InvokeModify(this);
             PropertyChanged(sender, e);
+        }
+
+        public bool CheckParams()
+        {
+            return true;
         }
 
         #endregion

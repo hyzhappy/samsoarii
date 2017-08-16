@@ -48,9 +48,18 @@ namespace SamSoarII.Utility
         /// <returns></returns>
         public static string GetTempFile(string postfix)
         {
-            var newfile = Path.GetTempFileName();
-            var result = Path.ChangeExtension(newfile, postfix);
-            File.Move(newfile, result);
+            string newfile, result;
+            while (true)
+            {
+                newfile = Path.GetTempFileName();
+                result = Path.ChangeExtension(newfile, postfix);
+                if (!File.Exists(result))
+                {
+                    File.Move(newfile, result);
+                    break;
+                }
+                else File.Delete(newfile);
+            }
             return result;
         }
         /// <summary>

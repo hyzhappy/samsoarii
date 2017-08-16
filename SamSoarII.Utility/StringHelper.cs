@@ -13,7 +13,7 @@ namespace SamSoarII.Utility
     public class StringHelper
     {
         //必须以字母或数字开头，长度为4至12位
-        public static Regex PasswordRegex = new Regex(@"^[a-zA-Z0-9][\w@#$%^&*]{3,11}", RegexOptions.Compiled);
+        public static Regex PasswordRegex = new Regex(@"^[a-zA-Z0-9][\w@#$%^&*+=-]{3,11}", RegexOptions.Compiled);
 
         public static readonly int MaxCapacity = 32;
         public static int Compare(string str,int index)

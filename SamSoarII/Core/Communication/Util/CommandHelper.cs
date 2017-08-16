@@ -74,7 +74,7 @@ namespace SamSoarII.Core.Communication
                 case 0x66:
                     return FGs_ERR_CODE.COMCODE_PASSWD_ERR;
                 default:
-                    return FGs_ERR_CODE.COMCODE_CARRY_OK;
+                    return FGs_ERR_CODE.FGs_ISNOTANERRCODE;
             }
         }
         public static byte? GetAddrType(ValueModel.Bases type,uint offset)
@@ -209,9 +209,13 @@ namespace SamSoarII.Core.Communication
             command.IsComplete &= CRC16.CheckCRC(command);
             if (command.IsComplete)
             {
-                FGs_ERR_CODE errCodeType = GetERRCODEType(_retData[3]);
-                command.IsSuccess = errCodeType == FGs_ERR_CODE.COMCODE_CARRY_OK;
-                if(command is UploadTypeStart)
+                if (!(command is UploadTypeData))
+                {
+                    FGs_ERR_CODE errCodeType = GetERRCODEType(_retData[3]);
+                    command.IsSuccess = errCodeType == FGs_ERR_CODE.COMCODE_CARRY_OK;
+                }
+                else command.IsSuccess = true;
+                if (command is UploadTypeStart)
                 {
                     command.RecvDataLen = command.IsSuccess ? ValueConverter.GetValueByBytes(_retData[6], _retData[7], _retData[8], _retData[9]) : -1;
                 }

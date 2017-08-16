@@ -9,7 +9,7 @@ namespace SamSoarII.Core.Communication
 {
     public class GeneralReadCommand : ICommunicationCommand
     {
-        private const byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
+        private byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
         private const byte commandType = CommunicationDataDefine.FGS_READ;
         private byte addrTypeNum = 0x00;
         public List<AddrSegment> Segments = new List<AddrSegment>();
@@ -85,12 +85,21 @@ namespace SamSoarII.Core.Communication
         }
         private void CheckRetData()
         {
+            //数据长度小于3视为为未完
             if (RetData.Length < 3)
             {
                 IsComplete = false;
                 IsSuccess = false;
                 return;
             }
+            //数据不是以SLAVE_ADDRESS开头，视为接受完成但错误
+            if (RetData[0] != CommunicationDataDefine.SLAVE_ADDRESS && RetData[1] != CommunicationDataDefine.FGS_READ)
+            {
+                IsComplete = true;
+                IsSuccess = false;
+                return;
+            }
+            
             if (RetData.Length == 3)
             {
                 IsSuccess = false;
@@ -101,6 +110,12 @@ namespace SamSoarII.Core.Communication
             if (RetData.Length < RecvDataLen)
             {
                 IsComplete = false;
+                IsSuccess = false;
+                return;
+            }
+            if (RetData.Length > RecvDataLen)
+            {
+                IsComplete = true;
                 IsSuccess = false;
                 return;
             }

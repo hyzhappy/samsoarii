@@ -25,11 +25,6 @@ namespace SamSoarII.Core.Models
             set { this.timeout = value; PropertyChanged(this, new PropertyChangedEventArgs("Timeout")); }
         }
 
-        public bool LoadSuccess
-        {
-            get;set;
-        }
-
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public IParams Clone()
@@ -50,7 +45,6 @@ namespace SamSoarII.Core.Models
                 USBCommunicationParams that = (USBCommunicationParams)iparams;
                 this.Timeout = that.Timeout;
             }
-            LoadSuccess = true;
         }
 
         public void Load(XElement xele)
@@ -73,6 +67,11 @@ namespace SamSoarII.Core.Models
             USBCommunicationParams that = new USBCommunicationParams(parent);
             that.Load(this);
             return that;
+        }
+
+        public bool CheckParams()
+        {
+            return true;
         }
     }
 }

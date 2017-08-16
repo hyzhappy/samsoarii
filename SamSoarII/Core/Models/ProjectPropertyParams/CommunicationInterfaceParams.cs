@@ -21,9 +21,9 @@ namespace SamSoarII.Core.Models
             stopbitindex = 0;
             checkcodeindex = 0;
             bufferbitindex = 0;
-            StationNumber = 2;
+            StationNumber = 1;
             timeout = 20;
-            comtype = ComTypes.Master;
+            comtype = ComTypes.Slave;
         }
 
         public void Dispose()
@@ -137,7 +137,6 @@ namespace SamSoarII.Core.Models
             that.Load(this);
             return that;
         }
-        public bool LoadSuccess { get; set; }
         public void Load(IParams iparams)
         {
             if (iparams is CommunicationInterfaceParams)
@@ -150,10 +149,15 @@ namespace SamSoarII.Core.Models
                 this.BufferBitIndex = that.BufferBitIndex;
                 this.StationNumber = that.StationNumber;
                 this.Timeout = that.Timeout;
+                this.ComType = that.ComType;
             }
-            LoadSuccess = true;
+        }
+
+        public bool CheckParams()
+        {
+            return true;
         }
         #endregion
-        
+
     }
 }

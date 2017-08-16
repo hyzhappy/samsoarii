@@ -24,7 +24,7 @@ namespace SamSoarII.Core.Helpers
     public static class DownloadHelper
     {
         #region option
-        private static int downloadoption;
+        private static int downloadoption = 9;
         public static int DownloadOption
         {
             get { return downloadoption; }
@@ -638,9 +638,7 @@ namespace SamSoarII.Core.Helpers
         #endregion
         
         #region start download
-        //下载前用于获取当前PLC信息(PLC型号，PLC运行状态，PLC当前程序，是否需要下载密码等)
-        private static PLCMessage plcMessage;
-
+        
         #region main download process
         public static DownloadError DownloadExecute(CommunicationManager communManager)
         {
@@ -650,9 +648,9 @@ namespace SamSoarII.Core.Helpers
             CommunicationTestCommand CTCommand = new CommunicationTestCommand();
             if (!communManager.CommunicationHandle(CTCommand))
                 return DownloadError.CommuicationFailed;
-            else plcMessage = new PLCMessage(CTCommand);
+            else communManager.PLCMessage = new PLCMessage(CTCommand);
             //首先判断PLC运行状态
-            if (plcMessage.RunStatus == RunStatus.Run)
+            if (communManager.PLCMessage.RunStatus == RunStatus.Run)
             {
                 if (LocalizedMessageBox.Show(Properties.Resources.PLC_Status_To_Stop, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information) == LocalizedMessageResult.Yes)
                 {
@@ -662,11 +660,48 @@ namespace SamSoarII.Core.Helpers
                 else return DownloadError.Cancel;
             }
             //验证是否需要下载密码
-            if (plcMessage.IsDPNeed)
+            if (communManager.PLCMessage.IsDPNeed)
             {
+                bool retp = false;
+                LocalizedMessageResult retcl = LocalizedMessageResult.None;
+                PasswordDialog dialog = new PasswordDialog();
 
+                dialog.EnsureButtonClick += (sender,e) =>
+                {
+                    if (dialog.Password.Length > 12 || dialog.Password.Length < 5)
+                        LocalizedMessageBox.Show(Properties.Resources.Password_Length_Error);
+                    else
+                    {
+                        int time = 0;
+                        ICommunicationCommand command = new PasswordCheckCommand(CommunicationDataDefine.CMD_PASSWD_DOWNLOAD, dialog.Password);
+                        for (time = 0; time < 3 && !communManager.CommunicationHandle(command);)
+                        {
+                            Thread.Sleep(200);
+                            time++;
+                        }
+                        if (time >= 3) retp = false;
+                        else
+                        {
+                            retp = true;
+                            dialog.Close();
+                        }
+                    }
+                };
+
+                dialog.Closing += (sender, e) =>
+                {
+                    if (!retp)
+                    {
+                        retcl = LocalizedMessageBox.Show(string.Format("{0}{1}", Properties.Resources.Dialog_Closing, Properties.Resources.MainWindow_Download), LocalizedMessageButton.OKCancel);
+                        if (retcl == LocalizedMessageResult.No) e.Cancel = true;
+                    }
+                    else retcl = LocalizedMessageResult.None;
+                };
+
+                dialog.ShowDialog();
+                if (retcl == LocalizedMessageResult.Yes) return DownloadError.Cancel;
             }
-            
+
             DownloadError ret = DownloadError.None;
             if (IsDownloadProgram)
             {
@@ -711,19 +746,19 @@ namespace SamSoarII.Core.Helpers
         {
             int time = 0;
             ICommunicationCommand command = new SwitchToIAPCommand();
-            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
+            for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
             {
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 10) return DownloadError.DownloadFailed;
+            if (time >= 5) return DownloadError.DownloadFailed;
             command = new IAPDESKEYCommand(communManager.ExecLen);
-            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
+            for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
             {
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 10) return DownloadError.DownloadFailed;
+            if (time >= 5) return DownloadError.DownloadFailed;
             byte[] data = communManager.ExecData.ToArray();
             byte[] pack = new byte[communManager.COMMU_MAX_DATALEN];
             int len = data.Length / communManager.COMMU_MAX_DATALEN;
@@ -746,12 +781,12 @@ namespace SamSoarII.Core.Helpers
                 if (time >= 3) return DownloadError.DownloadFailed;
             }
             command = new BinFinishedCommand();
-            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
+            for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
             {
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 10) return DownloadError.DownloadFailed;
+            if (time >= 5) return DownloadError.DownloadFailed;
             return DownloadError.None;
         }
         #endregion
@@ -837,12 +872,12 @@ namespace SamSoarII.Core.Helpers
             if (data.Length == 0) return DownloadError.None;
             int time = 0;
             ICommunicationCommand command = new DownloadTypeStart(funcCode, data.Length);
-            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
+            for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
             {
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 10) return DownloadError.DownloadFailed;
+            if (time >= 5) return DownloadError.DownloadFailed;
             byte[] pack = new byte[communManager.COMMU_MAX_DATALEN];
             int len = data.Length / communManager.COMMU_MAX_DATALEN;
             int rem = data.Length % communManager.COMMU_MAX_DATALEN;
@@ -864,12 +899,12 @@ namespace SamSoarII.Core.Helpers
                 if (time >= 3) return DownloadError.DownloadFailed;
             }
             command = new DownloadTypeOver(funcCode);
-            for (time = 0; time < 10 && !communManager.CommunicationHandle(command);)
+            for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
             {
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 10) return DownloadError.DownloadFailed;
+            if (time >= 5) return DownloadError.DownloadFailed;
             return DownloadError.None;
         }
         #endregion

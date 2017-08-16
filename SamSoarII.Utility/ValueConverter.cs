@@ -63,6 +63,16 @@ namespace SamSoarII.Utility
                 return new byte[] {byte2,byte1,byte4,byte3 };
             return new byte[] { byte1, byte2, byte3, byte4 };
         }
+
+        public static byte[] GetBytes(string value)
+        {
+            byte[] data = new byte[value.Length];
+            for (int i = 0; i < value.Length; i++)
+            {
+                data[i] = (byte)value[i];
+            }
+            return data;
+        }
         public static uint GetValue(byte[] data)
         {
             if (data.Length == 2)
