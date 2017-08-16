@@ -690,8 +690,9 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("C", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}),
                     new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}) });
             Formats[(int)Types.EHCNT] = new LadderUnitFormat(1701, "EHCNT", Types.EHCNT, Outlines.HighCount, Shapes.OutputRect,
-                Properties.Resources.Inst_HighCount,
-                "", "",
+                Properties.Resources.Inst_EHCNT,
+                "(仅多脉冲型PLC FGm_64MT_A  FGm_32MT_A支持该功能)",
+                "(Only supported in PLC FGm_64MT_A, FGm_32MT_A PLC device)",
                 new ValueFormat[] {
                     new ValueFormat("C", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}),
                     new ValueFormat("CM", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex}),

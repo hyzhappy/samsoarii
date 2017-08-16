@@ -2050,6 +2050,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Enhanced high counter 的本地化字符串。
+        /// </summary>
+        public static string Inst_EHCNT {
+            get {
+                return ResourceManager.GetString("Inst_EHCNT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 FloatCalculation 的本地化字符串。
         /// </summary>
         public static string Inst_FloatCalculation {

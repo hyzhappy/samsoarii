@@ -2295,4 +2295,7 @@
   <data name="Config_Applied_NewProj" xml:space="preserve">
     <value>We have detected that you have uploaded the configuration,do you want to create a new project to apply this configuration?</value>
   </data>
+  <data name="Inst_EHCNT" xml:space="preserve">
+    <value>Enhanced high counter</value>
+  </data>
 </root>

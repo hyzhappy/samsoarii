@@ -2295,4 +2295,7 @@
   <data name="Config_Applied_NewProj" xml:space="preserve">
     <value>检测到您上载的配置，是否创建新工程应用此配置？</value>
   </data>
+  <data name="Inst_EHCNT" xml:space="preserve">
+    <value>增强高速脉冲计数</value>
+  </data>
 </root>
