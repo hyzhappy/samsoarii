@@ -21,6 +21,6 @@
         </Style>
     </UserControl.Resources>-->
     <ScrollViewer x:Uid="ScrollViewer_1" x:Name="Scroll" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <TreeView x:Uid="TV_Main" x:Name="TV_Main" FontSize="12" Focusable="True" MouseWheel="OnPTVIMouseWheel"/>
+        <TreeView x:Uid="TV_Main" x:Name="TV_Main" FontSize="12" Focusable="True"/>
     </ScrollViewer>
 </UserControl>
