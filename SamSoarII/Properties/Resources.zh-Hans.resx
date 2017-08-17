@@ -2319,4 +2319,7 @@
   <data name="Inst_EHCNT" xml:space="preserve">
     <value>增强高速脉冲计数</value>
   </data>
+  <data name="Communication_Error" xml:space="preserve">
+    <value>通信失败！</value>
+  </data>
 </root>

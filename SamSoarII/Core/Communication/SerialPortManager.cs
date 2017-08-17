@@ -197,7 +197,7 @@ namespace SamSoarII.Core.Communication
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return 1;
             }
@@ -223,13 +223,13 @@ namespace SamSoarII.Core.Communication
 
         public int Write(ICommunicationCommand cmd)
         {
-            if (!port.IsOpen) port.Open();
             try
             {
+                if (!port.IsOpen) port.Open();
                 byte[] data = cmd.GetBytes();
                 port.Write(data, 0, data.Length);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return 1;
             }
@@ -250,11 +250,12 @@ namespace SamSoarII.Core.Communication
             }
             catch (Exception e)
             {
-                if (e.GetType() == typeof(TimeoutException) && AssertCmd(cmd))
+                if ((e.GetType() == typeof(TimeoutException) || e.GetType() == typeof(InvalidOperationException)) && AssertCmd(cmd))
                 {
                     cmd.IsComplete = true;
                     cmd.IsSuccess = false;
                     readbuffercount = 0;
+                    Thread.Sleep(200);
                     return 0;
                 }
                 return 1;

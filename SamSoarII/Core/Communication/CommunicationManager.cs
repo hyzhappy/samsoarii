@@ -13,6 +13,7 @@ using System.IO;
 using System.ComponentModel;
 using SamSoarII.Core.Helpers;
 using SamSoarII.Shell.Dialogs;
+using SamSoarII.Shell.Models;
 
 namespace SamSoarII.Core.Communication
 {
@@ -25,7 +26,7 @@ namespace SamSoarII.Core.Communication
             ifParent = _ifParent;
             mngPort = new SerialPortManager(this);
             mngUSB = new USBManager(this);
-            mngCurrent = null;
+            mngCurrent = mngUSB;
             //elements = new ObservableCollection<MonitorElement>();
             //elements.CollectionChanged += OnElementCollectionChanged;
             writecmds = new Queue<ICommunicationCommand>();
@@ -111,6 +112,7 @@ namespace SamSoarII.Core.Communication
                     ValueManager.PostValueStoreEvent -= OnReceiveValueStoreEvent;
                     PARACom.PropertyChanged -= OnCommunicationParamsChanged;
                     //visualtable.Dispose();
+                    writecmds.Clear();
                     readcmds = null;
                 }
             }
@@ -168,6 +170,7 @@ namespace SamSoarII.Core.Communication
         #region Thread
 
         private ICommunicationCommand current = null;
+        private int time = 0;
         private int readindex = 0;
 
         protected override void Handle()
@@ -175,9 +178,7 @@ namespace SamSoarII.Core.Communication
             if (current == null)
             {
                 if (writecmds.Count() > 0)
-                {
                     current = writecmds.Dequeue();
-                }
                 else
                 {
                     if (readindex >= readcmds.Count())
@@ -194,6 +195,22 @@ namespace SamSoarII.Core.Communication
             int sendtime = 0;
             if (current != null)
             {
+                if(time > 5)
+                {
+                    current = null;
+                    AbortAll();
+                    IsEnable = false;
+                    time = 0;
+                    if (!ThAlive)
+                    {
+                        Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, (ThreadStart)delegate ()
+                        {
+                            ifParent.VMDProj.LadderMode = LadderModes.Edit;
+                            LocalizedMessageBox.Show(Properties.Resources.Communication_Error, LocalizedMessageIcon.Error);
+                        });
+                        return;
+                    }
+                }
                 while (ThAlive && ThActive
                     && sendtime < 5)
                 {
@@ -225,12 +242,23 @@ namespace SamSoarII.Core.Communication
             {
                 if (!current.IsSuccess)
                 {
-                    if (current is GeneralWriteCommand || current is IntrasegmentWriteCommand)
+                    time++;
+                    if (current is GeneralWriteCommand || current is IntrasegmentWriteCommand || current is ForceCancelCommand)
                         writecmds.Enqueue(current);
-                    else readindex--;
-                }else Execute(current);
+                    else
+                    {
+                        if (readindex == 0)
+                            readindex = Math.Max(0, readcmds.Count - 1);
+                        else readindex--;
+                    }
+                    Thread.Sleep(200);
+                }else
+                {
+                    time = 0;
+                    Execute(current);
+                }
                 current = null;
-            }
+            }else time++;
         }
         
         private bool Send(ICommunicationCommand cmd)
@@ -261,10 +289,22 @@ namespace SamSoarII.Core.Communication
         public void AbortAll()
         {
             Abort();
-            while (IsAlive) Thread.Sleep(10);
-            mngCurrent.Abort();
+            if (IsAlive)
+                Aborted += OnAbortedToAbortAll;
+            else
+                mngCurrent.Abort();
         }
-        
+
+        private void OnAbortedToAbortAll(object sender, RoutedEventArgs e)
+        {
+            Aborted -= OnAbortedToAbortAll;
+            Application.Current.Dispatcher.Invoke(
+                System.Windows.Threading.DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                mngCurrent.Abort();
+            });
+        }
+
         #endregion
 
         #region Download & Upload
@@ -315,6 +355,8 @@ namespace SamSoarII.Core.Communication
             if (!CommunicationHandle(CTCommand))
                 return false;
             else PLCMessage = new PLCMessage(CTCommand);
+
+
 
             if(commuType == CommunicationType.Monitor)
             {
@@ -416,7 +458,6 @@ namespace SamSoarII.Core.Communication
             bool hassend = false;
             bool hasrecv = false;
             int sendtime = 0;
-            int recvtime = 0;
             while (sendtime < 5)
             {
                 if (mngCurrent.Write(cmd) == 0)
@@ -436,7 +477,6 @@ namespace SamSoarII.Core.Communication
                     hasrecv = true;
                     break;
                 }
-                recvtime++;
             }
             return hasrecv && cmd.IsComplete && cmd.IsSuccess;
         }
@@ -621,7 +661,7 @@ namespace SamSoarII.Core.Communication
         private void OnReceiveValueStoreEvent(object sender, ValueStoreWriteEventArgs e)
         {
             ValueStore vstore = (ValueStore)sender;
-            //MonitorElement element = new MonitorElement(visualtable, vstore);
+            
             if (e.IsWrite)
             {
                 byte[] data = null;

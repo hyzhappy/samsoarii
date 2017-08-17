@@ -556,6 +556,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Communication failed! 的本地化字符串。
+        /// </summary>
+        public static string Communication_Error {
+            get {
+                return ResourceManager.GetString("Communication_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Communication Parameter Setting 的本地化字符串。
         /// </summary>
         public static string Communication_Parameter_Setting {

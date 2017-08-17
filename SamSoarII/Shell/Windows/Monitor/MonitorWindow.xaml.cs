@@ -72,6 +72,7 @@ namespace SamSoarII.Shell.Windows
                     core.ChildrenChanged += OnCoreChildrenChanged;
                     if (core.View != this) core.View = this;
                 }
+                SelectedTable = null;
                 PropertyChanged(this, new PropertyChangedEventArgs("Children"));
                 PropertyChanged(this, new PropertyChangedEventArgs("TableElements"));
             }

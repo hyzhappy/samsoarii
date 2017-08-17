@@ -61,7 +61,13 @@ namespace SamSoarII.Core.Communication
                 readBuffercount += bytesRead;
                 byte[] data = new byte[readBuffercount];
                 if (ec != ErrorCode.None)
-                    return 1;
+                {
+                    cmd.IsComplete = true;
+                    cmd.IsSuccess = false;
+                    readBuffercount = 0;
+                    Thread.Sleep(200);
+                    return 0;
+                }
                 if (!AssertCommand(cmd))
                 {
                     for (int i = 0; i < readBuffercount; i++)
@@ -102,12 +108,12 @@ namespace SamSoarII.Core.Communication
             int bytesWritten;
             try
             {
-                ec = writer.Write(cmd.GetBytes(), 2000, out bytesWritten);
+                ec = writer.Write(cmd.GetBytes(), 1000, out bytesWritten);
                 if (ec != ErrorCode.None)
                 {
                     CloseUSB();
                     Start();
-                    Thread.Sleep(500);
+                    Thread.Sleep(100);
                     return 1;
                 }
             }

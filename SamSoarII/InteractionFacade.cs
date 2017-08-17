@@ -478,8 +478,12 @@ namespace SamSoarII
 
                     if (mngComu.CheckLink())
                     {
-                        if (!mngComu.PasswordHandle(CommunicationType.Download)) return;
-                        
+                        if (!mngComu.PasswordHandle(CommunicationType.Download))
+                        {
+                            LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                            return;
+                        }
+
                         handle = new LoadingWindowHandle(Properties.Resources.Project_Download);
                         vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                         {
@@ -586,8 +590,12 @@ namespace SamSoarII
 
                         if (mngComu.CheckLink())
                         {
-                            if (!mngComu.PasswordHandle(CommunicationType.Upload)) return;
-
+                            if (!mngComu.PasswordHandle(CommunicationType.Upload))
+                            {
+                                LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                                return;
+                            }
+                            
                             LocalizedMessageResult ret = LocalizedMessageResult.Yes;
                             if (UploadHelper.HasConfig && UploadHelper.IsUploadSetting)
                                 ret = LocalizedMessageBox.Show(Properties.Resources.Config_Override, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
@@ -619,11 +627,13 @@ namespace SamSoarII
                                     {
                                         if (UploadHelper.IsUploadProgram)
                                         {
-                                            HandleCurrentProj();
-                                            if (UploadHelper.LoadProjByUploadData(this, FileHelper.GetFullFileName("tempupfile", "7z")))
-                                                LocalizedMessageBox.Show(Properties.Resources.Project_Load_Success, LocalizedMessageIcon.Information);
-                                            else
-                                                LocalizedMessageBox.Show(Properties.Resources.Project_Load_Failed, LocalizedMessageIcon.Information);
+                                            if (HandleCurrentProj())
+                                            {
+                                                if (UploadHelper.LoadProjByUploadData(this, FileHelper.GetFullFileName("tempupfile", "7z")))
+                                                    LocalizedMessageBox.Show(Properties.Resources.Project_Load_Success, LocalizedMessageIcon.Information);
+                                                else
+                                                    LocalizedMessageBox.Show(Properties.Resources.Project_Load_Failed, LocalizedMessageIcon.Information);
+                                            }
                                         }
                                         if (UploadHelper.IsUploadSetting)
                                         {
@@ -729,8 +739,11 @@ namespace SamSoarII
             }
 
             if (!mngComu.PasswordHandle(CommunicationType.Monitor))
+            {
+                LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                 return false;
-
+            }
+                
             mngComu.IsEnable = true;
             vmdProj.LadderMode = LadderModes.Monitor;
             return true;
@@ -749,8 +762,7 @@ namespace SamSoarII
                     break;
             }
         }
-        
-        public void HandleCurrentProj()
+        public bool HandleCurrentProj()
         {
             if (mdProj != null && (mdProj.IsModified == true || FileHelper.InvalidFileName(mdProj.FileName)))
             {
@@ -772,9 +784,10 @@ namespace SamSoarII
                         break;
                     case LocalizedMessageResult.Cancel:
                     default:
-                        return;
+                        return false;
                 }
             }
+            return true;
         }
 
         private void _CloseSimulate()

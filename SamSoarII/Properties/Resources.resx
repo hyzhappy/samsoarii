@@ -2319,4 +2319,7 @@
   <data name="Inst_EHCNT" xml:space="preserve">
     <value>Enhanced HighCount</value>
   </data>
+  <data name="Communication_Error" xml:space="preserve">
+    <value>Communication failed!</value>
+  </data>
 </root>

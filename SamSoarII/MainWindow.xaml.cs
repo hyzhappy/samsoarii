@@ -552,9 +552,11 @@ namespace SamSoarII
                     LocalizedMessageBox.Show(string.Format("{0}", Properties.Resources.Message_Project_Loaded), LocalizedMessageIcon.Information);
                 else
                 {
-                    ifParent.HandleCurrentProj();
-                    ifParent.LoadProject(projectMessage.Value.Item2);
-                    LACProj.Show();
+                    if (ifParent.HandleCurrentProj())
+                    {
+                        ifParent.LoadProject(projectMessage.Value.Item2);
+                        LACProj.Show();
+                    }
                 }
             }
             e.Handled = true;
@@ -572,7 +574,7 @@ namespace SamSoarII
                 LocalizedMessageBox.Show(Properties.Resources.Item_Rename, LocalizedMessageIcon.Warning);
                 e.Cancel = true;
             }
-            ifParent.HandleCurrentProj();
+            if (!ifParent.HandleCurrentProj()) e.Cancel = true;
         }
 
         protected override void OnClosed(EventArgs e)
@@ -781,9 +783,11 @@ namespace SamSoarII
              || e.Command == ApplicationCommands.Close
              || e.Command == GlobalCommand.CloseProjectCommand)
             {
-                ifParent.HandleCurrentProj();
-                CommandBinding_Executed_ReturnEditMode(sender, e);
-                return;
+                if (ifParent.HandleCurrentProj())
+                {
+                    CommandBinding_Executed_ReturnEditMode(sender, e);
+                    return;
+                }
             }
             bool ret;
             //if (Project?.IsModified == true)
