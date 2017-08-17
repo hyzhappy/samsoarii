@@ -60,11 +60,11 @@ namespace SamSoarII.Core.Models
 
         public void Dispose()
         {
+            Parent = null;
             foreach (LadderUnitModel unit in children)
                 unit.Dispose();
             children.Clear();
             children = null;
-            parent = null;
             brief = null;
         }
 

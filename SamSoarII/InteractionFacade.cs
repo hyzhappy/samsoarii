@@ -406,7 +406,8 @@ namespace SamSoarII
             if (!CheckLadder(false)) return false;
             if (!CheckFuncBlock(false)) return false;
 #if DEBUG
-            GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
+            //GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
+            DownloadHelper.InitializeData(mdProj);
 #endif
             mngComu.IsEnable = true;
             CommunicationParams paraCom = mdProj.PARAProj.PARACom;

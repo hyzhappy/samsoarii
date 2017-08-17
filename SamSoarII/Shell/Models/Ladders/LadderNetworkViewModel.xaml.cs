@@ -235,6 +235,9 @@ namespace SamSoarII.Shell.Models
             switch (e.Action)
             {
                 case LadderUnitAction.MOVE:
+                    loadedrowstart = Math.Min(loadedrowstart, sender.Y);
+                    loadedrowend = Math.Max(loadedrowend, sender.Y);
+                    break;
                 case LadderUnitAction.REMOVE:
                     if (sender.View != null)
                     {
@@ -622,60 +625,7 @@ namespace SamSoarII.Shell.Models
             base.OnRenderSizeChanged(sizeInfo);
             if (ViewParent != null) ViewParent.IsViewModified = true;
         }
-
-        private void OnLadderNetworkEdit(object sender, LadderEditEventArgs e)
-        {
-            switch (e.Type)
-            {
-                case LadderEditEventArgs.Types.Delete:
-                    ViewParent.Delete();
-                    break;
-                case LadderEditEventArgs.Types.RowInsertBefore:
-                    if (IsSingleSelected())
-                        Core.Parent.AddR(Core, ViewParent.SelectionRect.Y);
-                    else if (IsMultiSelected())
-                        Core.Parent.AddR(Core, ViewParent.SelectionArea.Core.YStart);
-                    break;
-                case LadderEditEventArgs.Types.RowInsertAfter:
-                    if (IsSingleSelected())
-                        Core.Parent.AddR(Core, ViewParent.SelectionRect.Y + 1);
-                    else if (IsMultiSelected())
-                        Core.Parent.AddR(Core, ViewParent.SelectionArea.Core.YEnd + 1);
-                    break;
-                case LadderEditEventArgs.Types.RowInsertEnd:
-                    Core.Parent.AddR(Core, RowCount);
-                    break;
-                case LadderEditEventArgs.Types.RowDelete:
-                    if (IsSingleSelected())
-                        Core.Parent.RemoveR(Core, ViewParent.SelectionRect.Y);
-                    else if (IsMultiSelected())
-                        Core.Parent.RemoveR(Core, ViewParent.SelectionArea.Core.YStart, ViewParent.SelectionArea.Core.YEnd);
-                    break;
-                case LadderEditEventArgs.Types.NetInsertBefore:
-                    Core.Parent.AddN(Core.ID);
-                    break;
-                case LadderEditEventArgs.Types.NetInsertAfter:
-                    Core.Parent.AddN(Core.ID + 1);
-                    break;
-                case LadderEditEventArgs.Types.NetInsertEnd:
-                    Core.Parent.AddN(Core.Parent.NetworkCount);
-                    break;
-                case LadderEditEventArgs.Types.NetDelete:
-                    Core.Parent.RemoveN(Core.ID, Core);
-                    break;
-                case LadderEditEventArgs.Types.NetCopy:
-                    Core.CopyToClipboard();
-                    break;
-                case LadderEditEventArgs.Types.NetCut:
-                    Core.CopyToClipboard();
-                    Core.Parent.RemoveN(Core.ID, Core);
-                    break;
-                case LadderEditEventArgs.Types.NetShield:
-                    Core.IsMasked = !Core.IsMasked;
-                    break;
-            }
-        }
-
+        
         private void OnEditComment(object sender, RoutedEventArgs e)
         {
             IFParent.ShowEditNetworkCommentDialog(Core);

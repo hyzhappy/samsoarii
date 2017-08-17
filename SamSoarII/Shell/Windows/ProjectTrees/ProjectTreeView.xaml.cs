@@ -144,6 +144,7 @@ namespace SamSoarII.Shell.Windows
                 PTVI_Root,
                 ProjectTreeViewItem.TYPE_LADDERS,
                 Properties.Resources.Instruction);
+            PTVI_Ladders.IsExpanded = true;
 
             PTVI_Insts = new ProjectTreeViewItem[PTVIH_Insts.Length];
             for (int i = 0; i < PTVIH_Insts.Length; i++)
@@ -280,6 +281,7 @@ namespace SamSoarII.Shell.Windows
                 if (!parent.Items.Contains(createitem))
                     parent.Items.Add(createitem);
             }
+            createitem.MouseWheel += OnPTVIMouseWheel;
             createitem.MouseDoubleClick += OnPTVIDoubleClick;
             createitem.MenuItemClick += ONPTVIMenuClick;
             createitem.Renamed += OnPTVIRenamed;
@@ -419,6 +421,7 @@ namespace SamSoarII.Shell.Windows
                 Dispose(subitem);
             }
             ptvitem.RelativeObject = null;
+            ptvitem.MouseWheel -= OnPTVIMouseWheel;
             ptvitem.MouseDoubleClick -= OnPTVIDoubleClick;
             ptvitem.MenuItemClick -= ONPTVIMenuClick;
             ptvitem.Renamed -= OnPTVIRenamed;
@@ -539,8 +542,7 @@ namespace SamSoarII.Shell.Windows
                             }
                             ptvitem = CreatePTVItem(
                                 ptvparent,
-                                ProjectTreeViewItem.TYPE_ROUTINE
-                              | ProjectTreeViewItem.FLAG_CREATENETWORK
+                                ProjectTreeViewItem.TYPE_FUNCBLOCK
                               | ProjectTreeViewItem.FLAG_RENAME
                               | ProjectTreeViewItem.FLAG_REMOVE,
                                 fbmodel, false);
@@ -991,7 +993,7 @@ namespace SamSoarII.Shell.Windows
         
         private void OnPTVIMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            Scroll.ScrollToVerticalOffset(Scroll.VerticalOffset + e.Delta);
+            Scroll.ScrollToVerticalOffset(Scroll.VerticalOffset - e.Delta * 2);
         }
 
         #endregion

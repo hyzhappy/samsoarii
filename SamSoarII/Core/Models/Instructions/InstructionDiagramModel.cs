@@ -140,7 +140,7 @@ namespace SamSoarII.Core.Models
                     currenttop += instnet.Invalid ? 20 : 20 * instnet.Insts.Count;
                 instnet.ViewHeight = currenttop - instnet.CanvasTop;
             }
-            viewheight = currenttop;
+            viewheight = currenttop + 4;
             ViewPropertyChanged(this, new PropertyChangedEventArgs("ViewHeight"));
         }
 

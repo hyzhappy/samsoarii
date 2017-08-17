@@ -470,7 +470,7 @@ namespace SamSoarII.Core.Communication
             if (!hassend) return false;
             Thread.Sleep(waittime);
             if (!hasRecvData && cmd.RecvDataLen == 0) return true;
-            while (true)
+            while (recvtime < 20)
             {
                 if (mngCurrent.Read(cmd) == 0)
                 {

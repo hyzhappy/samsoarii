@@ -574,7 +574,7 @@ namespace SamSoarII.Core.Models
                     cmd.Network.InsertR(y1, y2);
                     for (i1 = 0; i1 < newrows.Count; i1++)
                         if (newrows[i1] >= y1) newrows[i1] += y2 - y1 + 1;
-                    area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity, y1, y2);
+                    area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity - 1, y1, y2);
                 }
             }
             if ((cmd.Type & CMDTYPE_MoveUnit) != 0)
@@ -748,7 +748,7 @@ namespace SamSoarII.Core.Models
                         if (y == y2 + 1) { y2++; i2++; } else break;
                     }
                     cmd.Network.InsertR(y1, y2);
-                    area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity, y1, y2);
+                    area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity - 1, y1, y2);
                     for (i1 = 0; i1 < oldrows.Count; i1++)
                         if (oldrows[i1] >= y1) oldrows[i1] += y2 - y1 + 1;
                 }
@@ -1121,9 +1121,9 @@ namespace SamSoarII.Core.Models
             string[] items = text.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);
             if (items.Length == 0)
                 throw new ValueParseException(Properties.Resources.Message_Input_Empty, null);
-            if (!LadderUnitModel.TypeOfNames.ContainsKey(items[0]))
+            if (!LadderUnitModel.TypeOfNames.ContainsKey(items[0].ToUpper()))
                 throw new ValueParseException(Properties.Resources.Message_Instruction_Not_Exist, null);
-            LadderUnitModel.Types type = LadderUnitModel.TypeOfNames[items[0]];
+            LadderUnitModel.Types type = LadderUnitModel.TypeOfNames[items[0].ToUpper()];
             LadderUnitModel newunit = null;
             if (type == LadderUnitModel.Types.CALLM)
             {

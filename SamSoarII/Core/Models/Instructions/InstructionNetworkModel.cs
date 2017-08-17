@@ -187,7 +187,7 @@ namespace SamSoarII.Core.Models
         public bool IsShortCircuit { get { return this.isshortcircuit; } }
         private bool isfusioncircuit;
         public bool IsFusionCircuit { get { return this.isfusioncircuit; } }
-        public bool Invalid { get { return IsMasked || IsOpenCircuit || IsShortCircuit || IsFusionCircuit; } }
+        public bool Invalid { get { return IsMasked || IsOpenCircuit || IsShortCircuit || IsFusionCircuit || Insts.Count == 0; } }
 
         public void Update()
         {

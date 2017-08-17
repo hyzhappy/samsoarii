@@ -660,6 +660,7 @@ namespace SamSoarII.Core.Models
             InnerOffset += offset;
             end += offset;
             CastOffset();
+            dividelabel = start - 1;
             // 从前到后扫描
             for (int i = start; i <= end; i++)
             {

@@ -22,7 +22,7 @@
             <StackPanel x:Name="mainstack" Margin="0,0,0,20">
                 <StackPanel.Resources>
                     <ContextMenu x:Key="CommentAreaContextMenu" DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.Tag}">
-                        <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Edit_Network_Comment}"></MenuItem>
+                        <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Edit_Network_Comment}" Click="OnEditComment"></MenuItem>
                     </ContextMenu>
                 </StackPanel.Resources>
                 <Grid x:Name="CommentAreaGrid" Background="Transparent">

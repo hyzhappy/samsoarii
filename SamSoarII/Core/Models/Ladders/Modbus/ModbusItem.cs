@@ -1,4 +1,5 @@
-﻿using SamSoarII.PLCDevice;
+﻿using SamSoarII.Core.Communication;
+using SamSoarII.PLCDevice;
 using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
 using System;
@@ -27,14 +28,14 @@ namespace SamSoarII.Core.Models
             string.Format("0x0f({0})",Properties.Resources.Write_Bits),string.Format("0x10({0})",Properties.Resources.Write_Words) };
         static private byte[] handlecodes = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x0f, 0x10 };
         static private ValueModel[] analyzers = {
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.BOOL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex1})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.BOOL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex8})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.WORD, false, true, 0, new Regex[] { ValueModel.VerifyWordRegex1})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.WORD, false, true, 0, new Regex[] { ValueModel.VerifyWordRegex2})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.BOOL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex2})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex2})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.BOOL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex2})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex2}))};
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex1})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex8})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, false, true, 0, new Regex[] { ValueModel.VerifyWordRegex1})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, false, true, 0, new Regex[] { ValueModel.VerifyWordRegex2})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex2})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex2})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex2})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex2}))};
 
         public IList<string> SelectedHandleCodes()
         {
@@ -144,20 +145,7 @@ namespace SamSoarII.Core.Models
                 if (!IsValid) return 0;
                 int id = SelectedHandleCodes().IndexOf(HandleCode);
                 analyzers[id].Text = MasteRegister;
-                switch (analyzers[id].Base)
-                {
-                    case ValueModel.Bases.X: return 0;
-                    case ValueModel.Bases.Y: return 10000;
-                    case ValueModel.Bases.M: return 30000;
-                    case ValueModel.Bases.T: return 60768;
-                    case ValueModel.Bases.C: return 60512;
-                    case ValueModel.Bases.D: return 40000;
-                    case ValueModel.Bases.TV: return 60256;
-                    case ValueModel.Bases.CV: return 60000;
-                    case ValueModel.Bases.AI: return 20000;
-                    case ValueModel.Bases.AO: return 20512;
-                    default: return 0;
-                }
+                return (analyzers[id].Offset << 16) | (int)CommandHelper.GetAddrType(analyzers[id].Base, (uint)analyzers[id].Offset);
             }
         }
 
@@ -184,7 +172,7 @@ namespace SamSoarII.Core.Models
             {
                 try
                 {
-                    int slaveid = int.Parse(SlaveID);
+                    byte slaveid = byte.Parse(SlaveID);
                     return true;
                 }
                 catch (FormatException)
@@ -208,10 +196,10 @@ namespace SamSoarII.Core.Models
             {
                 try
                 {
-                    int slaveregister = int.Parse(SlaveRegister);
+                    short slaveregister = short.Parse(SlaveRegister);
                     return true;
                 }
-                catch (FormatException)
+                catch (Exception)
                 {
                     return false;
                 }
@@ -224,10 +212,12 @@ namespace SamSoarII.Core.Models
             {
                 try
                 {
-                    int slavecount = int.Parse(SlaveCount);
+                    short slavecount = short.Parse(SlaveCount);
+                    if (handlecode.Equals(selectedhandlecodes[4]) || handlecode.Equals(selectedhandlecodes[5]))
+                        if (slavecount != 1) return false;
                     return true;
                 }
-                catch (FormatException)
+                catch (Exception)
                 {
                     return false;
                 }
