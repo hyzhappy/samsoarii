@@ -90,6 +90,9 @@ namespace SamSoarII.Shell.Models
             {
                 case "ViewHeight":
                     MainCanvas.Height = core.ViewHeight;
+                    LN_RV.Y2 = core.ViewHeight;
+                    Canvas.SetTop(LN_LB, core.ViewHeight);
+                    Canvas.SetTop(LN_RB, core.ViewHeight);
                     isviewmodified = true;
                     break;
             }
@@ -330,8 +333,9 @@ namespace SamSoarII.Shell.Models
                         {
                             cursor.IsNavigatable = false;
                             cursor.Core.Parent = instnet;
-                            cursor.IsNavigatable = true;
                             cursor.Core.Row = instnet.Insts.Count - 1;
+                            cursor.IsNavigatable = true;
+                            cursor.Navigate();
                         }
                     }
                     else
@@ -355,8 +359,9 @@ namespace SamSoarII.Shell.Models
                         {
                             cursor.IsNavigatable = false;
                             cursor.Core.Parent = instnet;
-                            cursor.IsNavigatable = true;
                             cursor.Core.Row = 0;
+                            cursor.IsNavigatable = true;
+                            cursor.Navigate();
                         }
                     }
                     else

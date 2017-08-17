@@ -539,8 +539,7 @@ namespace SamSoarII.Shell.Windows
                             }
                             ptvitem = CreatePTVItem(
                                 ptvparent,
-                                ProjectTreeViewItem.TYPE_ROUTINE
-                              | ProjectTreeViewItem.FLAG_CREATENETWORK
+                                ProjectTreeViewItem.TYPE_FUNCBLOCK
                               | ProjectTreeViewItem.FLAG_RENAME
                               | ProjectTreeViewItem.FLAG_REMOVE,
                                 fbmodel, false);

@@ -235,6 +235,9 @@ namespace SamSoarII.Shell.Models
             switch (e.Action)
             {
                 case LadderUnitAction.MOVE:
+                    loadedrowstart = Math.Min(loadedrowstart, sender.Y);
+                    loadedrowend = Math.Max(loadedrowend, sender.Y);
+                    break;
                 case LadderUnitAction.REMOVE:
                     if (sender.View != null)
                     {

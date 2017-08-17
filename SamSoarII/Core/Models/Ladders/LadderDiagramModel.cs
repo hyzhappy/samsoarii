@@ -1121,9 +1121,9 @@ namespace SamSoarII.Core.Models
             string[] items = text.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);
             if (items.Length == 0)
                 throw new ValueParseException(Properties.Resources.Message_Input_Empty, null);
-            if (!LadderUnitModel.TypeOfNames.ContainsKey(items[0]))
+            if (!LadderUnitModel.TypeOfNames.ContainsKey(items[0].ToUpper()))
                 throw new ValueParseException(Properties.Resources.Message_Instruction_Not_Exist, null);
-            LadderUnitModel.Types type = LadderUnitModel.TypeOfNames[items[0]];
+            LadderUnitModel.Types type = LadderUnitModel.TypeOfNames[items[0].ToUpper()];
             LadderUnitModel newunit = null;
             if (type == LadderUnitModel.Types.CALLM)
             {

@@ -208,7 +208,7 @@ namespace SamSoarII.Shell.Models
                 case 4: Canvas.SetLeft(ctrl, 24+281); ctrl.Width = 78; break;
                 case 5: Canvas.SetLeft(ctrl, 24+361); ctrl.Width = 78; break;
                 case 6: Canvas.SetLeft(ctrl, 24+441); ctrl.Width = 78; break;
-                case 7: Canvas.SetLeft(ctrl, 24+521); ctrl.Width = 238; break;
+                case 7: Canvas.SetLeft(ctrl, 24+521); ctrl.Width = 600; break;
             }
         }
 
@@ -283,6 +283,12 @@ namespace SamSoarII.Shell.Models
                 {
                     tberr.Text = String.Format(
                         App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在混连错误！" : "There have fusion circuit in ladder of Network {0:d}.",
+                        Core.ID);
+                }
+                else if (Core.Insts.Count == 0)
+                {
+                    tberr.Text = String.Format(
+                        App.CultureIsZH_CH() ? "Network {0:d} 为空！" : "Network {0:d} is empty!",
                         Core.ID);
                 }
                 else

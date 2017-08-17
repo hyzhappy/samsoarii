@@ -105,7 +105,7 @@ namespace SamSoarII.Shell.Dialogs
                     }
                     else if (words.Length > 1)
                     {
-                        switch (words[0])
+                        switch (words[0].ToUpper())
                         {
                             case "CALL":
                                 if (words.Length == 2)
@@ -261,83 +261,82 @@ namespace SamSoarII.Shell.Dialogs
                 InstructionInputTextBox.SelectionStart = oldText.Length;
                 CollectionStack.SelectItem = null;
             }
+            currentText = InstructionInputTextBox.Text;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CollectionSource"));
+            if (CheckInstructionName(currentText.ToUpper()))
+            {
+                IEnumerable<Label> fit = CollectionSource.Where(x => { return x.Content as string == currentText; });
+                if (fit.Count() > 0)
+                {
+                    CollectionStack.SelectItem = fit.First();
+                    SetPopup(CollectionStack.SelectItem);
+                }
+            }
             else
             {
-                currentText = InstructionInputTextBox.Text;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CollectionSource"));
-                if (CheckInstructionName(currentText.ToUpper()))
-                {
-                    IEnumerable<Label> fit = CollectionSource.Where(x => { return x.Content as string == currentText; });
-                    if (fit.Count() > 0)
-                    {
-                        CollectionStack.SelectItem = fit.First();
-                        SetPopup(CollectionStack.SelectItem);
-                    }
-                }
-                else
-                {
-                    CollectionStack.SelectItem = null;
-                }
-                List<string> InstructionInput = currentText.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-                if (InstructionInput.Count() > 0 && CheckInstructionName(InstructionInput[0].ToUpper()))
-                {
-                    LadderUnitFormat format = LadderUnitModel.Formats.Where(f => f.Name.Equals(InstructionInput[0].ToUpper())).First();
-                    if (InstructionInput[0].ToUpper().Equals("CALLM") && InstructionInput.Count() > 1)
-                    {
-                        FuncModel fmodel = project.Funcs.Where(f => f.Name.Equals(InstructionInput[1])).FirstOrDefault();
-                        if (fmodel != null && fmodel.CanCALLM())
-                        {
-                            IList<ValueModel> values = fmodel.GetValueModels(null);
-                            format = new LadderUnitFormat(format.CatalogID, "CALLM", LadderUnitModel.Types.CALLM,
-                                LadderUnitModel.Outlines.ProgramControl, LadderUnitModel.Shapes.OutputRect,
-                                format.Describe, format.Detail, format.Detail,
-                                new ValueFormat[] { new ValueFormat("F", ValueModel.Types.STRING, true, false, 0, new ValueRegex[] { ValueModel.AnyNameRegex }, fmodel.Comment) }
-                                .Concat(values.Select(v => v.Format)).ToArray());
-                        }
-                    }
-                    if (InstructionInput.Count() > 5)
-                    {
-                        TextBoxPopup.IsOpen = false;
-                    }
-                    for (int i = 0; i < 6; i++)
-                    {
-                        TB_Args[i].Text = i < InstructionInput.Count()
-                            ? InstructionInput[i] : "";
-                        TBD_Args[i].Text = i == 0 
-                            ? format.Describe
-                            : i <= format.Formats.Count 
-                                ? format.Formats[i - 1].Detail : "";
-                        if (TB_Args[i].Text.Length > 0 && TBD_Args[i].Text.Length == 0)
-                        {
-                            TextBoxPopup.IsOpen = false;
-                        }
-                        if (InstructionInput.Count() - 1 == i)
-                        {
-                            TB_Args[i].FontWeight = FontWeights.Heavy;
-                            TBD_Args[i].FontWeight = FontWeights.Heavy;
-                        }
-                        else
-                        {
-                            TB_Args[i].FontWeight = FontWeights.Light;
-                            TBD_Args[i].FontWeight = FontWeights.Light;
-                        }
-                    }
-                    TB_Detail.Text = format.Detail;
-                    if (!TextBoxPopup.IsOpen)
-                    {
-                        //TextBoxPopup.VerticalOffset = -29;
-                        TextBoxPopup.IsOpen = true;
-                    }
-                }
-                else
-                {
-                    if (TextBoxPopup.IsOpen)
-                    {
-                        TextBoxPopup.IsOpen = false;
-                    }
-                }
-                oldText = currentText;
+                CollectionStack.SelectItem = null;
             }
+            List<string> InstructionInput = currentText.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+            int inputcurrent = InstructionInput.Count() - 1;
+            if (currentText.EndsWith(" ")) inputcurrent++;
+            if (InstructionInput.Count() > 0 && CheckInstructionName(InstructionInput[0].ToUpper()))
+            {
+                LadderUnitFormat format = LadderUnitModel.Formats.Where(f => f.Name.Equals(InstructionInput[0].ToUpper())).First();
+                if (InstructionInput[0].ToUpper().Equals("CALLM") && InstructionInput.Count() > 1)
+                {
+                    FuncModel fmodel = project.Funcs.Where(f => f.Name.Equals(InstructionInput[1])).FirstOrDefault();
+                    if (fmodel != null && fmodel.CanCALLM())
+                    {
+                        IList<ValueModel> values = fmodel.GetValueModels(null);
+                        format = new LadderUnitFormat(format.CatalogID, "CALLM", LadderUnitModel.Types.CALLM,
+                            LadderUnitModel.Outlines.ProgramControl, LadderUnitModel.Shapes.OutputRect,
+                            format.Describe, format.Detail, format.Detail,
+                            new ValueFormat[] { new ValueFormat("F", ValueModel.Types.STRING, true, false, 0, new ValueRegex[] { ValueModel.AnyNameRegex }, fmodel.Comment) }
+                            .Concat(values.Select(v => v.Format)).ToArray());
+                    }
+                }
+                if (InstructionInput.Count() > 5)
+                {
+                    TextBoxPopup.IsOpen = false;
+                }
+                for (int i = 0; i < 6; i++)
+                {
+                    TB_Args[i].Text = i < InstructionInput.Count()
+                        ? InstructionInput[i] : "";
+                    TBD_Args[i].Text = i == 0
+                        ? format.Describe
+                        : i <= format.Formats.Count
+                            ? format.Formats[i - 1].Detail : "";
+                    if (TB_Args[i].Text.Length > 0 && TBD_Args[i].Text.Length == 0)
+                    {
+                        TextBoxPopup.IsOpen = false;
+                    }
+                    if (inputcurrent == i)
+                    {
+                        TB_Args[i].FontWeight = FontWeights.Heavy;
+                        TBD_Args[i].FontWeight = FontWeights.Heavy;
+                    }
+                    else
+                    {
+                        TB_Args[i].FontWeight = FontWeights.Light;
+                        TBD_Args[i].FontWeight = FontWeights.Light;
+                    }
+                }
+                TB_Detail.Text = format.Detail;
+                if (!TextBoxPopup.IsOpen)
+                {
+                    //TextBoxPopup.VerticalOffset = -29;
+                    TextBoxPopup.IsOpen = true;
+                }
+            }
+            else
+            {
+                if (TextBoxPopup.IsOpen)
+                {
+                    TextBoxPopup.IsOpen = false;
+                }
+            }
+            oldText = currentText;
         }
         private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {

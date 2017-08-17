@@ -95,8 +95,9 @@ namespace SamSoarII.Shell.Models
                         isnavigatable = false;
                         View.IsNavigatable = false;
                         Parent = _current?.Parent?.Inst;
-                        View.IsNavigatable = true;
                         Row = Parent != null ? Parent.Insts.IndexOf(_current.Inst.Origin) : -1;
+                        View.IsNavigatable = true;
+                        View.Navigate();
                         isnavigatable = true;
                     }
                     break;
@@ -212,18 +213,7 @@ namespace SamSoarII.Shell.Models
                     {
                         Canvas.SetLeft(this, 24);
                         Canvas.SetTop(this, core.Parent.CanvasTop + 26 + 20 * core.Row);
-                        if (!isnavigatable) break;
-                        InstructionDiagramModel idmodel = core.Parent?.Parent?.Parent?.Inst;
-                        InstructionNetworkModel inmodel = core.Parent?.Parent?.Inst;
-                        if (idmodel?.View != null && inmodel != null)
-                        {
-                            ScrollViewer scroll = idmodel.View.Scroll;
-                            if (inmodel.CanvasTop + 26 + core.Row * 20 - scroll.VerticalOffset < 0
-                             || inmodel.CanvasTop + 26 + (core.Row + 1) * 20 - scroll.VerticalOffset > scroll.ViewportHeight)
-                            {
-                                scroll.ScrollToVerticalOffset(Math.Max(0, inmodel.CanvasTop + 26 + core.Row * 20 - scroll.ViewportHeight / 2));
-                            }
-                        }
+                        Navigate();
                     }
                     break;
                 case "Current":
@@ -245,6 +235,24 @@ namespace SamSoarII.Shell.Models
         {
             get { return this.isnavigatable; }
             set { this.isnavigatable = value; }
+        }
+
+        public void Navigate()
+        {
+            if (core.Parent != null && isnavigatable)
+            {
+                InstructionDiagramModel idmodel = core.Parent?.Parent?.Parent?.Inst;
+                InstructionNetworkModel inmodel = core.Parent?.Parent?.Inst;
+                if (idmodel?.View != null && inmodel != null)
+                {
+                    ScrollViewer scroll = idmodel.View.Scroll;
+                    if (inmodel.CanvasTop + 26 + core.Row * 20 - scroll.VerticalOffset < 0
+                     || inmodel.CanvasTop + 26 + (core.Row + 1) * 20 - scroll.VerticalOffset > scroll.ViewportHeight)
+                    {
+                        scroll.ScrollToVerticalOffset(Math.Max(0, inmodel.CanvasTop + 26 + core.Row * 20 - scroll.ViewportHeight / 2));
+                    }
+                }
+            }
         }
 
         #endregion
