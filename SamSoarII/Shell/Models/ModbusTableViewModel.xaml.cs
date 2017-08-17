@@ -119,6 +119,7 @@ namespace SamSoarII.Shell.Models
                     current.ChildrenChanged += OnModelChildrenChanged;
                 UpdateButtonEnable();
                 InvokePropertyChanged("Current");
+                InvokePropertyChanged("GridItems");
                 Invoke(TabAction.ACTIVE);
             }
         }
@@ -276,7 +277,7 @@ namespace SamSoarII.Shell.Models
             if (Current == null || CurrentItem == null) return;
             int id = DG_Table.SelectedIndex;
             Current.ChildrenSwap(id, id - 1);
-            LB_Tables.SelectedIndex = id - 1;
+            DG_Table.SelectedIndex = id - 1;
         }
 
         private void B_Down_Click(object sender, RoutedEventArgs e)
@@ -284,7 +285,7 @@ namespace SamSoarII.Shell.Models
             if (Current == null || CurrentItem == null) return;
             int id = DG_Table.SelectedIndex;
             Current.ChildrenSwap(id, id + 1);
-            LB_Tables.SelectedIndex = id + 1;
+            DG_Table.SelectedIndex = id + 1;
         }
 
         private void B_Top_Click(object sender, RoutedEventArgs e)
@@ -292,7 +293,7 @@ namespace SamSoarII.Shell.Models
             if (Current == null || CurrentItem == null) return;
             int id = DG_Table.SelectedIndex;
             Current.ChildrenSwap(id, 0);
-            LB_Tables.SelectedIndex = 0;
+            DG_Table.SelectedIndex = 0;
         }
 
         private void B_Bottom_Click(object sender, RoutedEventArgs e)
@@ -300,7 +301,7 @@ namespace SamSoarII.Shell.Models
             if (Current == null || CurrentItem == null) return;
             int id = DG_Table.SelectedIndex;
             Current.ChildrenSwap(id, GridItems.Count() - 1);
-            LB_Tables.SelectedIndex = GridItems.Count() - 1;
+            DG_Table.SelectedIndex = GridItems.Count();
         }
         
         #endregion

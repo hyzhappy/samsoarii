@@ -71,7 +71,7 @@ namespace SamSoarII.Core.Helpers
 
         #region InitializeData
 
-        static private void InitializeData(ProjectModel project)
+        static public void InitializeData(ProjectModel project)
         {
             //工程，注释，软元件等用于上载的信息直接压缩xml
             
@@ -601,6 +601,7 @@ namespace SamSoarII.Core.Helpers
         {
             for (int i = 0; i < 9; i++)
                 dtModbus.Add(0x00);
+            dtModbus[4] = 0x01;
             dtModbus.Add((byte)(mtmodel.Children.Count));
             for (int i = 0; i < mtmodel.Children.Count; i++)
             {
@@ -608,8 +609,8 @@ namespace SamSoarII.Core.Helpers
                 Write(mtmodel.Children[i]);
             }
             foreach (ModbusModel mmodel in mtmodel.Children) Write(mmodel);
-            int sz = dtModbus.Count() - 10;
-            for (int i = 5; i < 9; i++)
+            int sz = dtModbus.Count();
+            for (int i = 0; i < 4; i++)
             {
                 dtModbus[i] = (byte)(sz & 0xff);
                 sz >>= 8;
@@ -620,8 +621,6 @@ namespace SamSoarII.Core.Helpers
         {
             dtModbus.Add((byte)(mmodel.Children.Count));
             foreach (ModbusItem mitem in mmodel.Children) Write(mitem);
-            Write8(dtModbus, mmodel.Name);
-            Write8(dtModbus, mmodel.Comment);
         }
 
         static private void Write(ModbusItem mitem)
@@ -629,8 +628,8 @@ namespace SamSoarII.Core.Helpers
             dtModbus.Add(byte.Parse(mitem.SlaveID));
             dtModbus.Add(mitem.HandleCodes[mitem.SelectedHandleCodes().IndexOf(mitem.HandleCode)]);
             Write(dtModbus, short.Parse(mitem.SlaveRegister));
-            Write(dtModbus, int.Parse(mitem.SlaveCount));
-            Write(dtModbus, (short)(mitem.MasteRegisterAddress));
+            Write(dtModbus, short.Parse(mitem.SlaveCount));
+            Write(dtModbus, mitem.MasteRegisterAddress);
         }
 
         #endregion
