@@ -65,6 +65,11 @@ namespace SamSoarII.Core.Models
                 if (parent == value) return;
                 if (ValueManager != null) ValueManager.Remove(this);
                 this.parent = value;
+                if (parent != null)
+                {
+                    LadderMode = parent.LadderMode;
+                    IsCommentMode = parent.IsCommentMode;
+                }
                 if (ValueManager != null) ValueManager.Add(this);
             }
         }

@@ -608,7 +608,6 @@ namespace SamSoarII.Core.Helpers
                 dtModbus.Add((byte)(i));
                 Write(mtmodel.Children[i]);
             }
-            foreach (ModbusModel mmodel in mtmodel.Children) Write(mmodel);
             int sz = dtModbus.Count();
             for (int i = 0; i < 4; i++)
             {

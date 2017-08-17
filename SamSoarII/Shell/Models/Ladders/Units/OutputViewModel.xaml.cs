@@ -78,8 +78,6 @@ namespace SamSoarII.Shell.Models
                 ? Visibility.Visible : Visibility.Hidden;
             CountTextBlock.Visibility = Core.Children.Count >= 2
                 ? Visibility.Visible : Visibility.Hidden;
-            CommentArea.Visibility = IsCommentMode 
-                ? Visibility.Visible : Visibility.Hidden;
             for (int i = 0; i < comments.Length; i++)
             {
                 if (i < Core.Children.Count)
@@ -100,9 +98,12 @@ namespace SamSoarII.Shell.Models
             if (comments[id] == null)
             {
                 comments[id] = new TextBlock();
-                CommentArea.Children.Add(comments[id]);
+                MainCanvas.Children.Add(comments[id]);
             }
-            comments[id].Visibility = Visibility.Visible;
+            Canvas.SetTop(comments[id], 300 + (FontManager.GetComment().FontSize + 4) * id);
+            Canvas.SetLeft(comments[id], 4);
+            comments[id].Visibility = IsCommentMode
+                ? Visibility.Visible : Visibility.Hidden;
         }
         public void HideComment(int id)
         {
@@ -147,7 +148,11 @@ namespace SamSoarII.Shell.Models
         {
             base.OnCorePropertyChanged(sender, e);
             if (e.PropertyName.Equals("IsCommentMode"))
-                CommentArea.Visibility = IsCommentMode ? Visibility.Visible : Visibility.Hidden;
+            {
+                for (int i = 0; i < Core.Children.Count; i++)
+                    if (comments[i] != null)
+                        comments[i].Visibility = IsCommentMode ? Visibility.Visible : Visibility.Hidden;
+            }
         }
 
         public override void Update(int flags = UPDATE_ALL)
@@ -173,6 +178,13 @@ namespace SamSoarII.Shell.Models
                             comment.FontFamily = fdata.FontFamily;
                             comment.FontSize = fdata.FontSize;
                         }
+                    }
+                    for (int i = 0; i < comments.Length; i++)
+                    {
+                        if (i < Core.Children.Count)
+                            ShowComment(i);
+                        else
+                            HideComment(i);
                     }
                     break;
                 case UPDATE_BRPO:

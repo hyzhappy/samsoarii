@@ -169,16 +169,16 @@ namespace SamSoarII.Shell.Models
                             ThumbnailButton.ToolTip = new ToolTip();
                             if (ThumbnailButton.Parent is Grid)
                                 ((Grid)(ThumbnailButton.Parent)).Children.Remove(ThumbnailButton);
-                            CommentAreaGrid.Children.Add(ThumbnailButton);
                         }
+                        if (!CommentAreaGrid.Children.Contains(ThumbnailButton))
+                            CommentAreaGrid.Children.Add(ThumbnailButton);
                     }
                     else
                     {
                         if (ThumbnailButton.ToolTip != null)
-                        {
                             ThumbnailButton.ToolTip = null;
+                        if (CommentAreaGrid.Children.Contains(ThumbnailButton))
                             CommentAreaGrid.Children.Remove(ThumbnailButton);
-                        }
                         LadderCanvas.Height = RowCount * HeightUnit;
                     }
                     PropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
