@@ -113,7 +113,7 @@ namespace SamSoarII.Core.Communication
                 {
                     CloseUSB();
                     Start();
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                     return 1;
                 }
             }

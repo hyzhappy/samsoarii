@@ -704,6 +704,7 @@ namespace SamSoarII.Core.Helpers
                 Thread.Sleep(200);
                 time++;
             }
+            
             if (time >= 5) return DownloadError.DownloadFailed;
             command = new IAPDESKEYCommand(communManager.ExecLen);
             for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
@@ -711,6 +712,7 @@ namespace SamSoarII.Core.Helpers
                 Thread.Sleep(200);
                 time++;
             }
+            
             if (time >= 5) return DownloadError.DownloadFailed;
             byte[] data = communManager.ExecData.ToArray();
             byte[] pack = new byte[communManager.COMMU_MAX_DATALEN];
