@@ -1630,28 +1630,24 @@ namespace SamSoarII.Shell.Models
             }
         }
 
-        private bool ispressingctrl;
+        private bool ispressingctrl = false;
+        private bool ispressingshift = false;
         private void OnLadderDiagramKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
-            {
                 ispressingctrl = false;
-            }
+            if (e.Key == Key.LeftShift || e.Key == Key.RightShift)
+                ispressingshift = false;
             if (_selectStatus == SelectStatus.MultiSelecting)
-            {
                 _selectStatus = SelectStatus.MultiSelected;
-            }
         }
         private void OnLadderDiagramKeyDown(object sender, KeyEventArgs e)
         {
-            if (IFParent.IsWaitForKey)
-            {
-                return;
-            }
+            if (IFParent.IsWaitForKey) return;
             if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
-            {
                 ispressingctrl = true;
-            }
+            if (e.Key == Key.LeftShift || e.Key == Key.RightShift)
+                ispressingshift = true;
             if (e.Key == Key.Left)
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
@@ -2184,20 +2180,6 @@ namespace SamSoarII.Shell.Models
                 else if (MainScrollViewer.ViewportWidth < p1.X)
                     MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + (p1.X - MainScrollViewer.ViewportWidth) * GlobalSetting.LadderScaleX * 0.8);
             }
-            /*
-            currentItem = GetNetworkByMouse();
-            if (currentItem == null && dragItem != null)
-            {
-                dragItem.Opacity = 1;
-            }
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                if (currentItem != null && dragItem != null)
-                {
-                    DragDrop.DoDragDrop(this, dragItem, DragDropEffects.Move);
-                }
-            }
-            */
         }
         
         private void OnMainCanvasMouseDown(object sender, MouseButtonEventArgs e)
@@ -2213,9 +2195,51 @@ namespace SamSoarII.Shell.Models
                 if (unit.IsUsed && (LadderMode != LadderModes.Edit || e.ChangedButton == MouseButton.Left))
                 {
                     cmMoni.Core = unit;
-                    _selectArea.Core.Release();
-                    _selectRect.Core.Current = unit;
-                    _selectStatus = SelectStatus.SingleSelecting;
+                    if (!ispressingshift || _selectStatus == SelectStatus.Idle)
+                    {
+                        _selectArea.Core.Release();
+                        _selectRect.Core.Current = unit;
+                        _selectStatus = SelectStatus.SingleSelecting;
+                    }
+                    else
+                    {
+                        switch (_selectStatus)
+                        {
+                            case SelectStatus.SingleSelecting:
+                            case SelectStatus.SingleSelected:
+                                if (unit != _selectRect.Core.Current)
+                                {
+                                    if (unit.Parent == SelectRectOwner)
+                                    {
+                                        _selectArea.Core.Select(SelectRectOwner.ID,
+                                            _selectRect.X, _selectRect.Y, unit.X, unit.Y);
+                                    }
+                                    else
+                                    {
+                                        _selectArea.Core.Select(SelectRectOwner.ID,
+                                            _selectRect.X, _selectRect.Y, _selectRect.X, _selectRect.Y);
+                                        _selectArea.Core.Select(SelectRectOwner.ID, unit.Parent.ID);
+                                    }
+                                    _selectRect.Core.Parent = null;
+                                    _selectStatus = SelectStatus.MultiSelecting;
+                                }
+                                break;
+                            case SelectStatus.MultiSelecting:
+                            case SelectStatus.MultiSelected:
+                                _selectArea.Core.Move(unit);
+                                if (_selectArea.Core.State == SelectAreaCore.Status.SelectRange
+                                 && _selectArea.Core.XStart == _selectArea.Core.XEnd
+                                 && _selectArea.Core.YStart == _selectArea.Core.YEnd)
+                                {
+                                    _selectRect.Core.Parent = core.Children[_selectArea.Core.NetOrigin];
+                                    _selectRect.Core.X = _selectArea.Core.XStart;
+                                    _selectRect.Core.Y = _selectArea.Core.YStart;
+                                    _selectArea.Core.Release();
+                                    _selectStatus = SelectStatus.SingleSelecting;
+                                }
+                                break;
+                        }
+                    }
                 }
             }
             else if (obj is LadderNetworkPositionModel)
@@ -2225,11 +2249,53 @@ namespace SamSoarII.Shell.Models
                 cmMoni.Core = null;
                 if (!pos.Network.IsMasked && (LadderMode != LadderModes.Edit || e.ChangedButton == MouseButton.Left))
                 {
-                    _selectArea.Core.Release();
-                    _selectRect.Core.Parent = pos.Network;
-                    _selectRect.Core.X = pos.X;
-                    _selectRect.Core.Y = pos.Y;
-                    _selectStatus = SelectStatus.SingleSelecting;
+                    if (!ispressingshift || _selectStatus == SelectStatus.Idle)
+                    {
+                        _selectArea.Core.Release();
+                        _selectRect.Core.Parent = pos.Network;
+                        _selectRect.Core.X = pos.X;
+                        _selectRect.Core.Y = pos.Y;
+                        _selectStatus = SelectStatus.SingleSelecting;
+                    }
+                    else
+                    {
+                        switch (_selectStatus)
+                        {
+                            case SelectStatus.SingleSelecting:
+                            case SelectStatus.SingleSelected:
+                                if (pos.Network != SelectRectOwner || pos.X != _selectRect.X || pos.Y != _selectRect.Y)
+                                {
+                                    if (pos.Network == SelectRectOwner)
+                                    {
+                                        _selectArea.Core.Select(SelectRectOwner.ID,
+                                            _selectRect.X, _selectRect.Y, pos.X, pos.Y);
+                                    }
+                                    else
+                                    {
+                                        _selectArea.Core.Select(SelectRectOwner.ID,
+                                            _selectRect.X, _selectRect.Y, _selectRect.X, _selectRect.Y);
+                                        _selectArea.Core.Select(SelectRectOwner.ID, pos.Network.ID);
+                                    }
+                                    _selectRect.Core.Parent = null;
+                                    _selectStatus = SelectStatus.MultiSelecting;
+                                }
+                                break;
+                            case SelectStatus.MultiSelecting:
+                            case SelectStatus.MultiSelected:
+                                _selectArea.Core.Move(pos);
+                                if (_selectArea.Core.State == SelectAreaCore.Status.SelectRange
+                                 && _selectArea.Core.XStart == _selectArea.Core.XEnd
+                                 && _selectArea.Core.YStart == _selectArea.Core.YEnd)
+                                {
+                                    _selectRect.Core.Parent = core.Children[_selectArea.Core.NetOrigin];
+                                    _selectRect.Core.X = _selectArea.Core.XStart;
+                                    _selectRect.Core.Y = _selectArea.Core.YStart;
+                                    _selectArea.Core.Release();
+                                    _selectStatus = SelectStatus.SingleSelecting;
+                                }
+                                break;
+                        }
+                    }
                 }
             }
             else if (obj is LadderNetworkModel)
@@ -2402,6 +2468,7 @@ namespace SamSoarII.Shell.Models
                     break;
             }
         }
+
         private void OnMainCanvasDragLeave(object sender, DragEventArgs e)
         {
             switch (_selectStatus)
