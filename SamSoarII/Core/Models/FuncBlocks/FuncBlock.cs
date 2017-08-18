@@ -55,17 +55,6 @@ namespace SamSoarII.Core.Models
         {
             get { return this.model; }
         }
-        /// <summary>
-        /// 变量索引表
-        /// </summary>
-        protected Dictionary<string, SortedList<int, FuncBlock_Assignment>> Assigns
-        {
-            get
-            {
-                if (model == null) return null;
-                return model.Assigns;
-            }
-        }
         #endregion
 
         #region Namespace
@@ -1298,35 +1287,7 @@ namespace SamSoarII.Core.Models
             }
             set
             {
-                //if (Parent == null) return;
-                // 删除之前在索引表中设置的记录
-                string subname = String.Empty;
-                SortedList<int, FuncBlock_Assignment> subassigns = null;
-                for (int i = 1; i <= name.Length; i++)
-                {
-                    subname = String.Format("{0:s}::{1:s}", Namespace, name.Substring(0, i));
-                    if (Assigns.ContainsKey(subname))
-                    {
-                        subassigns = Assigns[subname];
-                        subassigns.Remove(ID);
-                    }
-                }
                 this.name = value;
-                // 增加当前名称的在索引表中设置的记录
-                for (int i = 1; i <= name.Length; i++)
-                {
-                    subname = String.Format("{0:s}::{1:s}", Namespace, name.Substring(0, i));
-                    if (Assigns.ContainsKey(subname))
-                    {
-                        subassigns = Assigns[subname];
-                    }
-                    else
-                    {
-                        subassigns = new SortedList<int, FuncBlock_Assignment>();
-                        Assigns.Add(subname, subassigns);
-                    }
-                    subassigns.Add(ID, this);
-                }
             }
         }
         /// <summary>
@@ -1336,20 +1297,25 @@ namespace SamSoarII.Core.Models
         {
             get
             {
-                if (type.EndsWith("*"))
-                    return 4;
+                if (type.EndsWith("*")) return 4;
                 switch (type)
                 {
-                    case "BIT":
+                    case "int8_t":
+                    case "uint8_t":
+                    case "char":
+                        return 1;
+                    case "int16_t":
+                    case "uint16_t":
+                    case "short":
+                        return 2;
+                    case "int32_t":
+                    case "uint32_t":
+                    case "int":
+                    case "float":
                         return 4;
-                    case "WORD":
-                    case "UWORD":
-                        return 4;
-                    case "DWORD":
-                    case "UDWORD":
-                        return 8;
-                    case "FLOAT":
-                    case "UFLOAT":
+                    case "int64_t":
+                    case "uint64_t":
+                    case "double":
                         return 8;
                     default:
                         return 4;
