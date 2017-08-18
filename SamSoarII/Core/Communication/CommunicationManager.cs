@@ -457,7 +457,7 @@ namespace SamSoarII.Core.Communication
                                 message = Properties.Resources.MainWindow_Monitor;
                                 break;
                         }
-                        retcl = LocalizedMessageBox.Show(string.Format("{0}{1}", Properties.Resources.Dialog_Closing, message), LocalizedMessageButton.OKCancel);
+                        retcl = LocalizedMessageBox.Show(string.Format("{0}{1}", Properties.Resources.Dialog_Closing, message), LocalizedMessageButton.OKCancel,LocalizedMessageIcon.Question);
                         if (retcl == LocalizedMessageResult.No) e.Cancel = true;
                     }
                     else retcl = LocalizedMessageResult.None;
