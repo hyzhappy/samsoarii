@@ -1033,6 +1033,7 @@ namespace SamSoarII
                 cw.Write("typedef int* DWORD;\r\n");
                 cw.Write("typedef int* UDWORD;\r\n");
                 cw.Write("typedef float* FLOAT;\r\n");
+                sline = 7 + fbmodel.Funcs.Count();
                 if (fbmodel.IsLibrary)
                 {
                     cw.Write("double asin(double a) {}");
@@ -1041,6 +1042,7 @@ namespace SamSoarII
                     cw.Write("double log(double a) {}");
                     cw.Write("double log10(double a) {}");
                     cw.Write("double sqrt(double a) {}");
+                    sline += 6;
                 }
                 foreach (FuncModel fmodel in fbmodel.Funcs)
                 {
@@ -1058,7 +1060,6 @@ namespace SamSoarII
                 }
                 cw.Write(fbmodel.View != null ? fbmodel.View.Code : fbmodel.Code);
                 cw.Close();
-                sline = 4 + fbmodel.Funcs.Count();
                 cmd = new Process();
                 cmd.StartInfo.FileName =
                     String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-gcc",
@@ -1083,16 +1084,19 @@ namespace SamSoarII
                 {
                     message = m1.Groups[4].Value;
                     line = int.Parse(m1.Groups[2].Value) - sline;
-                    column = int.Parse(m1.Groups[3].Value);
-                    ewele = new ErrorReportElement_FB
-                    (
-                        ErrorReportElement_FB.STATUS_ERROR,
-                        message,
-                        fbmodel,
-                        line,
-                        column
-                    );
-                    eweles.Add(ewele);
+                    if (line > 0)
+                    {
+                        column = int.Parse(m1.Groups[3].Value);
+                        ewele = new ErrorReportElement_FB
+                        (
+                            ErrorReportElement_FB.STATUS_ERROR,
+                            message,
+                            fbmodel,
+                            line,
+                            column
+                        );
+                        eweles.Add(ewele);
+                    }
                     m1 = m1.NextMatch();
                 }
                 while (m2 != null && m2.Success)

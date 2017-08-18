@@ -435,6 +435,7 @@ namespace SamSoarII.Core.Helpers
                     start = bps[i2].IndexStart;
                     len = bps[i2].IndexEnd - start + 1;
                     code.Append(String.Format("bpcycle({0:d});", bps[i2].BPAddress));
+                    if (bps[i2] is FuncBlock_Return) code.Append("callleave();");
                     if (len > 0) code.Append(fbmodel.Code.Substring(start, len));
                     if (bps[i2] is FuncBlock_Statement) code.Append("}");
                     firstbp = false;

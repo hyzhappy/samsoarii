@@ -237,10 +237,6 @@ namespace SamSoarII.Shell.Models
                         lnmodel.View.Dispose();
                     }
                 }
-            if (!core.IsExecuting)
-            {
-                isviewmodified = true;
-            }
         }
         
         public void QuickInsertElement(LadderUnitModel.Types type)
