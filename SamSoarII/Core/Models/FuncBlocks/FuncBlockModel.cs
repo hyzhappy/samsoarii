@@ -123,10 +123,14 @@ namespace SamSoarII.Core.Models
             get { return this.index; }
             protected set { this.index = value; }
         }
-        
+
+        static private string[] registernames = {
+            "XBit", "YBit", "SBit", "MBit", "CBit", "TBit",
+            "DWord", "VWord", "ZWord", "TVWord", "CVWord", "CV32DoubleWord", "AIWord", "AOWord"};
         public List<string> GetCodeCompleteNames(string profix)
         {
             List<string> ret = new List<string>();
+            ret.AddRange(registernames.Where(rn => rn.Contains(profix)));
             if (Current != null && Current is FuncBlock_Comment)
             {
                 return ret;
