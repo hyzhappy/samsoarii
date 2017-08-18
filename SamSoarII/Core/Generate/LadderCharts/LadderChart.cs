@@ -347,10 +347,12 @@ namespace SamSoarII.Core.Generate
         /// </summary>
         public bool CheckOpenCircuit()
         {
+            // 整个梯形图为空
+            if (nodes.Count() == 0) return false;
             // 不存在起点
-            if (nodes.Where(n => n.IsStart).Count() == 0) return false;
+            if (nodes.Where(n => n.IsStart).Count() == 0) return true;
             // 不存在终点
-            if (nodes.Where(n => n.IsTerminate).Count() == 0) return false;
+            if (nodes.Where(n => n.IsTerminate).Count() == 0) return true;
             foreach (LadderChartNode node in nodes)
             {
                 // 检查左断路的基本条件
@@ -359,23 +361,17 @@ namespace SamSoarII.Core.Generate
                     if (node.Up == null || !node.Up.VAccess)
                         // 符合左断路条件时检查下导通
                         if (node.Down == null || !node.VAccess)
-                        {
                             return true;
-                        }
                 // 检查右断路的基本条件
                 if (node.HAccess && !node.IsTerminate && node.Right == null)
                     // 符合右断路条件时检查右上导通
                     if (node.RiUp == null || !node.RiUp.VAccess)
-                    {
                         return true;
-                    }
                 // 检查下断路的基本条件
                 if (node.VAccess && node.Down == null && (node.LeDo == null || !node.LeDo.HAccess))
                     // 符合下断路条件时检查左下导通
                     if (node.LeDo == null || !node.LeDo.HAccess)
-                    {
                         return true;
-                    }
             }
             return false;
         }

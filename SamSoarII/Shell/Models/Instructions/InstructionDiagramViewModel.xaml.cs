@@ -396,8 +396,24 @@ namespace SamSoarII.Shell.Models
         {
             isviewmodified = true;
         }
+        
+        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (e.Command == ApplicationCommands.Undo)
+                e.CanExecute = Core?.Parent?.CanUndo == true;
+            if (e.Command == ApplicationCommands.Redo)
+                e.CanExecute = Core?.Parent?.CanRedo == true;
+        }
+
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.Command == ApplicationCommands.Undo)
+                Core?.Parent?.Undo();
+            if (e.Command == ApplicationCommands.Redo)
+                Core?.Parent?.Redo();
+        }
 
         #endregion
-        
+
     }
 }

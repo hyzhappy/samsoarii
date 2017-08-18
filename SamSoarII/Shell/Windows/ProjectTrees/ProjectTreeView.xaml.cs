@@ -987,7 +987,7 @@ namespace SamSoarII.Shell.Windows
         private void TV_Main_DragLeave(object sender, DragEventArgs e)
         {
             CurrentItem = null;
-            if (e.Source == TV_Main)
+            if (e.Source == this)
                 ifParent.WNDMain.LACProj.Hide();
         }
         
