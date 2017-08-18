@@ -522,6 +522,13 @@ namespace SamSoarII.Core.Models
                 model.Move(model.CurrentIndex);
             }
         }
+
+        static private Regex r1 = new Regex(@"([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\((.*)\)\s*$", RegexOptions.Compiled);
+        static private Regex r2 = new Regex(@"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$", RegexOptions.Compiled);
+        static private Regex r3 = new Regex(@"for\s*\(\s*([^;]*;)\s*([^;]*;)\s*([^\)]*)\s*\).*$", RegexOptions.Compiled);
+        static private Regex r4 = new Regex(@"while\s*\(\s*([^\)]*)\s*\).*$", RegexOptions.Compiled);
+        static private Regex r5 = new Regex(@"if\s*\(\s*([^\)]*)\s*\).*$", RegexOptions.Compiled);
+        static private Regex r6 = new Regex(@"^\s*while\s*\(\s*([^\)]*)\s*\).*;\s*$", RegexOptions.Compiled);
         /// <summary>
         /// 根据给定的文本和范围，重构这个范围
         /// </summary>
@@ -708,7 +715,7 @@ namespace SamSoarII.Core.Models
                             int hstart = dividelabel + 1;
                             int hend = i;
                             string htext = text.Substring(hstart, hend - hstart + 1);
-                            Match m1 = Regex.Match(htext, @"([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\((.*)\)\s*$");
+                            Match m1 = r1.Match(htext);
                             // 如果符合函数头部的正则表达式格式
                             if (m1.Success)
                             {
@@ -730,7 +737,7 @@ namespace SamSoarII.Core.Models
                                     // 检查内部的参数是否符合格式
                                     for (int j = 0; j < argtexts.Length; j++)
                                     {
-                                        Match m2 = Regex.Match(argtexts[j], @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$");
+                                        Match m2 = r2.Match(argtexts[j]);
                                         if (m2.Success)
                                         {
                                             func.SetArgType(j, Regex.Replace(m2.Groups[1].Value, @"\s*", String.Empty));
@@ -768,9 +775,9 @@ namespace SamSoarII.Core.Models
                             int hstart = dividelabel + 1;
                             int hend = i;
                             string htext = text.Substring(hstart, hend - hstart + 1);
-                            Match m1 = Regex.Match(htext, @"for\s*\(\s*([^;]*;)\s*([^;]*;)\s*([^\)]*)\s*\)\s*$");
-                            Match m2 = Regex.Match(htext, @"while\s*\(\s*([^\)]*)\s*\)\s*$");
-                            Match m3 = Regex.Match(htext, @"if\s*\(\s*([^\)]*)\s*\)\s*$");
+                            Match m1 = r3.Match(htext);
+                            Match m2 = r4.Match(htext);
+                            Match m3 = r5.Match(htext);
                             // for循环头部
                             if (m1.Success)
                             {
@@ -778,7 +785,7 @@ namespace SamSoarII.Core.Models
                                 newblock.Parent = this;
                                 newblock.Namespace = Namespace;
                                 newblock.IndexStart = hstart + m1.Index;
-                                newblock.IndexEnd = newblock.IndexStart + m1.Value.Length - 1;
+                                newblock.IndexEnd = hend;
                                 AddChildren(newblock);
                                 if (m1.Groups[1].Length > 0)
                                 {
@@ -811,7 +818,7 @@ namespace SamSoarII.Core.Models
                             {
                                 FuncBlock_WhileHeader newblock = new FuncBlock_WhileHeader(model);
                                 newblock.IndexStart = hstart + m1.Index;
-                                newblock.IndexEnd = newblock.IndexStart + m1.Value.Length - 1;
+                                newblock.IndexEnd = hend;
                                 AddChildren(newblock);
                                 if (m1.Groups[1].Length > 0)
                                 {
@@ -828,7 +835,7 @@ namespace SamSoarII.Core.Models
                             {
                                 FuncBlock_IfHeader newblock = new FuncBlock_IfHeader(model);
                                 newblock.IndexStart = hstart + m1.Index;
-                                newblock.IndexEnd = newblock.IndexStart + m1.Value.Length - 1;
+                                newblock.IndexEnd = hend;
                                 AddChildren(newblock);
                                 if (m1.Groups[1].Length > 0)
                                 {
@@ -867,8 +874,13 @@ namespace SamSoarII.Core.Models
                                 stmtstart += blankMatch.Value.Length;
                                 statement = text.Substring(stmtstart, stmtend - stmtstart + 1);
                             }
+                            // 检查是否符合return语句的格式，并建立对应的语句
+                            if (FuncBlock_Return.TextSuit(statement))
+                            {
+                                child = new FuncBlock_Return(model);
+                            }
                             // 检查是否符合变量声明语句的格式，并建立对应的语句
-                            if (FuncBlock_Assignment.TextSuit(statement))
+                            else if (FuncBlock_Assignment.TextSuit(statement))
                             {
                                 child = new FuncBlock_Assignment(model, this, statement);
                             }
@@ -882,7 +894,7 @@ namespace SamSoarII.Core.Models
                             else
                             {
                                 // 检查是否符合while循环尾部的格式，并建立对应的语句
-                                Match m1 = Regex.Match(statement, @"^\s*while\s*\(\s*([^\)]*)\s*\)\s*;\s*$");
+                                Match m1 = r6.Match(statement);
                                 if (m1.Success)
                                 {
                                     FuncBlock_WhileEnd childwe = new FuncBlock_WhileEnd(model);
@@ -1213,17 +1225,19 @@ namespace SamSoarII.Core.Models
         /// 分析对应的代码文本，获得声明变量的信息
         /// </summary>
         /// <param name="text"></param>
+        private static Regex r1 = new Regex(@"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*;\s*$", RegexOptions.Compiled);
+        private static Regex r2 = new Regex(@"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$", RegexOptions.Compiled);
         public void AnalyzeText(string text)
         {
             string[] texts = text.Split('=');
             Match m1 = null;
             if (texts.Length == 1)
             {
-                m1 = Regex.Match(text, @"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*;\s*$");
+                m1 = r1.Match(text);
             }
             if (texts.Length == 2)
             {
-                m1 = Regex.Match(texts[0], @"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$");
+                m1 = r2.Match(texts[0]);
             }
             if (m1 != null && m1.Success)
             {
@@ -1327,18 +1341,21 @@ namespace SamSoarII.Core.Models
         /// </summary>
         /// <param name="text">代码文本</param>
         /// <returns></returns>
+        private static Regex r4 = new Regex(@"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*;\s*$", RegexOptions.Compiled);
+        private static Regex r5 = new Regex(@"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$", RegexOptions.Compiled);
+        private static Regex r6 = new Regex(@"^\s*[^;]*;\s*$", RegexOptions.Compiled);
         static public bool TextSuit(string text)
         {
             string[] texts = text.Split('=');
             if (texts.Length == 1)
             {
-                Match m1 = Regex.Match(text, @"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*;\s*$");
+                Match m1 = r4.Match(text);
                 return m1.Success;
             }
             if (texts.Length == 2)
             {
-                Match m1 = Regex.Match(texts[0], @"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$");
-                Match m2 = Regex.Match(texts[1], @"^\s*[^;]*;\s*$");
+                Match m1 = r5.Match(texts[0]);
+                Match m2 = r6.Match(texts[1]);
                 //Match m3 = Regex.Match(texts[1], @"^\s*\d*\.\d+\s*;\s*$");
                 //Match m4 = Regex.Match(texts[1], @"^\s*0x[\da-fA-F]{1,8}\s*;\s*$");
                 bool result = false;
@@ -1392,16 +1409,18 @@ namespace SamSoarII.Core.Models
             defines.Clear();
         }
 
+        private static Regex r1 = new Regex(@"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+(.*);$", RegexOptions.Compiled);
+        private static Regex r2 = new Regex(@"^(\s*\*)*\s*([a-zA-Z_]\w*)\s*", RegexOptions.Compiled);
         public override void Build(string text, int start, int end, int offset = 0)
         {
             ClearDefines();
-            Match m1 = Regex.Match(text.Substring(start, end - start + 1), @"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+(.*);$");
+            Match m1 = r1.Match(text.Substring(start, end - start + 1));
             if (!m1.Success) return;
             string _text = m1.Groups[5].Value;
             string[] texts = _text.Split(',');
             foreach (string sub in texts)
             {
-                Match m2 = Regex.Match(sub, @"^(\s*\*)*\s*([a-zA-Z_]\w*)\s*");
+                Match m2 = r2.Match(sub);
                 if (!m2.Success) return;
                 FuncBlock_Assignment fba = new FuncBlock_Assignment(model);
                 fba.Namespace = Parent.Namespace;
@@ -1410,15 +1429,16 @@ namespace SamSoarII.Core.Models
             }
         }
 
+        private static Regex r3 = new Regex(@"^(\s*\*)*\s*([a-zA-Z_]\w*)\s*(=|$)", RegexOptions.Compiled);
         static public bool TextSuit(string text)
         {
-            Match m1 = Regex.Match(text, @"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+(.*);$");
+            Match m1 = r1.Match(text);
             if (!m1.Success) return false;
             string _text = m1.Groups[5].Value;
             string[] texts = _text.Split(',');
             foreach (string sub in texts)
             {
-                Match m2 = Regex.Match(sub, @"^(\s*\*)*\s*([a-zA-Z_]\w*)\s*(=|$)");
+                Match m2 = r3.Match(sub);
                 if (!m2.Success) return false;
             }
             return true;
@@ -1607,6 +1627,24 @@ namespace SamSoarII.Core.Models
             Cond = null;
         }
     }
+
+    public class FuncBlock_Return : FuncBlock_Statement
+    {
+        public FuncBlock_Return(FuncBlockModel _model) : base(_model) { }
+
+        static private Regex regex = new Regex(@"^\s*return\s.*$", RegexOptions.Compiled);
+
+        /// <summary>
+        /// 判断一段代码文本是否符合这个元素
+        /// </summary>
+        /// <param name="text">代码文本</param>
+        /// <returns></returns>
+        static new public bool TextSuit(string text)
+        {
+            return regex.Match(text).Success;
+        }
+    }
+
 
     /// <summary>
     /// 表示一行注释部分

@@ -256,13 +256,11 @@ namespace SamSoarII.Shell.Windows
                 ifParent.WNDMain.LAErrorList.ToggleAutoHide();
             }
             if (DG_FList.SelectedIndex < 0) return;
-            /*
             ErrorReportElement_FB ele = (ErrorReportElement_FB)DG_FList.SelectedItem;
-            FuncBlockViewModel fbvmodel = ele.FBVModel;
+            FuncBlockModel fbmodel = ele.FuncBlock;
             int line = ele.Line;
             int column = ele.Column;
-            parent.NavigateToFuncBlock(fbvmodel, line, column);
-            */
+            ifParent.Navigate(fbmodel, line, column);
         }
 
         #endregion

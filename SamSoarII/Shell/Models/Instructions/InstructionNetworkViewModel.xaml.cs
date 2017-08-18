@@ -130,6 +130,7 @@ namespace SamSoarII.Shell.Models
 
         private void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (core == null) return;
             switch (e.PropertyName)
             {
                 case "ID": PropertyChanged(this, new PropertyChangedEventArgs("Header")); break;
@@ -141,6 +142,7 @@ namespace SamSoarII.Shell.Models
                     break;
                 case "CanvasTop":
                     Canvas.SetTop(this, core.CanvasTop);
+                    SetPosition(tberr, 0);
                     foreach (InstructionRowViewModel row in children)
                     {
                         for (int i = 0; i < row.TextBlocks.Count; i++)

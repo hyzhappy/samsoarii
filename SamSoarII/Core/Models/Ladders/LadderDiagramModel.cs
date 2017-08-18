@@ -667,7 +667,8 @@ namespace SamSoarII.Core.Models
             IFParent.ThMNGView.Start();
             area.Dispose();
             IsExecuting = false;
-            ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
+                ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public void Redo()
@@ -851,7 +852,8 @@ namespace SamSoarII.Core.Models
             IFParent.ThMNGView.Start();
             area.Dispose();
             IsExecuting = false;
-            ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
+                ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         private void Execute(int _type, object _target, IList<object> _olds, IList<object> _news)

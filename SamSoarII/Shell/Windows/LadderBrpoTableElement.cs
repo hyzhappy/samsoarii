@@ -72,13 +72,13 @@ namespace SamSoarII.Shell.Windows
         public string Instruction { get { return parent?.Parent.ToInstString(); } }
         public int SelectedIndex
         {
-            get { return parent.ConditionIndex; }
-            set { parent.ConditionIndex = value; }
+            get { return parent != null ? parent.ConditionIndex : 0; }
+            set { if (parent != null) parent.ConditionIndex = value; }
         }
         public string SkipCount
         {
-            get { return parent.SkipCount.ToString(); }
-            set { try { parent.SkipCount = Math.Max(1, int.Parse(value)); } catch (Exception) { parent.SkipCount = 1; } }
+            get { return parent != null ? parent.SkipCount.ToString() : "0"; }
+            set { try { if (parent != null) parent.SkipCount = Math.Max(1, int.Parse(value)); } catch (Exception) { parent.SkipCount = 1; } }
         }
 
         private void OnParentPropertyChanged(object sender, PropertyChangedEventArgs e)
