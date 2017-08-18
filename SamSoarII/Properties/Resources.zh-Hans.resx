@@ -1678,7 +1678,7 @@
     <value>下载成功</value>
   </data>
   <data name="Project_Download" xml:space="preserve">
-    <value>工程下载</value>
+    <value>工程下载...</value>
   </data>
   <data name="SB_Program" xml:space="preserve">
     <value>工程： </value>
@@ -2263,7 +2263,7 @@
     <value>请选择要上载的数据！</value>
   </data>
   <data name="Project_Upload" xml:space="preserve">
-    <value>工程上载</value>
+    <value>工程上载...</value>
   </data>
   <data name="MessageBox_Upload_Successd" xml:space="preserve">
     <value>上载成功</value>
@@ -2342,5 +2342,14 @@
   </data>
   <data name="Download_Size_Beyond" xml:space="preserve">
     <value>待下载数据大小超出限制，请调整工程大小！</value>
+  </data>
+  <data name="Initialize_Data" xml:space="preserve">
+    <value>初始化下载的数据...</value>
+  </data>
+  <data name="Config_Download" xml:space="preserve">
+    <value>配置下载中...</value>
+  </data>
+  <data name="Config_Upload" xml:space="preserve">
+    <value>配置上载中...</value>
   </data>
 </root>

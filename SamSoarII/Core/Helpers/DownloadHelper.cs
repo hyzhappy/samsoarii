@@ -639,8 +639,9 @@ namespace SamSoarII.Core.Helpers
         #region start download
         
         #region main download process
-        public static DownloadError DownloadExecute(CommunicationManager communManager)
+        public static DownloadError DownloadExecute(CommunicationManager communManager, LoadingWindowHandle handle)
         {
+            handle.UpdateMessage(Properties.Resources.Initialize_Data);
             //初始化要下载的数据
             InitializeData(communManager.IFParent.MDProj);
 
@@ -654,10 +655,11 @@ namespace SamSoarII.Core.Helpers
                 }
                 else return DownloadError.Cancel;
             }
-
+            
             DownloadError ret = DownloadError.None;
             if (IsDownloadProgram)
             {
+                handle.UpdateMessage(Properties.Resources.Project_Download);
                 //下载Bin文件
                 ret = DownloadBinExecute(communManager);
                 if (ret != DownloadError.None)
@@ -686,6 +688,7 @@ namespace SamSoarII.Core.Helpers
             //下载 Config
             if (IsDownloadSetting)
             {
+                handle.UpdateMessage(Properties.Resources.Config_Download);
                 ret = DownloadConfigExecute(communManager);
                 if (ret != DownloadError.None)
                     return ret;

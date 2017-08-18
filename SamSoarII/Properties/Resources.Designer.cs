@@ -655,11 +655,29 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Downloading configuration... 的本地化字符串。
+        /// </summary>
+        public static string Config_Download {
+            get {
+                return ResourceManager.GetString("Config_Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 The upload will overwrite the previously uploaded configuration,whether to continue? 的本地化字符串。
         /// </summary>
         public static string Config_Override {
             get {
                 return ResourceManager.GetString("Config_Override", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Uploading configuration... 的本地化字符串。
+        /// </summary>
+        public static string Config_Upload {
+            get {
+                return ResourceManager.GetString("Config_Upload", resourceCulture);
             }
         }
         
@@ -2055,6 +2073,15 @@ namespace SamSoarII.Properties {
         public static string Initialize {
             get {
                 return ResourceManager.GetString("Initialize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Initializing the downloaded data... 的本地化字符串。
+        /// </summary>
+        public static string Initialize_Data {
+            get {
+                return ResourceManager.GetString("Initialize_Data", resourceCulture);
             }
         }
         
@@ -5254,7 +5281,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Project Download 的本地化字符串。
+        ///   查找类似 Project Download... 的本地化字符串。
         /// </summary>
         public static string Project_Download {
             get {
@@ -5353,7 +5380,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Project Upload 的本地化字符串。
+        ///   查找类似 Project Upload... 的本地化字符串。
         /// </summary>
         public static string Project_Upload {
             get {

@@ -71,7 +71,7 @@ namespace SamSoarII.Core.Helpers
         }
         #endregion
         
-        public static UploadError UploadExecute(CommunicationManager communManager)
+        public static UploadError UploadExecute(CommunicationManager communManager, LoadingWindowHandle handle)
         {
             //首先判断PLC运行状态,为Iap时需要切换到App模式
             if (communManager.PLCMessage.RunStatus == RunStatus.Iap)
@@ -88,6 +88,7 @@ namespace SamSoarII.Core.Helpers
             UploadError ret = UploadError.None;
             if (IsUploadProgram)
             {
+                handle.UpdateMessage(Properties.Resources.Project_Upload);
                 //上载经过压缩的XML文件（包括程序，注释（可选），软元件表（可选）等）
                 ret = UploadProjExecute(communManager);
                 if (ret != UploadError.None)
@@ -96,6 +97,7 @@ namespace SamSoarII.Core.Helpers
             //下载 Config
             if (IsUploadSetting)
             {
+                handle.UpdateMessage(Properties.Resources.Config_Upload);
                 ret = UploadConfigExecute(communManager);
                 if (ret != UploadError.None)
                     return ret;

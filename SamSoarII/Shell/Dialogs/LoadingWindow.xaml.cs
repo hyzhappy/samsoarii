@@ -116,6 +116,7 @@ namespace SamSoarII.Shell.Dialogs
         private LoadingWindow loadWin;
         private string _message;
         private bool _completed = false;
+        public bool IsActive { get { return loadWin != null; } }
         /// <summary>
         /// params="Completed"
         /// 表示整个耗时操作的完成!

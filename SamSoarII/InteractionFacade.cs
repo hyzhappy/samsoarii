@@ -478,7 +478,8 @@ namespace SamSoarII
                         vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                         {
                             handle.Start();
-                            var ret = mngComu.DownloadExecute();
+                            while (!handle.IsActive) Thread.Sleep(10);
+                            var ret = mngComu.DownloadExecute(handle);
                             mngComu.AbortAll();
                             handle.Abort();
                             handle.Completed = true;
@@ -609,7 +610,8 @@ namespace SamSoarII
                                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                                 {
                                     handle.Start();
-                                    var ret1 = mngComu.UploadExecute();
+                                    while (!handle.IsActive) Thread.Sleep(10);
+                                    var ret1 = mngComu.UploadExecute(handle);
                                     mngComu.AbortAll();
                                     handle.Abort();
                                     handle.Completed = true;

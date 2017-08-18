@@ -354,14 +354,14 @@ namespace SamSoarII.Core.Communication
             execdata = FileHelper.GetBytesByBinaryFile(execfile).ToList();
         }
 
-        public DownloadError DownloadExecute()
+        public DownloadError DownloadExecute(LoadingWindowHandle handle)
         {
-            return DownloadHelper.DownloadExecute(this);
+            return DownloadHelper.DownloadExecute(this, handle);
         }
 
-        public UploadError UploadExecute()
+        public UploadError UploadExecute(LoadingWindowHandle handle)
         {
-            return UploadHelper.UploadExecute(this);
+            return UploadHelper.UploadExecute(this, handle);
         }
 
         public bool PasswordHandle(CommunicationType commuType)
