@@ -22,6 +22,10 @@ namespace SamSoarII.Core.Communication
         {
             get;set;
         }
+        public FGs_ERR_CODE ErrorCode
+        {
+            get; set;
+        }
         //返回的数据
         private byte[] _retData;
         public byte[] RetData

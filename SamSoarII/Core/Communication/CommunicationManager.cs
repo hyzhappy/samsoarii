@@ -309,7 +309,7 @@ namespace SamSoarII.Core.Communication
 
         #region Download & Upload
         //通信时，传送一包数据的最大长度
-        public int COMMU_MAX_DATALEN
+        public int DOWN_MAX_DATALEN
         {
             get
             {
@@ -318,9 +318,25 @@ namespace SamSoarII.Core.Communication
                     case PortTypes.SerialPort:
                         return CommunicationDataDefine.SERIAL_COMMU_LEN;
                     case PortTypes.USB:
-                        return CommunicationDataDefine.USB_COMMU_LEN;
+                        return CommunicationDataDefine.USB_DOWN_LEN;
                     default:
-                        return CommunicationDataDefine.USB_COMMU_LEN;
+                        return CommunicationDataDefine.USB_DOWN_LEN;
+                }
+            }
+        }
+
+        public int UP_MAX_DATALEN
+        {
+            get
+            {
+                switch (PortType)
+                {
+                    case PortTypes.SerialPort:
+                        return CommunicationDataDefine.SERIAL_COMMU_LEN;
+                    case PortTypes.USB:
+                        return CommunicationDataDefine.USB_UP_LEN;
+                    default:
+                        return CommunicationDataDefine.USB_UP_LEN;
                 }
             }
         }
@@ -338,14 +354,14 @@ namespace SamSoarII.Core.Communication
             execdata = FileHelper.GetBytesByBinaryFile(execfile).ToList();
         }
 
-        public DownloadError DownloadExecute()
+        public DownloadError DownloadExecute(LoadingWindowHandle handle)
         {
-            return DownloadHelper.DownloadExecute(this);
+            return DownloadHelper.DownloadExecute(this, handle);
         }
 
-        public UploadError UploadExecute()
+        public UploadError UploadExecute(LoadingWindowHandle handle)
         {
-            return UploadHelper.UploadExecute(this);
+            return UploadHelper.UploadExecute(this, handle);
         }
 
         public bool PasswordHandle(CommunicationType commuType)
@@ -470,7 +486,7 @@ namespace SamSoarII.Core.Communication
             if (!hassend) return false;
             Thread.Sleep(waittime);
             if (!hasRecvData && cmd.RecvDataLen == 0) return true;
-            while (true)
+            while (hassend)
             {
                 if (mngCurrent.Read(cmd) == 0)
                 {

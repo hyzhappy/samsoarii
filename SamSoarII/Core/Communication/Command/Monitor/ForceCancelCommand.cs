@@ -63,6 +63,10 @@ namespace SamSoarII.Core.Communication
             get { return _retData != null && _retData.Length >= RecvDataLen; }
             set { }
         }
+        public FGs_ERR_CODE ErrorCode
+        {
+            get; set;
+        }
         public bool IsSuccess { get; set; }
         private byte[] _retData;
         public byte[] RetData

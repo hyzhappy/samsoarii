@@ -18,7 +18,8 @@ namespace SamSoarII.Core.Helpers
         Cancel,
         None,
         CommuicationFailed,
-        DownloadFailed
+        DownloadFailed,
+        DataSizeBeyond
     }
 
     public static class DownloadHelper
@@ -638,8 +639,9 @@ namespace SamSoarII.Core.Helpers
         #region start download
         
         #region main download process
-        public static DownloadError DownloadExecute(CommunicationManager communManager)
+        public static DownloadError DownloadExecute(CommunicationManager communManager, LoadingWindowHandle handle)
         {
+            handle.UpdateMessage(Properties.Resources.Initialize_Data);
             //初始化要下载的数据
             InitializeData(communManager.IFParent.MDProj);
 
@@ -653,10 +655,11 @@ namespace SamSoarII.Core.Helpers
                 }
                 else return DownloadError.Cancel;
             }
-
+            
             DownloadError ret = DownloadError.None;
             if (IsDownloadProgram)
             {
+                handle.UpdateMessage(Properties.Resources.Project_Download);
                 //下载Bin文件
                 ret = DownloadBinExecute(communManager);
                 if (ret != DownloadError.None)
@@ -685,6 +688,7 @@ namespace SamSoarII.Core.Helpers
             //下载 Config
             if (IsDownloadSetting)
             {
+                handle.UpdateMessage(Properties.Resources.Config_Download);
                 ret = DownloadConfigExecute(communManager);
                 if (ret != DownloadError.None)
                     return ret;
@@ -703,24 +707,24 @@ namespace SamSoarII.Core.Helpers
                 Thread.Sleep(200);
                 time++;
             }
-            
             if (time >= 5) return DownloadError.DownloadFailed;
             command = new IAPDESKEYCommand(communManager.ExecLen);
-            for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
+            for (time = 0; time < 5 && !communManager.CommunicationHandle(command,true,1000);)
             {
+                if(command.ErrorCode == FGs_ERR_CODE.COMCODE_DOWNLOAD_BEYOND)
+                    return DownloadError.DataSizeBeyond;
                 Thread.Sleep(200);
                 time++;
             }
-            
             if (time >= 5) return DownloadError.DownloadFailed;
             byte[] data = communManager.ExecData.ToArray();
-            byte[] pack = new byte[communManager.COMMU_MAX_DATALEN];
-            int len = data.Length / communManager.COMMU_MAX_DATALEN;
-            int rem = data.Length % communManager.COMMU_MAX_DATALEN;
+            byte[] pack = new byte[communManager.DOWN_MAX_DATALEN];
+            int len = data.Length / communManager.DOWN_MAX_DATALEN;
+            int rem = data.Length % communManager.DOWN_MAX_DATALEN;
             for (int i = 0; i < len; i++)
             {
-                for (int j = 0; j < communManager.COMMU_MAX_DATALEN; j++)
-                    pack[j] = data[i * communManager.COMMU_MAX_DATALEN + j];
+                for (int j = 0; j < communManager.DOWN_MAX_DATALEN; j++)
+                    pack[j] = data[i * communManager.DOWN_MAX_DATALEN + j];
                 command = new TransportBinCommand(i, pack);
                 for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
                 if (time >= 3) return DownloadError.DownloadFailed;
@@ -729,7 +733,7 @@ namespace SamSoarII.Core.Helpers
             {
                 pack = new byte[rem];
                 for (int j = 0; j < rem; j++)
-                    pack[j] = data[len * communManager.COMMU_MAX_DATALEN + j];
+                    pack[j] = data[len * communManager.DOWN_MAX_DATALEN + j];
                 command = new TransportBinCommand(len, pack);
                 for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
                 if (time >= 3) return DownloadError.DownloadFailed;
@@ -832,13 +836,13 @@ namespace SamSoarII.Core.Helpers
                 time++;
             }
             if (time >= 5) return DownloadError.DownloadFailed;
-            byte[] pack = new byte[communManager.COMMU_MAX_DATALEN];
-            int len = data.Length / communManager.COMMU_MAX_DATALEN;
-            int rem = data.Length % communManager.COMMU_MAX_DATALEN;
+            byte[] pack = new byte[communManager.DOWN_MAX_DATALEN];
+            int len = data.Length / communManager.DOWN_MAX_DATALEN;
+            int rem = data.Length % communManager.DOWN_MAX_DATALEN;
             for (int i = 0; i < len; i++)
             {
-                for (int j = 0; j < communManager.COMMU_MAX_DATALEN; j++)
-                    pack[j] = data[i * communManager.COMMU_MAX_DATALEN + j];
+                for (int j = 0; j < communManager.DOWN_MAX_DATALEN; j++)
+                    pack[j] = data[i * communManager.DOWN_MAX_DATALEN + j];
                 command = new DownloadTypeData(i, pack, funcCode);
                 for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
                 if (time >= 3) return DownloadError.DownloadFailed;
@@ -847,7 +851,7 @@ namespace SamSoarII.Core.Helpers
             {
                 pack = new byte[rem];
                 for (int j = 0; j < rem; j++)
-                    pack[j] = data[len * communManager.COMMU_MAX_DATALEN + j];
+                    pack[j] = data[len * communManager.DOWN_MAX_DATALEN + j];
                 command = new DownloadTypeData(len, pack, funcCode);
                 for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
                 if (time >= 3) return DownloadError.DownloadFailed;

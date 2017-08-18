@@ -38,6 +38,11 @@ namespace SamSoarII.Core.Communication
             }
         }
 
+        public FGs_ERR_CODE ErrorCode
+        {
+            get; set;
+        }
+
         public byte[] GetBytes()
         {
             byte[] command = new byte[4];

@@ -36,7 +36,10 @@ namespace SamSoarII.Core.Communication
         {
             get;set;
         }
-
+        public FGs_ERR_CODE ErrorCode
+        {
+            get; set;
+        }
         public GeneralReadCommand(){}
         public void InitializeCommandByElement()
         {
@@ -103,8 +106,8 @@ namespace SamSoarII.Core.Communication
             if (RetData.Length == 3)
             {
                 IsSuccess = false;
-                FGs_ERR_CODE errCodeType = CommandHelper.GetERRCODEType(RetData[2]);
-                IsComplete = (errCodeType != FGs_ERR_CODE.FGs_ISNOTANERRCODE);
+                ErrorCode = CommandHelper.GetERRCODEType(RetData[2]);
+                IsComplete = (ErrorCode != FGs_ERR_CODE.FGs_ISNOTANERRCODE);
                 return;
             }
             if (RetData.Length < RecvDataLen)

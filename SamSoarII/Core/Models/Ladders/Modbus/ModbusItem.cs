@@ -196,7 +196,7 @@ namespace SamSoarII.Core.Models
             {
                 try
                 {
-                    short slaveregister = short.Parse(SlaveRegister);
+                    ushort slaveregister = ushort.Parse(SlaveRegister);
                     return true;
                 }
                 catch (Exception)
@@ -212,7 +212,7 @@ namespace SamSoarII.Core.Models
             {
                 try
                 {
-                    short slavecount = short.Parse(SlaveCount);
+                    ushort slavecount = ushort.Parse(SlaveCount);
                     if (handlecode.Equals(selectedhandlecodes[4]) || handlecode.Equals(selectedhandlecodes[5]))
                         if (slavecount != 1) return false;
                     return true;

@@ -52,6 +52,7 @@ namespace SamSoarII.Core.Communication
         bool IsSuccess { get; set; }
         byte[] GetBytes();
         int RecvDataLen { get; set; }
+        FGs_ERR_CODE ErrorCode { get; set; }
     }
 
 

@@ -9,7 +9,8 @@
         Title="{x:Static properties:Resources.Element_Parameter_Setting}" 
         Height="466" Width="360"
         MinHeight="466" MinWidth="360"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid x:Uid="GD_Main" x:Name="GD_Main">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

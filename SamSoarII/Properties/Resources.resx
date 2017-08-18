@@ -1678,7 +1678,7 @@
     <value>Download Successd</value>
   </data>
   <data name="Project_Download" xml:space="preserve">
-    <value>Project Download</value>
+    <value>Project Download...</value>
   </data>
   <data name="SB_Program" xml:space="preserve">
     <value>Project: </value>
@@ -2263,7 +2263,7 @@
     <value>Please select the data to upload!</value>
   </data>
   <data name="Project_Upload" xml:space="preserve">
-    <value>Project Upload</value>
+    <value>Project Upload...</value>
   </data>
   <data name="MessageBox_Upload_Successd" xml:space="preserve">
     <value>Upload Successd</value>
@@ -2321,5 +2321,35 @@
   </data>
   <data name="Communication_Error" xml:space="preserve">
     <value>Communication failed!</value>
+  </data>
+  <data name="Compiling" xml:space="preserve">
+    <value>Being compiled...</value>
+  </data>
+  <data name="Compiled_Success" xml:space="preserve">
+    <value>Compiled successfully!</value>
+  </data>
+  <data name="Compile_Failed" xml:space="preserve">
+    <value>Compile failed!</value>
+  </data>
+  <data name="Not_Compiled" xml:space="preserve">
+    <value>Editing mode can not be compiled!</value>
+  </data>
+  <data name="Compile" xml:space="preserve">
+    <value>Compile</value>
+  </data>
+  <data name="PLC_Status_Change_Error" xml:space="preserve">
+    <value>The current PLC DIP switch is in STOP and can not be set to RUN!</value>
+  </data>
+  <data name="Download_Size_Beyond" xml:space="preserve">
+    <value>To download the data size exceeds the limit, please adjust the size of the project!</value>
+  </data>
+  <data name="Initialize_Data" xml:space="preserve">
+    <value>Initializing the downloaded data...</value>
+  </data>
+  <data name="Config_Download" xml:space="preserve">
+    <value>Downloading configuration...</value>
+  </data>
+  <data name="Config_Upload" xml:space="preserve">
+    <value>Uploading configuration...</value>
   </data>
 </root>

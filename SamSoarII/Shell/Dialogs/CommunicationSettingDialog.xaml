@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
         xmlns:properties="clr-namespace:SamSoarII.Properties"
         mc:Ignorable="d" Icon="/Resources/Image/SamSoarII.ico"
-        Title="{x:Static properties:Resources.CommunicationSetting}" Height="320" Width="400">
+        Title="{x:Static properties:Resources.CommunicationSetting}"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Height="320" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"></RowDefinition>

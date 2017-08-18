@@ -478,7 +478,8 @@ namespace SamSoarII
                         vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                         {
                             handle.Start();
-                            var ret = mngComu.DownloadExecute();
+                            while (!handle.IsActive) Thread.Sleep(10);
+                            var ret = mngComu.DownloadExecute(handle);
                             mngComu.AbortAll();
                             handle.Abort();
                             handle.Completed = true;
@@ -488,16 +489,30 @@ namespace SamSoarII
                                     {
                                         if (LocalizedMessageBox.Show(string.Format("{0},{1}", Properties.Resources.MessageBox_Download_Successd, Properties.Resources.PLC_Status_To_Run), LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information) == LocalizedMessageResult.Yes)
                                         {
-                                            if (!mngComu.CommunicationHandle(new SwitchPLCStatusCommand(true)))
-                                                LocalizedMessageBox.Show(Properties.Resources.State_Failed, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
+                                            ICommunicationCommand command = new SwitchPLCStatusCommand(true);
+                                            if (!mngComu.CommunicationHandle(command))
+                                            {
+                                                switch (command.ErrorCode)
+                                                {
+                                                    case FGs_ERR_CODE.COMCODE_CANNOT_RUN:
+                                                        LocalizedMessageBox.Show(Properties.Resources.PLC_Status_Change_Error, LocalizedMessageIcon.Information);
+                                                        break;
+                                                    default:
+                                                        LocalizedMessageBox.Show(Properties.Resources.State_Failed, LocalizedMessageIcon.Information);
+                                                        break;
+                                                }
+                                            }
                                         }
                                     }
                                     break;
                                 case DownloadError.CommuicationFailed:
-                                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Error);
                                     break;
                                 case DownloadError.DownloadFailed:
-                                    LocalizedMessageBox.Show(Properties.Resources.Download_Fail, LocalizedMessageIcon.Information);
+                                    LocalizedMessageBox.Show(Properties.Resources.Download_Fail, LocalizedMessageIcon.Error);
+                                    break;
+                                case DownloadError.DataSizeBeyond:
+                                    LocalizedMessageBox.Show(Properties.Resources.Download_Size_Beyond, LocalizedMessageIcon.Error);
                                     break;
                                 default:
                                     break;
@@ -595,7 +610,8 @@ namespace SamSoarII
                                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                                 {
                                     handle.Start();
-                                    var ret1 = mngComu.UploadExecute();
+                                    while (!handle.IsActive) Thread.Sleep(10);
+                                    var ret1 = mngComu.UploadExecute(handle);
                                     mngComu.AbortAll();
                                     handle.Abort();
                                     handle.Completed = true;
@@ -758,13 +774,9 @@ namespace SamSoarII
             {
                 LocalizedMessageResult mbret;
                 if (mdProj.FileName == string.Empty)
-                {
                     mbret = ShowSaveYesNoCancelDialog(Properties.Resources.Project_UnSaved);
-                }
                 else
-                {
                     mbret = ShowSaveYesNoCancelDialog();
-                }
                 switch (mbret)
                 {
                     case LocalizedMessageResult.Yes:
@@ -887,7 +899,7 @@ namespace SamSoarII
                             if (showreport)
                                 ShowMessage(Properties.Resources.Program_Correct, handle, false, true);
                             else
-                                handle.Abort();
+                                handle?.Abort();
                             result = true;
                         }
                     }
@@ -1198,8 +1210,9 @@ namespace SamSoarII
                 }
             }
             else
-                handle.Abort();
-            handle.Completed = true;
+                handle?.Abort();
+            if(handle != null)
+                handle.Completed = true;
             return result;
         }
         
@@ -1434,7 +1447,7 @@ namespace SamSoarII
                 else
                     PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Normal, Properties.Resources.FuncBlock_Correct));
             }
-            handle.Abort();
+            handle?.Abort();
             LocalizedMessageBox.Show(message, LocalizedMessageIcon.Information);
         }
 
@@ -1491,7 +1504,7 @@ namespace SamSoarII
             openFileDialog.Filter = string.Format("{0}|*.{1};*.{2}",Properties.Resources.Project_File, FileHelper.NewFileExtension, FileHelper.OldFileExtension);
             if (openFileDialog.ShowDialog() == true)
             {
-                if (mdProj != null && mdProj.ProjName.Equals(openFileDialog.FileName))
+                if (mdProj != null && mdProj.FileName.Equals(openFileDialog.FileName))
                 {
                     LocalizedMessageBox.Show(Properties.Resources.Message_Project_Loaded, LocalizedMessageIcon.Information);
                     return;
@@ -1965,6 +1978,49 @@ namespace SamSoarII
             CurrentLadder.RemoveRow();
         }
 
+        public void ProjectCompile()
+        {
+            if (vmdProj.LadderMode != LadderModes.Edit)
+            {
+                PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                UnderBarStatus.Normal, Properties.Resources.Not_Compiled));
+                return;
+            }
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                UnderBarStatus.Normal, Properties.Resources.Compiling));
+            LoadingWindowHandle handle = new LoadingWindowHandle(string.Format("{0}...\n{1}", Properties.Resources.Compiling,Properties.Resources.LadderDiagram_check));
+            handle.Start();
+            bool ret = false;
+            vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
+            {
+                thmngCore.MNGInst.Pause();
+                while (thmngCore.MNGInst.IsActive)
+                    Thread.Sleep(10);
+                ret = _CheckLadder(null, false);
+                thmngCore.MNGInst.Start();
+                if(ret)
+                {
+                    handle.UpdateMessage(string.Format("{0}...\n{1}", Properties.Resources.Compiling, Properties.Resources.Funcblock_Check));
+                    ret &= _CheckFuncBlock(null, false);
+                }
+                handle.Completed = true;
+                handle.Abort();
+            });
+            while (!handle.Completed) Thread.Sleep(10);
+            if (ret)
+            {
+                PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                UnderBarStatus.Normal, Properties.Resources.Compiled_Success));
+                LocalizedMessageBox.Show(Properties.Resources.Compiled_Success);
+            }
+            else
+            {
+                PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                UnderBarStatus.Normal, Properties.Resources.Compile_Failed));
+                LocalizedMessageBox.Show(Properties.Resources.Compile_Failed);
+            }
+        }
+
         #endregion
 
         #region Event Handler
@@ -2179,6 +2235,7 @@ namespace SamSoarII
                  || e.Command == GlobalCommand.AddNewModbusCommand
                  || e.Command == GlobalCommand.AddNewSubRoutineCommand
                  || e.Command == ApplicationCommands.Replace)
+                 //|| e.Command == GlobalCommand.CompileCommand
                 {
                     ret &= vmdProj.LadderMode == LadderModes.Edit;
                 }
@@ -2193,7 +2250,8 @@ namespace SamSoarII
              || e.Command == GlobalCommand.MonitorCommand
              || e.Command == GlobalCommand.AddNewFuncBlockCommand
              || e.Command == GlobalCommand.AddNewModbusCommand
-             || e.Command == GlobalCommand.AddNewSubRoutineCommand)
+             || e.Command == GlobalCommand.AddNewSubRoutineCommand
+             || e.Command == GlobalCommand.CompileCommand)
             {
                 ret &= !ProjectTreeViewItem.HasRenaming;
             }

@@ -116,6 +116,7 @@ namespace SamSoarII.Shell.Dialogs
         private LoadingWindow loadWin;
         private string _message;
         private bool _completed = false;
+        public bool IsActive { get { return loadWin != null; } }
         /// <summary>
         /// params="Completed"
         /// 表示整个耗时操作的完成!
@@ -168,6 +169,14 @@ namespace SamSoarII.Shell.Dialogs
             loadWin.Message = _message;
             loadWin.ShowDialog();
             Dispatcher.Run();
+        }
+
+        public void UpdateMessage(string message)
+        {
+            loadWin.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate () 
+            {
+                loadWin.Message = message;
+            });
         }
     }
 }

@@ -27,7 +27,10 @@ namespace SamSoarII.Core.Communication
         {
             get; set;
         }
-
+        public FGs_ERR_CODE ErrorCode
+        {
+            get; set;
+        }
         public int RecvDataLen
         {
             get; set;
