@@ -24,6 +24,7 @@ namespace SamSoarII.Core.Communication
         COMCODE_INVALID_CMD = 0x64,      //无效功能码(或当前PLC型号不支持该下载功能码)
         COMCODE_DOWNLOAD_BEYOND = 0x65,  //待下载数据大小超出限制
         COMCODE_PASSWD_ERR = 0x66,       //密码错误
+        COMCODE_CANNOT_RUN = 0x67        //当前PLC拨码开关处于STOP状态,无法置为RUN状态
     }
     public class CommunicationDataDefine
     {
@@ -55,7 +56,8 @@ namespace SamSoarII.Core.Communication
         public const int OPTION_SETTING = 0x08;
         
         public const byte CMD_COMMU_FLAG = 0xF0;//下载标志位
-        public const int USB_COMMU_LEN = 56;//USB下载一包的最大长度
+        public const int USB_DOWN_LEN = 56;//USB下载一包的最大长度
+        public const int USB_UP_LEN = 54;//USB下载一包的最大长度
         public const int SERIAL_COMMU_LEN = 1024;//串口下载一包的最大长度
         //功能码列表
 

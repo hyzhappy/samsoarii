@@ -240,14 +240,14 @@ namespace SamSoarII
                     hotKey.ShowMessage = string.Format("(Ctrl+T,N)\t{0}", Properties.Resources.Ladder_Check);
                     continue;
                 }
-                if (command == GlobalCommand.CompileCommand)
-                {
-                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.C);
-                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
-                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+T,C)\t{0}", Properties.Resources.MainWindow_Compile);
-                    continue;
-                }
+                //if (command == GlobalCommand.CompileCommand)
+                //{
+                //    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.C);
+                //    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                //    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                //    hotKey.ShowMessage = string.Format("(Ctrl+T,C)\t{0}", Properties.Resources.MainWindow_Compile);
+                //    continue;
+                //}
                 if (command == GlobalCommand.DownloadCommand)
                 {
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.D);
@@ -450,13 +450,10 @@ namespace SamSoarII
         }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            //if (e.Key == Key.Left || e.Key == Key.Right || e.Key == Key.Up || e.Key == Key.Down || e.Key == Key.Insert || e.Key == Key.Delete || e.Key == Key.Return) return;
             if (_threeHotKeys.Count == 0)
             {
                 if (KeyInputHelper.IsModifier(e.Key))
-                {
                     return;
-                }
                 if (((e.KeyboardDevice.Modifiers ^ ModifierKeys.Control) == ModifierKeys.None))
                 {
                     _threeHotKeys = ThreeHotKeyManager.GetHotKeys(ModifierKeys.Control, e.Key);
@@ -699,7 +696,8 @@ namespace SamSoarII
              || e.Command == GlobalCommand.SimulateCommand
              || e.Command == GlobalCommand.DownloadCommand
              || e.Command == GlobalCommand.UploadCommand
-             || e.Command == GlobalCommand.MonitorCommand)
+             || e.Command == GlobalCommand.MonitorCommand
+             || e.Command == GlobalCommand.CompileCommand)
             {
                 CommandBinding_Executed_SaveHint(sender, e);
                 return;
@@ -806,6 +804,8 @@ namespace SamSoarII
                 ret = ifParent.MonitorProject();
                 TB_Monitor.IsChecked = ret;
             }
+            if (e.Command == GlobalCommand.CompileCommand)
+                ifParent.ProjectCompile();
         }
 
         private void CommandBinding_Executed_ReturnEditMode(object sender, ExecutedRoutedEventArgs e)

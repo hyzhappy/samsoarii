@@ -73,6 +73,8 @@ namespace SamSoarII.Core.Communication
                     return FGs_ERR_CODE.COMCODE_DOWNLOAD_BEYOND;
                 case 0x66:
                     return FGs_ERR_CODE.COMCODE_PASSWD_ERR;
+                case 0x67:
+                    return FGs_ERR_CODE.COMCODE_CANNOT_RUN;
                 default:
                     return FGs_ERR_CODE.FGs_ISNOTANERRCODE;
             }
@@ -211,8 +213,8 @@ namespace SamSoarII.Core.Communication
             {
                 if (!(command is UploadTypeData))
                 {
-                    FGs_ERR_CODE errCodeType = GetERRCODEType(_retData[3]);
-                    command.IsSuccess = errCodeType == FGs_ERR_CODE.COMCODE_CARRY_OK;
+                    command.ErrorCode = GetERRCODEType(_retData[3]);
+                    command.IsSuccess = command.ErrorCode == FGs_ERR_CODE.COMCODE_CARRY_OK;
                 }
                 else command.IsSuccess = true;
                 if (command is UploadTypeStart)

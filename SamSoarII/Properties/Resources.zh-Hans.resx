@@ -2322,4 +2322,25 @@
   <data name="Communication_Error" xml:space="preserve">
     <value>通信失败！</value>
   </data>
+  <data name="Compiling" xml:space="preserve">
+    <value>正在编译..</value>
+  </data>
+  <data name="Compiled_Success" xml:space="preserve">
+    <value>编译成功！</value>
+  </data>
+  <data name="Compile_Failed" xml:space="preserve">
+    <value>编译失败！</value>
+  </data>
+  <data name="Not_Compiled" xml:space="preserve">
+    <value>编辑模式下无法进行编译！</value>
+  </data>
+  <data name="Compile" xml:space="preserve">
+    <value>编译</value>
+  </data>
+  <data name="PLC_Status_Change_Error" xml:space="preserve">
+    <value>当前PLC拨码开关处于STOP状态,无法置为RUN状态！</value>
+  </data>
+  <data name="Download_Size_Beyond" xml:space="preserve">
+    <value>待下载数据大小超出限制，请调整工程大小！</value>
+  </data>
 </root>

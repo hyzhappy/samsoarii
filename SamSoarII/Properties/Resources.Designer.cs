@@ -601,6 +601,42 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Compile 的本地化字符串。
+        /// </summary>
+        public static string Compile {
+            get {
+                return ResourceManager.GetString("Compile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Compile failed! 的本地化字符串。
+        /// </summary>
+        public static string Compile_Failed {
+            get {
+                return ResourceManager.GetString("Compile_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Compiled successfully! 的本地化字符串。
+        /// </summary>
+        public static string Compiled_Success {
+            get {
+                return ResourceManager.GetString("Compiled_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Being compiled... 的本地化字符串。
+        /// </summary>
+        public static string Compiling {
+            get {
+                return ResourceManager.GetString("Compiling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 We have detected that you have uploaded the configuration,do you apply the configuration to the current project? 的本地化字符串。
         /// </summary>
         public static string Config_Applied {
@@ -975,6 +1011,15 @@ namespace SamSoarII.Properties {
         public static string Download_Failed {
             get {
                 return ResourceManager.GetString("Download_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 To download the data size exceeds the limit, please adjust the size of the project! 的本地化字符串。
+        /// </summary>
+        public static string Download_Size_Beyond {
+            get {
+                return ResourceManager.GetString("Download_Size_Beyond", resourceCulture);
             }
         }
         
@@ -4750,6 +4795,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Editing mode can not be compiled! 的本地化字符串。
+        /// </summary>
+        public static string Not_Compiled {
+            get {
+                return ResourceManager.GetString("Not_Compiled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Not Enabled 的本地化字符串。
         /// </summary>
         public static string Not_Enabled {
@@ -4989,6 +5043,15 @@ namespace SamSoarII.Properties {
         public static string PLC_Retentive_Zone_Settings {
             get {
                 return ResourceManager.GetString("PLC_Retentive_Zone_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The current PLC DIP switch is in STOP and can not be set to RUN! 的本地化字符串。
+        /// </summary>
+        public static string PLC_Status_Change_Error {
+            get {
+                return ResourceManager.GetString("PLC_Status_Change_Error", resourceCulture);
             }
         }
         

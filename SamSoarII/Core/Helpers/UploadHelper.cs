@@ -143,8 +143,8 @@ namespace SamSoarII.Core.Helpers
             Dictionary<int, byte[]> data = new Dictionary<int, byte[]>();
             if (command.RecvDataLen > 0)
             {
-                int len = command.RecvDataLen / communManager.COMMU_MAX_DATALEN;
-                int rem = command.RecvDataLen % communManager.COMMU_MAX_DATALEN;
+                int len = command.RecvDataLen / communManager.UP_MAX_DATALEN;
+                int rem = command.RecvDataLen % communManager.UP_MAX_DATALEN;
                 if (rem > 0) len++;
                 for (int i = 0; i < len; i++)
                 {
@@ -195,13 +195,17 @@ namespace SamSoarII.Core.Helpers
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
                 FileHelper.GenerateBinaryFile(fullFileName, upProj.ToArray());
                 FileHelper.DecompressFile(fullFileName, dir);
+                bool isSuccess = false;
                 foreach (var file in Directory.GetFiles(dir))
                 {
                     if (file.EndsWith(FileHelper.NewFileExtension))
                     {
                         ifParent.LoadProject(file,true);
+                        isSuccess = true;
+                        break;
                     }
                 }
+                return isSuccess;
             }
             catch (Exception)
             {
@@ -211,7 +215,6 @@ namespace SamSoarII.Core.Helpers
             {
                 Directory.Delete(Directory.GetParent(fullFileName).FullName, true);
             }
-            return true;
         }
 
         private static void LoadConfig()

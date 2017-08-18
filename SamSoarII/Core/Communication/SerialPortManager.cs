@@ -31,6 +31,34 @@ namespace SamSoarII.Core.Communication
             parent = _parent;
         }
         private bool IsSuccess = false;
+        public int OverTime
+        {
+            get
+            {
+                if (port == null) return 50;
+                else
+                {
+                    switch (port.BaudRate)
+                    {
+                        case 4800:
+                            return 300;
+                        case 9600:
+                            return 150;
+                        case 19200:
+                            return 100;
+                        case 38400:
+                            return 80;
+                        case 57600:
+                            return 50;
+                        case 115200:
+                            return 20;
+                        default:
+                            return 50;
+                    }
+                }
+            }
+        }
+
         public string PortName
         {
             get
@@ -331,7 +359,7 @@ namespace SamSoarII.Core.Communication
                 {
                     readbuffercount += port.BytesToRead;
                     recvcount++;
-                    Thread.Sleep(200);
+                    Thread.Sleep(OverTime);
                 }
                 while (readbuffercount < 3 && recvcount < 5);
                 if (readbuffercount >= 3)

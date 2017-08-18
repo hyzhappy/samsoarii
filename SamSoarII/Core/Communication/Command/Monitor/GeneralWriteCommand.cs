@@ -45,6 +45,10 @@ namespace SamSoarII.Core.Communication
             get { return 3; }
             set { }
         }
+        public FGs_ERR_CODE ErrorCode
+        {
+            get; set;
+        }
         public bool IsComplete { get; set; }
         public bool IsSuccess { get; set; }
         //public List<MonitorElement> RefElements_A { get; set; } = new List<MonitorElement>();
@@ -111,9 +115,9 @@ namespace SamSoarII.Core.Communication
             }
             if (RetData.Length == 3)
             {
-                FGs_ERR_CODE errCodeType = CommandHelper.GetERRCODEType(RetData[2]);
+                ErrorCode = CommandHelper.GetERRCODEType(RetData[2]);
                 IsComplete = true;
-                IsSuccess = (errCodeType == FGs_ERR_CODE.FGs_CARRY_OK);
+                IsSuccess = (ErrorCode == FGs_ERR_CODE.FGs_CARRY_OK);
                 return;
             }
             if (RetData.Length > 3)

@@ -45,6 +45,7 @@
         <CommandBinding Command="{x:Static gb:GlobalCommand.InstShortCutOpenCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.InsertRowCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.DeleteRowCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.CompileCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"/>
         <!-- Tool Command-->
         <CommandBinding Command="{x:Static gb:GlobalCommand.CloseProjectCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.CheckNetworkErrorCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
@@ -79,6 +80,7 @@
         <KeyBinding Gesture="F5" Command="{x:Static gb:GlobalCommand.SimuStartCommand}"></KeyBinding>
         <KeyBinding Gesture="F6" Command="{x:Static gb:GlobalCommand.SimuPauseCommand}"></KeyBinding>
         <KeyBinding Gesture="F7" Command="{x:Static gb:GlobalCommand.SimuStopCommand}"></KeyBinding>
+        <KeyBinding Gesture="F4" Command="{x:Static gb:GlobalCommand.CompileCommand}"></KeyBinding>
     </Window.InputBindings>
     <Window.Resources>
         <ad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -260,6 +262,7 @@
                 </MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.Monitor}" Command="{x:Static gb:GlobalCommand.MonitorCommand}" InputGestureText="Ctrl+E,M"></MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Ret_Edit_Mode}" Command="{x:Static gb:GlobalCommand.EditCommand}" InputGestureText="Ctrl+T,E"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.Compile}" Command="{x:Static gb:GlobalCommand.CompileCommand}" InputGestureText="F4"></MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Proj_Check}">
                     <MenuItem Header="{x:Static properties:Resources.MainWindow_Ladder_Check}" Command="{x:Static gb:GlobalCommand.CheckNetworkErrorCommand}" InputGestureText="Ctrl+T,N"></MenuItem>
                     <MenuItem Header="{x:Static properties:Resources.MainWindow_Funcblock_Check}" Command="{x:Static gb:GlobalCommand.CheckFuncBlockCommand}" InputGestureText="Ctrl+T,F"></MenuItem>
@@ -430,30 +433,37 @@
         </ToolBarTray>
         <ToolBarTray x:Name="TB_Simu" DockPanel.Dock="Top" Height="25" Visibility="Collapsed">
             <ToolBar>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Run}" x:Name="TB_Start" Command="{x:Static gb:GlobalCommand.SimuStartCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Run}" x:Name="TB_Start" 
+                               Style="{StaticResource ToggleButtonStyle}" Command="{x:Static gb:GlobalCommand.SimuStartCommand}" Height="24" Width="24" Margin="0,0,0,16">
                     <Image Source="/Resources/Image/Start.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Pause}" x:Name="TB_Pause" Command="{x:Static gb:GlobalCommand.SimuPauseCommand}" Height="24" Width="24" Margin="0,0,0,14">
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Pause}" x:Name="TB_Pause" 
+                              Style="{StaticResource ToggleButtonStyle}" Command="{x:Static gb:GlobalCommand.SimuPauseCommand}" Height="24" Width="24" Margin="0,0,0,14">
                     <Image Source="/Resources/Image/Pause.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Stop}" x:Name="TB_Stop" Command="{x:Static gb:GlobalCommand.SimuStopCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Stop}" x:Name="TB_Stop" 
+                              Style="{StaticResource ToggleButtonStyle}" Command="{x:Static gb:GlobalCommand.SimuStopCommand}" Height="24" Width="24" Margin="0,0,0,16">
                     <Image Source="/Resources/Image/Stop.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
             </ToolBar>
             <ToolBar>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Current_Breakpoint}" x:Name="BrpoNowButton" Height="24" Width="24" Margin="0,0,0,16"
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Current_Breakpoint}" x:Name="BrpoNowButton" 
+                        Style="{StaticResource ButtonStyle}" Height="24" Width="24" Margin="0,0,0,16"
                         Command="{x:Static gb:GlobalCommand.BrpoNowCommand}">
                     <Image Source="/Resources/Image/Breakpoint/BPNow.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_By_Process}" x:Name="BrpoStepButton" Height="24" Width="24" Margin="0,0,0,16"
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_By_Process}" x:Name="BrpoStepButton" 
+                        Style="{StaticResource ButtonStyle}" Height="24" Width="24" Margin="0,0,0,16"
                         Command="{x:Static gb:GlobalCommand.BrpoStepCommand}">
                     <Image Source="/Resources/Image/Breakpoint/BPStep.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_By_Sentence}" x:Name="BrpoCallButton" Height="24" Width="24" Margin="0,0,0,16"
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_By_Sentence}" x:Name="BrpoCallButton" 
+                        Style="{StaticResource ButtonStyle}" Height="24" Width="24" Margin="0,0,0,16"
                         Command="{x:Static gb:GlobalCommand.BrpoCallCommand}">
                     <Image Source="/Resources/Image/Breakpoint/BPCall.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Jump_Out}" x:Name="BropOutButton" Height="24" Width="24" Margin="0,0,0,16"
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Jump_Out}" x:Name="BropOutButton" 
+                        Style="{StaticResource ButtonStyle}" Height="24" Width="24" Margin="0,0,0,16"
                         Command="{x:Static gb:GlobalCommand.BrpoOutCommand}">
                     <Image Source="/Resources/Image/Breakpoint/BPOut.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>

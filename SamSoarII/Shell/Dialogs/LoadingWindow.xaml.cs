@@ -169,5 +169,13 @@ namespace SamSoarII.Shell.Dialogs
             loadWin.ShowDialog();
             Dispatcher.Run();
         }
+
+        public void UpdateMessage(string message)
+        {
+            loadWin.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate () 
+            {
+                loadWin.Message = message;
+            });
+        }
     }
 }

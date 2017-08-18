@@ -2322,4 +2322,25 @@
   <data name="Communication_Error" xml:space="preserve">
     <value>Communication failed!</value>
   </data>
+  <data name="Compiling" xml:space="preserve">
+    <value>Being compiled...</value>
+  </data>
+  <data name="Compiled_Success" xml:space="preserve">
+    <value>Compiled successfully!</value>
+  </data>
+  <data name="Compile_Failed" xml:space="preserve">
+    <value>Compile failed!</value>
+  </data>
+  <data name="Not_Compiled" xml:space="preserve">
+    <value>Editing mode can not be compiled!</value>
+  </data>
+  <data name="Compile" xml:space="preserve">
+    <value>Compile</value>
+  </data>
+  <data name="PLC_Status_Change_Error" xml:space="preserve">
+    <value>The current PLC DIP switch is in STOP and can not be set to RUN!</value>
+  </data>
+  <data name="Download_Size_Beyond" xml:space="preserve">
+    <value>To download the data size exceeds the limit, please adjust the size of the project!</value>
+  </data>
 </root>
