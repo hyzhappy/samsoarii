@@ -28,4 +28,3 @@ void MDPF(_FLOAT in,_WORD ct,_FLOAT out);
 void CRCC(_WORD in,_WORD ct);
 void DDO(_WORD in,_WORD ct);
 void DSL(_WORD in,_WORD ct);
-void GetArea(_WORD n,_FLOAT x,_FLOAT y,_FLOAT ans);

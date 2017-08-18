@@ -331,7 +331,7 @@ namespace SamSoarII.Core.Communication
                 {
                     readbuffercount += port.BytesToRead;
                     recvcount++;
-                    Thread.Sleep(10);
+                    Thread.Sleep(200);
                 }
                 while (readbuffercount < 3 && recvcount < 5);
                 if (readbuffercount >= 3)
