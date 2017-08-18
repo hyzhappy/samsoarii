@@ -124,44 +124,47 @@ namespace SamSoarII.Core.Models
             protected set { this.index = value; }
         }
 
-        public Dictionary<string, SortedList<int, FuncBlock_Assignment>> Assigns { get; }
-            = new Dictionary<string, SortedList<int, FuncBlock_Assignment>>();
-        
+        static private string[] registernames = {
+            "XBit", "YBit", "SBit", "MBit", "CBit", "TBit",
+            "DWord", "VWord", "ZWord", "TVWord", "CVWord", "CV32DoubleWord", "AIWord", "AOWord"};
         public List<string> GetCodeCompleteNames(string profix)
         {
             List<string> ret = new List<string>();
+            ret.AddRange(registernames.Where(rn => rn.Contains(profix)));
             if (Current != null && Current is FuncBlock_Comment)
             {
                 return ret;
             }
             FuncBlock _current = Current;
-            string _profix;
             while (_current != null)
             {
-                _profix = String.Format("{0:s}::{1:s}", _current.Namespace, profix);
-                if (Assigns.ContainsKey(_profix))
+                if (_current is FuncBlock_Local)
                 {
-                    SortedList<int, FuncBlock_Assignment> subassigns = Assigns[_profix];
-                    foreach (FuncBlock_Assignment fbassign in subassigns.Values)
+                    FuncBlock_Local fblocal = (FuncBlock_Local)_current;
+                    if (fblocal.VirtualAssigns != null)
                     {
-                        if (fbassign.IndexEnd < CurrentIndex)
-                        {
+                        foreach (FuncBlock_Assignment fbassign in fblocal.VirtualAssigns)
+                            if (fbassign.IndexEnd < Current.IndexStart && fbassign.Name.Contains(profix))
+                                ret.Add(fbassign.Name);
+                    }
+                }
+                foreach (FuncBlock subblock in _current.Childrens)
+                {
+                    if (subblock is FuncBlock_Assignment)
+                    {
+                        FuncBlock_Assignment fbassign = (FuncBlock_Assignment)subblock;
+                        if (fbassign.IndexEnd < Current.IndexStart && fbassign.Name.Contains(profix))
                             ret.Add(fbassign.Name);
-                        }
                     }
-                }
-                if (_current is FuncBlock_Assignment || _current is FuncBlock_Statement)
-                {
-                    if (_current.Parent is FuncBlock_Root)
+                    if (subblock is FuncBlock_AssignmentSeries)
                     {
-                        break;
+                        FuncBlock_AssignmentSeries fbassser = (FuncBlock_AssignmentSeries)subblock;
+                        foreach (FuncBlock_Assignment fbassign in fbassser.Defines)
+                            if (fbassign.IndexEnd < Current.IndexStart && fbassign.Name.Contains(profix))
+                                ret.Add(fbassign.Name);
                     }
-                    _current = _current.Parent.Parent;
                 }
-                else
-                {
-                    _current = _current.Parent;
-                }
+                _current = _current.Parent;
             }
             ret.Sort();
             return ret;
@@ -271,17 +274,6 @@ namespace SamSoarII.Core.Models
             Root = new FuncBlock_Root(this, code);
             this.current = new LinkedListNode<FuncBlock>(Root);
             //Root.Build(text);   
-            FuncBlock_Assignment assign = null;
-            assign = new FuncBlock_Assignment(this, Root, "uint_32* XBit;");
-            assign = new FuncBlock_Assignment(this, Root, "uint_32* YBit;");
-            assign = new FuncBlock_Assignment(this, Root, "uint_32* MBit;");
-            assign = new FuncBlock_Assignment(this, Root, "uint_32* CBit;");
-            assign = new FuncBlock_Assignment(this, Root, "uint_32* TBit;");
-            assign = new FuncBlock_Assignment(this, Root, "uint_32* SBit;");
-            assign = new FuncBlock_Assignment(this, Root, "uint_16* DWord;");
-            assign = new FuncBlock_Assignment(this, Root, "uint_16* CVWord;");
-            assign = new FuncBlock_Assignment(this, Root, "uint_32* CVDoubleWord;");
-            assign = new FuncBlock_Assignment(this, Root, "uint_16* TVWord;");
             InvokePropertyChanged("Funcs");
             //Parent.InvokeModify(this);
         }

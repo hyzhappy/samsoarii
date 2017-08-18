@@ -205,22 +205,11 @@ namespace SamSoarII
         private ViewThreadManager thmngView;
         public ViewThreadManager ThMNGView { get { return this.thmngView; } }
         
-        private void WaitForThreadPause()
-        {
-            thmngCore.Pause();
-            thmngView.Pause();
-            while (thmngCore.IsActive || thmngView.IsActive) Thread.Sleep(10) ;
-        }
-
         private void WaitForThreadAbort()
         {
             thmngCore.Abort();
             thmngView.Abort();
-            while (thmngCore.IsAlive || thmngView.IsAlive)
-            {
-                //Dispatcher.Run();
-                Thread.Sleep(10);
-            }
+            while (thmngCore.IsAlive || thmngView.IsAlive) Thread.Sleep(10);
         }
 
         private void AllThreadStart()
@@ -407,7 +396,7 @@ namespace SamSoarII
             if (!CheckFuncBlock(false)) return false;
 #if DEBUG
             //GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
-            DownloadHelper.InitializeData(mdProj);
+            //DownloadHelper.InitializeData(mdProj);
 #endif
             mngComu.IsEnable = true;
             CommunicationParams paraCom = mdProj.PARAProj.PARACom;

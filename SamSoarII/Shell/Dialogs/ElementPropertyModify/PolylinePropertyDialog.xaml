@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
              xmlns:properties="clr-namespace:SamSoarII.Properties"
              mc:Ignorable="d" 
-             Height="420" Width="500" FontSize="15">
+             Height="420" Width="500">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150*"/>

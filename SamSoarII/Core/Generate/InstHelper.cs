@@ -750,103 +750,7 @@ namespace SamSoarII.Core.Generate
                         sw.Write("CI_RTC_SETRTC((uint8_t)({0:s}),&{1:s});\n",
                             cond, inst[1]);
                     break;
-                // 可能调用下位的浮点运算
-                case "ADDF":
-                    if (!simumode)
-                        sw.Write("CI_FLOAT32_ADD((uint8_t)({0:s}),{1:s},{2:s},&{3:s});\n",
-                            cond, inst[1], inst[2], inst[3]);
-                    else
-                        sw.Write("if ({0:s}) {3:s} = _addf({1:s}, {2:s});\n",
-                            cond, inst[1], inst[2], inst[3]);
-                    break;
-                case "SUBF":
-                    if (!simumode)
-                        sw.Write("CI_FLOAT32_SUB((uint8_t)({0:s}),{1:s},{2:s},&{3:s});\n",
-                            cond, inst[1], inst[2], inst[3]);
-                    else
-                        sw.Write("if ({0:s}) {3:s} = _subf({1:s}, {2:s});\n",
-                            cond, inst[1], inst[2], inst[3]);
-                    break;
-                case "MULF":
-                    if (!simumode)
-                        sw.Write("CI_FLOAT32_MUL((uint8_t)({0:s}),{1:s},{2:s},&{3:s});\n",
-                            cond, inst[1], inst[2], inst[3]);
-                    else
-                        sw.Write("if ({0:s}) {3:s} = _mulf({1:s}, {2:s});\n",
-                            cond, inst[1], inst[2], inst[3]);
-                    break;
-                case "DIVF":
-                    if (!simumode)
-                        sw.Write("CI_FLOAT32_DIV((uint8_t)({0:s}),{1:s},{2:s},&{3:s});\n",
-                            cond, inst[1], inst[2], inst[3]);
-                    else
-                        sw.Write("if ({0:s}) {3:s} = _divf({1:s}, {2:s});\n",
-                            cond, inst[1], inst[2], inst[3]);
-                    break;
-                case "SIN":
-                    if (!simumode)
-                        sw.Write("CI_FLOAT32_SIN((uint8_t)({0:s}),{1:s},&{2:s});\n",
-                            cond, inst[1], inst[2]);
-                    else
-                        sw.Write("if ({0:s}) {2:s} = _sin({1:s});\n",
-                            cond, inst[1], inst[2]);
-                    break;
-                case "COS":
-                    if (!simumode)
-                        sw.Write("CI_FLOAT32_COS((uint8_t)({0:s}),{1:s},&{2:s});\n",
-                            cond, inst[1], inst[2]);
-                    else
-                        sw.Write("if ({0:s}) {2:s} = _cos({1:s});\n",
-                            cond, inst[1], inst[2]);
-                    break;
-                case "TAN":
-                    if (!simumode)
-                        sw.Write("CI_FLOAT32_TAN((uint8_t)({0:s}),{1:s},&{2:s});\n",
-                            cond, inst[1], inst[2]);
-                    else
-                        sw.Write("if ({0:s}) {2:s} = _tan({1:s});\n",
-                            cond, inst[1], inst[2]);
-                    break;
-                case "LN":
-                    if (!simumode)
-                        sw.Write("CI_FLOAT32_LN((uint8_t)({0:s}),{1:s},&{2:s});\n",
-                            cond, inst[1], inst[2]);
-                    else
-                        sw.Write("if ({0:s}) {2:s} = _ln({1:s});\n",
-                            cond, inst[1], inst[2]);
-                    break;
-                case "EXP":
-                    if (!simumode)
-                        sw.Write("CI_FLOAT32_EXP((uint8_t)({0:s}),{1:s},&{2:s});\n",
-                            cond, inst[1], inst[2]);
-                    else
-                        sw.Write("if ({0:s}) {2:s} = _exp({1:s});\n",
-                            cond, inst[1], inst[2]);
-                    break;
-                case "LOG":
-                    if (!simumode)
-                        sw.Write("CI_FLOAT32_LOG((uint8_t)({0:s}),{1:s},&{2:s});\n",
-                            cond, inst[1], inst[2]);
-                    else
-                        sw.Write("if ({0:s}) {2:s} = _log({1:s});\n",
-                            cond, inst[1], inst[2]);
-                    break;
-                case "POW":
-                    if (!simumode)
-                        sw.Write("CI_FLOAT32_POW((uint8_t)({0:s}),{1:s},{2:s},&{3:s});\n",
-                            cond, inst[1], inst[2], inst[3]);
-                    else
-                        sw.Write("if ({0:s}) {3:s} = _pow({1:s}, {2:s}});\n",
-                            cond, inst[1], inst[2], inst[3]);
-                    break;
-                case "SQRT":
-                    if (!simumode)
-                        sw.Write("CI_FLOAT32_SQRT((uint8_t)({0:s}),{1:s},&{2:s});\n",
-                            cond, inst[1], inst[2]);
-                    else
-                        sw.Write("if ({0:s}) {2:s} = _sqrt({1:s});\n",
-                            cond, inst[1], inst[2]);
-                    break;
+                
                 // 默认的其他情况，一般之前要先判断栈顶
                 default:
                     sw.Write("if ({0:s}) {{\n", cond);
@@ -1002,6 +906,103 @@ namespace SamSoarII.Core.Generate
                                 else
                                     sw.Write("_shr_bit_to_wbit(&{0:s}, {1:s}, {2:s}, {3:s});", inst[1], inst.ToCParas(2), inst[3], inst[4]);
                             }
+                            break;
+                        // 可能调用下位的浮点运算
+                        case "ADDF":
+                            if (!simumode)
+                                sw.Write("CI_FLOAT32_ADD({0:s},{1:s},{2:s},&{3:s});\n",
+                                    cond, inst[1], inst[2], inst[3]);
+                            else
+                                sw.Write("{3:s} = _addf({1:s}, {2:s});\n",
+                                    cond, inst[1], inst[2], inst[3]);
+                            break;
+                        case "SUBF":
+                            if (!simumode)
+                                sw.Write("CI_FLOAT32_SUB({0:s},{1:s},{2:s},&{3:s});\n",
+                                    cond, inst[1], inst[2], inst[3]);
+                            else
+                                sw.Write("{3:s} = _subf({1:s}, {2:s});\n",
+                                    cond, inst[1], inst[2], inst[3]);
+                            break;
+                        case "MULF":
+                            if (!simumode)
+                                sw.Write("CI_FLOAT32_MUL({0:s},{1:s},{2:s},&{3:s});\n",
+                                    cond, inst[1], inst[2], inst[3]);
+                            else
+                                sw.Write("{3:s} = _mulf({1:s}, {2:s});\n",
+                                    cond, inst[1], inst[2], inst[3]);
+                            break;
+                        case "DIVF":
+                            if (!simumode)
+                                sw.Write("CI_FLOAT32_DIV({0:s},{1:s},{2:s},&{3:s});\n",
+                                    cond, inst[1], inst[2], inst[3]);
+                            else
+                                sw.Write("{3:s} = _divf({1:s}, {2:s});\n",
+                                    cond, inst[1], inst[2], inst[3]);
+                            break;
+                        case "SIN":
+                            if (!simumode)
+                                sw.Write("CI_FLOAT32_SIN({0:s},{1:s},&{2:s});\n",
+                                    cond, inst[1], inst[2]);
+                            else
+                                sw.Write("{2:s} = _sin({1:s});\n",
+                                    cond, inst[1], inst[2]);
+                            break;
+                        case "COS":
+                            if (!simumode)
+                                sw.Write("CI_FLOAT32_COS({0:s},{1:s},&{2:s});\n",
+                                    cond, inst[1], inst[2]);
+                            else
+                                sw.Write("{2:s} = _cos({1:s});\n",
+                                    cond, inst[1], inst[2]);
+                            break;
+                        case "TAN":
+                            if (!simumode)
+                                sw.Write("CI_FLOAT32_TAN({0:s},{1:s},&{2:s});\n",
+                                    cond, inst[1], inst[2]);
+                            else
+                                sw.Write("{2:s} = _tan({1:s});\n",
+                                    cond, inst[1], inst[2]);
+                            break;
+                        case "LN":
+                            if (!simumode)
+                                sw.Write("CI_FLOAT32_LN({0:s},{1:s},&{2:s});\n",
+                                    cond, inst[1], inst[2]);
+                            else
+                                sw.Write("{2:s} = _ln({1:s});\n",
+                                    cond, inst[1], inst[2]);
+                            break;
+                        case "EXP":
+                            if (!simumode)
+                                sw.Write("CI_FLOAT32_EXP({0:s},{1:s},&{2:s});\n",
+                                    cond, inst[1], inst[2]);
+                            else
+                                sw.Write("{2:s} = _exp({1:s});\n",
+                                    cond, inst[1], inst[2]);
+                            break;
+                        case "LOG":
+                            if (!simumode)
+                                sw.Write("CI_FLOAT32_LOG({0:s},{1:s},&{2:s});\n",
+                                    cond, inst[1], inst[2]);
+                            else
+                                sw.Write("{2:s} = _log({1:s});\n",
+                                    cond, inst[1], inst[2]);
+                            break;
+                        case "POW":
+                            if (!simumode)
+                                sw.Write("CI_FLOAT32_POW({0:s},{1:s},{2:s},&{3:s});\n",
+                                    cond, inst[1], inst[2], inst[3]);
+                            else
+                                sw.Write("{3:s} = _pow({1:s}, {2:s}});\n",
+                                    cond, inst[1], inst[2], inst[3]);
+                            break;
+                        case "SQRT":
+                            if (!simumode)
+                                sw.Write("CI_FLOAT32_SQRT({0:s},{1:s},&{2:s});\n",
+                                    cond, inst[1], inst[2]);
+                            else
+                                sw.Write("{2:s} = _sqrt({1:s});\n",
+                                    cond, inst[1], inst[2]);
                             break;
                         // 辅助功能
                         case "FACT": sw.Write("{1:s} = _fact({0:s});\n", inst[1], inst[2]); break;

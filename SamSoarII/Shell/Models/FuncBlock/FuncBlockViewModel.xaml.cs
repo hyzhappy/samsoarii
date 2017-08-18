@@ -294,95 +294,102 @@ namespace SamSoarII.Shell.Models
             Match removeMatch3 = blankRegex.Match(e.RemovedText);
             int start = 0;
             int end = 0;
-            if (core.Current is FuncBlock_Comment)
+            try
             {
-                FuncBlock _parent = core.Current.Parent;
-                start = _parent.IndexStart;
-                end = _parent.IndexEnd - 1;
-                while (end < CodeTextBox.Text.Length && CodeTextBox.Text[end] != '\n') end++;
-                _parent.Build(CodeTextBox.Text, start, end, offset);
-            }
-            else if (insertMatch3.Success && removeMatch3.Success)
-            {
-                core.Current.InnerOffset += offset;
-            }
-            else if (insertMatch1.Success || removeMatch1.Success)
-            {
-                core.BuildAll(Code);
-                core.Move(e.Offset);
-            }
-            else
-            {
-                if (core.Current is FuncBlock_FuncHeader)
+                if (core.Current is FuncBlock_Comment)
                 {
-                    core.CurrentNode = new LinkedListNode<FuncBlock>(core.Root);
+                    FuncBlock _parent = core.Current.Parent;
+                    start = _parent.IndexStart;
+                    end = _parent.IndexEnd - 1;
+                    while (end < CodeTextBox.Text.Length && CodeTextBox.Text[end] != '\n') end++;
+                    _parent.Build(CodeTextBox.Text, start, end, offset);
                 }
-                if (core.Current is FuncBlock_Root)
+                else if (insertMatch3.Success && removeMatch3.Success)
                 {
-                    LinkedListNode<FuncBlock> nprev = null;
-                    LinkedListNode<FuncBlock> nnext = null;
-                    if (core.Current.Current != null)
-                    {
-                        nprev = core.Current.Current;
-                        if (core.Current.Current.Next != null)
-                        {
-                            nnext = core.Current.Current.Next;
-                        }
-                    }
-                    if (nprev != null &&
-                        nprev.Value.IndexStart > e.Offset)
-                    {
-                        nnext = nprev;
-                        nprev = nprev.Previous;
-                    }
-                    while (nprev != null
-                        && !(nprev.Value is FuncBlock_Local))
-                    {
-                        nprev = nprev.Previous;
-                    }
-                    while (nnext != null
-                        && !(nnext.Value is FuncBlock_Local))
-                    {
-                        nnext = nnext.Next;
-                    }
-                    start = nprev != null ? (nprev.Value.IndexEnd + 1) : (core.Current.IndexStart);
-                    end = nnext != null ? (nnext.Value.IndexStart - 2) : (core.Current.IndexEnd - 1);
-                    core.Root.Build(CodeTextBox.Text, start, end, offset);
+                    core.Current.InnerOffset += offset;
                 }
-                else if (insertMatch2.Success || removeMatch2.Success)
+                else if (insertMatch1.Success || removeMatch1.Success)
                 {
-                    start = core.Current.IndexStart;
-                    if (core.Current is FuncBlock_Local)
-                    {
-                        end = core.Current.IndexEnd;
-                        core.Current.Build(CodeTextBox.Text, start, end - 1, offset);
-                    }
-                    else if (core.Current.Parent is FuncBlock_Local)
-                    {
-                        end = core.Current.Parent.IndexEnd;
-                        core.Current.Parent.Build(CodeTextBox.Text, start, end - 1, offset);
-                    }
-                    else
-                    {
-                        throw new Exception(String.Format("Code Structure Error : {0:s} in {1:s}",
-                            core.Current.ToString(), core.Current.Parent.ToString()));
-                    }
+                    core.BuildAll(Code);
+                    core.Move(e.Offset);
                 }
                 else
                 {
-                    if (core.Current is FuncBlock_Local)
+                    if (core.Current is FuncBlock_FuncHeader)
+                    {
+                        core.CurrentNode = new LinkedListNode<FuncBlock>(core.Root);
+                    }
+                    if (core.Current is FuncBlock_Root)
+                    {
+                        LinkedListNode<FuncBlock> nprev = null;
+                        LinkedListNode<FuncBlock> nnext = null;
+                        if (core.Current.Current != null)
+                        {
+                            nprev = core.Current.Current;
+                            if (core.Current.Current.Next != null)
+                            {
+                                nnext = core.Current.Current.Next;
+                            }
+                        }
+                        if (nprev != null &&
+                            nprev.Value.IndexStart > e.Offset)
+                        {
+                            nnext = nprev;
+                            nprev = nprev.Previous;
+                        }
+                        while (nprev != null
+                            && !(nprev.Value is FuncBlock_Local))
+                        {
+                            nprev = nprev.Previous;
+                        }
+                        while (nnext != null
+                            && !(nnext.Value is FuncBlock_Local))
+                        {
+                            nnext = nnext.Next;
+                        }
+                        start = nprev != null ? (nprev.Value.IndexEnd + 1) : (core.Current.IndexStart);
+                        end = nnext != null ? (nnext.Value.IndexStart - 2) : (core.Current.IndexEnd - 1);
+                        core.Root.Build(CodeTextBox.Text, start, end, offset);
+                    }
+                    else if (insertMatch2.Success || removeMatch2.Success)
                     {
                         start = core.Current.IndexStart;
-                        end = core.Current.IndexEnd - 1;
-                        core.Current.Build(CodeTextBox.Text, start, end, offset);
+                        if (core.Current is FuncBlock_Local)
+                        {
+                            end = core.Current.IndexEnd;
+                            core.Current.Build(CodeTextBox.Text, start, end - 1, offset);
+                        }
+                        else if (core.Current.Parent is FuncBlock_Local)
+                        {
+                            end = core.Current.Parent.IndexEnd;
+                            core.Current.Parent.Build(CodeTextBox.Text, start, end - 1, offset);
+                        }
+                        else
+                        {
+                            throw new Exception(String.Format("Code Structure Error : {0:s} in {1:s}",
+                                core.Current.ToString(), core.Current.Parent.ToString()));
+                        }
                     }
                     else
                     {
-                        start = core.Current.IndexStart;
-                        end = core.Current.IndexEnd;
-                        core.Current.Parent.Build(CodeTextBox.Text, start, end, offset);
+                        if (core.Current is FuncBlock_Local)
+                        {
+                            start = core.Current.IndexStart;
+                            end = core.Current.IndexEnd - 1;
+                            core.Current.Build(CodeTextBox.Text, start, end, offset);
+                        }
+                        else
+                        {
+                            start = core.Current.IndexStart;
+                            end = core.Current.IndexEnd;
+                            core.Current.Parent.Build(CodeTextBox.Text, start, end, offset);
+                        }
                     }
                 }
+            }
+            catch (Exception exce)
+            {
+                core.BuildAll(CodeTextBox.Text);
             }
             core.Move(e.Offset);
             if (e.InsertionLength == 1 && e.RemovalLength == 0)
@@ -843,11 +850,12 @@ namespace SamSoarII.Shell.Models
                 case Key.Enter:
                     if (CCSIsSelected)
                     {
-                        int plen = CCSProfix.Length;
+                        string removetext = CCSProfix;
                         string inserttext = ccstblocks[CCSCursor].Text;
-                        inserttext = inserttext.Substring(plen);
-                        CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset + (plen - CCSProfixCursor), inserttext);
-                        core.Current.InnerOffset += inserttext.Length;
+                        CodeTextBox.Text = CodeTextBox.Text
+                            .Remove(CodeTextBox.CaretOffset - CCSProfixCursor, removetext.Length)
+                            .Insert(CodeTextBox.CaretOffset - CCSProfixCursor, inserttext);
+                        core.Current.InnerOffset += inserttext.Length - removetext.Length;
                         //CCSProfix = String.Empty;
                         //CodeTextBox.CaretOffset += inserttext.Length;
                     }
@@ -905,12 +913,12 @@ namespace SamSoarII.Shell.Models
             int id = (int)((p.Y - 20) / 18);
             if (p.X >= 0 && p.X < 188 && id >= 0 && id < 9)
             {
-                int plen = CCSProfix.Length;
+                string removetext = CCSProfix;
                 string inserttext = ccstblocks[CCSCursor].Text;
-                inserttext = inserttext.Substring(plen);
-                CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset, inserttext);
-                core.Current.InnerOffset += inserttext.Length;
-                CodeTextBox.CaretOffset += inserttext.Length;
+                CodeTextBox.Text = CodeTextBox.Text
+                    .Remove(CodeTextBox.CaretOffset - CCSProfixCursor, removetext.Length)
+                    .Insert(CodeTextBox.CaretOffset - CCSProfixCursor, inserttext);
+                core.Current.InnerOffset += inserttext.Length - removetext.Length;
                 CCSProfix = String.Empty;
             }
         }

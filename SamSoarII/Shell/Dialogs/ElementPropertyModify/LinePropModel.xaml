@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
              mc:Ignorable="d" 
-             d:DesignHeight="350" d:DesignWidth="350" FontSize="15">
+             d:DesignHeight="350" d:DesignWidth="350">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -26,13 +26,13 @@
         </Grid.ColumnDefinitions>
         <Grid.Resources>
             <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="10,5,10,5"/>
+                <Setter Property="Margin" Value="10,6,10,6"/>
             </Style>
             <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="Margin" Value="10,4,10,4"/>
+                <Setter Property="Margin" Value="10,10,10,4"/>
             </Style>
             <Style TargetType="{x:Type ComboBox}">
-                <Setter Property="Margin" Value="10,4,10,4"/>
+                <Setter Property="Margin" Value="10,6,10,6"/>
             </Style>
         </Grid.Resources>
         <TextBlock Grid.Row="0" Grid.Column="0" x:Name="TBL_X">x轴终点坐标：</TextBlock>
