@@ -2352,4 +2352,7 @@
   <data name="Config_Upload" xml:space="preserve">
     <value>Uploading configuration...</value>
   </data>
+  <data name="Inst_PID" xml:space="preserve">
+    <value>PID Instruction</value>
+  </data>
 </root>

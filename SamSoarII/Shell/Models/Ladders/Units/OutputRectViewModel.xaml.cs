@@ -106,11 +106,11 @@ namespace SamSoarII.Shell.Models
                 if (middlevalues[id] == null)
                 {
                     middlevalues[id] = new TextBlock();
-                    Canvas.SetLeft(middlevalues[id], 25);
-                    Canvas.SetTop(middlevalues[id], 120 + id * 30 - (Core.Type == LadderUnitModel.Types.PID ? 20 : 0));
                     middlevalues[id].TextAlignment = TextAlignment.Left;
+                    Canvas.SetLeft(middlevalues[id], 25);
                     mainCanvas.Children.Add(middlevalues[id]);
                 }
+                Canvas.SetTop(middlevalues[id], 120 + id * 30 - (Core.Type == LadderUnitModel.Types.PID ? 20 : 0));
                 middlevalues[id].Visibility = Visibility.Visible;
             }
             else
@@ -119,9 +119,9 @@ namespace SamSoarII.Shell.Models
                 if (bottomvalues[id] == null)
                 {
                     bottomvalues[id] = new TextBlock();
+                    bottomvalues[id].TextAlignment = TextAlignment.Right;
                     Canvas.SetLeft(bottomvalues[id], 25);
                     Canvas.SetTop(bottomvalues[id], 250 - id * 30);
-                    bottomvalues[id].TextAlignment = TextAlignment.Right;
                     mainCanvas.Children.Add(bottomvalues[id]);
                 }
                 bottomvalues[id].Visibility = Visibility.Visible;

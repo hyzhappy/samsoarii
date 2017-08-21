@@ -101,10 +101,10 @@ namespace SamSoarII.Core.Models
             new string[] { "TV" });
         public readonly static ValueRegex VerifyWordRegex5 = new ValueRegex(
             @"^(D|AI)([0-9]+)((V|Z)([0-9]+))?$",
-            new string[] { "AI" });
+            new string[] { "D", "AI" });
         public readonly static ValueRegex VerifyWordRegex6 = new ValueRegex(
             @"^(D|AO)([0-9]+)((V|Z)([0-9]+))?$",
-            new string[] { "AO" });
+            new string[] { "D", "AO" });
         public readonly static ValueRegex VerifyWordRegex7 = new ValueRegex(
             @"^(V|Z)([0-9]+)$",
             new string[] { "V", "Z" });
@@ -320,7 +320,10 @@ namespace SamSoarII.Core.Models
             Match match = format.Match(text);
             Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             if (match == null)
-                throw new ValueParseException("Unexpected input.", format);
+                throw new ValueParseException(
+                    String.Format(App.CultureIsZH_CH() ? "{0:s}({1:s})不合法，仅支持{2:s}" : "{0:s}({1:s}) is invalid, only supports {2:s}",
+                        format.Name, format.FullName, format.Supports), 
+                    format);
             //if (ValueManager != null) ValueManager.Remove(this);
             bas = match.Groups.Count > 1 ? ParseBase(match.Groups[1].Value) : Bases.NULL;
             switch (bas)
@@ -365,7 +368,14 @@ namespace SamSoarII.Core.Models
                             break;
                         default:
                             Store = new ValueStore(null, Type);
-                            Store.Value = int.Parse(match.Groups[2].Value);
+                            try
+                            {
+                                Store.Value = int.Parse(match.Groups[2].Value);
+                            }
+                            catch (Exception e)
+                            {
+                                Store.Value = uint.Parse(match.Groups[2].Value);
+                            }
                             break;
                     }
                     break;
@@ -511,10 +521,10 @@ namespace SamSoarII.Core.Models
                 _supports = _supports.Union(vregex.Supports);
             }
             supports = String.Join("/", _supports);
-            detail = _detail != null ? _detail : String.Format("[{0:s}]{1:s}({2:s})",
-                ValueModel.NameOfTypes[(int)type], name, supports);
             fullname_ch = _fullname_ch != null ? _fullname_ch : name;
             fullname_en = _fullname_en != null ? _fullname_en : name;
+            detail = _detail != null ? _detail : String.Format("[{0:s}]{1:s}({2:s})",
+                ValueModel.NameOfTypes[(int)type], FullName, supports);
         }
     }
 

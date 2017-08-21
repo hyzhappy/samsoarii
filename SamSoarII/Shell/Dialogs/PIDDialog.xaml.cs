@@ -77,9 +77,11 @@ namespace SamSoarII.Shell.Dialogs
                 {
                     temp = core.Children[2].Clone();
                     if (!core.Children[0].Text.Equals("???"))
-                        TB_Loop.Text = core.Children[0].Value.ToString();
+                        TB_Loop.Text = core.Children[0].Text;
                     if (!core.Children[1].Text.Equals("???"))
                         CB_Mode.SelectedIndex = (int)(core.Children[1].Value);
+                    else
+                        CB_Mode.SelectedIndex = 0;
                     if (!core.Children[2].Text.Equals("???"))
                         TB_Temp.Text = core.Children[2].Text;
                     if (!core.Children[3].Text.Equals("???"))

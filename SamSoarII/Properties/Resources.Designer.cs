@@ -2212,6 +2212,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 PID Instruction 的本地化字符串。
+        /// </summary>
+        public static string Inst_PID {
+            get {
+                return ResourceManager.GetString("Inst_PID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 ProgramControl 的本地化字符串。
         /// </summary>
         public static string Inst_ProgramControl {

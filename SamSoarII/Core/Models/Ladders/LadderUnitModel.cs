@@ -566,9 +566,9 @@ namespace SamSoarII.Core.Models
                 "Rotation move 32-bit IN1 right by IN2 step, and assign to OUT. For the part moved away from range, supply it to leftside with order maintaining.",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.FLOAT, true, false, 0, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.FLOAT, true, false, 1, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.FLOAT, false, true, -1, new Regex[] { ValueModel.VerifyFloatRegex}) };
+                    new ValueFormat("IN1", ValueModel.Types.FLOAT, true, false, 0, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}, null, "输入1", "Input1"),
+                    new ValueFormat("IN2", ValueModel.Types.FLOAT, true, false, 1, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}, null, "输入2", "Input2"),
+                    new ValueFormat("OUT", ValueModel.Types.FLOAT, false, true, -1, new Regex[] { ValueModel.VerifyFloatRegex}, null, "输出", "Output") };
             Formats[(int)Types.ADDF] = new LadderUnitFormat(700, "ADDF", Types.ADDF, Outlines.FloatCalculation, Shapes.OutputRect,
                 Properties.Resources.Float_Add,
                 "将浮点数IN1和浮点数IN2相加（IN1+IN2），产生的实数结果保存到OUT。",
@@ -595,9 +595,9 @@ namespace SamSoarII.Core.Models
                 "Calculate power with IN1 as bottom, IN2 as log, and assign the result to OUT.",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) };
+                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "输入1", "Input1"),
+                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "输入2", "Input2"),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}, null, "输出", "Output") };
             Formats[(int)Types.MUL] = new LadderUnitFormat(804, "MUL", Types.MUL, Outlines.IntegerCalculation, Shapes.OutputRect,
                 Properties.Resources.Multiply,
                 "将单字IN1和单字IN2相乘（IN1*IN2），产生的双字结果保存到双字OUT。",
@@ -609,8 +609,8 @@ namespace SamSoarII.Core.Models
                 "Calculate (16-bit IN1 / 16-bit IN2), assign the divide number to lower half of 32-bit OUT, as well as the remain number to higher.",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("T", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyWordRegex4}),
-                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
+                    new ValueFormat("T", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyWordRegex4}, null, "定时器", "Timer"),
+                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "预设值", "Set Value") };
             Formats[(int)Types.TON] = new LadderUnitFormat(900, "TON", Types.TON, Outlines.Timer, Shapes.OutputRect,
                 Properties.Resources.TON_Inst,
                 "TON指令在启用输入端为（闭合）时，开始计时。\r\n" +
@@ -639,8 +639,8 @@ namespace SamSoarII.Core.Models
                 "当输入为（断开）时，保持保留性延迟定时器当前值。您可使用保留性接通延时定时器为多个输入（闭合）阶段累计时间。\r\n",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("C", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}),
-                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
+                    new ValueFormat("C", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}, null, "计数器", "Counter"),
+                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "预设值", "Set Value") };
             Formats[(int)Types.CTU] = new LadderUnitFormat(1000, "CTU", Types.CTU, Outlines.Counter, Shapes.OutputRect,
                 Properties.Resources.CTU_Inst,
                 "每次向上计数输入能流从关闭向打开转换时，向上计数（CTU）指令从当前值向上计数。\r\n" +
@@ -687,17 +687,17 @@ namespace SamSoarII.Core.Models
                 "当前值（CVxxx）到达预设值（SV）时，计数器位（Cxxx）打开。\r\n" +
                 "不同的高速计数器(CV235-CV255)对不同的输入能流(X0-X7)有不同的计数策略（向上，向下，保留），具体请查阅帮助文档。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("C", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}),
-                    new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}) });
+                    new ValueFormat("C", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}, null, "计数器", "Counter"),
+                    new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "预设值", "Set Value") });
             Formats[(int)Types.EHCNT] = new LadderUnitFormat(1701, "EHCNT", Types.EHCNT, Outlines.HighCount, Shapes.OutputRect,
                 Properties.Resources.Inst_EHCNT,
                 "(仅多脉冲型PLC FGm_64MT_A  FGm_32MT_A支持该功能)",
                 "(Only supported in PLC FGm_64MT_A, FGm_32MT_A PLC device)",
                 new ValueFormat[] {
-                    new ValueFormat("C", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}),
-                    new ValueFormat("CM", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex}),
-                    new ValueFormat("TM", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyIntKValueRegex}),
-                    new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 3, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}) });
+                    new ValueFormat("C", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}, null, "计数器", "Counter"),
+                    new ValueFormat("CM", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex}, null, "计数模式", "Counter Mode"),
+                    new ValueFormat("TM", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyIntKValueRegex}, null, "启动复位触发方式", "Trigger Mode"),
+                    new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 3, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "预设值", "Set Value") });
             Formats[(int)Types.FOR] = new LadderUnitFormat(1100, "FOR", Types.FOR, Outlines.ProgramControl, Shapes.OutputRect,
                 Properties.Resources.FOR_Inst,
                 "如果指令前条件导通，则执行此条指令。此条指令必须和NEXT指令配合使用，FOR和NEXT指令允许了一个程序的区域指定。\r\n" +
@@ -705,9 +705,9 @@ namespace SamSoarII.Core.Models
                 "如果指令前条件导通，则执行此条指令。此条指令必须和NEXT指令配合使用，FOR和NEXT指令允许了一个程序的区域指定。\r\n" +
                 "在这个区域内，包括了一系列指令，它们将会被重复执行（循环次数）次。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) });
+                    new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "数量", "Count") });
             vformats = new ValueFormat[] {
-                    new ValueFormat("LBL", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}) };
+                    new ValueFormat("LBL", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "标签号", "Label") };
             Formats[(int)Types.JMP] = new LadderUnitFormat(1102, "JMP", Types.JMP, Outlines.ProgramControl, Shapes.OutputRect,
                 Properties.Resources.JMP_Inst,
                 "堆栈顶为1时，跳接至标签（JMP）指令对程序中的指定标签（LBL）执行分支操作。",
@@ -725,19 +725,19 @@ namespace SamSoarII.Core.Models
                 "当CALL指令有效时，通过被调用的指针，它将强迫程序运行与子程序ID号相同的子程序，执行完被调用子程序，会自动返回到当前CALL指令的下一条指令继续执行；\r\n" +
                 "当CALL指令无效时，程序会自动跳过此条CALL指令，执行下一条指令。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("S", ValueModel.Types.STRING, true, false, 0, new Regex[] { ValueModel.AnyNameRegex }) });
+                    new ValueFormat("S", ValueModel.Types.STRING, true, false, 0, new Regex[] { ValueModel.AnyNameRegex }, null, "子程序", "Subroutine") });
             Formats[(int)Types.CALLM] = new LadderUnitFormat(1105, "CALLM", Types.CALLM, Outlines.ProgramControl, Shapes.OutputRect,
                 Properties.Resources.CALLM_Inst,
                 "堆栈顶为1时，会调用用户在函数功能块内实现的函数。参数最多可以设定四个。",
                 "堆栈顶为1时，会调用用户在函数功能块内实现的函数。参数最多可以设定四个。",
                 new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.STRING, true, false, 0, new Regex[] { ValueModel.FuncNameRegex }) });
+                    new ValueFormat("F", ValueModel.Types.STRING, true, false, 0, new Regex[] { ValueModel.FuncNameRegex }, null, "函数", "Function") });
             Formats[(int)Types.STL] = new LadderUnitFormat(1106, "STL", Types.STL, Outlines.ProgramControl, Shapes.OutputRect,
                 "",
                 "STL与STLE必须一一配对使用，STL表示一个状态的开始，STLE表示一个状态的结束。",
                 "STL与STLE必须一一配对使用，STL表示一个状态的开始，STLE表示一个状态的结束。",
                 new ValueFormat[] {
-                    new ValueFormat("L", ValueModel.Types.BOOL, true, false, -1, new Regex[] {ValueModel.VerifyBitRegex6 }) });
+                    new ValueFormat("L", ValueModel.Types.BOOL, true, false, -1, new Regex[] {ValueModel.VerifyBitRegex6 }, null, "状态", "Status") });
             Formats[(int)Types.STLE] = new LadderUnitFormat(1107, "STLE", Types.STLE, Outlines.ProgramControl, Shapes.OutputRect,
                 "",
                 "STL与STLE必须一一配对使用，STL表示一个状态的开始，STLE表示一个状态的结束。",
@@ -748,12 +748,12 @@ namespace SamSoarII.Core.Models
                 "当使用ST指令当状态转移条件成立时，下一个待转移状态被置为ON，但当前STL段中的状态不会被复位OFF，ST指令一般在程序需要同时运行多个状态程序时使用；",
                 "当使用ST指令当状态转移条件成立时，下一个待转移状态被置为ON，但当前STL段中的状态不会被复位OFF，ST指令一般在程序需要同时运行多个状态程序时使用；",
                 new ValueFormat[] {
-                    new ValueFormat("S", ValueModel.Types.BOOL, true, false, -1, new Regex[] {ValueModel.VerifyBitRegex6 }) });
+                    new ValueFormat("S", ValueModel.Types.BOOL, true, false, -1, new Regex[] {ValueModel.VerifyBitRegex6 }, null, "目标状态", "Targeted Status") });
             vformats = new ValueFormat[] {
-                    new ValueFormat("S", ValueModel.Types.BOOL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex1, ValueModel.WordBitRegex}),
-                    new ValueFormat("D", ValueModel.Types.BOOL, false, true, 1, new Regex[] { ValueModel.VerifyBitRegex2, ValueModel.WordBitRegex}),
-                    new ValueFormat("N1", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("N2", ValueModel.Types.WORD, true, false, 3, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}), };
+                    new ValueFormat("S", ValueModel.Types.BOOL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex1, ValueModel.WordBitRegex}, null, "源", "Source"),
+                    new ValueFormat("D", ValueModel.Types.BOOL, false, true, 1, new Regex[] { ValueModel.VerifyBitRegex2, ValueModel.WordBitRegex}, null, "目标", "Destination"),
+                    new ValueFormat("N1", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "长度1", "Number1"),
+                    new ValueFormat("N2", ValueModel.Types.WORD, true, false, 3, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "长度2", "Number2"), };
             Formats[(int)Types.SHLB] = new LadderUnitFormat(1202, "SHLB", Types.SHLB, Outlines.Shift, Shapes.OutputRect,
                 Properties.Resources.SHLB_Inst,
                 "指令将起始地址为（S）长度为（IN4）的源位序列依次从起始地址为（D）长度为（IN3）的目的位序列的起始地址移入，目的位序列的值依次向后转移，直至移出。",
@@ -769,26 +769,26 @@ namespace SamSoarII.Core.Models
                 "指令将中断事件（EV）与子程序号码（INT）相关联，并启用中断事件。",
                 "指令将中断事件（EV）与子程序号码（INT）相关联，并启用中断事件。",
                 new ValueFormat[] {
-                    new ValueFormat("EV", ValueModel.Types.STRING, true, false, 0, new Regex[] {ValueModel.AnyNameRegex}),
-                    new ValueFormat("INT", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex }) });
+                    new ValueFormat("EV", ValueModel.Types.STRING, true, false, 0, new Regex[] {ValueModel.AnyNameRegex}, null, "中断程序", "Interrupt Routine"),
+                    new ValueFormat("INT", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex }, null, "中断事件ID", "Event ID") });
             Formats[(int)Types.DTCH] = new LadderUnitFormat(1301, "DTCH", Types.DTCH, Outlines.Interrupt, Shapes.OutputRect,
                 Properties.Resources.DTCH_Inst,
                 "指令将解除中断事件（EV）与中断子程序号码（INT）之间的关联，并禁用中断事件。",
                 "指令将解除中断事件（EV）与中断子程序号码（INT）之间的关联，并禁用中断事件。",
                 new ValueFormat[] {
-                    new ValueFormat("INT", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}) });
+                    new ValueFormat("INT", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "中断事件ID", "Event ID") });
             Formats[(int)Types.TRD] = new LadderUnitFormat(1400, "TRD", Types.TRD, Outlines.RealTime, Shapes.OutputRect,
                 Properties.Resources.TRD_Inst,
                 "指令从硬件时钟读取当前时间和日期，并将其载入以IN1起始的8个连续D的时间缓冲区。其中，年份用2字节表示。",
                 "指令从硬件时钟读取当前时间和日期，并将其载入以IN1起始的8个连续D的时间缓冲区。其中，年份用2字节表示。",
                 new ValueFormat[] {
-                    new ValueFormat("T", ValueModel.Types.WORD, false, true, 0, new Regex[] {ValueModel.VerifyWordRegex3}) });
+                    new ValueFormat("T", ValueModel.Types.WORD, false, true, 0, new Regex[] {ValueModel.VerifyWordRegex3}, null, "存储区域", "Wrote Range") });
             Formats[(int)Types.TWR] = new LadderUnitFormat(1401, "TWR", Types.TWR, Outlines.RealTime, Shapes.OutputRect,
                 Properties.Resources.TWR_Inst,
                 "指令将当前时间和日期写入IN1指定的在8个D的时间缓冲区开始的硬件时钟。其中，年份用2字节表示。",
                 "指令将当前时间和日期写入IN1指定的在8个D的时间缓冲区开始的硬件时钟。其中，年份用2字节表示。",
                 new ValueFormat[] {
-                    new ValueFormat("T", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}) });
+                    new ValueFormat("T", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}, null, "存储区域", "Wrote Range") });
             Formats[(int)Types.MBUS] = new LadderUnitFormat(1500, "MBUS", Types.MBUS, Outlines.Communication, Shapes.OutputRect,
                 Properties.Resources.MBUS_Inst,
                 "调用Modbus主站通信指令。\r\n" +
@@ -800,9 +800,9 @@ namespace SamSoarII.Core.Models
                 "Table  ：Modbus主站表格ID，可在工程管理窗口中添加所需的Modbus主站表格；\r\n" +
                 "WR     ：Dn、Dn+1，其中Dn用来存储通信信息代码(见帮助文档)，Dn+1用来存储当前主站表格的Modbus命令编号。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("PORT", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex}),
-                    new ValueFormat("TABLE", ValueModel.Types.STRING, true, false, 1, new Regex[] {ValueModel.AnyNameRegex}),
-                    new ValueFormat("WR", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3}) });
+                    new ValueFormat("COM", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex}, null, "Com通信口", "ComID"),
+                    new ValueFormat("TBL", ValueModel.Types.STRING, true, false, 1, new Regex[] {ValueModel.AnyNameRegex}, null, "Modbus表格", "Modbus Table"),
+                    new ValueFormat("WR", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3}, null, "存储区域", "Wrote Range") });
             Formats[(int)Types.SEND] = new LadderUnitFormat(1501, "SEND", Types.SEND, Outlines.Communication, Shapes.OutputRect,
                 Properties.Resources.SEND_Inst,
                 "调用自由口通讯发送指令。\r\n" +
@@ -814,9 +814,9 @@ namespace SamSoarII.Core.Models
                 "Addr（起始地址）    ：该参数地址是以Dn为起始地址的一片区域，该操作数仅能选择D数据寄存器；\r\n" +
                 "Len（数据长度）     ：设置待发送数据的长度，该操作数可选择K/H/D，对于不同型号PLC均有其相应的发送最大限制；\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("COM", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex}),
-                    new ValueFormat("ADDR", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3}),
-                    new ValueFormat("LEN", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }) });
+                    new ValueFormat("COM", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex}, null, "Com通信口", "ComID"),
+                    new ValueFormat("ADDR", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3}, null, "起始地址", "Address"),
+                    new ValueFormat("LEN", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }, null, "数据长度", "Length") });
             Formats[(int)Types.REV] = new LadderUnitFormat(1502, "REV", Types.REV, Outlines.Communication, Shapes.OutputRect,
                 Properties.Resources.REV_Inst,
                 "调用自由口通讯接收指令。\r\n" +
@@ -828,103 +828,99 @@ namespace SamSoarII.Core.Models
                 "Addr（起始地址）    ：将接收到的数据存放在以Dn为起始地址的一段区域，该操作数仅能选择D数据寄存器；\r\n" +
                 "Len（接收长度）     ：该参数无需设置，在数据接收过程中会自动返回实际接收到的数据长度，并存放在所设的D寄存器中，对于不同型号PLC均有其相应的接收最大限制；\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("COM", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex}),
-                    new ValueFormat("ADDR", ValueModel.Types.WORD, false, true, 1, new Regex[] {ValueModel.VerifyWordRegex3}),
-                    new ValueFormat("LEN", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }) });
+                    new ValueFormat("COM", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex}, null, "Com通信口", "ComID"),
+                    new ValueFormat("ADDR", ValueModel.Types.WORD, false, true, 1, new Regex[] {ValueModel.VerifyWordRegex3}, null, "起始地址", "Address"),
+                    new ValueFormat("LEN", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }, null, "数据长度", "Length") });
             Formats[(int)Types.PLSF] = new LadderUnitFormat(1600, "PLSF", Types.PLSF, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.PLSF_Inst,
                 "当栈顶为1时，往输出位输出指定频率的脉冲信号。",
                 "当栈顶为1时，往输出位输出指定频率的脉冲信号。",
                 new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "频率", "Frequency"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") });
             Formats[(int)Types.DPLSF] = new LadderUnitFormat(1601, "DPLSF", Types.DPLSF, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DPLSF_Inst,
                 "当栈顶为1时，往输出位输出指定频率的脉冲信号。",
                 "当栈顶为1时，往输出位输出指定频率的脉冲信号。",
                 new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("F", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "频率", "Frequency"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") });
             Formats[(int)Types.PLSY] = new LadderUnitFormat(1604, "PLSY", Types.PLSY, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.PLSY_Inst,
                 "当栈顶为1时，往输出位输出指定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，往输出位输出指定频率和脉冲数的脉冲信号。",
                 new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("P", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "频率", "Frequency"),
+                    new ValueFormat("P", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "脉冲数", "Pulse Number"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") });
             Formats[(int)Types.DRVI] = new LadderUnitFormat(1617, "DRVI", Types.DRVI, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DRVI_Inst,
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("P", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}),
-                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "频率", "Frequency"),
+                    new ValueFormat("P", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "脉冲数", "Pulse Number"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.DRVA] = new LadderUnitFormat(1617, "DRVA", Types.DRVA, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DRVI_Inst,
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("P", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}),
-                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "频率", "Frequency"),
+                    new ValueFormat("P", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "脉冲数", "Pulse Number"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.DPLSY] = new LadderUnitFormat(1605, "DPLSY", Types.DPLSY, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DPLSY_Inst,
                 "当栈顶为1时，往输出位输出指定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，往输出位输出指定频率和脉冲数的脉冲信号。",
                 new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("P", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("F", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "频率", "Frequency"),
+                    new ValueFormat("P", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "脉冲数", "Pulse Number"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") });
             Formats[(int)Types.DDRVI] = new LadderUnitFormat(1618, "DDRVI", Types.DDRVI, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DDRVI_Inst,
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("P", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}),
-                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("F", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "频率", "Frequency"),
+                    new ValueFormat("P", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "脉冲数", "Pulse Number"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.DDRVA] = new LadderUnitFormat(1618, "DDRVA", Types.DDRVA, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DDRVI_Inst,
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("P", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}),
-                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}) });
-            vformats = new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("DC", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) };
+                    new ValueFormat("F", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "频率", "Frequency"),
+                    new ValueFormat("P", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "脉冲数", "Pulse Number"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.DPLSY] = new LadderUnitFormat(1605, "DPLSY", Types.DPLSY, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DPLSY_Inst,
                 "当栈顶为1时，往输出位输出指定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，往输出位输出指定频率和脉冲数的脉冲信号。",
                 new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("PN", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "频率", "Frequency"),
+                    new ValueFormat("P", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "脉冲数", "Pulse Number"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") });
             Formats[(int)Types.PWM] = new LadderUnitFormat(1602, "PWM", Types.PWM, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.PWM_Inst,
                 "当栈顶为1时，往输出位输出指定频率和占空比的脉冲信号。",
                 "当栈顶为1时，往输出位输出指定频率和占空比的脉冲信号。",
                 new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("DC", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "频率", "Frequency"),
+                    new ValueFormat("DC", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "占空比", "Duty Cycle"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") });
             Formats[(int)Types.DPWM] = new LadderUnitFormat(1603, "DPWM", Types.DPWM, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DPWM_Inst,
                 "当栈顶为1时，往输出位输出指定频率和占空比的脉冲信号。",
                 "当栈顶为1时，往输出位输出指定频率和占空比的脉冲信号。",
                 new ValueFormat[] {
-                    new ValueFormat("F", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("DC", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("F", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "频率", "Frequency"),
+                    new ValueFormat("DC", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "占空比", "Duty Cycle"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") });
             Formats[(int)Types.PLSR] = new LadderUnitFormat(1606, "PLSR", Types.PLSR, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.PLSR_Inst,
                 "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
@@ -934,9 +930,9 @@ namespace SamSoarII.Core.Models
                 "段内按照给定频率（D2n）和脉冲数（D2n+1)产生一段脉冲，段之间的频率按给定时间（T)内直线变化。\r\n" +
                 "若给定D0为基地址，则D0表示第一段的脉冲数，D1表示第一段的频率，D2表示第二段的脉冲数，D3表示第二段的频率。以此类推。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("D", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}),
-                    new ValueFormat("V", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("D", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}, null, "分段数据", "Fragment data"),
+                    new ValueFormat("V", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "速度", "Velocity"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") });
             Formats[(int)Types.DPLSR] = new LadderUnitFormat(1607, "DPLSR", Types.DPLSR, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DPLSR_Inst,
                 "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
@@ -946,14 +942,14 @@ namespace SamSoarII.Core.Models
                 "段内按照给定频率（D4n）和脉冲数（D4n+2)产生一段脉冲，段之间的频率按给定时间（T)内直线变化。\r\n" +
                 "若给定D0为基地址，则D0表示第一段的脉冲数，D2表示第一段的频率，D4表示第二段的脉冲数，D6表示第二段的频率。以此类推。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("D", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}),
-                    new ValueFormat("V", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("D", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}, null, "分段数据", "Fragment data"),
+                    new ValueFormat("V", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "速度", "Velocity"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") });
             vformats = new ValueFormat[] {
-                    new ValueFormat("D", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}),
-                    new ValueFormat("V", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}),
-                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) };
+                    new ValueFormat("D", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}, null, "分段数据", "Fragment data"),
+                    new ValueFormat("V", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "速度", "Velocity"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") };
             Formats[(int)Types.PLSRD] = new LadderUnitFormat(1608, "PLSRD", Types.PLSRD, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.PLSRD_Inst,
                 "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
@@ -991,7 +987,7 @@ namespace SamSoarII.Core.Models
                 "若给定D0为基地址，则D0表示第一段的脉冲数，D2表示第一段的频率，D4表示第二段的脉冲数，D6表示第二段的频率。以此类推。\r\n",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) };
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") };
             Formats[(int)Types.PLSNEXT] = new LadderUnitFormat(1612, "PLSNEXT", Types.PLSNEXT, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.PLSNEXT_Inst,
                 "在脉冲输出到达当前段最高频率，并且PLSNEXT指向下一段非结束段，在此频率下稳定输出时，如果M0由OFF—>ON，则以加减速时间进入下一段的脉冲输出。",
@@ -1007,34 +1003,39 @@ namespace SamSoarII.Core.Models
                 "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
                 "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
                 new ValueFormat[] {
-                    new ValueFormat("DV", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}),
-                    new ValueFormat("CV", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}),
-                    new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("DV", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "回归速度", "Back Velocity"),
+                    new ValueFormat("CV", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "爬行速度", "Crew Velocity"),
+                    new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}, null, "信号", "Signal"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") });
             Formats[(int)Types.ZRND] = new LadderUnitFormat(1614, "ZRND", Types.ZRND, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.ZRN_Inst,
                 "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
                 "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
                 new ValueFormat[] {
-                    new ValueFormat("DV", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}),
-                    new ValueFormat("CV", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
-            vformats = new ValueFormat[] {
-                    new ValueFormat("DV", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex }),
-                    new ValueFormat("CV", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) };
+                    new ValueFormat("DV", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "回归速度", "Back Velocity"),
+                    new ValueFormat("CV", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "爬行速度", "Crew Velocity"),
+                    new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}, null, "信号", "Signal"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.DZRN] = new LadderUnitFormat(1615, "DZRN", Types.DZRN, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DZRN_Inst,
                 "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
                 "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
-                vformats);
+                new ValueFormat[] {
+                    new ValueFormat("DV", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "回归速度", "Back Velocity"),
+                    new ValueFormat("CV", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "爬行速度", "Crew Velocity"),
+                    new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}, null, "信号", "Signal"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") });
             Formats[(int)Types.DZRND] = new LadderUnitFormat(1615, "DZRND", Types.DZRND, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DZRN_Inst,
                 "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
                 "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
-                vformats);
+                new ValueFormat[] {
+                    new ValueFormat("DV", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "回归速度", "Back Velocity"),
+                    new ValueFormat("CV", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "爬行速度", "Crew Velocity"),
+                    new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}, null, "信号", "Signal"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.PTO] = new LadderUnitFormat(1616, "PTO", Types.PTO, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.PTO_Inst,
                 "当栈顶为1时，输出分段变频段内频率匀速渐变的脉冲信号。\r\n" +
@@ -1044,15 +1045,15 @@ namespace SamSoarII.Core.Models
                 "段内从起始频率D2n到终止频率D2n+1之间直线变化，段之间直接相接。\r\n" +
                 "若给定D0为基地址，则D0表示第一段的起始频率，D1表示第一段的终止频率，D2表示第二段的起始频率，D3表示第二段的终止频率。以此类推。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("D", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}),
-                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("D", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}, null, "分段数据", "Fragment Data"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.TBL] = new LadderUnitFormat(1617, "TBL", Types.TBL, Outlines.Pulse, Shapes.OutputRect,
                 "", "", "",
                 new ValueFormat[] {
-                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3 }),
-                    new ValueFormat("P", ValueModel.Types.BOOL, false, true, 1, new Regex[] {ValueModel.VerifyBitRegex4 }),
-                    new ValueFormat("D", ValueModel.Types.BOOL, false, true, 2, new Regex[] {ValueModel.VerifyBitRegex4 }) });
+                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}),
+                    new ValueFormat("P", ValueModel.Types.BOOL, false, true, 1, new Regex[] {ValueModel.VerifyBitRegex4}),
+                    new ValueFormat("D", ValueModel.Types.BOOL, false, true, 2, new Regex[] {ValueModel.VerifyBitRegex4}) });
             vformats = new ValueFormat[] {
                 new ValueFormat("ID", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex}),
                 new ValueFormat("S", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex3}),
@@ -1096,9 +1097,9 @@ namespace SamSoarII.Core.Models
                 "比较IN1和IN2的大小，比较结果发送到OUT。\r\n" +
                 "若OUT为Y000，当IN1 > IN2时Y000为‘1’。当IN1 == IN2时Y001为‘1’。当IN1 < IN2时Y002为‘1’。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) });
+                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "输入1", "Input1"),
+                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "输入2", "Input2"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}, null, "输出", "Output") });
             Formats[(int)Types.CMPD] = new LadderUnitFormat(1804, "CMPD", Types.CMPD, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.CMPD_Inst,
                 "比较IN1和IN2的大小，比较结果发送到OUT。\r\n" +
@@ -1106,9 +1107,9 @@ namespace SamSoarII.Core.Models
                 "比较IN1和IN2的大小，比较结果发送到OUT。\r\n" +
                 "若OUT为Y000，当IN1 > IN2时Y000为‘1’。当IN1 == IN2时Y001为‘1’。当IN1 < IN2时Y002为‘1’。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) });
+                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "输入1", "Input1"),
+                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "输入2", "Input2"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}, null, "输出", "Output") });
             Formats[(int)Types.CMPF] = new LadderUnitFormat(1805, "CMPF", Types.CMPF, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.CMPF_Inst,
                 "比较IN1和IN2的大小，比较结果发送到OUT。\r\n" +
@@ -1116,9 +1117,9 @@ namespace SamSoarII.Core.Models
                 "比较IN1和IN2的大小，比较结果发送到OUT。\r\n" +
                 "若OUT为Y000，当IN1 > IN2时Y000为‘1’。当IN1 == IN2时Y001为‘1’。当IN1 < IN2时Y002为‘1’。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.FLOAT, true, false, 0, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.FLOAT, true, false, 1, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) });
+                    new ValueFormat("IN1", ValueModel.Types.FLOAT, true, false, 0, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}, null, "输入1", "Input1"),
+                    new ValueFormat("IN2", ValueModel.Types.FLOAT, true, false, 1, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}, null, "输入2", "Input2"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}, null, "输出", "Output") });
             Formats[(int)Types.ZCP] = new LadderUnitFormat(1806, "ZCP", Types.ZCP, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.ZCP_Inst,
                 "比较值 IN 与下限 LOW 及上限 HIGH 作比较，其比较结果在 OUT 作表示。\r\n" +
@@ -1126,10 +1127,10 @@ namespace SamSoarII.Core.Models
                 "比较值 IN 与下限 LOW 及上限 HIGH 作比较，其比较结果在 OUT 作表示。\r\n" +
                 "若OUT为Y000，当IN < LOW时Y000为‘1’。当LOW <= IN <= HIGH 时Y001为‘1’。当HIGH < IN时Y002为‘1’。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("IN3", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) });
+                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "比较值", "Comparing Value"),
+                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "下限", "Low Limit"),
+                    new ValueFormat("IN3", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "上限", "High Limit"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}, null, "输出", "Output") });
             Formats[(int)Types.ZCPD] = new LadderUnitFormat(1807, "ZCPD", Types.ZCPD, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.ZCPD_Inst,
                 "比较值 IN 与下限 LOW 及上限 HIGH 作比较，其比较结果在 OUT 作表示。\r\n" +
@@ -1137,10 +1138,10 @@ namespace SamSoarII.Core.Models
                 "比较值 IN 与下限 LOW 及上限 HIGH 作比较，其比较结果在 OUT 作表示。\r\n" +
                 "若OUT为Y000，当IN < LOW时Y000为‘1’。当LOW <= IN <= HIGH 时Y001为‘1’。当HIGH < IN时Y002为‘1’。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("IN3", ValueModel.Types.DWORD, true, false, 2, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) });
+                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "比较值", "Comparing Value"),
+                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "下限", "Low Limit"),
+                    new ValueFormat("IN3", ValueModel.Types.DWORD, true, false, 2, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "上限", "High Limit"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}, null, "输出", "Output") });
             Formats[(int)Types.ZCPF] = new LadderUnitFormat(1808, "ZCPF", Types.ZCPF, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.ZCPF_Inst,
                 "比较值 IN 与下限 LOW 及上限 HIGH 作比较，其比较结果在 OUT 作表示。\r\n" +
@@ -1148,34 +1149,34 @@ namespace SamSoarII.Core.Models
                 "比较值 IN 与下限 LOW 及上限 HIGH 作比较，其比较结果在 OUT 作表示。\r\n" +
                 "若OUT为Y000，当IN < LOW时Y000为‘1’。当LOW <= IN <= HIGH 时Y001为‘1’。当HIGH < IN时Y002为‘1’。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.FLOAT, true, false, 0, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.FLOAT, true, false, 1, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN3", ValueModel.Types.FLOAT, true, false, 2, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) });
+                    new ValueFormat("IN1", ValueModel.Types.FLOAT, true, false, 0, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}, null, "比较值", "Comparing Value"),
+                    new ValueFormat("IN2", ValueModel.Types.FLOAT, true, false, 1, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}, null, "下限", "Low Limit"),
+                    new ValueFormat("IN3", ValueModel.Types.FLOAT, true, false, 2, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}, null, "上限", "High Limit"),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}, null, "输出", "Output") });
             Formats[(int)Types.XCH] = new LadderUnitFormat(1811, "XCH", Types.XCH, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.XCH_Inst,
                 "交换IN1和IN2的值。",
                 "交换IN1和IN2的值。",
                 new ValueFormat[] {
-                    new ValueFormat("L", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7, ValueModel.BitWordRegex}),
-                    new ValueFormat("R", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7, ValueModel.BitWordRegex}) });
+                    new ValueFormat("L", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7, ValueModel.BitWordRegex}, null, "交换值1", "Exchanging Value 1"),
+                    new ValueFormat("R", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7, ValueModel.BitWordRegex}, null, "交换值2", "Exchanging Value 2") });
             Formats[(int)Types.XCHD] = new LadderUnitFormat(1812, "XCHD", Types.XCHD, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.XCHD_Inst,
                 "交换IN1和IN2的值。",
                 "交换IN1和IN2的值。",
                 new ValueFormat[] {
-                    new ValueFormat("L", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("R", ValueModel.Types.DWORD, true, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) });
+                    new ValueFormat("L", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}, null, "交换值1", "Exchanging Value 1"),
+                    new ValueFormat("R", ValueModel.Types.DWORD, true, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}, null, "交换值2", "Exchanging Value 2") });
             Formats[(int)Types.XCHF] = new LadderUnitFormat(1813, "XCHF", Types.XCHF, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.XCHF_Inst,
                 "交换IN1和IN2的值。",
                 "交换IN1和IN2的值。",
                 new ValueFormat[] {
-                    new ValueFormat("L", ValueModel.Types.FLOAT, true, true, 0, new Regex[] { ValueModel.VerifyFloatRegex}),
-                    new ValueFormat("R", ValueModel.Types.FLOAT, true, true, 1, new Regex[] { ValueModel.VerifyFloatRegex}) });
+                    new ValueFormat("L", ValueModel.Types.FLOAT, true, true, 0, new Regex[] { ValueModel.VerifyFloatRegex}, null, "交换值1", "Exchanging Value 1"),
+                    new ValueFormat("R", ValueModel.Types.FLOAT, true, true, 1, new Regex[] { ValueModel.VerifyFloatRegex}, null, "交换值2", "Exchanging Value 2") });
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7, ValueModel.BitWordRegex}) };
+                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "输入", "Input"),
+                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7, ValueModel.BitWordRegex}, null, "输出", "Output") };
             Formats[(int)Types.NEG] = new LadderUnitFormat(1809, "NEG", Types.NEG, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.NEG_Inst,
                 "对寄存器（IN）的值求补后传送到寄存器（OUT）。",
@@ -1187,8 +1188,8 @@ namespace SamSoarII.Core.Models
                 "将源操作数（IN）中的数据逐位取反后传送到OUT寄存器。",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) };
+                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "输入", "Input"),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}, null, "输出", "Output") };
             Formats[(int)Types.NEGD] = new LadderUnitFormat(1810, "NEGD", Types.NEGD, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.NEGD_Inst,
                 "对寄存器（IN）的值求补后传送到寄存器（OUT）。",
@@ -1208,36 +1209,36 @@ namespace SamSoarII.Core.Models
                 "源数据 BCD码右起从第 4 位开始的 2 位移送到目标 D2的第 3 位和第 2 位，而 D2的第 4 和第 1 两位  BCD  码不变。\r\n" +
                 "然后，目标D2 中的 BCD码自动转换成二进制数，即为  D2 的内容。BCD  码值超过9999 时出错。\r\n",
                 new ValueFormat[] {
-                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7}),
-                    new ValueFormat("SS", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}),
-                    new ValueFormat("SC", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}),
-                    new ValueFormat("DV", ValueModel.Types.WORD, false, true, -2, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7}),
-                    new ValueFormat("DS", ValueModel.Types.WORD, true, false, -1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}) });
+                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7}, null, "源", "Source"),
+                    new ValueFormat("SS", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "源位", "Source Bit"),
+                    new ValueFormat("SC", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "长度", "Count"),
+                    new ValueFormat("DV", ValueModel.Types.WORD, false, true, -2, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7}, null, "目标", "Destination"),
+                    new ValueFormat("DS", ValueModel.Types.WORD, true, false, -1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "目标位", "Destination Bit") });
             Formats[(int)Types.FMOV] = new LadderUnitFormat(1817, "FMOV", Types.FMOV, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.FMOV_Inst,
                 "将源元件（SRC）中的数据传送到指定目标（DST）开始的 N  个目标元件中，这  N 个元件中的数据完全相同。",
                 "将源元件（SRC）中的数据传送到指定目标（DST）开始的 N  个目标元件中，这  N 个元件中的数据完全相同。",
                 new ValueFormat[] {
-                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("TV", ValueModel.Types.WORD, false, true, 1, new Regex[] { ValueModel.VerifyWordRegex1}),
-                    new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) });
+                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "源", "Source"),
+                    new ValueFormat("T", ValueModel.Types.WORD, false, true, 1, new Regex[] { ValueModel.VerifyWordRegex1}, null, "目标", "Destination"),
+                    new ValueFormat("N", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "长度", "Count") });
             Formats[(int)Types.FMOVD] = new LadderUnitFormat(1818, "FMOVD", Types.FMOVD, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.FMOVD_Inst,
                 "将源元件（SRC）中的数据传送到指定目标（DST）开始的 N  个目标元件中，这  N 个元件中的数据完全相同。",
                 "将源元件（SRC）中的数据传送到指定目标（DST）开始的 N  个目标元件中，这  N 个元件中的数据完全相同。",
                 new ValueFormat[] {
-                    new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("TV", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}),
-                    new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) });
+                    new ValueFormat("S", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "源", "Source"),
+                    new ValueFormat("T", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}, null, "目标", "Destination"),
+                    new ValueFormat("N", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "长度", "Count") });
             Formats[(int)Types.PID] = new LadderUnitFormat(1900, "PID", Types.PID, Outlines.PID, Shapes.OutputRect,
                 "", "", "",
                 new ValueFormat[] {
-                    new ValueFormat("LOOP", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex }),
-                    new ValueFormat("AUTO", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyIntKValueRegex }),
-                    new ValueFormat("TEMP", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3 }),
-                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, -2, new Regex[] {ValueModel.VerifyWordRegex5 }),
-                    new ValueFormat("OUT", ValueModel.Types.WORD, true, false, -1, new Regex[] {ValueModel.VerifyWordRegex6 }),
-                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 3, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex }) });
+                    new ValueFormat("LOOP", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex}, null, "PID回路", "PID Loop"),
+                    new ValueFormat("AUTO", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyIntKValueRegex}, null, "模式", "Mode"),
+                    new ValueFormat("TEMP", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3}, null, "过程变量", "Temp Data"),
+                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, -2, new Regex[] {ValueModel.VerifyWordRegex5}, null, "输入", "Input"),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, true, false, -1, new Regex[] { ValueModel.VerifyBitRegex7, ValueModel.VerifyWordRegex6}, null, "输出", "Output"),
+                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 3, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex }, null, "目标值", "Set Value") });
             LabelTypes = new Types[] { Types.LBL, Types.NEXT, Types.STL, Types.STLE };
             TypeOfNames = new Dictionary<string, Types>();
             for (int i = 0; i < Formats.Length; i++)

@@ -2352,4 +2352,7 @@
   <data name="Config_Upload" xml:space="preserve">
     <value>配置上载中...</value>
   </data>
+  <data name="Inst_PID" xml:space="preserve">
+    <value>PID指令</value>
+  </data>
 </root>

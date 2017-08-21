@@ -521,6 +521,7 @@ void cpcycle(int32_t _bpaddr, int8_t value)
 		cond |= (prevalue == 0 && value == 1);
 	if (cpmsg & 0x08)
 		cond |= (prevalue == 1 && value == 0);
+	
 	if (bpjump >= 0)
 		cond &= (bpjump == bpaddr);
 	if (cond)
@@ -613,6 +614,8 @@ EXPORT int32_t GetBackTrace(int32_t* data)
 	memcpy(data, rbpstack, rbpsttop);
 	return rbpsttop;
 }
+
+
 
 void InitRegisters()
 {
