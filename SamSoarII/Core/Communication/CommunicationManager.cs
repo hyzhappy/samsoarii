@@ -485,7 +485,7 @@ namespace SamSoarII.Core.Communication
             }
             if (!hassend) return false;
             Thread.Sleep(waittime);
-            if (!hasRecvData && cmd.RecvDataLen == 0) return true;
+            if (!hasRecvData) return true;
             while (hassend)
             {
                 if (mngCurrent.Read(cmd) == 0)
@@ -493,6 +493,7 @@ namespace SamSoarII.Core.Communication
                     hasrecv = true;
                     break;
                 }
+                Thread.Sleep(50);
             }
             return hasrecv && cmd.IsComplete && cmd.IsSuccess;
         }

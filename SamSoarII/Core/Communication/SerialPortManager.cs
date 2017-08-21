@@ -31,6 +31,34 @@ namespace SamSoarII.Core.Communication
             parent = _parent;
         }
         private bool IsSuccess = false;
+        public int RecvTime
+        {
+            get
+            {
+                if (port == null) return 1;
+                else
+                {
+                    switch (port.BaudRate)
+                    {
+                        case 4800:
+                            return 12;
+                        case 9600:
+                            return 6;
+                        case 19200:
+                            return 4;
+                        case 38400:
+                            return 3;
+                        case 57600:
+                            return 2;
+                        case 115200:
+                            return 1;
+                        default:
+                            return 3;
+                    }
+                }
+            }
+        }
+
         public int OverTime
         {
             get
@@ -229,6 +257,7 @@ namespace SamSoarII.Core.Communication
             {
                 return 1;
             }
+            recvtime = RecvTime;
             readbuffercount = 0;
             IsSuccess = true;
             return 0;
@@ -264,7 +293,8 @@ namespace SamSoarII.Core.Communication
             return 0;
         }
         static byte[] readbuffer = new byte[4096];
-        static int readbuffercount = 0;
+        static int readbuffercount;
+        static int recvtime;
         public int Read(ICommunicationCommand cmd)
         {
             try
@@ -278,13 +308,23 @@ namespace SamSoarII.Core.Communication
             }
             catch (Exception e)
             {
-                if ((e.GetType() == typeof(TimeoutException) || e.GetType() == typeof(InvalidOperationException)) && AssertCmd(cmd))
+                if ((e.GetType() == typeof(TimeoutException)) || (e.GetType() == typeof(InvalidOperationException)))
                 {
-                    cmd.IsComplete = true;
-                    cmd.IsSuccess = false;
-                    readbuffercount = 0;
-                    Thread.Sleep(200);
-                    return 0;
+                    bool ret = true;
+                    if (!AssertCmd(cmd) && recvtime > 0)
+                    {
+                        recvtime--;
+                        ret = false;
+                    }
+                    else recvtime = RecvTime;
+                    if (ret)
+                    {
+                        cmd.IsComplete = true;
+                        cmd.IsSuccess = false;
+                        readbuffercount = 0;
+                        Thread.Sleep(200);
+                        return 0;
+                    }
                 }
                 return 1;
             }
