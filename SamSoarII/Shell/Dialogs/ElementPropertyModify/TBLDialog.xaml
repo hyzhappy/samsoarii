@@ -49,7 +49,7 @@
         <TextBox Grid.Row="0" Grid.Column="1" x:Name="TB_Addr"/>
         <TextBox Grid.Row="0" Grid.Column="3" x:Name="TB_Out"/>
         <TextBox Grid.Row="1" Grid.Column="3" x:Name="TB_Dir"/>
-        <ComboBox Grid.Row="1" Grid.Column="1" Margin="-24,4,72,4" x:Name="CB_Mode"> 
+        <ComboBox Grid.Row="1" Grid.Column="1" Margin="-24,4,72,4" x:Name="CB_Mode">
             <Label Content="相对"/>
             <Label Content="绝对"/>
         </ComboBox>

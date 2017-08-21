@@ -493,7 +493,8 @@ namespace SamSoarII.Core.Communication
                     hasrecv = true;
                     break;
                 }
-                Thread.Sleep(50);
+                if (mngCurrent == mngPort)
+                    Thread.Sleep(mngPort.OverTime);
             }
             return hasrecv && cmd.IsComplete && cmd.IsSuccess;
         }

@@ -398,6 +398,7 @@ namespace SamSoarII
             //GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
             //DownloadHelper.InitializeData(mdProj);
 #endif
+            _option = -1;
             mngComu.IsEnable = true;
             CommunicationParams paraCom = mdProj.PARAProj.PARACom;
             using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom,
@@ -1506,14 +1507,13 @@ namespace SamSoarII
             openFileDialog.Filter = string.Format("{0}|*.{1};*.{2}",Properties.Resources.Project_File, FileHelper.NewFileExtension, FileHelper.OldFileExtension);
             if (openFileDialog.ShowDialog() == true)
             {
-                if (mdProj != null && mdProj.FileName.Equals(openFileDialog.FileName))
+                if (mdProj != null && openFileDialog.FileName.Equals(mdProj.FileName))
                 {
                     LocalizedMessageBox.Show(Properties.Resources.Message_Project_Loaded, LocalizedMessageIcon.Information);
                     return;
                 }
                 if (openFileDialog.FileName.EndsWith(FileHelper.OldFileExtension))
                 {
-                    //LocalizedMessageBox.Show(Properties.Resources.File_Type_Not_Supported, LocalizedMessageIcon.Information);
                     ShowFileConvertDialog(openFileDialog.FileName);
                 }
                 else LoadProject(openFileDialog.FileName);

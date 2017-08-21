@@ -1214,7 +1214,8 @@ Discarded input sections
  .text.CRCC     0x00000000       0x58 build\\downf.o
  .text.DDO      0x00000000       0xac build\\downf.o
  .text.DSL      0x00000000       0xac build\\downf.o
- .text.TEST     0x00000000        0x4 build\\downf.o
+ .text.CI__FLOAT32_ADD
+                0x00000000        0x4 build\\downf.o
  .comment       0x00000000       0x6f build\\downf.o
  .ARM.attributes
                 0x00000000       0x33 build\\downf.o

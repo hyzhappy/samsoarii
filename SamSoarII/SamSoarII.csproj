@@ -278,6 +278,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Dialogs\ElementPropertyModify\TBLDialog.xaml.cs">
+      <DependentUpon>TBLDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shell\Dialogs\Monitor\AddElementDialog.xaml.cs">
       <DependentUpon>AddElementDialog.xaml</DependentUpon>
     </Compile>
@@ -441,9 +444,6 @@
     </Compile>
     <Compile Include="Shell\Dialogs\ReplaceReportWindow.xaml.cs">
       <DependentUpon>ReplaceReportWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Shell\Dialogs\ElementPropertyModify\TBLDialog.xaml.cs">
-      <DependentUpon>TBLDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Dialogs\ValueModify\ValueModifyDialog.xaml.cs">
       <DependentUpon>ValueModifyDialog.xaml</DependentUpon>
@@ -807,6 +807,10 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
+    <Page Include="Shell\Dialogs\ElementPropertyModify\TBLDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Shell\Dialogs\Monitor\AddElementDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1004,10 +1008,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Dialogs\ReplaceReportWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Shell\Dialogs\ElementPropertyModify\TBLDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

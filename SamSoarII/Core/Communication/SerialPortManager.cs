@@ -71,7 +71,7 @@ namespace SamSoarII.Core.Communication
                         case 4800:
                             return 300;
                         case 9600:
-                            return 150;
+                            return 200;
                         case 19200:
                             return 100;
                         case 38400:
@@ -253,7 +253,7 @@ namespace SamSoarII.Core.Communication
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return 1;
             }
@@ -286,7 +286,7 @@ namespace SamSoarII.Core.Communication
                 byte[] data = cmd.GetBytes();
                 port.Write(data, 0, data.Length);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return 1;
             }

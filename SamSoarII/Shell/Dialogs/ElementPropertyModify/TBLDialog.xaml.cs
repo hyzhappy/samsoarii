@@ -58,7 +58,7 @@ namespace SamSoarII.Shell.Dialogs
                     CB_Mode.SelectedIndex = (int)(core.Mode);
                     PropertyChanged(this, new PropertyChangedEventArgs("Elements"));
                 }
-                
+
             }
         }
 
@@ -83,13 +83,13 @@ namespace SamSoarII.Shell.Dialogs
         {
             Ensure(this, e);
         }
-        
+
         public event RoutedEventHandler Cancel = delegate { };
         private void OnCancelButtonClick(object sender, RoutedEventArgs e)
         {
             Cancel(this, e);
         }
-        
+
         private void GD_Ele_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateButtonEnable();
@@ -103,7 +103,7 @@ namespace SamSoarII.Shell.Dialogs
             MI_Up.IsEnabled = GD_Ele.SelectedItems.Count > 0 && GD_Ele.SelectedIndex > 0;
             MI_Down.IsEnabled = GD_Ele.SelectedItems.Count > 0 && GD_Ele.SelectedIndex + GD_Ele.SelectedItems.Count < Elements.Count;
         }
-        
+
         private void MI_Add_Click(object sender, RoutedEventArgs e)
         {
             Elements.Add(new TBLElement(core));

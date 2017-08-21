@@ -42,7 +42,7 @@ namespace SamSoarII.Core.Models
         public bool IsValid { get { return children.All(e => e.IsValid); } }
 
         #endregion
- 
+
         public void Compile()
         {
             string cpath = Utility.FileHelper.AppRootPath;
@@ -77,7 +77,7 @@ namespace SamSoarII.Core.Models
             for (int i = children.Count() - 1; i >= 0; i--)
             {
                 if (!children[i].IsActive) continue;
-                string lvalue = 
+                string lvalue =
                     children[i].LeftCStyle();
                 string rvalue = children[i].RightCStyle();
                 switch (children[i].Oper)
@@ -233,7 +233,7 @@ namespace SamSoarII.Core.Models
             }
         }
 
-#endregion
+        #endregion
 
         public void Parse(string _lvalue, string _rvalue = "???", string _oper = null, ValueModel.Types _type = ValueModel.Types.WORD)
         {
@@ -412,9 +412,6 @@ namespace SamSoarII.Core.Models
         {
             return ToCStyle(rvalue);
         }
-            
-
-
     }
 
 }
