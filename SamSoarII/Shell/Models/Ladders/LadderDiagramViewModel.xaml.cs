@@ -1975,7 +1975,7 @@ namespace SamSoarII.Shell.Models
                         }
                         IEnumerable<LadderNetworkModel> oldnets = SelectRectOwner != null
                             ? new LadderNetworkModel[] { SelectRectOwner }
-                            : new LadderNetworkModel[] { SelectStartNetwork }.Concat(_selectArea.Core.SelectNetworks);
+                            : _selectArea.Core.SelectNetworks;
                         Core.ReplaceN(oldnets, nets);
                     }
                 }

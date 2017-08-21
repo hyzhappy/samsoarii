@@ -1,36 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
+using System.Xml.Linq;
 
 using SamSoarII.Core.Simulate;
-using System.Diagnostics;
+using SamSoarII.Shell.Models;
+using SamSoarII.Shell.Windows;
 
 namespace SamSoarII.Core.Models
 {
-    public class ItrpModel
+    public class ValueBrpoModel : IModel
     {
-        public ItrpModel(ProjectModel _parent)
+        public ValueBrpoModel(ProjectModel _parent)
         {
-
+            parent = _parent;
+            children = new ObservableCollection<ValueBrpoElement>();
+            children.CollectionChanged += OnChildrenColletionChanged;
         }
-
+        
         public void Dispose()
         {
-
+            foreach (ValueBrpoElement ele in children)
+            {
+                ele.PropertyChanged -= OnChildrenPropertyChanged;
+                ele.Dispose();
+            }
+            children.CollectionChanged -= OnChildrenColletionChanged;
+            children = null;
+            parent = null;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         #region Number
 
         private ProjectModel parent;
         public ProjectModel Parent { get { return this.parent; } }
+        IModel IModel.Parent { get { return Parent; } }
 
-        private ObservableCollection<ItrpElement> children;
-        public IList<ItrpElement> Children { get { return this.children; } }
+        private ObservableCollection<ValueBrpoElement> children;
+        public IList<ValueBrpoElement> Children { get { return this.children; } }
+        private void OnChildrenColletionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+                foreach (ValueBrpoElement ele in e.NewItems)
+                    ele.PropertyChanged += OnChildrenPropertyChanged;
+            if (e.OldItems != null)
+                foreach (ValueBrpoElement ele in e.OldItems)
+                {
+                    ele.PropertyChanged -= OnChildrenPropertyChanged;
+                    ele.Dispose();
+                }
+            IsModified = true;
+        }
+
+        private void OnChildrenPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            IsModified = true;
+        }
 
         private bool ismodified;
         public bool IsModified
@@ -42,11 +76,45 @@ namespace SamSoarII.Core.Models
         public bool IsValid { get { return children.All(e => e.IsValid); } }
 
         #endregion
+        
+        #region View
 
+        private ValueBrpoWindow view;
+        public ValueBrpoWindow View
+        {
+            get
+            {
+                return this.view;
+            }
+            set
+            {
+                if (view == value) return;
+                ValueBrpoWindow _view = view;
+                this.view = null;
+                if (_view != null && _view.Core != null) _view.Core = null;
+                this.view = value;
+                if (view != null && view.Core != this) view.Core = this;
+            }
+        }
+        IViewModel IModel.View
+        {
+            get { return View; }
+            set { View = (ValueBrpoWindow)value; }
+        }
+
+        private ProjectTreeViewItem ptvitem;
+        public ProjectTreeViewItem PTVItem
+        {
+            get { return this.ptvitem; }
+            set { this.ptvitem = value; }
+        }
+
+        #endregion
+        
         public void Compile()
         {
             string cpath = Utility.FileHelper.AppRootPath;
-            string hopath = String.Format(@"{0:s}\simug\_simuitrp.o", cpath);
+            string hopath = String.Format(@"{0:s}\simug\simuitrp.o", cpath);
             string hcpath = String.Format(@"{0:s}\simug\simuitrp.h", cpath);
             string ccpath = String.Format(@"{0:s}\simug\simuitrp.c", cpath);
             string dllpath = String.Format(@"{0:s}\simug\simuitrp.dll", cpath);
@@ -59,9 +127,9 @@ namespace SamSoarII.Core.Models
                 if (!children[i].IsActive) continue;
                 switch (children[i].Oper)
                 {
-                    case ItrpElement.Operators.UPEDGE:
-                    case ItrpElement.Operators.DOWNEDGE:
-                    case ItrpElement.Operators.CHANGED:
+                    case ValueBrpoElement.Operators.UPEDGE:
+                    case ValueBrpoElement.Operators.DOWNEDGE:
+                    case ValueBrpoElement.Operators.CHANGED:
                         switch (children[i].Type)
                         {
                             case ValueModel.Types.BOOL: sw.Write("int8_t _last{0:d};\n", i); break;
@@ -82,34 +150,34 @@ namespace SamSoarII.Core.Models
                 string rvalue = children[i].RightCStyle();
                 switch (children[i].Oper)
                 {
-                    case ItrpElement.Operators.UPEDGE:
+                    case ValueBrpoElement.Operators.UPEDGE:
                         sw.Write("if (!isfirst && !_last{0:d} && {1:s}) ret = {0:d} + 1;\n", i, lvalue);
                         sw.Write("_last{0:d} = {1:s};\n", i, lvalue);
                         break;
-                    case ItrpElement.Operators.DOWNEDGE:
+                    case ValueBrpoElement.Operators.DOWNEDGE:
                         sw.Write("if (!isfirst && _last{0:d} && !{1:s}) ret = {0:d} + 1;\n", i, lvalue);
                         sw.Write("_last{0:d} = {1:s};\n", i, lvalue);
                         break;
-                    case ItrpElement.Operators.CHANGED:
+                    case ValueBrpoElement.Operators.CHANGED:
                         sw.Write("if (!isfirst && _last{0:d} != {1:s}) ret = {0:d} + 1;\n", i, lvalue);
                         sw.Write("_last{0:d} = {1:s};\n", i, lvalue);
                         break;
-                    case ItrpElement.Operators.EQUAL:
+                    case ValueBrpoElement.Operators.EQUAL:
                         sw.Write("if ({1:s} == {2:s}) ret = {0:d} + 1;\n", i, lvalue, rvalue);
                         break;
-                    case ItrpElement.Operators.NOTEQUAL:
+                    case ValueBrpoElement.Operators.NOTEQUAL:
                         sw.Write("if ({1:s} != {2:s}) ret = {0:d} + 1;\n", i, lvalue, rvalue);
                         break;
-                    case ItrpElement.Operators.LESS:
+                    case ValueBrpoElement.Operators.LESS:
                         sw.Write("if ({1:s} < {2:s}) ret = {0:d} + 1;\n", i, lvalue, rvalue);
                         break;
-                    case ItrpElement.Operators.NOTLESS:
+                    case ValueBrpoElement.Operators.NOTLESS:
                         sw.Write("if ({1:s} >= {2:s}) ret = {0:d} + 1;\n", i, lvalue, rvalue);
                         break;
-                    case ItrpElement.Operators.MORE:
+                    case ValueBrpoElement.Operators.MORE:
                         sw.Write("if ({1:s} > {2:s}) ret = {0:d} + 1;\n", i, lvalue, rvalue);
                         break;
-                    case ItrpElement.Operators.NOTMORE:
+                    case ValueBrpoElement.Operators.NOTMORE:
                         sw.Write("if ({1:s} <= {2:s}) ret = {0:d} + 1;\n", i, lvalue, rvalue);
                         break;
                 }
@@ -137,11 +205,25 @@ namespace SamSoarII.Core.Models
             File.Delete(ccpath);
 #endif
         }
+
+        #region Save & Load
+        
+        public void Save(XElement xele)
+        {
+
+        }
+
+        public void Load(XElement xele)
+        {
+
+        }
+
+        #endregion
     }
 
-    public class ItrpElement : IDisposable, INotifyPropertyChanged
+    public class ValueBrpoElement : IDisposable, INotifyPropertyChanged
     {
-        public ItrpElement(ItrpModel _parent)
+        public ValueBrpoElement(ValueBrpoModel _parent)
         {
             parent = _parent;
             isactive = false;
@@ -161,8 +243,8 @@ namespace SamSoarII.Core.Models
 
         #region Number
 
-        private ItrpModel parent;
-        public ItrpModel Parent { get { return this.parent; } }
+        private ValueBrpoModel parent;
+        public ValueBrpoModel Parent { get { return this.parent; } }
 
         private bool isactive;
         public bool IsActive
@@ -232,7 +314,25 @@ namespace SamSoarII.Core.Models
                 return true;
             }
         }
-
+        
+        private ValueBrpoTableElement view;
+        public ValueBrpoTableElement View
+        {
+            get
+            {
+                return this.view;
+            }
+            set
+            {
+                if (view == value) return;
+                ValueBrpoTableElement _view = view;
+                this.view = null;
+                if (_view != null && _view.Core != null) _view.Core = null;
+                this.view = value;
+                if (view != null && _view.Core != this) _view.Core = this;
+            }
+        }
+        
         #endregion
 
         public void Parse(string _lvalue, string _rvalue = "???", string _oper = null, ValueModel.Types _type = ValueModel.Types.WORD)

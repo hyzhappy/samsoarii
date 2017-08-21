@@ -815,7 +815,7 @@ namespace SamSoarII.Core.Models
                 new ValueFormat[] {
                     new ValueFormat("COM", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex}, null, "Com通信口", "ComID"),
                     new ValueFormat("ADDR", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3}, null, "起始地址", "Address"),
-                    new ValueFormat("LEN", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }, null, "数据长度", "Length") });
+                    new ValueFormat("LEN", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "数据长度", "Length") });
             Formats[(int)Types.REV] = new LadderUnitFormat(1502, "REV", Types.REV, Outlines.Communication, Shapes.OutputRect,
                 Properties.Resources.REV_Inst,
                 "调用自由口通讯接收指令。\r\n" +
@@ -829,7 +829,7 @@ namespace SamSoarII.Core.Models
                 new ValueFormat[] {
                     new ValueFormat("COM", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex}, null, "Com通信口", "ComID"),
                     new ValueFormat("ADDR", ValueModel.Types.WORD, false, true, 1, new Regex[] {ValueModel.VerifyWordRegex3}, null, "起始地址", "Address"),
-                    new ValueFormat("LEN", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }, null, "数据长度", "Length") });
+                    new ValueFormat("LEN", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3}, null, "数据长度", "Length") });
             Formats[(int)Types.PLSF] = new LadderUnitFormat(1600, "PLSF", Types.PLSF, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.PLSF_Inst,
                 "当栈顶为1时，往输出位输出指定频率的脉冲信号。",

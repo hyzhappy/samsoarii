@@ -457,6 +457,15 @@ int32_t cpsttop = 0;
 int32_t callcount = 0;
 int32_t rbpstack[1<<10];
 int32_t rbpsttop = 0;
+int8_t itrpactive = 0;
+int32_t itrpid = 0;
+HINSTANCE itrpdll = NULL;
+typedef void(*dfSetRegister)(int8_t*, int8_t*, int8_t*, int8_t*, int8_t*, int8_t*,
+	int16_t*, int16_t*, int16_t*, int16_t*, int16_t*, int16_t*, int16_t*, 
+	int32_t*);
+typedef int(*dfAssertItrps)(void);
+dfSetRegister SetRegister = NULL;
+dfAssertItrps AssertItrps = NULL;
 
 void callinto()
 {
@@ -512,6 +521,7 @@ void cpcycle(int32_t _bpaddr, int8_t value)
 	int32_t cpmsg = ((cpdatas[bpaddr>>3]>>((bpaddr&7)<<2)) & 15);
 	if (cpmsg == 0) return;
 	int8_t prevalue = cpstack[cpsttop];
+	cpstack[cpsttop++] = value;
 	int32_t cond = 0;
 	if (cpmsg & 0x01)
 		cond |= (value == 0);
@@ -521,18 +531,23 @@ void cpcycle(int32_t _bpaddr, int8_t value)
 		cond |= (prevalue == 0 && value == 1);
 	if (cpmsg & 0x08)
 		cond |= (prevalue == 1 && value == 0);
-	
+	if (!itrpactive && itrpdll != NULL)
+	{
+		itrpactive = 1;
+		itrpid = AssertItrps();
+		cond |= (itrpid > 0);
+		itrpactive = 0;
+	}
 	if (bpjump >= 0)
 		cond &= (bpjump == bpaddr);
-	if (cond)
+	if (cond && ++bpcount[bpaddr] >= bpmaxcount[bpaddr])
 	{
-		if (++bpcount[bpaddr] < bpmaxcount[bpaddr]) return;
 		bpcount[bpaddr] = 0;
 		bpjump = -1;
 		bppause = 2;
 		while (bpenable && bppause);	
 	}
-	cpstack[cpsttop++] = value;
+	itrpid = 0;
 }
 
 EXPORT int32_t GetCallCount()
@@ -615,7 +630,32 @@ EXPORT int32_t GetBackTrace(int32_t* data)
 	return rbpsttop;
 }
 
+EXPORT void SetItrpDll(char* dllpath)
+{
+	while (itrpactive);
+	itrpactive = 1;
+	if (itrpdll != NULL)
+	{
+		FreeLibrary(itrpdll);
+		SetRegister = NULL;
+		AssertItrps = NULL;
+	}
+	if (dllpath != NULL)
+	{
+		itrpdll = LoadLibrary(dllpath);
+		SetRegister = (dfSetRegister)GetProcAddress(itrpdll, "_SetRegister@56");
+		AssertItrps = (dfAssertItrps)GetProcAddress(itrpdll, "_AssertItrps@0");
+		SetRegister(XBit, YBit, MBit, CBit, TBit, SBit,
+			DWord, CVWord, TVWord, AIWord, AOWord, VWord, ZWord, 
+			CV32DoubleWord);
+	}
+	itrpactive = 0;
+}
 
+EXPORT int GetItrpID()
+{
+	return itrpid;
+}
 
 void InitRegisters()
 {

@@ -114,7 +114,7 @@ namespace SamSoarII.Shell.Dialogs
                                 }
                                 break;
                             case "ATCH":
-                                if (words.Length == 3)
+                                if (words.Length == 2)
                                 {
                                     return _subdiagramSource.Where(x => { return (x.Content as string).StartsWith(words[2]); });
                                 }

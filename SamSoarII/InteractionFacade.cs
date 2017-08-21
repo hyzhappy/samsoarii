@@ -394,7 +394,7 @@ namespace SamSoarII
             if (!CheckLadder(false)) return false;
             if (!CheckFuncBlock(false)) return false;
 #if DEBUG
-            //GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
+            GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
             //DownloadHelper.InitializeData(mdProj);
 #endif
             _option = -1;

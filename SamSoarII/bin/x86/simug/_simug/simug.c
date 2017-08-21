@@ -306,7 +306,6 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeDll();
 		return 34;
 	}
-	/*
 	dfSetItrpDll = (vsDllfun)GetProcAddress(hdll, "_SetItrpDll@4");
 	if (dfSetItrpDll == NULL)
 	{
@@ -319,7 +318,6 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeDll();
 		return 36;
 	}
-	*/
 	return 0;
 }
 
