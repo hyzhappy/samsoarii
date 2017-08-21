@@ -118,7 +118,7 @@ namespace SamSoarII.Shell.Dialogs
         }
 
         #endregion
-        
+
         #region Event Handler
 
         private void TB_Temp_TextChanged(object sender, TextChangedEventArgs e)
@@ -139,7 +139,7 @@ namespace SamSoarII.Shell.Dialogs
         {
             Cancel(this, e);
         }
-        
+
 
         #endregion
     }
@@ -207,5 +207,4 @@ namespace SamSoarII.Shell.Dialogs
 
         #endregion
     }
-
 }

@@ -28,4 +28,4 @@ void MDPF(_FLOAT in,_WORD ct,_FLOAT out);
 void CRCC(_WORD in,_WORD ct);
 void DDO(_WORD in,_WORD ct);
 void DSL(_WORD in,_WORD ct);
-void TEST();
+void CI_FLOAT32_ADD();
