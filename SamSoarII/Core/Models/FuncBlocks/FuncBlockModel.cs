@@ -332,6 +332,19 @@ namespace SamSoarII.Core.Models
             set { this.laddermode = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("LadderMode")); }
         }
 
+        public IViewModel Visual
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         #endregion
 
         #region Save & Load

@@ -122,6 +122,19 @@ namespace SamSoarII.Core.Models
             set { this.ptvitem = value; }
         }
 
+        public IViewModel Visual
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         #endregion
 
         #region Save & Load

@@ -150,6 +150,19 @@ namespace SamSoarII.Core.Models
             set { this.isvisited = value; }
         }
 
+        public IViewModel Visual
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         #endregion
 
     }

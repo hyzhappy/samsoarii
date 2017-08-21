@@ -337,6 +337,19 @@ namespace SamSoarII.Core.Models
 
         public bool IsReadOnly { get { return true; } }
 
+        public IViewModel Visual
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public ValueInfo this[int index]
         {
             get

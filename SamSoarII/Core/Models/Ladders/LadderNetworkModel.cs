@@ -587,6 +587,19 @@ namespace SamSoarII.Core.Models
 
         public Dictionary<int, LadderLogicModule> LadderLogicModules { get; set; }
 
+        public IViewModel Visual
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public int GetMaxY()
         {
             IEnumerable<int> ys = Children.Concat(VLines).Select(u => u.Y);

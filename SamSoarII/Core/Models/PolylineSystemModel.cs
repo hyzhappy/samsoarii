@@ -119,10 +119,23 @@ namespace SamSoarII.Core.Models
             set { throw new NotImplementedException(); }
         }
 
+        public IViewModel Visual
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         #endregion
 
         #region Save & Load
-        
+
         public void Save(XElement xele)
         {
 

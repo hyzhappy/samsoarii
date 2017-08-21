@@ -191,6 +191,19 @@ namespace SamSoarII.Shell.Models
 
         public ProjectTreeViewItem PTVItem { get { return null; } set { } }
 
+        public IViewModel Visual
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         #endregion
     }
     /// <summary>

@@ -144,6 +144,19 @@ namespace SamSoarII.Shell.Models
 
         public ProjectTreeViewItem PTVItem { get { throw new NotImplementedException(); } set { throw new NotImplementedException(); } }
 
+        public IViewModel Visual
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public void Save(XElement xele)
         {
             throw new NotImplementedException();

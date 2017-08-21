@@ -21,7 +21,13 @@ namespace SamSoarII
         static private ResourceManager<VLineViewModel> rmgVLine;
         static private ResourceManager<InstructionRowViewModel> rmgIRow;
         static private ResourceManager<LadderBrpoViewModel> rmgBrpo;
-        
+
+        static private ResourceManager<InputVisualUnitModel> vuInput;
+        static private ResourceManager<OutputVisualUnitModel> vuOutput;
+        static private ResourceManager<OutputRectVisualUnitModel> vuOutRec;
+        static private ResourceManager<SpecialVisualUnitModel> vuSpecial;
+        static private ResourceManager<HLineVisualUnitModel> vuHLine;
+        static private ResourceManager<VLineVisualUnitModel> vuVLine;
         static public void Initialize()
         {
             rmgNet = new ResourceManager<LadderNetworkViewModel>(new LadderNetworkViewModel(null), 20, new object[] { null });
@@ -34,6 +40,13 @@ namespace SamSoarII
             rmgVLine = new ResourceManager<VLineViewModel>(new VLineViewModel(null), 75, new object[] { null });
             rmgIRow = new ResourceManager<InstructionRowViewModel>(new InstructionRowViewModel(null, 0), 25, new object[] { null, 0 });
             rmgBrpo = new ResourceManager<LadderBrpoViewModel>(new LadderBrpoViewModel(null), 20, new object[] { null });
+
+            vuInput = new ResourceManager<InputVisualUnitModel>(new InputVisualUnitModel(null), 100, new object[] { null });
+            vuOutput = new ResourceManager<OutputVisualUnitModel>(new OutputVisualUnitModel(null), 25, new object[] { null });
+            vuOutRec = new ResourceManager<OutputRectVisualUnitModel>(new OutputRectVisualUnitModel(null), 25, new object[] { null });
+            vuSpecial = new ResourceManager<SpecialVisualUnitModel>(new SpecialVisualUnitModel(null), 25, new object[] { null });
+            vuHLine = new ResourceManager<HLineVisualUnitModel>(new HLineVisualUnitModel(null), 125, new object[] { null });
+            vuVLine = new ResourceManager<VLineVisualUnitModel>(new VLineVisualUnitModel(null), 75, new object[] { null });
         }
 
         static public LadderNetworkViewModel CreateNet(LadderNetworkModel core)
@@ -124,6 +137,60 @@ namespace SamSoarII
         static public void Dispose(VLineViewModel _view)
         {
             rmgVLine.Dispose(_view);
+        }
+
+        static public InputVisualUnitModel CreateVisualInput(LadderUnitModel _core)
+        {
+            return vuInput.Create(_core);
+        }
+        static public void Dispose(InputVisualUnitModel _view)
+        {
+            vuInput.Dispose(_view);
+        }
+
+        static public OutputVisualUnitModel CreateVisualOutput(LadderUnitModel _core)
+        {
+            return vuOutput.Create(_core);
+        }
+        static public void Dispose(OutputVisualUnitModel _view)
+        {
+            vuOutput.Dispose(_view);
+        }
+
+        static public OutputRectVisualUnitModel CreateVisualOutRec(LadderUnitModel _core)
+        {
+            return vuOutRec.Create(_core);
+        }
+        static public void Dispose(OutputRectVisualUnitModel _view)
+        {
+            vuOutRec.Dispose(_view);
+        }
+
+        static public SpecialVisualUnitModel CreateVisualSpecial(LadderUnitModel _core)
+        {
+            return vuSpecial.Create(_core);
+        }
+        static public void Dispose(SpecialVisualUnitModel _view)
+        {
+            vuSpecial.Dispose(_view);
+        }
+
+        static public HLineVisualUnitModel CreateVisualHLine(LadderUnitModel _core)
+        {
+            return vuHLine.Create(_core);
+        }
+        static public void Dispose(HLineVisualUnitModel _view)
+        {
+            vuHLine.Dispose(_view);
+        }
+
+        static public VLineVisualUnitModel CreateVisualVLine(LadderUnitModel _core)
+        {
+            return vuVLine.Create(_core);
+        }
+        static public void Dispose(VLineVisualUnitModel _view)
+        {
+            vuVLine.Dispose(_view);
         }
     }
 }

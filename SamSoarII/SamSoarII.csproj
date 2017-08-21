@@ -492,6 +492,16 @@
     <Compile Include="Shell\Models\Ladders\LadderNetworkViewModel.xaml.cs">
       <DependentUpon>LadderNetworkViewModel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Models\Ladders\LightUnits\HLineVisualUnitModel.cs" />
+    <Compile Include="Shell\Models\Ladders\LightUnits\InputVisualUnitModel.cs" />
+    <Compile Include="Shell\Models\Ladders\LightUnits\OutputRectVisualUnitModel.cs" />
+    <Compile Include="Shell\Models\Ladders\LightUnits\OutputVisualUnitModel.cs" />
+    <Compile Include="Shell\Models\Ladders\LightUnits\SpecialVisualUnitModel.cs" />
+    <Compile Include="Shell\Models\Ladders\LightUnits\VLineVisualUnitModel.cs" />
+    <Compile Include="Shell\Models\Ladders\UnitRender\DrawingManager.cs" />
+    <Compile Include="Shell\Models\Ladders\UnitRender\IRenderModel.cs" />
+    <Compile Include="Shell\Models\Ladders\UnitRender\LadderUnitDrawingVisual.cs" />
+    <Compile Include="Shell\Models\Ladders\LightUnits\BaseVisualUnitModel.cs" />
     <Compile Include="Shell\Models\Ladders\Units\HLineViewModel.xaml.cs">
       <DependentUpon>HLineViewModel.xaml</DependentUpon>
     </Compile>
@@ -1168,7 +1178,6 @@
     <Folder Include="Core\Models\Ladders\Commands\" />
     <Folder Include="Core\Models\Ladders\PLSBlock\" />
     <Folder Include="Shell\Helper\" />
-    <Folder Include="Shell\Models\Ladders\LightUnits\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\Error.png" />

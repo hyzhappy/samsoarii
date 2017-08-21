@@ -147,6 +147,19 @@ namespace SamSoarII.Shell.Models
             set { throw new NotImplementedException(); }
         }
 
+        public IViewModel Visual
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         #endregion
 
         #region Select Changed

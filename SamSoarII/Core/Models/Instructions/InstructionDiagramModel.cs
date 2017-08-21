@@ -128,7 +128,20 @@ namespace SamSoarII.Core.Models
         
         private double viewheight;
         public double ViewHeight { get { return this.viewheight; } }
-        
+
+        public IViewModel Visual
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public void UpdateCanvasTop()
         {
             double currenttop = 0;

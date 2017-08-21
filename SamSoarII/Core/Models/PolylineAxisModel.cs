@@ -84,10 +84,23 @@ namespace SamSoarII.Core.Models
 
         public ProjectTreeViewItem PTVItem { get; set; }
 
+        public IViewModel Visual
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         #endregion
 
         #region Save & Load
-        
+
         public void Save(XElement xele)
         {
 

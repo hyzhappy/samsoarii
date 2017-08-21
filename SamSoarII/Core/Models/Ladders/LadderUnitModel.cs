@@ -1,7 +1,6 @@
 ﻿using SamSoarII.Core.Generate;
 using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
-using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -1535,12 +1534,45 @@ namespace SamSoarII.Core.Models
         {
             get { return breakpoint?.Cursor; }
         }
-        
+
         #endregion
 
         #endregion
 
         #region Shell
+        private BaseVisualUnitModel visual;
+        public BaseVisualUnitModel Visual
+        {
+            get
+            {
+                return this.visual;
+            }
+            set
+            {
+                if (visual == value) return;
+                BaseVisualUnitModel _visual = visual;
+                this.visual = null;
+                if (_visual != null)
+                {
+                    foreach (ValueStore vstore in children.Where(vm => vm.Store?.Parent != null).Select(vm => vm.Store))
+                        vstore.VisualRefNum--;
+                    if (_visual.Core != null) _visual.Core = null;
+                }
+                this.visual = value;
+                if (visual != null)
+                {
+                    foreach (ValueStore vstore in children.Where(vm => vm.Store?.Parent != null).Select(vm => vm.Store))
+                        vstore.VisualRefNum++;
+                    if (visual.Core != this) visual.Core = this;
+                }
+            }
+        }
+
+        IViewModel IModel.Visual
+        {
+            get { return visual; }
+            set { Visual = (BaseVisualUnitModel)value; }
+        }
 
         private LadderUnitViewModel view;
         public LadderUnitViewModel View
@@ -1763,7 +1795,7 @@ namespace SamSoarII.Core.Models
         public List<LadderUnitModel> SubElements = new List<LadderUnitModel>();
         public bool IsSearched { get; set; }
         public int CountLevel { get; set; }
-
+        
         public virtual bool Assert()
         {
             switch (Shape)

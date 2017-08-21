@@ -189,6 +189,19 @@ namespace SamSoarII.Core.Models
         public bool IsFusionCircuit { get { return this.isfusioncircuit; } }
         public bool Invalid { get { return IsMasked || IsOpenCircuit || IsShortCircuit || IsFusionCircuit || Insts.Count == 0; } }
 
+        public IViewModel Visual
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public void Update()
         {
             IsModified = false;

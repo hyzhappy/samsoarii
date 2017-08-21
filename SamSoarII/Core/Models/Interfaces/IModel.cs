@@ -13,6 +13,7 @@ namespace SamSoarII.Core.Models
     {
         IModel Parent { get; }
         IViewModel View { get; set; }
+        IViewModel Visual { get; set; }
         ProjectTreeViewItem PTVItem { get; set; }
         void Save(XElement xele);
         void Load(XElement xele);
