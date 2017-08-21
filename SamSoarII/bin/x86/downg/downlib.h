@@ -240,6 +240,21 @@ extern void CI_FLOAT32_POW(uint8_t en, float in0, float in1, float *out);
 extern void CI_FLOAT32_ABSF(uint8_t en, float in, float *out);
 extern void CI_FLOAT32_MEANF(uint8_t en, float *in, float *out, uint16_t cnt);
 
+extern void CI_PID(uint8_t en, uint16_t pid_loop, uint8_t pid_mode, uint16_t *pid_data, uint16_t pid_in, uint32_t *pid_out, uint16_t pid_setValue);
+extern void CI_MODBUS_MASTER(uint8_t en, uint8_t com_id, uint16_t table_id, uint16_t *wr_out);
+extern void CI_SEND(uint8_t en, uint8_t com_id, uint16_t *txd_buf, uint16_t length);
+extern void CI_REV(uint8_t en, uint8_t com_id, uint16_t *rev_buf, uint16_t *length);
+
+extern void reset_timer(uint16_t Tnum);
+extern void reset_counter(uint16_t ucCntIndex);
+
+typedef void (*Interrupt_Handle_Typedef)();
+
+extern void CI_INTR_ATCH(uint8_t en, Interrupt_Handle_Typedef fx, uint16_t event_index);
+extern void CI_INTR_DTCH(uint8_t en, uint16_t event_index);
+extern void CI_INTR_ENI(uint8_t en);
+extern void CI_INTR_DISI(uint8_t en);
+
 void _imyset(int16_t Yn, int16_t size);
 
 void _imyrst(int16_t Yn, int16_t size);
