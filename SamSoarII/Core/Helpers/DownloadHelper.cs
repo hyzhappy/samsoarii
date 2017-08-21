@@ -627,8 +627,8 @@ namespace SamSoarII.Core.Helpers
         {
             dtModbus.Add(byte.Parse(mitem.SlaveID));
             dtModbus.Add(mitem.HandleCodes[mitem.SelectedHandleCodes().IndexOf(mitem.HandleCode)]);
-            Write(dtModbus, short.Parse(mitem.SlaveRegister));
-            Write(dtModbus, short.Parse(mitem.SlaveCount));
+            Write(dtModbus, ushort.Parse(mitem.SlaveRegister));
+            Write(dtModbus, ushort.Parse(mitem.SlaveCount));
             Write(dtModbus, mitem.MasteRegisterAddress);
         }
 

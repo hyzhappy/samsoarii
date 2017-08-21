@@ -7,7 +7,8 @@ namespace SamSoarII.Core.Models
 {
     public class LadderUnitFormat
     {
-        public LadderUnitFormat(int _catalogid, string _name, LadderUnitModel.Types _type, LadderUnitModel.Outlines _outline, LadderUnitModel.Shapes _shape,
+        public LadderUnitFormat(int _catalogid, string _name, 
+            LadderUnitModel.Types _type, LadderUnitModel.Outlines _outline, LadderUnitModel.Shapes _shape,
             string _describe, string _detail_ch, string _detail_en, ValueFormat[] _formats)
         {
             catalogid = _catalogid;
@@ -28,6 +29,10 @@ namespace SamSoarII.Core.Models
 
         private string name;
         public string Name { get { return this.name; } }
+
+        private string fullname_ch;
+        private string fullname_en;
+        public string Fullname { get { return App.CultureIsZH_CH() ? fullname_ch : fullname_en; } }
 
         private LadderUnitModel.Types type;
         public LadderUnitModel.Types Type { get { return this.type; } }

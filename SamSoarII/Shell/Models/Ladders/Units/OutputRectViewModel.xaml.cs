@@ -91,6 +91,7 @@ namespace SamSoarII.Shell.Models
                 else
                     HideComment(i);
             }
+            Canvas.SetTop(LB_EN, Core.Type == LadderUnitModel.Types.PID ? 60 : 80);
             Update();
         }
 
@@ -106,7 +107,7 @@ namespace SamSoarII.Shell.Models
                 {
                     middlevalues[id] = new TextBlock();
                     Canvas.SetLeft(middlevalues[id], 25);
-                    Canvas.SetTop(middlevalues[id], 120 + id * 30);
+                    Canvas.SetTop(middlevalues[id], 120 + id * 30 - (Core.Type == LadderUnitModel.Types.PID ? 20 : 0));
                     middlevalues[id].TextAlignment = TextAlignment.Left;
                     mainCanvas.Children.Add(middlevalues[id]);
                 }

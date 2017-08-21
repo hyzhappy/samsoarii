@@ -85,7 +85,7 @@ namespace SamSoarII.Core.Models
             Formats = new LadderUnitFormat[(int)Types.NULL + 1];
             ValueFormat[] vformats = null;
             vformats = new ValueFormat[] {
-                new ValueFormat("IN", ValueModel.Types.BOOL, true, false, 0, new Regex[]{ ValueModel.VerifyBitRegex1, ValueModel.WordBitRegex}) };
+                new ValueFormat("IN", ValueModel.Types.BOOL, true, false, 0, new Regex[]{ ValueModel.VerifyBitRegex1, ValueModel.WordBitRegex}, null, "输入", "Input") };
 
             Formats[(int)Types.LD] = new LadderUnitFormat(200, "LD", Types.LD, Outlines.BitOperation, Shapes.Input,
                 Properties.Resources.MainWindow_Normally_Open_Contact,
@@ -155,7 +155,7 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.NULL] = new LadderUnitFormat(0, "NULL", Types.NULL, Outlines.NULL, Shapes.Null,
                 "", "", "", vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, 0, new Regex[]{ ValueModel.VerifyBitRegex2, ValueModel.WordBitRegex}) };
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, 0, new Regex[]{ ValueModel.VerifyBitRegex2, ValueModel.WordBitRegex}, null, "输出", "Output") };
             Formats[(int)Types.OUT] = new LadderUnitFormat(209, "OUT", Types.OUT, Outlines.BitOperation, Shapes.Output,
                 Properties.Resources.MainWindow_Output_Coil,
                 "线圈前方条件持续导通时，线圈才会输出；",
@@ -177,8 +177,8 @@ namespace SamSoarII.Core.Models
                 "Alterminately changed the targeted register between 1(ON) and 0(OFF) when the conditon encounter the rising edge.（OFF -- ON）",
                 vformats);
             vformats = new ValueFormat[] {
-                new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex2, ValueModel.WordBitRegex}),
-                new ValueFormat("CT", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}) };
+                new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex2, ValueModel.WordBitRegex}, null, "输出", "Output"),
+                new ValueFormat("CT", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "总数", "Count") };
             Formats[(int)Types.SET] = new LadderUnitFormat(211, "SET", Types.SET, Outlines.BitOperation, Shapes.Output,
                 Properties.Resources.Set_Coil,
                 "指令置位从（地址位）开始的（长度）个线圈，最大点数根据操作数类型设定。",
@@ -200,8 +200,8 @@ namespace SamSoarII.Core.Models
                 "Immediately set a range of coils to ON, the start and count of these coils can be defined.",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
+                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "输入1", "Input1"),
+                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "输入2", "Input2") };
             Formats[(int)Types.LDWEQ] = new LadderUnitFormat(300, "LDWEQ", Types.LDWEQ, Outlines.Compare, Shapes.Input,
                 Properties.Resources.Word_Equal,
                 "比较IN1是否等于IN2，如果比较结果为真实，输出打开。",
@@ -233,8 +233,8 @@ namespace SamSoarII.Core.Models
                 "Compare the 16-bit word IN1 and IN2, access it (ON) when IN1 is move than IN2.",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}) };
+                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "输入1", "Input1"),
+                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "输入2", "Input2") };
             Formats[(int)Types.LDDEQ] = new LadderUnitFormat(306, "LDDEQ", Types.LDDEQ, Outlines.Compare, Shapes.Input,
                 Properties.Resources.DWord_Equal,
                 "比较IN1是否等于IN2，如果比较结果为真实，输出打开。",
@@ -266,8 +266,8 @@ namespace SamSoarII.Core.Models
                 "Compare the 32-bit double word IN1 and IN2, access it (ON) when IN1 is move than IN2.",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.FLOAT, true, false, 0, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.FLOAT, true, false, 1, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}) };
+                    new ValueFormat("IN1", ValueModel.Types.FLOAT, true, false, 0, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}, null, "输入1", "Input1"),
+                    new ValueFormat("IN2", ValueModel.Types.FLOAT, true, false, 1, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}, null, "输入2", "Input2") };
             Formats[(int)Types.LDFEQ] = new LadderUnitFormat(312, "LDFEQ", Types.LDFEQ, Outlines.Compare, Shapes.Input,
                 Properties.Resources.DWord_Equal,
                 "比较IN1是否等于IN2，如果比较结果为真实，输出打开。",
@@ -303,25 +303,25 @@ namespace SamSoarII.Core.Models
                 "将单字的IN转为双字的OUT。",
                 "Convert the 16-bit word IN to 32-bit double word OUT",
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}) });
+                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "输入", "Input"),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}, null, "输出", "Output") });
             Formats[(int)Types.DTOW] = new LadderUnitFormat(401, "DTOW", Types.DTOW, Outlines.Convert, Shapes.OutputRect,
                 Properties.Resources.DWord_To_Word,
                 "将双字的IN转为单字的OUT。",
                 "Convert the 32-bit double word IN to 16-bit word OUT",
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7, ValueModel.BitWordRegex}) });
+                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "输入", "Input"),
+                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7, ValueModel.BitWordRegex}, null, "输出", "Output") });
             Formats[(int)Types.DTOF] = new LadderUnitFormat(402, "DTOF", Types.DTOF, Outlines.Convert, Shapes.OutputRect,
                 Properties.Resources.DWord_To_Float,
                 "将双字的IN转为浮点的OUT。",
                 "Convert the 32-bit double word IN to 32-bit float OUT",
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.FLOAT, false, true, -1, new Regex[] { ValueModel.VerifyFloatRegex}) });
+                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "输入", "Input"),
+                    new ValueFormat("OUT", ValueModel.Types.FLOAT, false, true, -1, new Regex[] { ValueModel.VerifyFloatRegex}, null, "输出", "Output") });
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7, ValueModel.BitWordRegex}) };
+                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "输入", "Input"),
+                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7, ValueModel.BitWordRegex}, null, "输出", "Output") };
             Formats[(int)Types.BIN] = new LadderUnitFormat(403, "BIN", Types.BIN, Outlines.Convert, Shapes.OutputRect,
                 Properties.Resources.BCD_Code_To_Integer,
                 "将BCD码IN转为单字的OUT。",
@@ -353,8 +353,8 @@ namespace SamSoarII.Core.Models
                 "Decrease one to 16-bit word IN (IN - 1) and assign to OUT",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) };
+                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "输入", "Input"),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}, null, "输出", "Output") };
             Formats[(int)Types.INVD] = new LadderUnitFormat(501, "INVD", Types.INVD, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.DWord_Reverse,
                 "对IN执行取反操作，并将结果载入输出到OUT。",
@@ -376,8 +376,8 @@ namespace SamSoarII.Core.Models
                 "Decrease one to 32-bit double word IN (IN - 1) and assign to OUT",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.FLOAT, true, false, 0, new Regex[] {ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.FLOAT, false, true, -1, new Regex[] { ValueModel.VerifyFloatRegex}) };
+                    new ValueFormat("IN", ValueModel.Types.FLOAT, true, false, 0, new Regex[] {ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}, null, "输入", "Input"),
+                    new ValueFormat("OUT", ValueModel.Types.FLOAT, false, true, -1, new Regex[] { ValueModel.VerifyFloatRegex}, null, "输出", "Output") };
             Formats[(int)Types.MOVF] = new LadderUnitFormat(602, "MOVF", Types.MOVF, Outlines.Move, Shapes.OutputRect,
                 Properties.Resources.Move_Float,
                 "将浮点IN移动到双字OUT中，不改变IN的值。",
@@ -423,20 +423,20 @@ namespace SamSoarII.Core.Models
                 "将（长度）个单字从IN开始的一段连续的寄存器移动到从OUT开始的一段寄存器中，长度的范围是（1 - 1024）",
                 "Move a range of 16-bit word register started from IN, to another range started from OUT, the maximum length is 1024.",
                 new ValueFormat[] {
-                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.BitWordRegex}),
-                    new ValueFormat("D", ValueModel.Types.WORD, false, true, 1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.BitWordRegex}),
-                    new ValueFormat("N", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) });
+                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.BitWordRegex}, null, "源", "Source"),
+                    new ValueFormat("D", ValueModel.Types.WORD, false, true, 1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.BitWordRegex}, null, "目标", "Destination"),
+                    new ValueFormat("N", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "长度", "Number") });
             Formats[(int)Types.MVDBLK] = new LadderUnitFormat(604, "MVDBLK", Types.MVDBLK, Outlines.Move, Shapes.OutputRect,
                 Properties.Resources.Move_Blocks_DWord,
                 "将（长度）个双字从IN开始的一段连续的寄存器移动到从OUT开始的一段寄存器中，长度的范围是（1-1024）",
                 "Move a range of 32-bit double word register started from IN, to another range started from OUT, the maximum length is 1024.",
                 new ValueFormat[] {
-                    new ValueFormat("S", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("D", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("N", ValueModel.Types.DWORD, true, false, 2, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex })});
+                    new ValueFormat("S", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}, null, "源", "Source"),
+                    new ValueFormat("D", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}, null, "目标", "Destination"),
+                    new ValueFormat("N", ValueModel.Types.DWORD, true, false, 2, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex }, null, "长度", "Number")});
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.FLOAT, true, false, 0, new Regex[] {ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}) };
+                    new ValueFormat("IN", ValueModel.Types.FLOAT, true, false, 0, new Regex[] {ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}, null, "输入", "Input"),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}, null, "输出", "Output") };
             Formats[(int)Types.TRUNC] = new LadderUnitFormat(406, "TRUNC", Types.TRUNC, Outlines.Convert, Shapes.OutputRect,
                 Properties.Resources.Trunc,
                 "将浮点的IN截位取整转为双字的OUT。",
@@ -448,9 +448,9 @@ namespace SamSoarII.Core.Models
                 "Round-up the 32-bit float IN and assign to OUT.",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7, ValueModel.BitWordRegex}) };
+                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "输入1", "Input1"),
+                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "输入2", "Input2"),
+                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.VerifyWordRegex7, ValueModel.BitWordRegex}, null, "输出", "Output") };
             Formats[(int)Types.ANDW] = new LadderUnitFormat(502, "ANDW", Types.ANDW, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.Word_And,
                 "对单字IN1和IN2执行与操作，并将结果载入输出到OUT。",
@@ -507,9 +507,9 @@ namespace SamSoarII.Core.Models
                 "Rotation move IN1 right by IN2 step, and assign to OUT. For the part moved away from range, supply it to leftside with order maintaining.",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) };
+                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "输入1", "Input1"),
+                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "输入2", "Input2"),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}, null, "输出", "Output") };
             Formats[(int)Types.ANDD] = new LadderUnitFormat(503, "ANDD", Types.ANDD, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.DWord_And,
                 "对双字IN1和IN2执行与操作，并将结果载入输出到OUT。",

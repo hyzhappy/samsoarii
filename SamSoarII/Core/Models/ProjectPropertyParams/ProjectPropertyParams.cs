@@ -140,28 +140,28 @@ namespace SamSoarII.Core.Models
                 paraCom232.Load(xeleParams);
             xeleParams = xele.Element("CommunicationInterfaceParams485");
             if (xeleParams != null)
-                paraCom232.Load(xeleParams);
+                paraCom485.Load(xeleParams);
             xeleParams = xele.Element("USBCommunicationParams");
             if (xeleParams != null)
-                paraCom232.Load(xeleParams);
+                paraUsb.Load(xeleParams);
             xeleParams = xele.Element("PasswordParams");
             if (xeleParams != null)
-                paraCom232.Load(xeleParams);
+                paraPassword.Load(xeleParams);
             xeleParams = xele.Element("FilterParams");
             if (xeleParams != null)
-                paraCom232.Load(xeleParams);
+                paraFilter.Load(xeleParams);
             xeleParams = xele.Element("HoldingSectionParams");
             if (xeleParams != null)
-                paraCom232.Load(xeleParams);
+                paraHolding.Load(xeleParams);
             xeleParams = xele.Element("AnalogQuantityParams");
             if (xeleParams != null)
-                paraCom232.Load(xeleParams);
+                paraAnalog.Load(xeleParams);
             xeleParams = xele.Element("ExpansionModuleParams");
             if (xeleParams != null)
-                paraCom232.Load(xeleParams);
+                paraExpansion.Load(xeleParams);
             xeleParams = xele.Element("CommunicationParams");
             if (xeleParams != null)
-                paraCom232.Load(xeleParams);
+                paraCom.Load(xeleParams);
         }
 
         public IParams Clone()

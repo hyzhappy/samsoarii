@@ -208,6 +208,7 @@
     <Compile Include="Core\Models\Instructions\InstructionNetworkModel.cs" />
     <Compile Include="Core\Models\Interfaces\IModel.cs" />
     <Compile Include="Core\Models\Interfaces\IParams.cs" />
+    <Compile Include="Core\Models\Ladders\ItrpModel.cs" />
     <Compile Include="Core\Models\Ladders\LadderBrpoModel.cs" />
     <Compile Include="Core\Models\Ladders\LadderDiagramModel.cs" />
     <Compile Include="Core\Models\Ladders\LadderNetworkModel.cs" />
@@ -304,6 +305,9 @@
     </Compile>
     <Compile Include="Shell\Dialogs\PasswordDialog.xaml.cs">
       <DependentUpon>PasswordDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\PIDDialog.xaml.cs">
+      <DependentUpon>PIDDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Dialogs\PolylineAxisWidget.xaml.cs">
       <DependentUpon>PolylineAxisWidget.xaml</DependentUpon>
@@ -438,7 +442,7 @@
     <Compile Include="Shell\Dialogs\ReplaceReportWindow.xaml.cs">
       <DependentUpon>ReplaceReportWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shell\Dialogs\TBLDialog.xaml.cs">
+    <Compile Include="Shell\Dialogs\ElementPropertyModify\TBLDialog.xaml.cs">
       <DependentUpon>TBLDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Dialogs\ValueModify\ValueModifyDialog.xaml.cs">
@@ -839,6 +843,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Shell\Dialogs\PIDDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Shell\Dialogs\PolylineAxisWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -999,7 +1007,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Shell\Dialogs\TBLDialog.xaml">
+    <Page Include="Shell\Dialogs\ElementPropertyModify\TBLDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
