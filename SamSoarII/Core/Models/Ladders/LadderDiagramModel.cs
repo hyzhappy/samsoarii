@@ -13,7 +13,6 @@ using SamSoarII.Shell.Managers;
 using System.Threading;
 using System.Windows.Threading;
 using System.Windows;
-using System.Windows.Media.TextFormatting;
 
 namespace SamSoarII.Core.Models
 {

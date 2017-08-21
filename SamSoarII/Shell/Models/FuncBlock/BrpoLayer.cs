@@ -101,7 +101,7 @@ namespace SamSoarII.Shell.Models
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            base.OnRender(drawingContext); 
+            base.OnRender(drawingContext);
             if (core.LadderMode != LadderModes.Simulate) return;
 
             BackgroundGeometryBuilder unactiveBuilder = new BackgroundGeometryBuilder();
