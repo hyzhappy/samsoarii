@@ -77,7 +77,7 @@ namespace SamSoarII.Shell.Windows
             Properties.Resources.Inst_Shift, Properties.Resources.Inst_Interrupt,
             Properties.Resources.Inst_RealTime, Properties.Resources.Inst_Communication,
             Properties.Resources.Inst_Pulse, Properties.Resources.Inst_HighCount,
-            Properties.Resources.Inst_Auxiliar};
+            Properties.Resources.Inst_Auxiliar, Properties.Resources.Inst_PID};
 
         #endregion
 
@@ -154,7 +154,7 @@ namespace SamSoarII.Shell.Windows
                     ProjectTreeViewItem.TYPE_LADDERS,
                     PTVIH_Insts[i]);
             }
-            for (int i = 0; i < (int)(LadderUnitModel.Types.PID); i++)
+            for (int i = 0; i < (int)(LadderUnitModel.Types.VLINE); i++)
             {
                 int id = (int)(LadderUnitModel.Formats[i].Outline);
                 CreatePTVItem(PTVI_Insts[id], ProjectTreeViewItem.TYPE_INSTRUCTION, (LadderUnitModel.Types)i, false);
