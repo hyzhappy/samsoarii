@@ -55,10 +55,10 @@
                             MouseDoubleClick="OnThumbnailButtonMouseDoubleClick"/>
                 </Grid>
                 <Grid x:Name="GD_Canvas">
-                    <Canvas x:Name="LadderCanvas"
+                    <local:LightCanvas x:Name="LadderCanvas"
                         HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" 
                         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
-                    </Canvas>
+                    </local:LightCanvas>
                 </Grid>
             </StackPanel>
         </Grid>

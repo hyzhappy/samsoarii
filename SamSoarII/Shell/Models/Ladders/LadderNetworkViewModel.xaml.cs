@@ -162,8 +162,8 @@ namespace SamSoarII.Shell.Models
                     if (!IsExpand)
                     {
                         ReleaseSelectRect();
-                        LadderCanvas.Height = 0;
                         DynamicDispose(true);
+                        LadderCanvas.Height = 0;
                         if (ThumbnailButton.ToolTip == null)
                         {
                             ThumbnailButton.ToolTip = new ToolTip();
@@ -492,18 +492,18 @@ namespace SamSoarII.Shell.Models
             {
                 IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
                 units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
-                units = units.Where(u => u.View == null);
+                
                 if (units.Count() > 0)
                     Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
                         foreach (LadderUnitModel unit in units)
                         {
-                            unit.View = LadderUnitViewModel.Create(unit);
-                            if (unit.View.Parent != ViewParent.MainCanvas)
+                            if (unit.Visual != null) unit.Visual.Dispose();
+                            unit.Visual = BaseVisualUnitModel.Create(unit);
+                            foreach (var visual in unit.Visual.Visuals)
                             {
-                                if (unit.View.Parent is Canvas)
-                                    ((Canvas)(unit.View.Parent)).Children.Remove(unit.View);
-                                ViewParent.MainCanvas.Children.Add(unit.View);
+                                if(visual != null)
+                                    LadderCanvas.AddVisual(visual);
                             }
                         }
                     });
@@ -517,14 +517,13 @@ namespace SamSoarII.Shell.Models
             {
                 IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
                 units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
-                units = units.Where(u => u.View != null);
+                units = units.Where(u => u.Visual != null);
                 if (units.Count() > 0)
                     Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
                         foreach (LadderUnitModel unit in units)
                         {
-                            if (hide) unit.View.Visibility = Visibility.Hidden;
-                            unit.View.Dispose();
+                            unit.Visual.Dispose();
                         }
                     });
             }

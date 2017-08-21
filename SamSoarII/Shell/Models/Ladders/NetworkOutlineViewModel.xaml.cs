@@ -176,14 +176,20 @@ namespace SamSoarII.Shell.Models
                     units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
                     foreach (LadderUnitModel unit in units)
                     {
-                        if (unit.View == null)
+                        if (unit.Visual == null)
                         {
-                            unit.View = LadderUnitViewModel.Create(unit);
-                            if (unit.View.Parent != LadderCanvas)
+                            //unit.View = LadderUnitViewModel.Create(unit);
+                            //if (unit.View.Parent != LadderCanvas)
+                            //{
+                            //    if (unit.View.Parent is Canvas)
+                            //        ((Canvas)(unit.View.Parent)).Children.Remove(unit.View);
+                            //    LadderCanvas.Children.Add(unit.View);
+                            //}
+                            unit.Visual = BaseVisualUnitModel.Create(unit);
+                            foreach (var visual in unit.Visual.Visuals)
                             {
-                                if (unit.View.Parent is Canvas)
-                                    ((Canvas)(unit.View.Parent)).Children.Remove(unit.View);
-                                LadderCanvas.Children.Add(unit.View);
+                                if (visual != null)
+                                    LadderCanvas.AddVisual(visual);
                             }
                         }
                     }
@@ -203,9 +209,9 @@ namespace SamSoarII.Shell.Models
                     units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
                     foreach (LadderUnitModel unit in units)
                     {
-                        if (unit.View != null)
+                        if (unit.Visual != null)
                         {
-                            unit.View.Dispose();
+                            unit.Visual.Dispose();
                         }
                     }
                 });

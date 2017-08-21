@@ -11,14 +11,13 @@ namespace SamSoarII.Shell.Models
         Unit,
         Property,
         Comment,
-        SelectRect,
-        SelectArea
+        Brop
     }
-    public class LadderUnitDrawingVisual : DrawingVisual, IRenderModel
+    public class LadderDrawingVisual : DrawingVisual, IRenderModel
     {
         private VisualType type;
         public VisualType Type { get { return type; } }
-        public LadderUnitDrawingVisual(IViewModel core, VisualType type)
+        public LadderDrawingVisual(IViewModel core, VisualType type)
         {
             this.core = core;
             this.type = type;
@@ -38,11 +37,8 @@ namespace SamSoarII.Shell.Models
                     case VisualType.Comment:
                         DrawingManager.DrawingUnitCommnet(context, core);
                         break;
-                    case VisualType.SelectRect:
-                        DrawingManager.DrawingSelectRect(context, core);
-                        break;
-                    case VisualType.SelectArea:
-                        DrawingManager.DrawingSelectArea(context, core);
+                    case VisualType.Brop:
+                        DrawingManager.DrawingBrop(context, core);
                         break;
                 }
             }

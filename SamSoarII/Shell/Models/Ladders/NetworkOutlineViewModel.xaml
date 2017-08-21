@@ -7,10 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="385" d:DesignWidth="800" MaxHeight="385">
     <ScrollViewer x:Name="Scroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <Canvas x:Name="LadderCanvas" Background="White" HorizontalAlignment="Left">
+        <local:LightCanvas x:Name="LadderCanvas" Background="White" HorizontalAlignment="Left">
             <Canvas.LayoutTransform>
                 <ScaleTransform x:Name="LadderScale"></ScaleTransform>
             </Canvas.LayoutTransform>
-        </Canvas>
+        </local:LightCanvas>
     </ScrollViewer>
 </UserControl>

@@ -48,11 +48,6 @@ namespace SamSoarII.Shell.Models
                     if (vmodel.Store != null)
                         vmodel.Store.PropertyChanged += OnValueStorePropertyChanged;
             }
-
-            Visuals[0] = new LadderUnitDrawingVisual(this, VisualType.Unit);
-            Visuals[1] = new LadderUnitDrawingVisual(this, VisualType.Property);
-            if (IsCommentMode) Visuals[2] = new LadderUnitDrawingVisual(this, VisualType.Comment);
-            else Visuals[2] = null;
         }
 
         #endregion
@@ -63,34 +58,74 @@ namespace SamSoarII.Shell.Models
 
         #region Visuals
 
-        private IRenderModel[] visuals = new IRenderModel[4];
+        private LadderDrawingVisual[] visuals = new LadderDrawingVisual[4];
 
-        public IRenderModel[] Visuals { get { return visuals; } }
+        public LadderDrawingVisual[] Visuals { get { return visuals; } }
         protected void RenderUnit()
         {
-            visuals[0]?.Render();
+            if (visuals[0] != null)
+                ViewParent.LadderCanvas.RemoveVisual(visuals[0]);
+            visuals[0] = new LadderDrawingVisual(this, VisualType.Unit);
+            visuals[0].Render();
+            //ViewParent.LadderCanvas.AddVisual(visuals[0]);
         }
 
         protected void RenderProperty()
         {
-            visuals[1]?.Render();
+            if (visuals[1] != null)
+                ViewParent.LadderCanvas.RemoveVisual(visuals[1]);
+            visuals[1] = new LadderDrawingVisual(this, VisualType.Property);
+            visuals[1].Render();
+            //ViewParent.LadderCanvas.AddVisual(visuals[1]);
         }
 
         protected void RenderComment()
         {
-            visuals[2]?.Render();
+            if (visuals[2] != null)
+                ViewParent.LadderCanvas.RemoveVisual(visuals[2]);
+            visuals[2] = new LadderDrawingVisual(this, VisualType.Comment);
+            visuals[2].Render();
+            //ViewParent.LadderCanvas.AddVisual(visuals[2]);
         }
         protected void RenderBrpo()
         {
-            visuals[3]?.Render();
+            if (visuals[3] != null)
+                ViewParent.LadderCanvas.RemoveVisual(visuals[3]);
+            visuals[3] = new LadderDrawingVisual(this, VisualType.Brop);
+            visuals[3].Render();
+            //ViewParent.LadderCanvas.AddVisual(visuals[3]);
         }
         protected void RenderAll()
         {
             RenderUnit();
-            RenderProperty();
+            if(!(this is HLineVisualUnitModel || this is VLineVisualUnitModel))
+                RenderProperty();
             if (IsCommentMode) RenderComment();
         }
         #endregion
+
+        static public BaseVisualUnitModel Create(LadderUnitModel _core)
+        {
+            BaseVisualUnitModel ret = null;
+            switch (_core.Shape)
+            {
+                case LadderUnitModel.Shapes.Input:
+                    ret = AllResourceManager.CreateVisualInput(_core); break;
+                case LadderUnitModel.Shapes.Output:
+                    ret = AllResourceManager.CreateVisualOutput(_core); break;
+                case LadderUnitModel.Shapes.OutputRect:
+                    ret = AllResourceManager.CreateVisualOutRec(_core); break;
+                case LadderUnitModel.Shapes.Special:
+                    ret = AllResourceManager.CreateVisualSpecial(_core); break;
+                case LadderUnitModel.Shapes.HLine:
+                    ret = AllResourceManager.CreateVisualHLine(_core); break;
+                case LadderUnitModel.Shapes.VLine:
+                    ret = AllResourceManager.CreateVisualVLine(_core); break;
+                default:
+                    ret = null; break;
+            }
+            return ret;
+        }
 
         #region Core
         private LadderUnitModel core;
@@ -148,6 +183,15 @@ namespace SamSoarII.Shell.Models
                     if (vmodel.Store != null)
                         vmodel.Store.PropertyChanged -= OnValueStorePropertyChanged;
             }
+            for (int i = 0; i < visuals.Length; i++)
+            {
+                if (ViewParent.LadderCanvas.Contains(visuals[i]))
+                {
+                    ViewParent.LadderCanvas.RemoveVisual(visuals[i]);
+                }
+                visuals[i] = null;
+            }
+            Core.Visual = null;
             Core = null;
         }
 
@@ -165,9 +209,11 @@ namespace SamSoarII.Shell.Models
                     RenderProperty();
                     break;
                 case RenderType.Comment:
+                    RenderUnit();
                     RenderComment();
                     break;
                 case RenderType.Opacity:
+                    RenderAll();
                     break;
                 case RenderType.Brpo:
                     break;
@@ -185,19 +231,16 @@ namespace SamSoarII.Shell.Models
             switch (e.Action)
             {
                 case LadderUnitAction.ADD:
-                    //if (ViewParent != null)
-                    //    ViewParent.LadderCanvas.Children.Add(this);
-                    //Update(UPDATE_PROPERTY);
+                    //RenderAll();
                     break;
                 case LadderUnitAction.REMOVE:
-                    //if (ViewParent != null)
-                    //    ViewParent.LadderCanvas.Children.Remove(this);
+                    Dispose();
                     break;
                 case LadderUnitAction.MOVE:
-                    //Update(UPDATE_TOP | UPDATE_LEFT);
+                    //Update(RenderType.All);
                     break;
                 case LadderUnitAction.UPDATE:
-                    //Update(UPDATE_PROPERTY);
+                    Update(RenderType.Comment);
                     break;
             }
         }
