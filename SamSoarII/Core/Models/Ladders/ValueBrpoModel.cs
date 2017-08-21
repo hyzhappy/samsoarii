@@ -114,7 +114,7 @@ namespace SamSoarII.Core.Models
         public void Compile()
         {
             string cpath = Utility.FileHelper.AppRootPath;
-            string hopath = String.Format(@"{0:s}\simug\_simuitrp.o", cpath);
+            string hopath = String.Format(@"{0:s}\simug\simuitrp.o", cpath);
             string hcpath = String.Format(@"{0:s}\simug\simuitrp.h", cpath);
             string ccpath = String.Format(@"{0:s}\simug\simuitrp.c", cpath);
             string dllpath = String.Format(@"{0:s}\simug\simuitrp.dll", cpath);
