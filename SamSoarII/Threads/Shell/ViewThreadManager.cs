@@ -104,7 +104,7 @@ namespace SamSoarII.Threads
         {
             try
             {
-            oldscrolloffset = current.Scroll.VerticalOffset;
+                oldscrolloffset = current.Scroll.VerticalOffset;
                 oldinstoffset = current.Core.Inst.View.Scroll.VerticalOffset;
                 oldoutlineoffset = current.Outline.Scroll.VerticalOffset;
                 current.DynamicUpdate();
