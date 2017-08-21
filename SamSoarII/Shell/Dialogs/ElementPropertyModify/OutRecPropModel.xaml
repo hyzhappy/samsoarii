@@ -22,19 +22,19 @@
             ADD
         </TextBlock>
         <TextBlock x:Uid="MiddleTextBlock1" x:Name="MiddleTextBlock1"
-                   Canvas.Top="122" Canvas.Left="36" FontSize="18">
+                   Canvas.Top="122" Canvas.Left="36" FontSize="14">
         </TextBlock>
         <TextBlock x:Uid="MiddleTextBlock2" x:Name="MiddleTextBlock2"
-                   Canvas.Top="152" Canvas.Left="36" FontSize="18">
+                   Canvas.Top="152" Canvas.Left="36" FontSize="14">
         </TextBlock>
         <TextBlock x:Uid="MiddleTextBlock3" x:Name="MiddleTextBlock3"
-                   Canvas.Top="182" Canvas.Left="36" FontSize="18">
+                   Canvas.Top="182" Canvas.Left="36" FontSize="14">
         </TextBlock>
         <TextBlock x:Uid="MiddleTextBlock4" x:Name="MiddleTextBlock4"
-                   Canvas.Top="212" Canvas.Left="36" FontSize="18">
+                   Canvas.Top="212" Canvas.Left="36" FontSize="14">
         </TextBlock>
         <TextBlock x:Uid="MiddleTextBlock5" x:Name="MiddleTextBlock5"
-                   Canvas.Top="242" Canvas.Left="36" FontSize="18">
+                   Canvas.Top="242" Canvas.Left="36" FontSize="14">
         </TextBlock>
         <TextBox x:Uid="MiddleTextBox1" x:Name="MiddleTextBox1" 
                  Canvas.Left="150" Canvas.Top="120" Width="140" Height="30"

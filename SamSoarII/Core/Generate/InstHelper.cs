@@ -762,7 +762,7 @@ namespace SamSoarII.Core.Generate
                     break;
                 case "PID":
                     if (!simumode)
-                        sw.Write("CI_PID((uint8_t)({0:s}),{1:s}, {2:s}, &{3:s}, {4:s}, {5:s}, &{6:s});\n",
+                        sw.Write("CI_PID((uint8_t)({0:s}), {1:s}, {2:s}, &{3:s}, {4:s}, &{5:s}, {6:s});\n",
                             cond, inst[1], inst[2], inst[3], inst[4], inst[5], inst[6]);
                     break;
                 case "MBUS":
@@ -772,13 +772,13 @@ namespace SamSoarII.Core.Generate
                     break;
                 case "SEND":
                     if (!simumode)
-                        sw.Write("CI_SEND((uint8_t)({0:s}), {1:s}, {2:s}, {3:s});\n",
-                            cond, inst[1], inst[2], inst[3]);
+                        sw.Write("CI_SEND((uint8_t)({0:s}), {1:d}, &{2:s}, {3:s});\n",
+                            cond, inst[1].Equals("485") ? 1 : 0, inst[2], inst[3]);
                     break;
                 case "REV":
                     if (!simumode)
-                        sw.Write("CI_REV((uint8_t)({0:s}), {1:s}, {2:s}, &{3:s});\n",
-                            cond, inst[1], inst[2], inst[3]);
+                        sw.Write("CI_REV((uint8_t)({0:s}), {1:d}, &{2:s}, &{3:s});\n",
+                            cond, inst[1].Equals("485") ? 1 : 0, inst[2], inst[3]);
                     break;
                 // 默认的其他情况，一般之前要先判断栈顶
                 default:

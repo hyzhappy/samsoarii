@@ -82,10 +82,15 @@ namespace SamSoarII.Shell.Models
         private void OnCoreChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             InvokePropertyChanged("ListItems");
-            if (e.NewItems != null) Current = (ModbusModel)(e.NewItems[0]);
+            if (e.NewItems != null)
+            {
+                Current = (ModbusModel)(e.NewItems[0]);
+                LB_Tables.SelectedItem = Current;
+                LB_Tables.SelectedIndex = Core.Children.IndexOf(Current);
+            }
             UpdateButtonEnable();
         }
-
+        
         #endregion
 
         #region Shell
@@ -96,7 +101,7 @@ namespace SamSoarII.Shell.Models
         #region Binding
 
         public override string TabHeader { get { return Properties.Resources.Modbus_Table; } }
-
+        
         public IList<ModbusModel> ListItems
         {
             get { return Core?.Children; }
@@ -412,6 +417,12 @@ namespace SamSoarII.Shell.Models
             }
         }
         
+        private void ListBoxItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (LB_Tables.SelectedItem != null)
+                LB_Tables.SelectedIndex = ListItems.IndexOf((ModbusModel)(LB_Tables.SelectedItem));
+        }
+
         #region DataGrid Update
 
         private void DataGridRow_Selected(object sender, RoutedEventArgs e)

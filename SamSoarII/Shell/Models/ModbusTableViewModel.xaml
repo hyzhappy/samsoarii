@@ -24,6 +24,7 @@
                      SelectedItem="{Binding Current, Mode=TwoWay}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
+                        <EventSetter Event="Loaded" Handler="ListBoxItem_Loaded"/>
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="Blue"/>
