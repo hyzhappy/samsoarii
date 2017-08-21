@@ -165,8 +165,6 @@ namespace SamSoarII.Shell.Windows
                 return profix + Text;
             }
         }
-        
-
         public void InitializeContextMenu()
         {
             ContextMenu = new ContextMenu();

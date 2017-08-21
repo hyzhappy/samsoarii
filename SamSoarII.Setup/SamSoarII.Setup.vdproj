@@ -4,9 +4,9 @@
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
 "ProjectName" = "8:SamSoarII.Setup"
-"LanguageId" = "3:0"
-"CodePage" = "3:1252"
-"UILanguageId" = "3:0"
+"LanguageId" = "3:2052"
+"CodePage" = "3:936"
+"UILanguageId" = "3:2052"
 "SccProjectName" = "8:"
 "SccLocalPath" = "8:"
 "SccAuxPath" = "8:"
@@ -11678,7 +11678,7 @@
         }
         "MsiBootstrapper"
         {
-        "LangId" = "3:0"
+        "LangId" = "3:2052"
         "RequiresElevation" = "11:FALSE"
         }
         "Product"
@@ -11686,7 +11686,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SamSoarII"
         "ProductCode" = "8:{D8A07A80-3750-422E-A921-59646E9DA217}"
-        "PackageCode" = "8:{8D452ACC-2B3F-4D1F-B44E-8C012BEF9422}"
+        "PackageCode" = "8:{4B7C08A4-B74A-4A24-9B86-72BCBB17A673}"
         "UpgradeCode" = "8:{A7ED4973-BC60-4163-929E-885AA3DD333F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

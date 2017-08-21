@@ -2080,13 +2080,13 @@ namespace SamSoarII
             {
                 PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
                 UnderBarStatus.Normal, Properties.Resources.Compiled_Success));
-                LocalizedMessageBox.Show(Properties.Resources.Compiled_Success);
+                LocalizedMessageBox.Show(Properties.Resources.Compiled_Success, LocalizedMessageIcon.Information);
             }
             else
             {
                 PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
                 UnderBarStatus.Normal, Properties.Resources.Compile_Failed));
-                LocalizedMessageBox.Show(Properties.Resources.Compile_Failed);
+                LocalizedMessageBox.Show(Properties.Resources.Compile_Failed, LocalizedMessageIcon.Error);
             }
         }
 
