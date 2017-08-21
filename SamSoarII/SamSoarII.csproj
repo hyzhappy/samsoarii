@@ -1168,6 +1168,7 @@
     <Folder Include="Core\Models\Ladders\Commands\" />
     <Folder Include="Core\Models\Ladders\PLSBlock\" />
     <Folder Include="Shell\Helper\" />
+    <Folder Include="Shell\Models\Ladders\LightUnits\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\Error.png" />
