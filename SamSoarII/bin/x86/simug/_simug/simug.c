@@ -21,6 +21,7 @@ typedef void(*viDllfun)(int);
 typedef void(*vv8Dllfun)(int8_t);
 typedef void(*viiDllfun)(int, int);
 typedef void(*viv8Dllfun)(int, int8_t);
+typedef void(*vsDllfun)(char*);
 typedef void*(*pDllfun)(void);
 typedef int8_t(*v8Dllfun)(void);
 typedef int(*iDllfun)(void);
@@ -69,6 +70,8 @@ static vDllfun dfMoveStep;
 static vDllfun dfCallStep;
 static viDllfun dfJumpTo;
 static vDllfun dfJumpOut;
+static vsDllfun dfSetItrpDll;
+static iDllfun dfGetItrpID;
 
 EXPORT void Encode(char* ifile, char* ofile)
 {
@@ -303,6 +306,18 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeDll();
 		return 34;
 	}
+	dfSetItrpDll = (vsDllfun)GetProcAddress(hdll, "_SetItrpDll@4");
+	if (dfSetItrpDll == NULL)
+	{
+		FreeDll();
+		return 35;
+	}
+	dfGetItrpID = (iDllfun)GetProcAddress(hdll, "_GetItrpID@0");
+	if (dfGetItrpID == NULL)
+	{
+		FreeDll();
+		return 36;
+	}
 	return 0;
 }
 
@@ -464,4 +479,14 @@ EXPORT void JumpTo(int _bpaddr)
 EXPORT void JumpOut()
 {
 	dfJumpOut();
+}
+
+EXPORT void SetItrpDll(char* dllpath)
+{
+	dfSetItrpDll(dllpath);
+}
+
+EXPORT int GetItrpID()
+{
+	return dfGetItrpID();
 }

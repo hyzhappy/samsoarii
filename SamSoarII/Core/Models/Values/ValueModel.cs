@@ -490,7 +490,12 @@ namespace SamSoarII.Core.Models
         private string detail;
         public string Detail { get { return this.detail; } }
 
-        public ValueFormat(string _name, ValueModel.Types _type, bool _canread, bool _canwrite, int _position, IEnumerable<Regex> _regexs, string _detail = null)
+        private string fullname_ch;
+        private string fullname_en;
+        public string FullName { get { return App.CultureIsZH_CH() ? fullname_ch : fullname_en; } }
+
+        public ValueFormat(string _name, ValueModel.Types _type, bool _canread, bool _canwrite, int _position, IEnumerable<Regex> _regexs, 
+            string _detail = null, string _fullname_ch = null, string _fullname_en = null)
         {
             name = _name;
             type = _type;
@@ -508,6 +513,8 @@ namespace SamSoarII.Core.Models
             supports = String.Join("/", _supports);
             detail = _detail != null ? _detail : String.Format("[{0:s}]{1:s}({2:s})",
                 ValueModel.NameOfTypes[(int)type], name, supports);
+            fullname_ch = _fullname_ch != null ? _fullname_ch : name;
+            fullname_en = _fullname_en != null ? _fullname_en : name;
         }
     }
 

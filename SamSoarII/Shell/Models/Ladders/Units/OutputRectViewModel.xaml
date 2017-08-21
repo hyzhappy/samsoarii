@@ -14,7 +14,7 @@
         <Line X1="0" Y1="100" X2="20" Y2="100" 
                   Stroke="Black" StrokeThickness="4">
         </Line>
-        <Label Canvas.Left="30" Canvas.Top="80" FontSize="25">
+        <Label x:Name="LB_EN" Canvas.Left="30" Canvas.Top="80" FontSize="25">
             EN
         </Label>
         <TextBlock x:Name="TopTextBlock" 

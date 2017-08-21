@@ -394,6 +394,21 @@ namespace SamSoarII.Core.Simulate
         [DllImport(@"simug\simu.dll", EntryPoint = "JumpOut")]
         public static extern void JumpOut();
 
+        /// <summary>
+        /// 设置判断中断软元件的dll程序
+        /// </summary>
+        /// <param name="dllpath"></param>
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetItrpDll")]
+        public static extern void SetItrpDll(string dllpath);
+
+        /// <summary>
+        /// 获得当前触发的中断软元件ID
+        /// </summary>
+        /// <returns></returns>
+        [DllImport(@"simug\simu.dll", EntryPoint = "GetItrpID")]
+        public static extern int GetItrpID();
+
+
         #endregion
 
         /// <summary>

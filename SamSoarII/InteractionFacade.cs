@@ -867,6 +867,8 @@ namespace SamSoarII
             foreach (LadderDiagramModel diagram in mdProj.Diagrams)
             {
                 errorMessages.Add(LadderGraphCheckModule.Execute(diagram));
+                if (diagram.View != null)
+                    diagram.View.IsViewModified = true;
             }
             for (int i = 0; i < errorMessages.Count; i++)
             {
@@ -1597,7 +1599,32 @@ namespace SamSoarII
                 }
                 return;
             }
-            if (current.Type == LadderUnitModel.Types.PID) return;
+            if (current.Type == LadderUnitModel.Types.PID)
+            {
+                using (PIDDialog dialog = new PIDDialog(this, current))
+                {
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    dialog.Ensure += (sender, e) =>
+                    {
+                        try
+                        {
+                            current.Parent.Parent.UpdateUC(current, dialog.PropertyStrings);
+                            current.Parent.Parent.View.NavigateByInstructionInputDialog();
+                            dialog.Close();
+                        }
+                        catch (Exception exce)
+                        {
+                            LocalizedMessageBox.Show(string.Format(exce.Message), LocalizedMessageIcon.Error);
+                        }
+                    };
+                    dialog.Cancel += (sender, e) =>
+                    {
+                        dialog.Close();
+                    };
+                    dialog.ShowDialog();
+                }
+                return;
+            }
             using (ElementPropertyDialog dialog = new ElementPropertyDialog(current))
             {
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -1678,6 +1705,48 @@ namespace SamSoarII
                         }
                     };
                     dialog.Cancel += (sender, e) => { dialog.Close(); };
+                    dialog.ShowDialog();
+                }
+                return ret;
+            }
+            if (current.Type == LadderUnitModel.Types.PID)
+            {
+                using (PIDDialog dialog = new PIDDialog(this, current))
+                {
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    dialog.Ensure += (sender, e) =>
+                    {
+                        try
+                        {
+                            IList<string> properties = dialog.PropertyStrings;
+                            List<string> instargs = new List<string>();
+                            for (int i = 0; i < properties.Count / 2; i++)
+                            {
+                                string value = properties[i * 2];
+                                instargs.Add(value);
+                                try
+                                {
+                                    mngValue[value].Comment = properties[i * 2 + 1];
+                                }
+                                catch (ValueParseException)
+                                {
+                                }
+                            }
+                            current.InstArgs = instargs.ToArray();
+                            current.Parent.Parent.AddSingleUnit(current, current.Parent, cover);
+                            ret = true;
+                            dialog.Close();
+                        }
+                        catch (Exception exce)
+                        {
+                            LocalizedMessageBox.Show(string.Format(exce.Message), LocalizedMessageIcon.Error);
+                        }
+                    };
+                    dialog.Cancel += (sender, e) =>
+                    {
+                        current.Dispose();
+                        dialog.Close();
+                    };
                     dialog.ShowDialog();
                 }
                 return ret;

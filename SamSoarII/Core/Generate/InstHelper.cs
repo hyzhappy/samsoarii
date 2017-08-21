@@ -535,7 +535,7 @@ namespace SamSoarII.Core.Generate
                         sw.Write("if ({0:s}) {{\n_bitrst(&{1:s}, {2:s});\n",
                             cond, inst[1], inst[2]);
                     /*
-                     * 注意如果复位的是计数器位，那么计数器值也要跟着复原
+                     * 注意如果复位的是计数器或者计时器位，那么相应的值也要跟着复原
                      * 考虑到向下计数器(CTD)复原时需要载入预设值
                      * 所以每个计数器预设值都要存起来便于访问
                      * 预设值需要在外部先初始化
@@ -545,7 +545,17 @@ namespace SamSoarII.Core.Generate
                         int begin = int.Parse(inst[3]);
                         int end = begin + int.Parse(inst[4]);
                         for (int i = begin; i < end; i++)
-                            sw.Write("CVWord[{0:d}] = {1:s};\n", i, ctsv[i]);
+                            if (i >= 235 && !simumode)
+                                sw.Write("reset_counter({0:d});\n", i);
+                            else
+                                sw.Write("CVWord[{0:d}] = {1:s};\n", i, ctsv[i]);
+                    }
+                    if (inst[1][0] == 'T' && !simumode)
+                    {
+                        int begin = int.Parse(inst[3]);
+                        int end = begin + int.Parse(inst[4]);
+                        for (int i = begin; i < end; i++)
+                            sw.Write("reset_timer({0:d});\n", i);
                     }
                     sw.Write("}\n");
                     break;
@@ -750,7 +760,26 @@ namespace SamSoarII.Core.Generate
                         sw.Write("CI_RTC_SETRTC((uint8_t)({0:s}),&{1:s});\n",
                             cond, inst[1]);
                     break;
-                
+                case "PID":
+                    if (!simumode)
+                        sw.Write("CI_PID((uint8_t)({0:s}),{1:s}, {2:s}, &{3:s}, {4:s}, {5:s}, &{6:s});\n",
+                            cond, inst[1], inst[2], inst[3], inst[4], inst[5], inst[6]);
+                    break;
+                case "MBUS":
+                    if (!simumode)
+                        sw.Write("CI_MODBUS_MASTER((uint8_t)({0:s}), {1:d}, {2:s}, &{3:s});\n",
+                            cond, inst[1].Equals("485") ? 1 : 0, inst[2], inst[3]);
+                    break;
+                case "SEND":
+                    if (!simumode)
+                        sw.Write("CI_SEND((uint8_t)({0:s}), {1:s}, {2:s}, {3:s});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    break;
+                case "REV":
+                    if (!simumode)
+                        sw.Write("CI_REV((uint8_t)({0:s}), {1:s}, {2:s}, &{3:s});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    break;
                 // 默认的其他情况，一般之前要先判断栈顶
                 default:
                     sw.Write("if ({0:s}) {{\n", cond);
@@ -1116,16 +1145,30 @@ namespace SamSoarII.Core.Generate
                             break;
                         // 中断
                         case "ATCH":
-                            sw.Write("_atch({1:s}, {0:s});\n", inst[1], inst[2]);
+                            if (!simumode)
+                                sw.Write("CI_INTR_ATCH((uint8_t)({0:s}), {1:s}, {2:s});\n",
+                                    cond, inst[1], inst[2]);
+                            else
+                                sw.Write("_atch({1:s}, {0:s});\n", inst[1], inst[2]);
                             break;
                         case "DTCH":
-                            sw.Write("_dtch({0:s});\n", inst[1]);
+                            if (!simumode)
+                                sw.Write("CI_INTR_DTCH((uint8_t)({0:s}), {1:s});\n",
+                                    cond, inst[1]);
+                            else
+                                sw.Write("_dtch({0:s});\n", inst[1]);
                             break;
                         case "EI":
-                            sw.Write("_ei();\n");
+                            if (!simumode)
+                                sw.Write("CI_INTR_ENI((uint8_t)({0:s}));\n", cond);
+                            else
+                                sw.Write("_ei();\n");
                             break;
                         case "DI":
-                            sw.Write("_di();\n");
+                            if (!simumode)
+                                sw.Write("CI_INTR_DISI((uint8_t)({0:s}));\n", cond);
+                            else
+                                sw.Write("_di();\n");
                             break;
                         // 实时时钟
                         /*

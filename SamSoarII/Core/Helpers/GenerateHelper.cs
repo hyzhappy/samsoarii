@@ -350,8 +350,13 @@ namespace SamSoarII.Core.Helpers
             {
                 if (inst[0].Equals("CALL") || inst[0].Equals("ATCH"))
                 {
-                    LadderDiagramModel diagram = project.Diagrams.Where(d => d.Name.Equals(inst[1])).FirstOrDefault();
+                    LadderDiagramModel diagram = project.Diagrams.FirstOrDefault(d => d.Name.Equals(inst[1]));
                     if (diagram != null) inst[1] = diagram.CName;
+                }
+                if (inst[0].Equals("MBUS"))
+                {
+                    ModbusModel modbus = project.Modbus.Children.FirstOrDefault(m => m.Name.Equals(inst[2]));
+                    if (modbus != null) inst[2] = modbus.Parent.Children.IndexOf(modbus).ToString(); 
                 }
             }
             InstHelper.PLCInstNetwork net = new InstHelper.PLCInstNetwork(

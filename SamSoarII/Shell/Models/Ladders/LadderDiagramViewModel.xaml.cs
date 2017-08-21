@@ -1053,31 +1053,21 @@ namespace SamSoarII.Shell.Models
         {
             double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
             double scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
-            Point point = _selectRect.TranslatePoint(new Point(0, 0), MainScrollViewer);
-            if (point.X < 0)
-            {
-                MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + point.X);
-            }
-            if (point.X + 2 * _selectRect.ActualWidth * scaleX > MainScrollViewer.ViewportWidth)
-            {
-                MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + point.X + 2 * _selectRect.ActualWidth * scaleX - MainScrollViewer.ViewportWidth);
-            }
-            if (point.Y < 0)
-            {
-                MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + point.Y);
-            }
-            if (point.Y + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
-            {
-                MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + point.Y + _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight);
-            }
+            if (SelectRectOwner == null) return;
+            double pointX = (LeftBorder + _selectRect.X * WidthUnit) * scaleX;
+            double pointY = (TopBorder + SelectRectOwner.UnitBaseTop + _selectRect.Y * HeightUnit) * scaleY;
+            if (pointX < 0)
+                MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + pointX);
+            if (pointX + 2 * _selectRect.ActualWidth * scaleX > MainScrollViewer.ViewportWidth)
+                MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + pointX + 2 * _selectRect.ActualWidth * scaleX - MainScrollViewer.ViewportWidth);
+            if (pointY < 0)
+                MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + pointY);
+            if (pointY + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + pointY + _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight);
             if (_selectRect.X == GlobalSetting.LadderXCapacity - 1)
-            {
                 MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + MainScrollViewer.ScrollableWidth);
-            }
             if (_selectRect.X == 0)
-            {
                 MainScrollViewer.ScrollToHorizontalOffset(0);
-            }
         }
         
         private bool IsSelectRectOutOfViewpoint(Directions dir)
