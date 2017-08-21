@@ -208,7 +208,7 @@
     <Compile Include="Core\Models\Instructions\InstructionNetworkModel.cs" />
     <Compile Include="Core\Models\Interfaces\IModel.cs" />
     <Compile Include="Core\Models\Interfaces\IParams.cs" />
-    <Compile Include="Core\Models\Ladders\ItrpModel.cs" />
+    <Compile Include="Core\Models\Ladders\ValueBrpoModel.cs" />
     <Compile Include="Core\Models\Ladders\LadderBrpoModel.cs" />
     <Compile Include="Core\Models\Ladders\LadderDiagramModel.cs" />
     <Compile Include="Core\Models\Ladders\LadderNetworkModel.cs" />
@@ -524,7 +524,7 @@
     <Compile Include="Shell\Models\Ladders\SelectArea.xaml.cs">
       <DependentUpon>SelectArea.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shell\Windows\BreakpointWindow.xaml.cs">
+    <Compile Include="Shell\Windows\Breakpoint\BreakpointWindow.xaml.cs">
       <DependentUpon>BreakpointWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Windows\Element\ElementInitWindow.xaml.cs">
@@ -551,13 +551,13 @@
     <Compile Include="Shell\Windows\FindReplace\TextReplaceWindow.xaml.cs">
       <DependentUpon>TextReplaceWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shell\Windows\FuncBrpoTableElement.cs" />
+    <Compile Include="Shell\Windows\Breakpoint\FuncBrpoTableElement.cs" />
     <Compile Include="Shell\Windows\Interfaces\ITabItem.cs" />
     <Compile Include="Shell\Windows\Interfaces\IWindow.cs" />
     <Compile Include="Shell\Windows\Interfaces\IWindowEventArgs.cs" />
     <Compile Include="Core\Models\Monitor\MonitorElement.cs" />
     <Compile Include="Core\Models\Monitor\MonitorTable.cs" />
-    <Compile Include="Shell\Windows\LadderBrpoTableElement.cs" />
+    <Compile Include="Shell\Windows\Breakpoint\LadderBrpoTableElement.cs" />
     <Compile Include="Shell\Windows\Monitor\MonitorWindow.xaml.cs">
       <DependentUpon>MonitorWindow.xaml</DependentUpon>
     </Compile>
@@ -584,6 +584,10 @@
     </Compile>
     <Compile Include="Shell\Windows\Update\UpdateWindow.xaml.cs">
       <DependentUpon>UpdateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\Breakpoint\ValueBrpoTableElement.cs" />
+    <Compile Include="Shell\Windows\Breakpoint\ValueBrpoWindow.xaml.cs">
+      <DependentUpon>ValueBrpoWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Windows\WindowUpBorder.xaml.cs">
       <DependentUpon>WindowUpBorder.xaml</DependentUpon>
@@ -1095,7 +1099,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Shell\Windows\BreakpointWindow.xaml">
+    <Page Include="Shell\Windows\Breakpoint\BreakpointWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1156,6 +1160,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Windows\Update\UpdateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Windows\Breakpoint\ValueBrpoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
