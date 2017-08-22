@@ -143,11 +143,20 @@ namespace SamSoarII.Shell.Windows
 
         public void LoadFromCore()
         {
+            PropertyChanged(this, new PropertyChangedEventArgs("Operations"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTypes"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ActiveInfo"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ActiveBrush"));
             if (core != null && core.IsValid)
             {
                 LeftValue = core.LValue.Text.Equals("???") ? "" : core.LValue.Text;
                 RightValue = core.RValue.Text.Equals("???") ? "" : core.RValue.Text;
                 ValueType = ValueModel.NameOfTypes[(int)(core.Type)];
+                if (ValueType.Equals("BOOL"))
+                {
+                    if (RightValue.Equals("K0")) RightValue = "OFF";
+                    if (RightValue.Equals("K1")) RightValue = "ON";
+                }
                 switch (core.Oper)
                 {
                     case ValueBrpoElement.Operators.UPEDGE: Operation = "上升沿"; break;
@@ -161,10 +170,6 @@ namespace SamSoarII.Shell.Windows
                     case ValueBrpoElement.Operators.NOTMORE: Operation = "≤"; break;
                 }
             }
-            PropertyChanged(this, new PropertyChangedEventArgs("Operations"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTypes"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ActiveInfo"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ActiveBrush"));
         }
 
         static private string[] AllValueTypes = {"BOOL", "WORD", "DWORD", "FLOAT"};

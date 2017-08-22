@@ -2361,4 +2361,46 @@
   <data name="ValueBrpo" xml:space="preserve">
     <value>Element Breakpoint</value>
   </data>
+  <data name="ARCF_Inst" xml:space="preserve">
+    <value>Arch System(Float)</value>
+  </data>
+  <data name="ARCI_Inst" xml:space="preserve">
+    <value>Arch System(DWord)</value>
+  </data>
+  <data name="BLOCK_Inst" xml:space="preserve">
+    <value>Image block import</value>
+  </data>
+  <data name="DDRVA_Inst" xml:space="preserve">
+    <value>Absolute position single pulse output(DWord)</value>
+  </data>
+  <data name="DRVA_Inst" xml:space="preserve">
+    <value>Absolute position single pulse output(Word)</value>
+  </data>
+  <data name="LINEF_Inst" xml:space="preserve">
+    <value>Line System(Float)</value>
+  </data>
+  <data name="LINEI_Inst" xml:space="preserve">
+    <value>Line System(DWord)</value>
+  </data>
+  <data name="PID_Inst" xml:space="preserve">
+    <value>PID Instruction</value>
+  </data>
+  <data name="POLYLINEF_Inst" xml:space="preserve">
+    <value>Polyline System(Float)</value>
+  </data>
+  <data name="POLYLINEI_Inst" xml:space="preserve">
+    <value>Polyline System(DWord)</value>
+  </data>
+  <data name="STLE_Inst" xml:space="preserve">
+    <value>Status End</value>
+  </data>
+  <data name="STL_Inst" xml:space="preserve">
+    <value>Status Begin</value>
+  </data>
+  <data name="ST_Inst" xml:space="preserve">
+    <value>Status Transform</value>
+  </data>
+  <data name="TBL_Inst" xml:space="preserve">
+    <value>Located output of multi-segments pulse</value>
+  </data>
 </root>

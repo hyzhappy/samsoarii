@@ -38,6 +38,8 @@ namespace SamSoarII.Core.Models
 
         public void Redo()
         {
+            if (network?.Parent?.View != null)
+                network.Parent.View.IsViewModified = true;
             network.Remove(oldunit);
             try
             {
@@ -52,6 +54,8 @@ namespace SamSoarII.Core.Models
 
         public void Undo()
         {
+            if (network?.Parent?.View != null)
+                network.Parent.View.IsViewModified = true;
             network.Remove(newunit);
             try
             {

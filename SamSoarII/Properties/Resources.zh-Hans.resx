@@ -1315,7 +1315,7 @@
     <value>双字转单字</value>
   </data>
   <data name="DWord_To_Float" xml:space="preserve">
-    <value>双子转浮点</value>
+    <value>双字转浮点</value>
   </data>
   <data name="BCD_Code_To_Integer" xml:space="preserve">
     <value>BCD码转整数</value>
@@ -2360,5 +2360,47 @@
   </data>
   <data name="ValueBrpo" xml:space="preserve">
     <value>软元件断点</value>
+  </data>
+  <data name="ARCF_Inst" xml:space="preserve">
+    <value>浮点圆弧插补</value>
+  </data>
+  <data name="ARCI_Inst" xml:space="preserve">
+    <value>双字圆弧插补</value>
+  </data>
+  <data name="BLOCK_Inst" xml:space="preserve">
+    <value>图形导入</value>
+  </data>
+  <data name="DDRVA_Inst" xml:space="preserve">
+    <value>双字绝对位置单段脉冲输出</value>
+  </data>
+  <data name="DRVA_Inst" xml:space="preserve">
+    <value>单字绝对位置单段脉冲输出</value>
+  </data>
+  <data name="LINEF_Inst" xml:space="preserve">
+    <value>浮点直线插补</value>
+  </data>
+  <data name="LINEI_Inst" xml:space="preserve">
+    <value>双字直线插补</value>
+  </data>
+  <data name="PID_Inst" xml:space="preserve">
+    <value>PID指令</value>
+  </data>
+  <data name="POLYLINEF_Inst" xml:space="preserve">
+    <value>浮点多段线插补</value>
+  </data>
+  <data name="POLYLINEI_Inst" xml:space="preserve">
+    <value>双字多段线插补</value>
+  </data>
+  <data name="STLE_Inst" xml:space="preserve">
+    <value>状态结束</value>
+  </data>
+  <data name="STL_Inst" xml:space="preserve">
+    <value>状态开始</value>
+  </data>
+  <data name="ST_Inst" xml:space="preserve">
+    <value>状态转移</value>
+  </data>
+  <data name="TBL_Inst" xml:space="preserve">
+    <value>多端脉冲定位输出</value>
   </data>
 </root>

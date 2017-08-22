@@ -73,7 +73,7 @@
                 <DataGridTextColumn x:Name="DGC_RValue" Header="比较目标" MinWidth="150"
                                     Binding="{Binding RightValue}" IsReadOnly="False">
                 </DataGridTextColumn>
-                <DataGridComboBoxColumn x:Name="DGC_Type" Header="比较类型" MinWidth="100" IsReadOnly="False" TextBinding="{Binding ValueType}">
+                <DataGridComboBoxColumn x:Name="DGC_Type" Header="比较类型" MinWidth="100" IsReadOnly="False">
                     <DataGridComboBoxColumn.EditingElementStyle>
                         <Style TargetType="ComboBox">
                             <Setter Property="ItemsSource" Value="{Binding ValueTypes}"></Setter>

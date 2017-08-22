@@ -732,18 +732,18 @@ namespace SamSoarII.Core.Models
                 new ValueFormat[] {
                     new ValueFormat("F", ValueModel.Types.STRING, true, false, 0, new Regex[] { ValueModel.FuncNameRegex }, null, "函数", "Function") });
             Formats[(int)Types.STL] = new LadderUnitFormat(1106, "STL", Types.STL, Outlines.ProgramControl, Shapes.OutputRect,
-                "",
+                Properties.Resources.STL_Inst,
                 "STL与STLE必须一一配对使用，STL表示一个状态的开始，STLE表示一个状态的结束。",
                 "STL与STLE必须一一配对使用，STL表示一个状态的开始，STLE表示一个状态的结束。",
                 new ValueFormat[] {
                     new ValueFormat("L", ValueModel.Types.BOOL, true, false, -1, new Regex[] {ValueModel.VerifyBitRegex6 }, null, "状态", "Status") });
             Formats[(int)Types.STLE] = new LadderUnitFormat(1107, "STLE", Types.STLE, Outlines.ProgramControl, Shapes.OutputRect,
-                "",
+                Properties.Resources.STLE_Inst,
                 "STL与STLE必须一一配对使用，STL表示一个状态的开始，STLE表示一个状态的结束。",
                 "STL与STLE必须一一配对使用，STL表示一个状态的开始，STLE表示一个状态的结束。",
                 new ValueFormat[] { });
             Formats[(int)Types.ST] = new LadderUnitFormat(1108, "ST", Types.ST, Outlines.ProgramControl, Shapes.OutputRect,
-                "",
+                Properties.Resources.ST_Inst,
                 "当使用ST指令当状态转移条件成立时，下一个待转移状态被置为ON，但当前STL段中的状态不会被复位OFF，ST指令一般在程序需要同时运行多个状态程序时使用；",
                 "当使用ST指令当状态转移条件成立时，下一个待转移状态被置为ON，但当前STL段中的状态不会被复位OFF，ST指令一般在程序需要同时运行多个状态程序时使用；",
                 new ValueFormat[] {
@@ -862,7 +862,7 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
                     new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.DRVA] = new LadderUnitFormat(1617, "DRVA", Types.DRVA, Outlines.Pulse, Shapes.OutputRect,
-                Properties.Resources.DRVI_Inst,
+                Properties.Resources.DRVA_Inst,
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 new ValueFormat[] {
@@ -888,7 +888,7 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
                     new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.DDRVA] = new LadderUnitFormat(1618, "DDRVA", Types.DDRVA, Outlines.Pulse, Shapes.OutputRect,
-                Properties.Resources.DDRVI_Inst,
+                Properties.Resources.DDRVA_Inst,
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 new ValueFormat[] {
@@ -1048,29 +1048,55 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
                     new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.TBL] = new LadderUnitFormat(1617, "TBL", Types.TBL, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "",
+                Properties.Resources.TBL_Inst,
+                "多段脉冲定位输出TBL指令可用于实现多段输出一定频率的指定脉冲数的脉冲。",
+                "多段脉冲定位输出TBL指令可用于实现多段输出一定频率的指定脉冲数的脉冲。",
                 new ValueFormat[] {
-                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}),
-                    new ValueFormat("P", ValueModel.Types.BOOL, false, true, 1, new Regex[] {ValueModel.VerifyBitRegex4}),
-                    new ValueFormat("D", ValueModel.Types.BOOL, false, true, 2, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}, null, "参数存放首地址", "Arguments data"),
+                    new ValueFormat("P", ValueModel.Types.BOOL, false, true, 1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "脉冲输出口", "Output"),
+                    new ValueFormat("D", ValueModel.Types.BOOL, false, true, 2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向输出口", "Direction") });
             vformats = new ValueFormat[] {
-                new ValueFormat("ID", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex}),
-                new ValueFormat("S", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex3}),
-                new ValueFormat("NUM", ValueModel.Types.WORD, true, false, -1, new Regex[] { ValueModel.VerifyIntKValueRegex}) };
+                new ValueFormat("ID", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex}, null, "平面编号", "System ID"),
+                new ValueFormat("S", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex3}, null, "映射地址", "Reflicted data"),
+                new ValueFormat("NUM", ValueModel.Types.WORD, true, false, -1, new Regex[] { ValueModel.VerifyIntKValueRegex}, null, "线段数量", "Number") };
             Formats[(int)Types.POLYLINEF] = new LadderUnitFormat(1618, "POLYLINEF", Types.POLYLINEF, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "", vformats);
+                Properties.Resources.POLYLINEF_Inst,
+                "该指令作用是完成直线、圆弧组合运动，按照左侧的线段序列框中的线段顺序依次绘制。\r\n" +
+                "若相邻的两线段为共线、相切的过渡方式，则在交点处无加减速停顿，平滑过渡，反之，有加减速停顿。\r\n",
+                "该指令作用是完成直线、圆弧组合运动，按照左侧的线段序列框中的线段顺序依次绘制。\r\n" +
+                "若相邻的两线段为共线、相切的过渡方式，则在交点处无加减速停顿，平滑过渡，反之，有加减速停顿。\r\n", 
+                vformats);
             Formats[(int)Types.POLYLINEI] = new LadderUnitFormat(1619, "POLYLINEI", Types.POLYLINEI, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "", vformats);
+                Properties.Resources.POLYLINEI_Inst,
+                "该指令作用是完成直线、圆弧组合运动，按照左侧的线段序列框中的线段顺序依次绘制。\r\n" +
+                "若相邻的两线段为共线、相切的过渡方式，则在交点处无加减速停顿，平滑过渡，反之，有加减速停顿。\r\n",
+                "该指令作用是完成直线、圆弧组合运动，按照左侧的线段序列框中的线段顺序依次绘制。\r\n" +
+                "若相邻的两线段为共线、相切的过渡方式，则在交点处无加减速停顿，平滑过渡，反之，有加减速停顿。\r\n", 
+                vformats);
             Formats[(int)Types.LINEF] = new LadderUnitFormat(1620, "LINEF", Types.LINEF, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "", vformats);
+                Properties.Resources.LINEF_Inst,
+                "该指令作用是在指定的平面系统中，完成从当前所在位置直线运行到终点位置；",
+                "该指令作用是在指定的平面系统中，完成从当前所在位置直线运行到终点位置；", 
+                vformats);
             Formats[(int)Types.LINEI] = new LadderUnitFormat(1621, "LINEI", Types.LINEI, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "", vformats);
+                Properties.Resources.LINEI_Inst,
+                "该指令作用是在指定的平面系统中，完成从当前所在位置直线运行到终点位置；",
+                "该指令作用是在指定的平面系统中，完成从当前所在位置直线运行到终点位置；", 
+                vformats);
             Formats[(int)Types.ARCF] = new LadderUnitFormat(1622, "ARCF", Types.ARCF, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "", vformats);
+                Properties.Resources.ARCF_Inst,
+                "该指令作用是在指定的平面系统中，完成从当前所在位置按设置参数圆弧运行到终点位置；",
+                "该指令作用是在指定的平面系统中，完成从当前所在位置按设置参数圆弧运行到终点位置；", 
+                vformats);
             Formats[(int)Types.ARCI] = new LadderUnitFormat(1623, "ARCI", Types.ARCI, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "", vformats);
+                Properties.Resources.ARCI_Inst,
+                "该指令作用是在指定的平面系统中，完成从当前所在位置按设置参数圆弧运行到终点位置；",
+                "该指令作用是在指定的平面系统中，完成从当前所在位置按设置参数圆弧运行到终点位置；", 
+                vformats);
             Formats[(int)Types.BLOCK] = new LadderUnitFormat(1624, "BLOCK", Types.BLOCK, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "",
+                Properties.Resources.BLOCK_Inst,
+                "该指令作用是在指定的平面系统中，完成导入的图形绘制；",
+                "该指令作用是在指定的平面系统中，完成导入的图形绘制；",
                 new ValueFormat[] {
                     new ValueFormat("NAME", ValueModel.Types.STRING, true, false, 0, new Regex[] {ValueModel.AnyNameRegex }),
                     new ValueFormat("S", ValueModel.Types.BOOL, false, true, 1, new Regex[] { ValueModel.VerifyBitRegex7}) });
@@ -1087,8 +1113,8 @@ namespace SamSoarII.Core.Models
                 "计算寄存器（IN）值的阶乘，N的最大值为12，将结果传送到寄存器（OUT）。",
                 "计算寄存器（IN）值的阶乘，N的最大值为12，将结果传送到寄存器（OUT）。",
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}) });
+                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyWordRegex7, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "输入", "Input"),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}, null, "输出", "Output") });
             Formats[(int)Types.CMP] = new LadderUnitFormat(1803, "CMP", Types.CMP, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.CMP_Inst,
                 "比较IN1和IN2的大小，比较结果发送到OUT。\r\n" +
@@ -1230,7 +1256,9 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("T", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}, null, "目标", "Destination"),
                     new ValueFormat("N", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "长度", "Count") });
             Formats[(int)Types.PID] = new LadderUnitFormat(1900, "PID", Types.PID, Outlines.PID, Shapes.OutputRect,
-                "", "", "",
+                Properties.Resources.PID_Inst,
+                "FGS的PID功能是通过PID指令函数功能块实现。通过定时（按照采样时间）执行PID功能块，按照PID运算规律，根据当时的给定、反馈、比例－积分－微分数据，计算出控制量。",
+                "FGS的PID功能是通过PID指令函数功能块实现。通过定时（按照采样时间）执行PID功能块，按照PID运算规律，根据当时的给定、反馈、比例－积分－微分数据，计算出控制量。",
                 new ValueFormat[] {
                     new ValueFormat("LOOP", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex}, null, "PID回路", "PID Loop"),
                     new ValueFormat("AUTO", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyIntKValueRegex}, null, "模式", "Mode"),

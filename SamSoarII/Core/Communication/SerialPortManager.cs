@@ -41,17 +41,17 @@ namespace SamSoarII.Core.Communication
                     switch (port.BaudRate)
                     {
                         case 4800:
-                            return 12;
+                            return 15;
                         case 9600:
-                            return 6;
+                            return 12;
                         case 19200:
-                            return 4;
+                            return 9;
                         case 38400:
-                            return 3;
+                            return 7;
                         case 57600:
-                            return 2;
+                            return 5;
                         case 115200:
-                            return 1;
+                            return 3;
                         default:
                             return 3;
                     }
@@ -314,15 +314,15 @@ namespace SamSoarII.Core.Communication
                     if (!AssertCmd(cmd) && recvtime > 0)
                     {
                         recvtime--;
+                        Thread.Sleep(300);
                         ret = false;
                     }
-                    else recvtime = RecvTime;
                     if (ret)
                     {
+                        recvtime = RecvTime;
                         cmd.IsComplete = true;
                         cmd.IsSuccess = false;
                         readbuffercount = 0;
-                        Thread.Sleep(200);
                         return 0;
                     }
                 }
