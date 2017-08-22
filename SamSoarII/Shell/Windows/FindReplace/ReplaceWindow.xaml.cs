@@ -231,6 +231,24 @@ namespace SamSoarII.Shell.Windows
         /// <param name="showdialog">是否显示提示窗口</param>
         private void Replace(bool showdialog = true)
         {
+            // 等待UI线程暂停再操作
+            IFParent.ThMNGView.Pause();
+            _showdialog = showdialog;
+            if (IFParent.ThMNGView.IsActive)
+                IFParent.ThMNGView.Paused += OnViewThreadPauseToReplace;
+            else
+                _Replace();
+        }
+
+        private void OnViewThreadPauseToReplace(object sender, RoutedEventArgs e)
+        {
+            IFParent.ThMNGView.Paused -= OnViewThreadPauseToReplace;
+            _Replace();
+        }
+
+        private bool _showdialog;
+        private void _Replace()
+        {
             // 替换成功和失败的个数，以及详细的错误信息
             int success = 0;
             int error = 0;
@@ -275,7 +293,7 @@ namespace SamSoarII.Shell.Windows
                 Find();
             }
             // 当需要显示结果，或者出现错误替换时显示
-            if (showdialog || error > 0)
+            if (_showdialog || error > 0)
             {
                 ReplaceReportWindow report = new ReplaceReportWindow();
                 if (Thread.CurrentThread.CurrentUICulture.Name.Contains("zh-Hans"))
@@ -288,6 +306,7 @@ namespace SamSoarII.Shell.Windows
                 report.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 report.ShowDialog();
             }
+            IFParent.ThMNGView.Start();
         }
 
         #region Event Handler

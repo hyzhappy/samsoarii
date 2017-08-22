@@ -726,7 +726,7 @@ namespace SamSoarII.Shell.Models
             set
             {
                 this.ccstop = value;
-                double top = ccstop * 19 - 17 - CodeTextBox.VerticalOffset;
+                double top = ccstop * 18.5 - 17 - CodeTextBox.VerticalOffset;
                 if (top + 200 > ActualHeight)
                 {
                     top -= 220;

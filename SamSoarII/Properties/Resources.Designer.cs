@@ -6334,6 +6334,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Located output of multi-segments pulse 的本地化字符串。
+        /// </summary>
+        public static string TBL_Inst {
+            get {
+                return ResourceManager.GetString("TBL_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Thermocouple 的本地化字符串。
         /// </summary>
         public static string Thermocouple {

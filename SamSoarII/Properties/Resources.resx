@@ -2400,4 +2400,7 @@
   <data name="ST_Inst" xml:space="preserve">
     <value>Status Transform</value>
   </data>
+  <data name="TBL_Inst" xml:space="preserve">
+    <value>Located output of multi-segments pulse</value>
+  </data>
 </root>

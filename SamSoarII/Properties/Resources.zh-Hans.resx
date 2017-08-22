@@ -1315,7 +1315,7 @@
     <value>双字转单字</value>
   </data>
   <data name="DWord_To_Float" xml:space="preserve">
-    <value>双子转浮点</value>
+    <value>双字转浮点</value>
   </data>
   <data name="BCD_Code_To_Integer" xml:space="preserve">
     <value>BCD码转整数</value>
@@ -2399,5 +2399,8 @@
   </data>
   <data name="ST_Inst" xml:space="preserve">
     <value>状态转移</value>
+  </data>
+  <data name="TBL_Inst" xml:space="preserve">
+    <value>多端脉冲定位输出</value>
   </data>
 </root>

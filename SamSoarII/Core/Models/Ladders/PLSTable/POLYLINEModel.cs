@@ -82,11 +82,11 @@ namespace SamSoarII.Core.Models
         public Polyline(POLYLINEModel _parent)
         {
             parent = _parent;
-            x = new ValueModel(_parent, new ValueFormat("X", valuetype, true, false, 0, regexs));
-            y = new ValueModel(_parent, new ValueFormat("Y", valuetype, true, false, 0, regexs));
-            ac = new ValueModel(_parent, new ValueFormat("AC", valuetype, true, false, 0, regexs));
-            dc = new ValueModel(_parent, new ValueFormat("DC", valuetype, true, false, 0, regexs));
-            v = new ValueModel(_parent, new ValueFormat("V", valuetype, true, false, 0, regexs));
+            x = new ValueModel(_parent, new ValueFormat("X", valuetype, true, false, 0, regexs, null, "X坐标", "Axis X"));
+            y = new ValueModel(_parent, new ValueFormat("Y", valuetype, true, false, 0, regexs, null, "Y坐标", "Axis Y"));
+            ac = new ValueModel(_parent, new ValueFormat("AC", valuetype, true, false, 0, regexs, null, "加速时间", "Accelerate time"));
+            dc = new ValueModel(_parent, new ValueFormat("DC", valuetype, true, false, 0, regexs, null, "减速时间", "Decelerate time"));
+            v = new ValueModel(_parent, new ValueFormat("V", valuetype, true, false, 0, regexs, null, "速度", "Velocity"));
             x.Text = "K0";
             y.Text = "K0";
             ac.Text = "K0";
