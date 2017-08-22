@@ -183,7 +183,7 @@ namespace SamSoarII.Core.Generate
             user_id = 0;
             sw.Write("static int8_t _global[{0:d}];\n", globalTotal); // 全局变量
             // 清空边沿信息
-            sw.Write("void ClearEdge() { int i = 0; for ( ; i < {0:d}; i++) _global[i] = 0; }\n", globalTotal);
+            sw.Write("void ClearEdge() {{ int i = 0; for ( ; i < {0:d}; i++) _global[i] = 0; }}\n", globalTotal);
             // 仿真模式下计算当前信号
             if (simumode) sw.Write("static int8_t _signal;\n");
             // 先声明所有的子函数
