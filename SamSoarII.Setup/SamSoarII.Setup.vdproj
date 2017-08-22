@@ -387,6 +387,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_266FC00BA5E94D03AC1051B2AAD0C403"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_26D76F366FD74C7E93D1C48FBE97AC90"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -921,6 +927,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_5F7C03C7CA4A40FCA66D52DAB6C1849F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5F80A6B9CE0D41ECB3CF8DC43A1B4F81"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1336,6 +1348,12 @@
         "Entry"
         {
         "MsmKey" = "8:_8E40BAB5D704433B8891397C41EBAE56"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8F0F5C5320624B35848B44F3D142579B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1809,6 +1827,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BCFA9F2CC98843099E292F5B6FE8FFD0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BD13C3727C9E4B0A98A37D71608AA723"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1977,12 +2001,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CB1BCAFB1520432AAFACB4606BD53F21"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_CBDB8BD57655486080A8004D76F269BB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2050,12 +2068,6 @@
         "Entry"
         {
         "MsmKey" = "8:_D102ADCCC2A84495AAC3A9C759B94515"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D23C19AE4C444A19A8C005620010830F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2211,6 +2223,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_E33B352584DF4DCF89F069E6D1F3D5B9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_E3A254F562C14F61AAFE3AE3C48366BD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2242,12 +2260,6 @@
         "Entry"
         {
         "MsmKey" = "8:_E684410A547B4119A40BA00A7019A510"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E6A2946EBDC74B29ADDB170397FA24E3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -3951,6 +3963,26 @@
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_266FC00BA5E94D03AC1051B2AAD0C403"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\msiexec.exe"
+            "TargetName" = "8:msiexec.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:TRUE"
             "System" = "11:FALSE"
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
@@ -5744,6 +5776,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5F7C03C7CA4A40FCA66D52DAB6C1849F"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\simug\\simuitrp.o"
+            "TargetName" = "8:simuitrp.o"
+            "Tag" = "8:"
+            "Folder" = "8:_E2C18B5EC0244CD2919BB0750E7CEFFE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5F80A6B9CE0D41ECB3CF8DC43A1B4F81"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\redboot.ld"
@@ -7130,6 +7182,26 @@
             "TargetName" = "8:reason.h"
             "Tag" = "8:"
             "Folder" = "8:_8DE0C4D68AF349F197764C754921A1FB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8F0F5C5320624B35848B44F3D142579B"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\HaoZip.dll"
+            "TargetName" = "8:HaoZip.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8695,6 +8767,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BCFA9F2CC98843099E292F5B6FE8FFD0"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\HaoZipFormats.dll"
+            "TargetName" = "8:HaoZipFormats.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BD13C3727C9E4B0A98A37D71608AA723"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\crtn.o"
@@ -9266,26 +9358,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CB1BCAFB1520432AAFACB4606BD53F21"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\HaoZip.dll"
-            "TargetName" = "8:HaoZip.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CBDB8BD57655486080A8004D76F269BB"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\paths.h"
@@ -9523,26 +9595,6 @@
             "TargetName" = "8:setjmp.h"
             "Tag" = "8:"
             "Folder" = "8:_D2FD382201D8457EADC637C80F6E4C32"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D23C19AE4C444A19A8C005620010830F"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\HaoZipFormats.dll"
-            "TargetName" = "8:HaoZipFormats.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10057,6 +10109,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E33B352584DF4DCF89F069E6D1F3D5B9"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\HaoZipC.exe"
+            "TargetName" = "8:HaoZipC.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E3A254F562C14F61AAFE3AE3C48366BD"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\include\\winapi\\winnt.h"
@@ -10163,26 +10235,6 @@
             "TargetName" = "8:time.h"
             "Tag" = "8:"
             "Folder" = "8:_D2FD382201D8457EADC637C80F6E4C32"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E6A2946EBDC74B29ADDB170397FA24E3"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\HaoZipC.exe"
-            "TargetName" = "8:HaoZipC.exe"
-            "Tag" = "8:"
-            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -11685,15 +11737,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SamSoarII"
-        "ProductCode" = "8:{D8A07A80-3750-422E-A921-59646E9DA217}"
-        "PackageCode" = "8:{4B7C08A4-B74A-4A24-9B86-72BCBB17A673}"
+        "ProductCode" = "8:{C407CBB1-C975-43F7-B460-3FDC5ABC3F97}"
+        "PackageCode" = "8:{07DA11D7-6126-4A07-BA70-3C87F81052A1}"
         "UpgradeCode" = "8:{A7ED4973-BC60-4163-929E-885AA3DD333F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.5"
+        "ProductVersion" = "8:2.0.9"
         "Manufacturer" = "8:Samkoon"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -11806,6 +11858,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_0E0AEF25EF244A3683FBD88CC6110250"
+            {
+            "Name" = "8:uninstall"
+            "Arguments" = "8:/x {C407CBB1-C975-43F7-B460-3FDC5ABC3F97}"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_266FC00BA5E94D03AC1051B2AAD0C403"
+            "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
+            "WorkingFolder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {

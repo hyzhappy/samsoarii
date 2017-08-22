@@ -96,12 +96,12 @@ namespace SamSoarII.Shell.Models
                             case LadderModes.Simulate:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGSimu.IsAlive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGSimu.IsActive ? "???" : core.Core.Children[0].Value);
                                 break;
                             case LadderModes.Monitor:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGComu.IsAlive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGComu.IsActive ? "???" : core.Core.Children[0].Value);
                                 break;
                             default:
                                 break;
@@ -138,18 +138,18 @@ namespace SamSoarII.Shell.Models
                             case LadderModes.Simulate:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGSimu.IsAlive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGSimu.IsActive ? "???" : core.Core.Children[0].Value);
                                 text2 = string.Format("{0:s} = {1}",
                                         core.Core.Children[1].Text,
-                                        !core.MNGSimu.IsAlive ? "???" : core.Core.Children[1].Value);
+                                        !core.MNGSimu.IsActive ? "???" : core.Core.Children[1].Value);
                                 break;
                             case LadderModes.Monitor:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGComu.IsAlive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGComu.IsActive ? "???" : core.Core.Children[0].Value);
                                 text2 = string.Format("{0:s} = {1}",
                                         core.Core.Children[1].Text,
-                                        !core.MNGComu.IsAlive ? "???" : core.Core.Children[1].Value);
+                                        !core.MNGComu.IsActive ? "???" : core.Core.Children[1].Value);
                                 break;
                         }
                         DrawingText(context, core, new Point(0, 0), span, text1, null, FontWeights.Heavy, 0, 300, TextAlignment.Center, FontType.Property);
@@ -161,78 +161,82 @@ namespace SamSoarII.Shell.Models
             {
                 case LadderModes.Simulate:
                 case LadderModes.Monitor:
-                    bool value = false;
-                    Int32 w1 = 0, w2 = 0;
-                    Int64 d1 = 0, d2 = 0;
-                    double f1 = 0, f2 = 0;
-                    try
+                    if ((core.Core.LadderMode == LadderModes.Monitor && core.MNGComu.IsActive)
+                        || (core.Core.LadderMode == LadderModes.Simulate && core.MNGSimu.IsActive))
                     {
-                        switch (core.Core.Type)
+                        bool value = false;
+                        Int32 w1 = 0, w2 = 0;
+                        Int64 d1 = 0, d2 = 0;
+                        double f1 = 0, f2 = 0;
+                        try
                         {
-                            case LadderUnitModel.Types.LD:
-                            case LadderUnitModel.Types.LDIM:
-                                value = BIT_1_SHOWS.Contains(core.Core.Children[0].Value.ToString());
-                                break;
-                            case LadderUnitModel.Types.LDI:
-                            case LadderUnitModel.Types.LDIIM:
-                                value = BIT_0_SHOWS.Contains(core.Core.Children[0].Value.ToString());
-                                break;
-                            case LadderUnitModel.Types.LDWEQ:
-                            case LadderUnitModel.Types.LDWNE:
-                            case LadderUnitModel.Types.LDWGE:
-                            case LadderUnitModel.Types.LDWLE:
-                            case LadderUnitModel.Types.LDWG:
-                            case LadderUnitModel.Types.LDWL:
-                                w1 = short.Parse(core.Core.Children[0].Value.ToString());
-                                w2 = short.Parse(core.Core.Children[1].Value.ToString());
-                                break;
-                            case LadderUnitModel.Types.LDDEQ:
-                            case LadderUnitModel.Types.LDDNE:
-                            case LadderUnitModel.Types.LDDGE:
-                            case LadderUnitModel.Types.LDDLE:
-                            case LadderUnitModel.Types.LDDG:
-                            case LadderUnitModel.Types.LDDL:
-                                d1 = int.Parse(core.Core.Children[0].Value.ToString());
-                                d2 = int.Parse(core.Core.Children[1].Value.ToString());
-                                break;
-                            case LadderUnitModel.Types.LDFEQ:
-                            case LadderUnitModel.Types.LDFNE:
-                            case LadderUnitModel.Types.LDFGE:
-                            case LadderUnitModel.Types.LDFLE:
-                            case LadderUnitModel.Types.LDFG:
-                            case LadderUnitModel.Types.LDFL:
-                                f1 = float.Parse(core.Core.Children[0].Value.ToString());
-                                f2 = float.Parse(core.Core.Children[1].Value.ToString());
-                                break;
+                            switch (core.Core.Type)
+                            {
+                                case LadderUnitModel.Types.LD:
+                                case LadderUnitModel.Types.LDIM:
+                                    value = BIT_1_SHOWS.Contains(core.Core.Children[0].Value.ToString());
+                                    break;
+                                case LadderUnitModel.Types.LDI:
+                                case LadderUnitModel.Types.LDIIM:
+                                    value = BIT_0_SHOWS.Contains(core.Core.Children[0].Value.ToString());
+                                    break;
+                                case LadderUnitModel.Types.LDWEQ:
+                                case LadderUnitModel.Types.LDWNE:
+                                case LadderUnitModel.Types.LDWGE:
+                                case LadderUnitModel.Types.LDWLE:
+                                case LadderUnitModel.Types.LDWG:
+                                case LadderUnitModel.Types.LDWL:
+                                    w1 = short.Parse(core.Core.Children[0].Value.ToString());
+                                    w2 = short.Parse(core.Core.Children[1].Value.ToString());
+                                    break;
+                                case LadderUnitModel.Types.LDDEQ:
+                                case LadderUnitModel.Types.LDDNE:
+                                case LadderUnitModel.Types.LDDGE:
+                                case LadderUnitModel.Types.LDDLE:
+                                case LadderUnitModel.Types.LDDG:
+                                case LadderUnitModel.Types.LDDL:
+                                    d1 = int.Parse(core.Core.Children[0].Value.ToString());
+                                    d2 = int.Parse(core.Core.Children[1].Value.ToString());
+                                    break;
+                                case LadderUnitModel.Types.LDFEQ:
+                                case LadderUnitModel.Types.LDFNE:
+                                case LadderUnitModel.Types.LDFGE:
+                                case LadderUnitModel.Types.LDFLE:
+                                case LadderUnitModel.Types.LDFG:
+                                case LadderUnitModel.Types.LDFL:
+                                    f1 = float.Parse(core.Core.Children[0].Value.ToString());
+                                    f2 = float.Parse(core.Core.Children[1].Value.ToString());
+                                    break;
+                            }
+                            switch (core.Core.InstName)
+                            {
+                                case "LDWEQ": value = (w1 == w2); break;
+                                case "LDWNE": value = (w1 != w2); break;
+                                case "LDWLE": value = (w1 <= w2); break;
+                                case "LDWGE": value = (w1 >= w2); break;
+                                case "LDWL": value = (w1 < w2); break;
+                                case "LDWG": value = (w1 > w2); break;
+                                case "LDDEQ": value = (d1 == d2); break;
+                                case "LDDNE": value = (d1 != d2); break;
+                                case "LDDLE": value = (d1 <= d2); break;
+                                case "LDDGE": value = (d1 >= d2); break;
+                                case "LDDL": value = (d1 < d2); break;
+                                case "LDDG": value = (d1 > d2); break;
+                                case "LDFEQ": value = (f1 == f2); break;
+                                case "LDFNE": value = (f1 != f2); break;
+                                case "LDFLE": value = (f1 <= f2); break;
+                                case "LDFGE": value = (f1 >= f2); break;
+                                case "LDFL": value = (f1 < f2); break;
+                                case "LDFG": value = (f1 > f2); break;
+                            }
                         }
-                        switch (core.Core.InstName)
+                        catch (Exception)
                         {
-                            case "LDWEQ": value = (w1 == w2); break;
-                            case "LDWNE": value = (w1 != w2); break;
-                            case "LDWLE": value = (w1 <= w2); break;
-                            case "LDWGE": value = (w1 >= w2); break;
-                            case "LDWL": value = (w1 < w2); break;
-                            case "LDWG": value = (w1 > w2); break;
-                            case "LDDEQ": value = (d1 == d2); break;
-                            case "LDDNE": value = (d1 != d2); break;
-                            case "LDDLE": value = (d1 <= d2); break;
-                            case "LDDGE": value = (d1 >= d2); break;
-                            case "LDDL": value = (d1 < d2); break;
-                            case "LDDG": value = (d1 > d2); break;
-                            case "LDFEQ": value = (f1 == f2); break;
-                            case "LDFNE": value = (f1 != f2); break;
-                            case "LDFLE": value = (f1 <= f2); break;
-                            case "LDFGE": value = (f1 >= f2); break;
-                            case "LDFL": value = (f1 < f2); break;
-                            case "LDFG": value = (f1 > f2); break;
+                            context.DrawRectangle(Brushes.Red, Transparent, new Rect(new Point(core.X * Global.GlobalSetting.LadderWidthUnit + 100, core.Y * span + 50), new Size(100, 100)));
+                            return;
                         }
+                        context.DrawRectangle(value ? Brushes.Green : Brushes.Transparent, Transparent, new Rect(new Point(core.X * Global.GlobalSetting.LadderWidthUnit + 100, core.Y * span + 50), new Size(100, 100)));
                     }
-                    catch (Exception)
-                    {
-                        context.DrawRectangle(Brushes.Red,Transparent,new Rect(new Point(core.X * Global.GlobalSetting.LadderWidthUnit + 100, core.Y * span + 50),new Size(100,100)));
-                        return;
-                    }
-                    context.DrawRectangle(value ? Brushes.Green :Brushes.Transparent,Transparent, new Rect(new Point(core.X * Global.GlobalSetting.LadderWidthUnit + 100, core.Y * span + 50), new Size(100, 100)));
                     break;
             }
         }
@@ -253,12 +257,12 @@ namespace SamSoarII.Shell.Models
                             case LadderModes.Simulate:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGSimu.IsAlive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGSimu.IsActive ? "???" : core.Core.Children[0].Value);
                                 break;
                             case LadderModes.Monitor:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGComu.IsAlive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGComu.IsActive ? "???" : core.Core.Children[0].Value);
                                 break;
                         }
                         DrawingText(context, core, new Point(0, 0), span, text1, null, FontWeights.Heavy, 0, 300, TextAlignment.Center, FontType.Property);
@@ -279,18 +283,18 @@ namespace SamSoarII.Shell.Models
                             case LadderModes.Simulate:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGSimu.IsAlive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGSimu.IsActive ? "???" : core.Core.Children[0].Value);
                                 text2 = string.Format("{0:s} = {1}",
                                         core.Core.Children[1].Text,
-                                        !core.MNGSimu.IsAlive ? "???" : core.Core.Children[1].Value);
+                                        !core.MNGSimu.IsActive ? "???" : core.Core.Children[1].Value);
                                 break;
                             case LadderModes.Monitor:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGComu.IsAlive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGComu.IsActive ? "???" : core.Core.Children[0].Value);
                                 text2 = string.Format("{0:s} = {1}",
                                         core.Core.Children[1].Text,
-                                        !core.MNGComu.IsAlive ? "???" : core.Core.Children[1].Value);
+                                        !core.MNGComu.IsActive ? "???" : core.Core.Children[1].Value);
                                 break;
                         }
                         DrawingText(context, core, new Point(0, 0), span, text1, null, FontWeights.Heavy, 0, 300, TextAlignment.Center, FontType.Property);
@@ -302,14 +306,64 @@ namespace SamSoarII.Shell.Models
             {
                 case LadderModes.Simulate:
                 case LadderModes.Monitor:
-                    bool value = BIT_1_SHOWS.Contains(core.Core.Children[0].Value.ToString());
-                    context.DrawRectangle(value ? Brushes.Green : Brushes.Transparent, Transparent, new Rect(new Point(core.X * Global.GlobalSetting.LadderWidthUnit + 100, core.Y * span + 50), new Size(100, 100)));
+                    if ((core.Core.LadderMode == LadderModes.Monitor && core.MNGComu.IsActive) 
+                        || (core.Core.LadderMode == LadderModes.Simulate && core.MNGSimu.IsActive))
+                    {
+                        bool value = BIT_1_SHOWS.Contains(core.Core.Children[0].Value.ToString());
+                        context.DrawRectangle(value ? Brushes.Green : Brushes.Transparent, Transparent, new Rect(new Point(core.X * Global.GlobalSetting.LadderWidthUnit + 100, core.Y * span + 50), new Size(100, 100)));
+                    }
                     break;
             }
         }
         public static void DrawingOutputRectProperty(DrawingContext context, BaseVisualUnitModel core, int span)
         {
-
+            if (core.Core.IsUsed)
+            {
+                ValueModel vmodel;
+                ValueFormat vformat;
+                switch (core.Core.LadderMode)
+                {
+                    case LadderModes.Edit:
+                        for (int i = 0; i < core.Core.Children.Count; i++)
+                        {
+                            vmodel = core.Core.Children[i];
+                            vformat = vmodel.Format;
+                            string text = string.Format("{0:s}:{1:s}",
+                                vformat.Name, vmodel.Text);
+                            if (vformat.Position >= 0)
+                                DrawingText(context, core, new Point(25, 120 + 30 * vformat.Position - (core.Core.Type == LadderUnitModel.Types.PID ? 20 : 0)), span, text, null, FontWeights.Heavy, 0, 0, TextAlignment.Left, FontType.Property);
+                            else
+                                DrawingText(context, core, new Point(25, 250 + 30 * (vformat.Position + 1)), span, text, null, FontWeights.Heavy, 0, 0, TextAlignment.Left, FontType.Property);
+                        }
+                        break;
+                    case LadderModes.Simulate:
+                        for (int i = 0; i < core.Core.Children.Count; i++)
+                        {
+                            vmodel = core.Core.Children[i];
+                            vformat = vmodel.Format;
+                            string text = string.Format("{0:s} = {1}",
+                                vmodel.Text, !core.MNGSimu.IsActive ? "???" : vmodel.Value);
+                            if (vformat.Position >= 0)
+                                DrawingText(context, core, new Point(25, 120 + 30 * vformat.Position - (core.Core.Type == LadderUnitModel.Types.PID ? 20 : 0)), span, text, null, FontWeights.Heavy, 0, 0, TextAlignment.Left, FontType.Property);
+                            else
+                                DrawingText(context, core, new Point(25, 250 + 30 * (vformat.Position + 1)), span, text, null, FontWeights.Heavy, 0, 0, TextAlignment.Left, FontType.Property);
+                        }
+                        break;
+                    case LadderModes.Monitor:
+                        for (int i = 0; i < core.Core.Children.Count; i++)
+                        {
+                            vmodel = core.Core.Children[i];
+                            vformat = vmodel.Format;
+                            string text = string.Format("{0:s} = {1}",
+                                vmodel.Text, !core.MNGComu.IsActive ? "???" : vmodel.Value);
+                            if (vformat.Position >= 0)
+                                DrawingText(context, core, new Point(25, 120 + 30 * vformat.Position - (core.Core.Type == LadderUnitModel.Types.PID ? 20 : 0)), span, text, null, FontWeights.Heavy, 0, 0, TextAlignment.Left, FontType.Property);
+                            else
+                                DrawingText(context, core, new Point(25, 250 + 30 * (vformat.Position + 1)), span, text, null, FontWeights.Heavy, 0, 0, TextAlignment.Left, FontType.Property);
+                        }
+                        break;
+                }
+            }
         }
 
         public static void DrawingUnitCommnet(DrawingContext context, IViewModel core)

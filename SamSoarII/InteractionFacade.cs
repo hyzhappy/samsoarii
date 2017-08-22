@@ -224,7 +224,7 @@ namespace SamSoarII
         private void AllThreadStart()
         {
             thmngCore.Start();
-            thmngView.Start();
+            //thmngView.Start();
         }
 
         #region Tools

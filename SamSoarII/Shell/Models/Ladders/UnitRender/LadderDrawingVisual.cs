@@ -25,6 +25,7 @@ namespace SamSoarII.Shell.Models
         }
         public void Render()
         {
+            if (core == null) return;
             Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, (ThreadStart)delegate () 
             {
                 using (DrawingContext context = RenderOpen())

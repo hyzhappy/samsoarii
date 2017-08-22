@@ -157,8 +157,8 @@ namespace SamSoarII.Shell.Models
                 }
             }
         }
-        public SimulateManager MNGSimu { get { return Core.IFParent.MNGSimu; } }
-        public CommunicationManager MNGComu { get { return Core.IFParent.MNGComu; } }
+        public SimulateManager MNGSimu { get { return Core?.IFParent?.MNGSimu; } }
+        public CommunicationManager MNGComu { get { return Core?.IFParent?.MNGComu; } }
 
         IModel IViewModel.Core
         {
@@ -323,22 +323,32 @@ namespace SamSoarII.Shell.Models
 
         private void OnSimulateStarted(object sender, RoutedEventArgs e)
         {
-            Update(RenderType.State);
+            if(MNGSimu != null)
+                Update(RenderType.State);
         }
 
         private void OnSimulateAborted(object sender, RoutedEventArgs e)
         {
-            Update(RenderType.State);
+            if (MNGSimu != null)
+            {
+                while (MNGSimu.IsActive) Thread.Sleep(10);
+                Update(RenderType.State);
+            }
         }
 
         private void OnMonitorStarted(object sender, RoutedEventArgs e)
         {
-            Update(RenderType.State);
+            if (MNGComu != null)
+                Update(RenderType.State);
         }
 
         private void OnMonitorAborted(object sender, RoutedEventArgs e)
         {
-            Update(RenderType.State);
+            if(MNGComu != null)
+            {
+                while (MNGComu.IsActive) Thread.Sleep(10);
+                Update(RenderType.State);
+            }
         }
         #endregion
     }
