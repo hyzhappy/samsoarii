@@ -149,7 +149,7 @@ namespace SamSoarII.Core.Models
             new string[] { });
 
         public readonly static ValueModel Analyzer_Bit = new ValueModel(null, new ValueFormat("ANA", Types.BOOL, false, false, 0,
-                new Regex[] { ValueModel.BitRegex, ValueModel.WordBitRegex }));
+                new Regex[] { ValueModel.BitRegex, ValueModel.WordBitRegex, ValueModel.IntKValueRegex }));
         public readonly static ValueModel Analyzer_Word = new ValueModel(null, new ValueFormat("ANA", Types.WORD, false, false, 0,
                 new Regex[] { ValueModel.WordRegex, ValueModel.BitWordRegex, ValueModel.IntKValueRegex, ValueModel.IntHValueRegex }));
         public readonly static ValueModel Analyzer_DWord = new ValueModel(null, new ValueFormat("ANA", Types.DWORD, false, false, 0,

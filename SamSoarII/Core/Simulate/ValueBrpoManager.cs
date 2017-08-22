@@ -38,6 +38,7 @@ namespace SamSoarII.Core.Simulate
                 Core.Compile();
                 string cpath = Utility.FileHelper.AppRootPath;
                 string dllpath = String.Format(@"{0:s}\simug\simuitrp.dll", cpath);
+                if (!ThAlive) return;
                 while (SimulateDllModel.SetItrpDll(dllpath) != 0)
                     Thread.Sleep(10);
             }

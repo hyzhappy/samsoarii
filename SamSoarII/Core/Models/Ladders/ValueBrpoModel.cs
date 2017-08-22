@@ -426,6 +426,9 @@ namespace SamSoarII.Core.Models
                                     ? "_set_wbit({0:s}Word+({1:s}>>4), {1:s}&15,"
                                     : "_get_wbit({0:s}Word+({1:s}>>4), {1:s}&15)",
                                 ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.K:
+                        case ValueModel.Bases.H:
+                            return vmodel.Store.Value.ToString();
                     }
                     break;
                 case ValueModel.Types.WORD:
