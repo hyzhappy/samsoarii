@@ -492,13 +492,13 @@ namespace SamSoarII.Shell.Models
             {
                 IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
                 units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
-                
+                units = units.Where(x => { return x.Visual == null; });
                 if (units.Count() > 0)
                     Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
                         foreach (LadderUnitModel unit in units)
                         {
-                            if (unit.Visual != null) unit.Visual.Dispose();
+                            //if (unit.Visual != null) unit.Visual.Dispose();
                             unit.Visual = BaseVisualUnitModel.Create(unit);
                             foreach (var visual in unit.Visual.Visuals)
                             {

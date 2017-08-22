@@ -1892,7 +1892,7 @@ namespace SamSoarII
                 dlgOption = new OptionDialog(this);
                 dlgOption.EnsureButtonClick += (sender, e) =>
                 {
-                    if (VMDProj != null) VMDProj.UpdateUnit(LadderUnitViewModel.UPDATE_STYLE);
+                    if (VMDProj != null) VMDProj.UpdateUnit();
                 };
             }
             dlgOption.WindowStartupLocation = WindowStartupLocation.CenterScreen;

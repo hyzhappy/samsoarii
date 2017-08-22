@@ -26,13 +26,13 @@ namespace SamSoarII.Shell.Models
         {
             foreach (LadderDiagramModel diagram in core.Diagrams)
             {
-                diagram?.View?.Dispose();
                 foreach (LadderNetworkModel network in diagram.Children)
                 {
-                    network?.View?.Dispose();
                     foreach (LadderUnitModel unit in network.Children)
-                        unit?.View?.Dispose();
+                        unit?.Visual?.Dispose();
+                    network?.View?.Dispose();
                 }
+                diagram?.View?.Dispose();
             }
             foreach (FuncBlockModel funcblock in core.FuncBlocks)
                 funcblock?.View?.Dispose();
@@ -101,12 +101,16 @@ namespace SamSoarII.Shell.Models
             set { core.IsCommentMode = value; PropertyChanged(this,new PropertyChangedEventArgs("IsCommentMode")); }
         }
 
-        public void UpdateUnit(int flags)
+        public void UpdateUnit()
         {
             foreach (LadderDiagramModel diagram in core.Diagrams)
                 foreach (LadderNetworkModel network in diagram.Children)
                     foreach (LadderUnitModel unit in network.Children)
-                        if (unit.View != null) unit.View.Update(flags);
+                        if (unit.Visual != null)
+                        {
+                            unit.Visual.Update(RenderType.Property);
+                            if(diagram.IsCommentMode) unit.Visual.Update(RenderType.Comment);
+                        }
         }
         
         #endregion

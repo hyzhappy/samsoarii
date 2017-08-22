@@ -213,6 +213,7 @@ namespace SamSoarII.Shell.Models
                     break;
                 case RenderType.Comment:
                     RenderUnit();
+                    RenderProperty();
                     RenderComment();
                     break;
                 case RenderType.Opacity:
@@ -244,6 +245,7 @@ namespace SamSoarII.Shell.Models
                     //Update(RenderType.All);
                     break;
                 case LadderUnitAction.UPDATE:
+                    Update(RenderType.Property);
                     Update(RenderType.Comment);
                     break;
             }
@@ -316,7 +318,7 @@ namespace SamSoarII.Shell.Models
         
         private void OnValueStorePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () {  });
+            Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { Update(RenderType.Property); });
         }
 
         private void OnSimulateStarted(object sender, RoutedEventArgs e)

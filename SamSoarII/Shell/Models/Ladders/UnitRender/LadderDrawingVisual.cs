@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Media;
 
 namespace SamSoarII.Shell.Models
@@ -24,27 +25,27 @@ namespace SamSoarII.Shell.Models
         }
         public void Render()
         {
-            DrawingContext context;
-            if (Drawing == null) context = RenderOpen();
-            else context = Drawing.Open();
-            using (context)
+            Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, (ThreadStart)delegate () 
             {
-                switch (type)
+                using (DrawingContext context = RenderOpen())
                 {
-                    case VisualType.Unit:
-                        DrawingManager.DrawingUnit(context, core);
-                        break;
-                    case VisualType.Property:
-                        DrawingManager.DrawingUnitProperty(context, core);
-                        break;
-                    case VisualType.Comment:
-                        DrawingManager.DrawingUnitCommnet(context, core);
-                        break;
-                    case VisualType.Brop:
-                        DrawingManager.DrawingBrop(context, core);
-                        break;
+                    switch (type)
+                    {
+                        case VisualType.Unit:
+                            DrawingManager.DrawingUnit(context, core);
+                            break;
+                        case VisualType.Property:
+                            DrawingManager.DrawingUnitProperty(context, core);
+                            break;
+                        case VisualType.Comment:
+                            DrawingManager.DrawingUnitCommnet(context, core);
+                            break;
+                        case VisualType.Brop:
+                            DrawingManager.DrawingBrop(context, core);
+                            break;
+                    }
                 }
-            }
+            });
         }
 
         public void Dispose()
