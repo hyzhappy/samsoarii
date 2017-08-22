@@ -63,6 +63,20 @@ namespace SamSoarII.Shell.Models
         private LadderDrawingVisual[] visuals = new LadderDrawingVisual[4];
 
         public LadderDrawingVisual[] Visuals { get { return visuals; } }
+
+        public bool IsRendering
+        {
+            get
+            {
+                bool ret = false;
+                for (int i = 0; i < visuals.Length; i++)
+                {
+                    if(visuals[i] != null)
+                        ret |= visuals[i].IsRendering;
+                }
+                return ret;
+            }
+        }
         protected void RenderUnit()
         {
             if (visuals[0] == null)
@@ -184,15 +198,13 @@ namespace SamSoarII.Shell.Models
                     if (vmodel.Store != null)
                         vmodel.Store.PropertyChanged -= OnValueStorePropertyChanged;
             }
+            while (IsRendering) Thread.Sleep(10);
             for (int i = 0; i < visuals.Length; i++)
             {
                 if (ViewParent.LadderCanvas.Contains(visuals[i]))
                     ViewParent.LadderCanvas.RemoveVisual(visuals[i]);
                 if (visuals[i] != null)
-                {
-                    visuals[i]?.Dispose();
                     visuals[i] = null;
-                }
             }
             Core.Visual = null;
             Core = null;
@@ -200,6 +212,7 @@ namespace SamSoarII.Shell.Models
 
         public virtual void Update(RenderType type)
         {
+            if (core == null) return;
             switch (type)
             {
                 case RenderType.All:
@@ -318,7 +331,7 @@ namespace SamSoarII.Shell.Models
         
         private void OnValueStorePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { Update(RenderType.Property); });
+            Update(RenderType.Property);
         }
 
         private void OnSimulateStarted(object sender, RoutedEventArgs e)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace SamSoarII.Shell.Models
 { 
@@ -25,9 +26,9 @@ namespace SamSoarII.Shell.Models
         }
         public void Render()
         {
-            if (core == null) return;
-            Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, (ThreadStart)delegate () 
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () 
             {
+                isRendering = true;
                 using (DrawingContext context = RenderOpen())
                 {
                     switch (type)
@@ -46,12 +47,13 @@ namespace SamSoarII.Shell.Models
                             break;
                     }
                 }
+                isRendering = false;
             });
         }
-
+        bool isRendering = false;
+        public bool IsRendering { get { return isRendering;} }
         public void Dispose()
         {
-            core = null;
         }
         #region Core
         private IViewModel core;
