@@ -25,6 +25,7 @@ typedef void(*vsDllfun)(char*);
 typedef void*(*pDllfun)(void);
 typedef int8_t(*v8Dllfun)(void);
 typedef int(*iDllfun)(void);
+typedef int(*isDllfun)(char*);
 typedef int(*ipDllfun)(int*);
 typedef int(*isi32Dllfun)(char*, int32_t*);
 typedef int(*isv32Dllfun)(char*, int32_t);
@@ -70,7 +71,9 @@ static vDllfun dfMoveStep;
 static vDllfun dfCallStep;
 static viDllfun dfJumpTo;
 static vDllfun dfJumpOut;
-static vsDllfun dfSetItrpDll;
+static isDllfun dfSetItrpDll;
+static iDllfun dfFreeItrpDll;
+static vDllfun dfForceFreeItrpDll;
 static iDllfun dfGetItrpID;
 
 EXPORT void Encode(char* ifile, char* ofile)
@@ -99,10 +102,16 @@ EXPORT int IsDllAlive()
 
 EXPORT void FreeDll()
 {
-	FreeLibrary(hdll);
-	hdll = NULL;
-	sprintf(cmd, "erase %s", dllPath);
-	system(cmd);
+	if (hdll != NULL)
+	{
+		if (dfForceFreeItrpDll != NULL)
+			dfForceFreeItrpDll();
+		FreeLibrary(hdll);
+		dfForceFreeItrpDll = NULL;
+		hdll = NULL;
+		sprintf(cmd, "erase %s", dllPath);
+		system(cmd);
+	}
 }
 
 EXPORT int LoadDll(char* simudllPath)
@@ -306,17 +315,29 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeDll();
 		return 34;
 	}
-	dfSetItrpDll = (vsDllfun)GetProcAddress(hdll, "_SetItrpDll@4");
+	dfSetItrpDll = (isDllfun)GetProcAddress(hdll, "_SetItrpDll@4");
 	if (dfSetItrpDll == NULL)
 	{
 		FreeDll();
 		return 35;
 	}
+	dfFreeItrpDll = (iDllfun)GetProcAddress(hdll, "_FreeItrpDll@0");
+	if (dfFreeItrpDll == NULL)
+	{
+		FreeDll();
+		return 36;
+	}
 	dfGetItrpID = (iDllfun)GetProcAddress(hdll, "_GetItrpID@0");
 	if (dfGetItrpID == NULL)
 	{
 		FreeDll();
-		return 36;
+		return 37;
+	}
+	dfForceFreeItrpDll = (vDllfun)GetProcAddress(hdll, "_ForceFreeItrpDll@0");
+	if (dfForceFreeItrpDll == NULL)
+	{
+		FreeDll();
+		return 38;
 	}
 	return 0;
 }
@@ -481,12 +502,22 @@ EXPORT void JumpOut()
 	dfJumpOut();
 }
 
-EXPORT void SetItrpDll(char* dllpath)
+EXPORT int SetItrpDll(char* dllpath)
 {
-	dfSetItrpDll(dllpath);
+	return dfSetItrpDll(dllpath);
+}
+
+EXPORT int FreeItrpDll()
+{
+	return dfFreeItrpDll();
 }
 
 EXPORT int GetItrpID()
 {
 	return dfGetItrpID();
+}
+
+EXPORT void ForceFreeItrpDll()
+{
+	dfForceFreeItrpDll();
 }

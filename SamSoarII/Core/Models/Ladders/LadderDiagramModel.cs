@@ -32,7 +32,10 @@ namespace SamSoarII.Core.Models
         
         public void Dispose()
         {
+            if (View != null) View.Dispose();
             Parent = null;
+            inst.Dispose();
+            inst = null;
             foreach (LadderNetworkModel network in children)
             {
                 network.PropertyChanged -= OnChildrenPropertyChanged;
@@ -41,12 +44,11 @@ namespace SamSoarII.Core.Models
             children.CollectionChanged -= Children_CollectionChanged;
             children.Clear();
             children = null;
-            inst.Dispose();
-            inst = null;
             undos.Clear();
             redos.Clear();
             undos = null;
             redos = null;
+            PTVItem = null;
         }
         
         public event PropertyChangedEventHandler PropertyChanged = delegate { };

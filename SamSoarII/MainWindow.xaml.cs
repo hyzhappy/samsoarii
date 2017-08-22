@@ -120,6 +120,7 @@ namespace SamSoarII
         public LayoutAnchorable LAElemList { get { return LA_ElemList; } }
         public LayoutAnchorable LAElemInit { get { return LA_ElemInit; } }
         public LayoutAnchorable LABreakpoint { get { return LA_Breakpoint; } }
+        public LayoutAnchorable LAValueBrpo { get { return LA_ValueBrpo; } }
         public LayoutAnchorControl LACProj { get { return LA_Proj?.AnchorControl; } }
         public LayoutAnchorControl LACFind { get { return LA_Find?.AnchorControl; } }
         public LayoutAnchorControl LACReplace { get { return LA_Replace?.AnchorControl; } }
@@ -129,6 +130,7 @@ namespace SamSoarII
         public LayoutAnchorControl LACElemList { get { return LA_ElemList?.AnchorControl; } }
         public LayoutAnchorControl LACElemInit { get { return LA_ElemInit?.AnchorControl; } }
         public LayoutAnchorControl LACBreakpoint { get { return LA_Breakpoint?.AnchorControl; } }
+        public LayoutAnchorControl LACValueBrpo { get { return LA_ValueBrpo?.AnchorControl; } }
 
         private void InitializeAvalonDock()
         {
@@ -143,6 +145,7 @@ namespace SamSoarII
             InitializeAvalonDock(LAElemList);
             InitializeAvalonDock(LAElemInit);
             InitializeAvalonDock(LABreakpoint);
+            InitializeAvalonDock(LAValueBrpo);
             LP_Dock.Children.Add(ifParent.TCMain);
             LA_Proj.Content = ifParent.TVProj;
             GD_Find.Children.Add(ifParent.WNDFind);
@@ -156,6 +159,7 @@ namespace SamSoarII
             LA_Monitor.Content = ifParent.WNDMoni;
             LA_Inform.Content = ifParent.WNDInform;
             LA_Breakpoint.Content = ifParent.WNDBrpo;
+            LA_ValueBrpo.Content = ifParent.WNDVBrpo;
         }
 
         private void InitializeAvalonDock(LayoutAnchorable LAnch)
@@ -724,6 +728,8 @@ namespace SamSoarII
                 LACMonitor.Show();
             if (e.Command == GlobalCommand.ShowBreakpointCommand)
                 LACBreakpoint.Show();
+            if (e.Command == GlobalCommand.ShowValueBrpoCommand)
+                LACValueBrpo.Show();
             if (e.Command == GlobalCommand.ShowPropertyDialogCommand)
                 ifParent.ShowProjectPropertyDialog();
             if (e.Command == GlobalCommand.ShowOptionDialogCommand)

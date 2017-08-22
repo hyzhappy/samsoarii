@@ -36,6 +36,7 @@
         <CommandBinding Command="{x:Static gb:GlobalCommand.ShowElemListCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.ShowElemInitCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.ShowBreakpointCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.ShowValueBrpoCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"/>
         <CommandBinding Command="{x:Static gb:GlobalCommand.ShowOptionDialogCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"/>
         <!--Project Command-->
         <CommandBinding Command="{x:Static gb:GlobalCommand.AddNewSubRoutineCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
@@ -236,6 +237,7 @@
                 <MenuItem Header="{x:Static properties:Resources.Error_List}" Command="{x:Static gb:GlobalCommand.ShowErrorListCommand}" InputGestureText="Ctrl+F5,O"></MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Monitor_List}" Command="{x:Static gb:GlobalCommand.ShowMainMonitorCommand}" InputGestureText="Ctrl+F4,O"></MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.Breakpoint_List}" Command="{x:Static gb:GlobalCommand.ShowBreakpointCommand}" InputGestureText="Ctrl+F8,O"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.ValueBrpo}" Command="{x:Static gb:GlobalCommand.ShowValueBrpoCommand}" InputGestureText="Ctrl+F9,O"></MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Proj}" Margin="0,-5,0,0">
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_SubRoutine}" Command="{x:Static gb:GlobalCommand.AddNewSubRoutineCommand}" InputGestureText="Ctrl+W,R"></MenuItem>
@@ -516,6 +518,10 @@
                             </ad:LayoutAnchorGroup>
                             <ad:LayoutAnchorGroup>
                                 <ad:LayoutAnchorable x:Name="LA_Breakpoint" Title="{x:Static properties:Resources.MainWindow_Breakpoint}">
+                                </ad:LayoutAnchorable>
+                            </ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorGroup>
+                                <ad:LayoutAnchorable x:Name="LA_ValueBrpo" Title="{x:Static properties:Resources.MainWindow_ValueBrpo}">
                                 </ad:LayoutAnchorable>
                             </ad:LayoutAnchorGroup>
                         </ad:LayoutAnchorSide>

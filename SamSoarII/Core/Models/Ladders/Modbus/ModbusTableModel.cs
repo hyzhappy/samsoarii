@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using SamSoarII.Shell.Models;
-using System.Collections.ObjectModel;
 using SamSoarII.Shell.Windows;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
 namespace SamSoarII.Core.Models
@@ -15,16 +15,14 @@ namespace SamSoarII.Core.Models
     {
         public ModbusTableModel(ProjectModel _parent)
         {
-            isdisposed = false;
             parent = _parent;
             children = new ObservableCollection<ModbusModel>();
             children.CollectionChanged += OnChildrenCollectionChanged;
         }
-
-        protected bool isdisposed;
+        
         public void Dispose()
         {
-            isdisposed = true;
+            if (View != null) View.Dispose();
             foreach (ModbusModel modbus in children)
             {
                 modbus.PropertyChanged -= OnChildrenPropertyChanged;

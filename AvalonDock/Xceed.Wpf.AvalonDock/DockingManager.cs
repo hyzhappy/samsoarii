@@ -1338,7 +1338,8 @@ namespace Xceed.Wpf.AvalonDock
 
         void SetupAutoHideWindow()
         {
-            _autohideArea = FindName("PART_AutoHideArea") as FrameworkElement;
+            _autohideArea = GetTemplateChild("PART_AutoHideArea") as FrameworkElement;
+            //_autohideArea = FindName("PART_AutoHideArea") as FrameworkElement;
 
             if (_autoHideWindowManager != null)
                 _autoHideWindowManager.HideAutoWindow();

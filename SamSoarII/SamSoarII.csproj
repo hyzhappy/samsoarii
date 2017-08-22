@@ -259,6 +259,7 @@
     <Compile Include="Core\Simulate\SimulateBreakpointEvent.cs" />
     <Compile Include="Core\Simulate\SimulateDllModel.cs" />
     <Compile Include="Core\Simulate\SimulateManager.cs" />
+    <Compile Include="Core\Simulate\ValueBrpoManager.cs" />
     <Compile Include="Core\Simulate\SimulateViewer.cs" />
     <Compile Include="Core\Update\Information.cs" />
     <Compile Include="Core\Update\UpdateManager.cs" />

@@ -2355,4 +2355,10 @@
   <data name="Inst_PID" xml:space="preserve">
     <value>PID指令</value>
   </data>
+  <data name="MainWindow_ValueBrpo" xml:space="preserve">
+    <value>软元件断点</value>
+  </data>
+  <data name="ValueBrpo" xml:space="preserve">
+    <value>软元件断点</value>
+  </data>
 </root>

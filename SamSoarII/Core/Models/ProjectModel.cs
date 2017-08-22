@@ -47,12 +47,14 @@ namespace SamSoarII.Core.Models
                 modbus = new ModbusTableModel(this);
                 monitor = new MonitorModel(this);
                 paraProj = new ProjectPropertyParams(this);
+                valuebrpo = new ValueBrpoModel(this);
             }
             ismodified = false;
         }
 
         public void Dispose()
         {
+            if (View != null) View.Dispose();
             foreach (LadderDiagramModel diagram in diagrams)
             {
                 diagram.PropertyChanged -= OnDiagramPropertyChanged;
@@ -74,7 +76,10 @@ namespace SamSoarII.Core.Models
             modbus = null;
             paraProj.Dispose();
             paraProj = null;
+            valuebrpo.Dispose();
+            valuebrpo = null;
             parent = null;
+            PTVItem = null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -193,6 +198,9 @@ namespace SamSoarII.Core.Models
         private ProjectPropertyParams paraProj;
         public ProjectPropertyParams PARAProj { get { return this.paraProj; } }
 
+        private ValueBrpoModel valuebrpo;
+        public ValueBrpoModel ValueBrpo { get { return this.valuebrpo; } }
+        
         #endregion
 
         #endregion
@@ -367,6 +375,9 @@ namespace SamSoarII.Core.Models
             XElement xele_mn = new XElement("Monitor");
             monitor.Save(xele_mn);
             xele_p.Add(xele_mn);
+            XElement xele_vb = new XElement("RegisterBreakpoints");
+            valuebrpo.Save(xele_vb);
+            xele_p.Add(xele_vb);
             FileStream stream = File.Create(_filename);
             xdoc.Save(stream);
             stream.Close();
@@ -404,6 +415,14 @@ namespace SamSoarII.Core.Models
             ValueManager.Load(xele.Element("ValueManager"));
             paraProj = new ProjectPropertyParams(this);
             paraProj.Load(xele.Element("ProjectPropertyParams"));
+            try
+            {
+                valuebrpo = new ValueBrpoModel(this);
+                valuebrpo.Load(xele.Element("RegisterBreakpoints"));
+            }
+            catch (Exception)
+            {
+            }
         }
 
         #endregion

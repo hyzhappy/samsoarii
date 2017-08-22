@@ -63,9 +63,15 @@ namespace SamSoarII.Core.Models
             Parent = null;
             foreach (LadderUnitModel unit in children)
                 unit.Dispose();
+            foreach (LadderUnitModel unit in vlines)
+                unit.Dispose();
             children.Clear();
             children = null;
+            vlines.Clear();
+            vlines = null;
             brief = null;
+            description = null;
+            PTVItem = null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };

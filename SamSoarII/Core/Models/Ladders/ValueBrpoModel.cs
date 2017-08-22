@@ -47,6 +47,7 @@ namespace SamSoarII.Core.Models
 
         private ObservableCollection<ValueBrpoElement> children;
         public IList<ValueBrpoElement> Children { get { return this.children; } }
+        public event NotifyCollectionChangedEventHandler ChildrenChanged = delegate { };
         private void OnChildrenColletionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems != null)
@@ -58,6 +59,7 @@ namespace SamSoarII.Core.Models
                     ele.PropertyChanged -= OnChildrenPropertyChanged;
                     ele.Dispose();
                 }
+            ChildrenChanged(this, e);
             IsModified = true;
         }
 
@@ -72,9 +74,7 @@ namespace SamSoarII.Core.Models
             get { return this.ismodified; }
             set { this.ismodified = value; }
         }
-
-        public bool IsValid { get { return children.All(e => e.IsValid); } }
-
+        
         #endregion
         
         #region View
@@ -120,7 +120,7 @@ namespace SamSoarII.Core.Models
             string dllpath = String.Format(@"{0:s}\simug\simuitrp.dll", cpath);
             SimulateDllModel.Encode(hopath, hcpath);
             StreamWriter sw = new StreamWriter(ccpath);
-            sw.Write("#include \"{0:s}\";\n", hcpath);
+            sw.Write("#include \"simuitrp.h\"\n");
             sw.Write("int8_t isfirst = 1;\n");
             for (int i = 0; i < children.Count(); i++)
             {
@@ -140,11 +140,11 @@ namespace SamSoarII.Core.Models
                         break;
                 }
             }
-            sw.Write("EXPORT int AssertItrp()\n{\n");
+            sw.Write("EXPORT int AssertItrps()\n{\n");
             sw.Write("int ret = 0;\n");
             for (int i = children.Count() - 1; i >= 0; i--)
             {
-                if (!children[i].IsActive) continue;
+                if (!children[i].IsValid || !children[i].IsActive) continue;
                 string lvalue =
                     children[i].LeftCStyle();
                 string rvalue = children[i].RightCStyle();
@@ -189,8 +189,8 @@ namespace SamSoarII.Core.Models
             cmd.StartInfo.FileName
                 = String.Format(@"{0:s}\Compiler\tcc\tcc", cpath);
             cmd.StartInfo.Arguments
-                = String.Format("\"{0:s}\" \"{1:s}\" -o \"{3:s}\" -shared -DBUILD_DLL",
-                    hcpath, ccpath, dllpath);
+                = String.Format("\"{0:s}\" -o \"{1:s}\" -shared -DBUILD_DLL",
+                    ccpath, dllpath);
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
 #if DEBUG
@@ -199,7 +199,6 @@ namespace SamSoarII.Core.Models
 #endif
             cmd.Start();
             cmd.WaitForExit();
-            SimulateDllModel.SetItrpDll(dllpath);
 #if RELEASE
             File.Delete(chpath);
             File.Delete(ccpath);
@@ -210,12 +209,22 @@ namespace SamSoarII.Core.Models
         
         public void Save(XElement xele)
         {
-
+            foreach (ValueBrpoElement element in children)
+            {
+                XElement xele_e = new XElement("Element");
+                element.Save(xele_e);
+                xele.Add(xele_e);
+            }
         }
 
         public void Load(XElement xele)
         {
-
+            foreach (XElement xele_e in xele.Elements("Element"))
+            {
+                ValueBrpoElement element = new ValueBrpoElement(this);
+                element.Load(xele_e);
+                children.Add(element);
+            }
         }
 
         #endregion
@@ -226,8 +235,7 @@ namespace SamSoarII.Core.Models
         public ValueBrpoElement(ValueBrpoModel _parent)
         {
             parent = _parent;
-            isactive = false;
-            isbit = false;
+            isactive = true;
             oper = Operators.NULL;
         }
 
@@ -252,12 +260,11 @@ namespace SamSoarII.Core.Models
             get { return this.isactive; }
             set { this.isactive = value; PropertyChanged(this, new PropertyChangedEventArgs("IsActive")); }
         }
-
-        private bool isbit;
-        public bool IsBit { get { return this.isbit; } }
+        
+        public bool IsBit { get { return lvalue != null && lvalue.Type == ValueModel.Types.BOOL; } }
 
         private ValueModel lvalue;
-        public ValueModel LValue { get { return this.rvalue; } }
+        public ValueModel LValue { get { return this.lvalue; } }
 
         private ValueModel rvalue;
         public ValueModel RValue { get { return this.rvalue; } }
@@ -277,14 +284,13 @@ namespace SamSoarII.Core.Models
         public Operators Oper
         {
             get { return this.oper; }
-            set { this.oper = value; PropertyChanged(this, new PropertyChangedEventArgs("Oper")); }
         }
 
         public bool IsValid
         {
             get
             {
-                if (lvalue.Text.Equals("???"))
+                if (lvalue == null || lvalue.Text.Equals("???"))
                     return false;
                 switch (oper)
                 {
@@ -294,7 +300,7 @@ namespace SamSoarII.Core.Models
                     case Operators.NOTLESS:
                     case Operators.MORE:
                     case Operators.NOTMORE:
-                        if (rvalue.Text.Equals("???"))
+                        if (rvalue == null || rvalue.Text.Equals("???"))
                             return false;
                         break;
                 }
@@ -302,13 +308,13 @@ namespace SamSoarII.Core.Models
                 {
                     case Operators.UPEDGE:
                     case Operators.DOWNEDGE:
-                        if (!isbit) return false;
+                        if (!IsBit) return false;
                         break;
                     case Operators.LESS:
                     case Operators.MORE:
                     case Operators.NOTLESS:
                     case Operators.NOTMORE:
-                        if (isbit) return false;
+                        if (IsBit) return false;
                         break;
                 }
                 return true;
@@ -329,48 +335,59 @@ namespace SamSoarII.Core.Models
                 this.view = null;
                 if (_view != null && _view.Core != null) _view.Core = null;
                 this.view = value;
-                if (view != null && _view.Core != this) _view.Core = this;
+                if (view != null && view.Core != this) view.Core = this;
             }
         }
-        
-        #endregion
 
+        #endregion
+        
         public void Parse(string _lvalue, string _rvalue = "???", string _oper = null, ValueModel.Types _type = ValueModel.Types.WORD)
         {
-            try
+            if (lvalue != null)
             {
-                ValueModel.Analyzer_Bit.Text = _lvalue;
-                lvalue = ValueModel.Analyzer_Bit.Clone();
-                ValueModel.Analyzer_Bit.Text = _rvalue;
-                rvalue = ValueModel.Analyzer_Bit.Clone();
+                lvalue.Dispose();
+                lvalue = null;
             }
-            catch (ValueParseException)
+            if (rvalue != null)
             {
-                switch (_type)
-                {
-                    case ValueModel.Types.WORD:
-                        ValueModel.Analyzer_Word.Text = _lvalue;
-                        lvalue = ValueModel.Analyzer_Word.Clone();
-                        ValueModel.Analyzer_Word.Text = _rvalue;
-                        rvalue = ValueModel.Analyzer_Word.Clone();
-                        break;
-                    case ValueModel.Types.DWORD:
-                        ValueModel.Analyzer_DWord.Text = _lvalue;
-                        lvalue = ValueModel.Analyzer_DWord.Clone();
-                        ValueModel.Analyzer_DWord.Text = _rvalue;
-                        rvalue = ValueModel.Analyzer_DWord.Clone();
-                        break;
-                    case ValueModel.Types.FLOAT:
-                        ValueModel.Analyzer_Float.Text = _lvalue;
-                        lvalue = ValueModel.Analyzer_Float.Clone();
-                        ValueModel.Analyzer_Float.Text = _rvalue;
-                        rvalue = ValueModel.Analyzer_Float.Clone();
-                        break;
-                }
+                rvalue.Dispose();
+                rvalue = null;
+            }
+            switch (_type)
+            {
+                case ValueModel.Types.BOOL:
+                    ValueModel.Analyzer_Bit.Text = _lvalue;
+                    lvalue = ValueModel.Analyzer_Bit.Clone();
+                    switch (_rvalue.ToUpper())
+                    {
+                        case "OFF": _rvalue = "K0"; break;
+                        case "ON": _rvalue = "K1"; break;
+                    }
+                    ValueModel.Analyzer_Bit.Text = _rvalue;
+                    rvalue = ValueModel.Analyzer_Bit.Clone();
+                    break;
+                case ValueModel.Types.WORD:
+                    ValueModel.Analyzer_Word.Text = _lvalue;
+                    lvalue = ValueModel.Analyzer_Word.Clone();
+                    ValueModel.Analyzer_Word.Text = _rvalue;
+                    rvalue = ValueModel.Analyzer_Word.Clone();
+                    break;
+                case ValueModel.Types.DWORD:
+                    ValueModel.Analyzer_DWord.Text = _lvalue;
+                    lvalue = ValueModel.Analyzer_DWord.Clone();
+                    ValueModel.Analyzer_DWord.Text = _rvalue;
+                    rvalue = ValueModel.Analyzer_DWord.Clone();
+                    break;
+                case ValueModel.Types.FLOAT:
+                    ValueModel.Analyzer_Float.Text = _lvalue;
+                    lvalue = ValueModel.Analyzer_Float.Clone();
+                    ValueModel.Analyzer_Float.Text = _rvalue;
+                    rvalue = ValueModel.Analyzer_Float.Clone();
+                    break;
             }
             switch (_oper)
             {
-                case "": break;
+                case "": oper = Operators.CHANGED; break;
                 case "上升沿": oper = Operators.UPEDGE; break;
                 case "下降沿": oper = Operators.DOWNEDGE; break;
                 case "变化": oper = Operators.CHANGED; break;
@@ -382,6 +399,7 @@ namespace SamSoarII.Core.Models
                 case "≥": oper = Operators.NOTMORE; break;
                 default: oper = Operators.CHANGED; break;
             }
+            PropertyChanged(this, new PropertyChangedEventArgs("@All"));
         }
 
         private string ToCStyle(ValueModel vmodel)
@@ -512,6 +530,27 @@ namespace SamSoarII.Core.Models
         {
             return ToCStyle(rvalue);
         }
+
+        #region Save & Load
+
+        public void Save(XElement xele)
+        {
+            xele.SetAttributeValue("LeftValue", lvalue != null ? lvalue.Text : "");
+            xele.SetAttributeValue("RightValue", rvalue != null ? rvalue.Text : "");
+            xele.SetAttributeValue("Operation", (int)(oper));
+            xele.SetAttributeValue("ValueType", (int)(Type));
+        }
+
+        public void Load(XElement xele)
+        {
+            string _lvalue = xele.Attribute("LeftValue").Value;
+            string _rvalue = xele.Attribute("RightValue").Value;
+            string _oper = xele.Attribute("Operation").Value;
+            ValueModel.Types _type = (ValueModel.Types)(int.Parse(xele.Attribute("ValueType").Value));
+            Parse(_lvalue, _rvalue, _oper, _type);
+        }
+
+        #endregion
     }
 
 }

@@ -39,27 +39,53 @@
             </StackPanel>
         </GroupBox>
         <DataGrid x:Uid="DG_Main" x:Name="DG_Main" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Elements}"
-                  AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False">
+                  AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False"
+                  SelectionChanged="DG_Main_SelectionChanged"
+                  SelectedCellsChanged="DG_Main_SelectedCellsChanged"
+                  CellEditEnding="DG_Main_CellEditEnding"
+                  RowEditEnding="DG_Main_RowEditEnding">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="{x:Static properties:Resources.Enable_Disable}" 
+                <DataGridTextColumn Header="状态" MinWidth="60"
                                     Binding="{Binding ActiveInfo}" IsReadOnly="True">
                     <DataGridTextColumn.CellStyle>
-                        <Style x:Uid="Style_2" TargetType="{x:Type DataGridCell}">
-                            <Setter x:Uid="Setter_5" Property="Foreground" Value="{Binding ActiveBrush}"></Setter>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Foreground" Value="{Binding ActiveBrush}"></Setter>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="比较源" MinWidth="150"
+                <DataGridTextColumn x:Name="DGC_LValue" Header="比较源" MinWidth="150"
                                     Binding="{Binding LeftValue}" IsReadOnly="False">
                 </DataGridTextColumn>
-                <DataGridComboBoxColumn Header="条件" MinWidth="80" IsReadOnly="False"
-                                        ItemsSource="{Binding Operations}" TextBinding="{Binding Operation}">
+                <DataGridComboBoxColumn x:Name="DGC_Cond" Header="条件" MinWidth="80" IsReadOnly="False" TextBinding="{Binding Operation}">
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding Operations}"></Setter>
+                            <Setter Property="Text" Value="{Binding Operation}"></Setter>
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding Operations}"></Setter>
+                            <Setter Property="Text" Value="{Binding Operation}"></Setter>
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
                 </DataGridComboBoxColumn>
-                <DataGridTextColumn Header="比较目标" MinWidth="150"
+                <DataGridTextColumn x:Name="DGC_RValue" Header="比较目标" MinWidth="150"
                                     Binding="{Binding RightValue}" IsReadOnly="False">
                 </DataGridTextColumn>
-                <DataGridComboBoxColumn Header="比较类型" MinWidth="100" IsReadOnly="False"
-                                        ItemsSource="{Binding ValueTypes}" TextBinding="{Binding ValueType}">
+                <DataGridComboBoxColumn x:Name="DGC_Type" Header="比较类型" MinWidth="100" IsReadOnly="False" TextBinding="{Binding ValueType}">
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding ValueTypes}"></Setter>
+                            <Setter Property="Text" Value="{Binding ValueType}"></Setter>
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding ValueTypes}"></Setter>
+                            <Setter Property="Text" Value="{Binding ValueType}"></Setter>
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
                 </DataGridComboBoxColumn>
             </DataGrid.Columns>
         </DataGrid>
