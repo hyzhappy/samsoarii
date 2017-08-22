@@ -162,7 +162,7 @@ namespace SamSoarII.Shell.Models
                     if (!IsExpand)
                     {
                         ReleaseSelectRect();
-                        DynamicDispose(true);
+                        DynamicDispose();
                         LadderCanvas.Height = 0;
                         if (ThumbnailButton.ToolTip == null)
                         {
@@ -239,12 +239,11 @@ namespace SamSoarII.Shell.Models
                     loadedrowend = Math.Max(loadedrowend, sender.Y);
                     break;
                 case LadderUnitAction.REMOVE:
-                    if (sender.View != null)
+                    if (sender.Visual != null)
                     {
                         Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                         {
-                            sender.View.Visibility = Visibility.Hidden;
-                            sender.View.Dispose();
+                            sender.Visual.Dispose();
                         });
                     }
                     break;
@@ -475,11 +474,11 @@ namespace SamSoarII.Shell.Models
             oldscrolloffset = newscrolloffset;
         }
 
-        public void DynamicDispose(bool hide = true)
+        public void DynamicDispose()
         {
             if (loadedrowstart <= loadedrowend)
             {
-                DisposeRange(loadedrowstart, loadedrowend, hide);
+                DisposeRange(loadedrowstart, loadedrowend);
                 loadedrowstart = 0;
                 loadedrowend = -1;
             }
@@ -510,7 +509,7 @@ namespace SamSoarII.Shell.Models
             }
         }
 
-        private void DisposeRange(int rowstart, int rowend, bool hide = true)
+        private void DisposeRange(int rowstart, int rowend)
         {
             int dir = (rowstart < rowend ? 1 : -1);
             for (int y = rowstart; y != rowend + dir; y += dir)
