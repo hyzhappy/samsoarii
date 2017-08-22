@@ -2355,4 +2355,10 @@
   <data name="Inst_PID" xml:space="preserve">
     <value>PID Instruction</value>
   </data>
+  <data name="MainWindow_ValueBrpo" xml:space="preserve">
+    <value>Element Breakpoint</value>
+  </data>
+  <data name="ValueBrpo" xml:space="preserve">
+    <value>Element Breakpoint</value>
+  </data>
 </root>

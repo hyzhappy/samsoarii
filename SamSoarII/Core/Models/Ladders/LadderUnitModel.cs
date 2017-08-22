@@ -1341,6 +1341,7 @@ namespace SamSoarII.Core.Models
             Breakpoint = null;
             oldparent = null;
             children = null;
+            Inst = null;
         }
 
         public override string ToString()

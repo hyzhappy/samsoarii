@@ -460,11 +460,11 @@ int32_t rbpsttop = 0;
 int8_t itrpactive = 0;
 int32_t itrpid = 0;
 HINSTANCE itrpdll = NULL;
-typedef void(*dfSetRegister)(int8_t*, int8_t*, int8_t*, int8_t*, int8_t*, int8_t*,
+typedef void(*dfSetRegisters)(int8_t*, int8_t*, int8_t*, int8_t*, int8_t*, int8_t*,
 	int16_t*, int16_t*, int16_t*, int16_t*, int16_t*, int16_t*, int16_t*, 
 	int32_t*);
 typedef int(*dfAssertItrps)(void);
-dfSetRegister SetRegister = NULL;
+dfSetRegisters SetRegisters = NULL;
 dfAssertItrps AssertItrps = NULL;
 
 void callinto()
@@ -519,10 +519,9 @@ void cpcycle(int32_t _bpaddr, int8_t value)
 	if (!bpenable || !cpenable) return;
 	bpaddr = _bpaddr;
 	int32_t cpmsg = ((cpdatas[bpaddr>>3]>>((bpaddr&7)<<2)) & 15);
-	if (cpmsg == 0) return;
 	int8_t prevalue = cpstack[cpsttop];
-	cpstack[cpsttop++] = value;
 	int32_t cond = 0;
+	if (cpmsg) cpstack[cpsttop++] = value;
 	if (cpmsg & 0x01)
 		cond |= (value == 0);
 	if (cpmsg & 0x02)
@@ -535,19 +534,25 @@ void cpcycle(int32_t _bpaddr, int8_t value)
 	{
 		itrpactive = 1;
 		itrpid = AssertItrps();
-		cond |= (itrpid > 0);
+		//cond |= (itrpid > 0);
 		itrpactive = 0;
 	}
 	if (bpjump >= 0)
 		cond &= (bpjump == bpaddr);
-	if (cond && ++bpcount[bpaddr] >= bpmaxcount[bpaddr])
+	if (itrpid > 0)
+	{
+		bpjump = -1;
+		bppause = 3;
+		while (bpenable && bppause);	
+		itrpid = 0;
+	}
+	else if (cond && ++bpcount[bpaddr] >= bpmaxcount[bpaddr])
 	{
 		bpcount[bpaddr] = 0;
 		bpjump = -1;
 		bppause = 2;
 		while (bpenable && bppause);	
 	}
-	itrpid = 0;
 }
 
 EXPORT int32_t GetCallCount()
@@ -630,26 +635,42 @@ EXPORT int32_t GetBackTrace(int32_t* data)
 	return rbpsttop;
 }
 
-EXPORT void SetItrpDll(char* dllpath)
+EXPORT int SetItrpDll(char* dllpath)
 {
-	while (itrpactive);
+	if (itrpactive) return 1;
 	itrpactive = 1;
-	if (itrpdll != NULL)
-	{
-		FreeLibrary(itrpdll);
-		SetRegister = NULL;
-		AssertItrps = NULL;
-	}
+	ForceFreeItrpDll();
 	if (dllpath != NULL)
 	{
 		itrpdll = LoadLibrary(dllpath);
-		SetRegister = (dfSetRegister)GetProcAddress(itrpdll, "_SetRegister@56");
+		SetRegisters = (dfSetRegisters)GetProcAddress(itrpdll, "_SetRegisters@56");
 		AssertItrps = (dfAssertItrps)GetProcAddress(itrpdll, "_AssertItrps@0");
-		SetRegister(XBit, YBit, MBit, CBit, TBit, SBit,
+		SetRegisters(XBit, YBit, MBit, CBit, TBit, SBit,
 			DWord, CVWord, TVWord, AIWord, AOWord, VWord, ZWord, 
 			CV32DoubleWord);
 	}
 	itrpactive = 0;
+	return 0;
+}
+
+EXPORT int FreeItrpDll()
+{
+	if (itrpactive) return 1;
+	itrpactive = 1;
+	ForceFreeItrpDll();
+	itrpactive = 0;
+	return 0;
+}
+
+EXPORT void ForceFreeItrpDll()
+{
+	if (itrpdll != NULL)
+	{
+		FreeLibrary(itrpdll);
+		itrpdll = NULL;
+		SetRegisters = NULL;
+		AssertItrps = NULL;
+	}
 }
 
 EXPORT int GetItrpID()

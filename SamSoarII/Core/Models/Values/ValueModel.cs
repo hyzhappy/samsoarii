@@ -184,6 +184,7 @@ namespace SamSoarII.Core.Models
         {
             Parent = null;
             format = null;
+            Store = null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -467,7 +468,7 @@ namespace SamSoarII.Core.Models
         public ValueModel Clone()
         {
             ValueModel vmodel = new ValueModel(parent, format);
-            vmodel.Parse(Text);
+            vmodel.Text = Text;
             return vmodel;
         }
 

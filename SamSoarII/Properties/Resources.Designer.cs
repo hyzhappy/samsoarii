@@ -3436,6 +3436,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Element Breakpoint 的本地化字符串。
+        /// </summary>
+        public static string MainWindow_ValueBrpo {
+            get {
+                return ResourceManager.GetString("MainWindow_ValueBrpo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Vertical Line 的本地化字符串。
         /// </summary>
         public static string MainWindow_Vertical_Line {
@@ -6438,6 +6447,15 @@ namespace SamSoarII.Properties {
         public static string Valid_Range {
             get {
                 return ResourceManager.GetString("Valid_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Element Breakpoint 的本地化字符串。
+        /// </summary>
+        public static string ValueBrpo {
+            get {
+                return ResourceManager.GetString("ValueBrpo", resourceCulture);
             }
         }
         

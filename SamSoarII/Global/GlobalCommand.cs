@@ -29,6 +29,7 @@ namespace SamSoarII.Global
         public static RoutedUICommand ShowElemListCommand { get; set; }
         public static RoutedUICommand ShowElemInitCommand { get; set; }
         public static RoutedUICommand ShowBreakpointCommand { get; set; }
+        public static RoutedUICommand ShowValueBrpoCommand { get; set; }
         public static RoutedUICommand LadderModeToggleCommand { get; set; }
         public static RoutedUICommand InstModeToggleCommand { get; set; }
         public static RoutedUICommand CommentModeToggleCommand { get; set; }
@@ -86,6 +87,8 @@ namespace SamSoarII.Global
             commands.Add(ShowElemInitCommand);
             ShowBreakpointCommand = new RoutedUICommand();
             commands.Add(ShowBreakpointCommand);
+            ShowValueBrpoCommand = new RoutedUICommand();
+            commands.Add(ShowValueBrpoCommand);
             CompileCommand = new RoutedUICommand();
             commands.Add(CompileCommand);
             MonitorCommand = new RoutedUICommand();

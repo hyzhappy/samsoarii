@@ -24,6 +24,7 @@ namespace SamSoarII.Core.Simulate
             viewer.BreakpointPaused += OnBreakpointPaused;
             viewer.BreakpointResumed += OnBreakpointResumed;
             mngBrpo = new BreakpointManager(this);
+            mngVBrpo = new ValueBrpoManager(this);
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -41,6 +42,9 @@ namespace SamSoarII.Core.Simulate
 
         private BreakpointManager mngBrpo;
         public BreakpointManager MNGBrpo { get { return this.mngBrpo; } }
+
+        private ValueBrpoManager mngVBrpo;
+        public ValueBrpoManager MNGVBrpo { get { return this.mngVBrpo; } }
 
         private bool isenable;
         public bool IsEnable
@@ -73,6 +77,7 @@ namespace SamSoarII.Core.Simulate
             if (viewer.IsBPPause) viewer.Resume();
             dllmodel.Abort();
             viewer.Abort();
+            mngVBrpo.Abort();
         }
 
         public void Pause()
@@ -86,6 +91,7 @@ namespace SamSoarII.Core.Simulate
             if (viewer.IsBPPause) viewer.Resume();
             dllmodel.Start();
             viewer.Start();
+            mngVBrpo.Start();
         }
         
         private void OnStarted(object sender, RoutedEventArgs e)

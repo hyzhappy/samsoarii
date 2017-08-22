@@ -78,7 +78,11 @@ EXPORT void JumpOut();
 
 EXPORT void SetCPAddr(int32_t _cpaddr, int32_t _cpmsg);
 
-EXPORT void SetItrpDll(char* dllpath);
+EXPORT int SetItrpDll(char* dllpath);
+
+EXPORT int FreeItrpDll();
+
+EXPORT void ForceFreeItrpDll();
 
 EXPORT int GetItrpID();
 

@@ -14,6 +14,10 @@ namespace SamSoarII.Shell.Windows
         public ValueBrpoTableElement(ValueBrpoElement _core)
         {
             Core = _core;
+            leftvalue = "";
+            rightvalue = "";
+            operation = "";
+            valuetype = "";
         }
 
         public void Dispose()
@@ -64,8 +68,8 @@ namespace SamSoarII.Shell.Windows
             }
         }
         
-        public string ActiveInfo { get { return core.IsActive ? "启用" : "禁用"; } }
-        public Brush ActiveBrush { get { return core.IsActive ? Brushes.Red : Brushes.Gray; } }
+        public string ActiveInfo { get { return core == null || !core.IsValid ? "非法" : core.IsActive ? "启用" : "禁用"; } }
+        public Brush ActiveBrush { get { return core != null && core.IsValid && core.IsActive ? Brushes.Red : Brushes.Gray; } }
 
         private string leftvalue;
         public string LeftValue
@@ -90,7 +94,7 @@ namespace SamSoarII.Shell.Windows
 
         static private string[] BitOperations = { "上升沿", "下降沿", "变化", "＝", "≠"};
         static private string[] WordOperations = { "变化", "＝", "≠", "＞", "≥", "＜", "≤"};
-        public IList<string> Operations
+        public IEnumerable<string> Operations
         {
             get
             {
@@ -117,7 +121,7 @@ namespace SamSoarII.Shell.Windows
 
         static private string[] BitTypes = { "BOOL" };
         static private string[] WordTypes = { "WORD", "DWORD", "FLOAT" };
-        public IList<string> ValueTypes
+        public IEnumerable<string> ValueTypes
         {
             get
             {
@@ -139,32 +143,59 @@ namespace SamSoarII.Shell.Windows
 
         public void LoadFromCore()
         {
-            LeftValue = core.LValue.Text.Equals("???") ? "" : core.LValue.Text;
-            RightValue = core.RValue.Text.Equals("???") ? "" : core.RValue.Text;
-            ValueType = ValueModel.NameOfTypes[(int)(core.Type)];
-            switch (core.Oper)
+            if (core != null && core.IsValid)
             {
-                case ValueBrpoElement.Operators.UPEDGE: Operation = "上升沿"; break;
-                case ValueBrpoElement.Operators.DOWNEDGE: Operation = "下降沿"; break;
-                case ValueBrpoElement.Operators.CHANGED: Operation = "变化"; break;
-                case ValueBrpoElement.Operators.EQUAL: Operation = "＝"; break;
-                case ValueBrpoElement.Operators.NOTEQUAL: Operation = "≠"; break;
-                case ValueBrpoElement.Operators.LESS: Operation = "＜"; break;
-                case ValueBrpoElement.Operators.NOTLESS: Operation = "≥"; break;
-                case ValueBrpoElement.Operators.MORE: Operation = "＞"; break;
-                case ValueBrpoElement.Operators.NOTMORE: Operation = "≤"; break;
+                LeftValue = core.LValue.Text.Equals("???") ? "" : core.LValue.Text;
+                RightValue = core.RValue.Text.Equals("???") ? "" : core.RValue.Text;
+                ValueType = ValueModel.NameOfTypes[(int)(core.Type)];
+                switch (core.Oper)
+                {
+                    case ValueBrpoElement.Operators.UPEDGE: Operation = "上升沿"; break;
+                    case ValueBrpoElement.Operators.DOWNEDGE: Operation = "下降沿"; break;
+                    case ValueBrpoElement.Operators.CHANGED: Operation = "变化"; break;
+                    case ValueBrpoElement.Operators.EQUAL: Operation = "＝"; break;
+                    case ValueBrpoElement.Operators.NOTEQUAL: Operation = "≠"; break;
+                    case ValueBrpoElement.Operators.LESS: Operation = "＜"; break;
+                    case ValueBrpoElement.Operators.NOTLESS: Operation = "≥"; break;
+                    case ValueBrpoElement.Operators.MORE: Operation = "＞"; break;
+                    case ValueBrpoElement.Operators.NOTMORE: Operation = "≤"; break;
+                }
             }
             PropertyChanged(this, new PropertyChangedEventArgs("Operations"));
             PropertyChanged(this, new PropertyChangedEventArgs("ValueTypes"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ActiveInfo"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ActiveBrush"));
         }
 
+        static private string[] AllValueTypes = {"BOOL", "WORD", "DWORD", "FLOAT"};
         public void SaveToCore()
         {
-            core.Parse(
-                LeftValue.Length > 0 ? LeftValue : "???",
-                RightValue.Length > 0 ? RightValue : "???",
-                Operation,
-                ValueModel.TypeOfNames[ValueType]);
+            try
+            {
+                core.Parse(
+                    LeftValue.Length > 0 ? LeftValue : "???",
+                    RightValue.Length > 0 ? RightValue : "???",
+                    Operation,
+                    ValueModel.TypeOfNames[ValueType]);
+            }
+            catch (Exception)
+            {
+                foreach (string _valuetype in AllValueTypes)
+                {
+                    try
+                    {
+                        core.Parse(
+                            LeftValue.Length > 0 ? LeftValue : "???",
+                            RightValue.Length > 0 ? RightValue : "???",
+                            Operation,
+                            ValueModel.TypeOfNames[_valuetype]);
+                        break;
+                    }
+                    catch (ValueParseException)
+                    {
+                    }
+                }
+            }
         }
     }
 }

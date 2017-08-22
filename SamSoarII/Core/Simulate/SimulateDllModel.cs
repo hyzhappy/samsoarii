@@ -399,7 +399,19 @@ namespace SamSoarII.Core.Simulate
         /// </summary>
         /// <param name="dllpath"></param>
         [DllImport(@"simug\simu.dll", EntryPoint = "SetItrpDll")]
-        public static extern void SetItrpDll(string dllpath);
+        public static extern int SetItrpDll(string dllpath);
+        
+        /// <summary>
+        /// 释放判断中断软元件的dll程序
+        /// </summary>
+        [DllImport(@"simug\simu.dll", EntryPoint = "FreeItrpDll")]
+        public static extern int FreeItrpDll();
+        
+        /// <summary>
+        /// 强制释放判断中断软元件的dll程序
+        /// </summary>
+        [DllImport(@"simug\simu.dll", EntryPoint = "ForceFreeItrpDll")]
+        public static extern void ForceFreeItrpDll();
 
         /// <summary>
         /// 获得当前触发的中断软元件ID

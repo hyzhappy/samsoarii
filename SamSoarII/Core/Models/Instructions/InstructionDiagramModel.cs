@@ -21,6 +21,9 @@ namespace SamSoarII.Core.Models
 
         public void Dispose()
         {
+            if (View != null) View.Dispose();
+            foreach (InstructionNetworkModel instnet in Children)
+                instnet.Dispose();
             Parent = null;
         }
 

@@ -23,6 +23,19 @@ namespace SamSoarII.Core.Models
 
         public void Dispose()
         {
+            if (View != null) View.Dispose();
+            if (lchart != null)
+            {
+                lchart.Dispose();
+                lchart = null;
+            }
+            if (lgraph != null)
+            {
+                lgraph.Dispose();
+                lgraph = null;
+            }
+            foreach (PLCOriginInst inst in insts)
+                inst.Inst = null;
             Parent = null;
         }
 

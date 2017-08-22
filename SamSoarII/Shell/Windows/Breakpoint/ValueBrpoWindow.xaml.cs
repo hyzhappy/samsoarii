@@ -11,10 +11,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 using SamSoarII.Core.Models;
 using SamSoarII.Shell.Models;
-using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace SamSoarII.Shell.Windows
 {
@@ -28,6 +30,7 @@ namespace SamSoarII.Shell.Windows
             InitializeComponent();
             ifparent = _ifparent;
             ifparent.PostIWindowEvent += OnReceiveIWindowEvent;
+            elements = new ObservableCollection<ValueBrpoTableElement>();
             DataContext = this;
         }
 
@@ -60,13 +63,20 @@ namespace SamSoarII.Shell.Windows
                 if (_core != null)
                 {
                     _core.PropertyChanged -= CorePropertyChanged;
+                    _core.ChildrenChanged -= CoreChildrenChanged;
                     if (_core.View != null) _core.View = null;
+                    foreach (ValueBrpoTableElement element in elements)
+                        element.Dispose();
                 }
                 this.core = value;
+                elements.Clear();
                 if (core != null)
                 {
                     core.PropertyChanged += CorePropertyChanged;
+                    core.ChildrenChanged += CoreChildrenChanged;
                     if (core.View != this) core.View = this;
+                    foreach (ValueBrpoElement element in core.Children)
+                        elements.Add(new ValueBrpoTableElement(element));
                 }
                 PropertyChanged(this, new PropertyChangedEventArgs("Elements"));
             }
@@ -76,14 +86,22 @@ namespace SamSoarII.Shell.Windows
         private void CorePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
         }
-
-        public IList<ValueBrpoElement> Elements
+        private void CoreChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            get
-            {
-                return core != null ? core.Children : new ValueBrpoElement[] { };
-            }
+            if (e.NewItems != null)
+                for (int i = e.NewItems.Count - 1; i >= 0; i--)
+                    elements.Insert(e.NewStartingIndex, new ValueBrpoTableElement((ValueBrpoElement)(e.NewItems[i])));
+            if (e.OldItems != null)
+                foreach (ValueBrpoElement element in e.OldItems)
+                {
+                    elements.Remove(element.View);
+                    element.View.Dispose();
+                }
+            PropertyChanged(this, new PropertyChangedEventArgs("Elements"));
         }
+
+        private ObservableCollection<ValueBrpoTableElement> elements;
+        public IList<ValueBrpoTableElement> Elements { get { return this.elements; } }
 
         #endregion
 
@@ -96,33 +114,36 @@ namespace SamSoarII.Shell.Windows
         }
 
         #region Button
-        
+
         public void UpdateButtonEnable()
         {
-            BT_Add.IsEnabled = true;
-            BT_Active.IsEnabled = DG_Main.SelectedItem != null;
-            BT_Remove.IsEnabled = DG_Main.SelectedItem != null;
-            BT_RemoveAll.IsEnabled = Elements.Count > 0;
+            BT_Add.IsEnabled = core != null;
+            BT_Active.IsEnabled = core != null && DG_Main.SelectedItem != null && ((ValueBrpoTableElement)(DG_Main.SelectedItem)).Core.IsValid;
+            BT_Remove.IsEnabled = core != null && DG_Main.SelectedItem != null;
+            BT_RemoveAll.IsEnabled = core != null && Elements.Count > 0;
         }
 
         private void BT_Add_Click(object sender, RoutedEventArgs e)
         {
-            
+            core.Children.Add(new ValueBrpoElement(core));
+            //PropertyChanged(this, new PropertyChangedEventArgs("Elements"));
         }
 
         private void BT_Active_Click(object sender, RoutedEventArgs e)
         {
-
+            ((ValueBrpoTableElement)(DG_Main.SelectedItem)).Core.IsActive ^= true;
         }
 
         private void BT_Remove_Click(object sender, RoutedEventArgs e)
         {
-
+            core.Children.Remove(((ValueBrpoTableElement)(DG_Main.SelectedItem)).Core);
+            //PropertyChanged(this, new PropertyChangedEventArgs("Elements"));
         }
 
         private void BT_RemoveAll_Click(object sender, RoutedEventArgs e)
         {
-
+            core.Children.Clear();
+            //PropertyChanged(this, new PropertyChangedEventArgs("Elements"));
         }
 
         #endregion
@@ -143,9 +164,35 @@ namespace SamSoarII.Shell.Windows
 
         #region DataGrid
 
+        private void DG_Main_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateButtonEnable();
+        }
+        
+        private void DG_Main_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            
+        }
+        
+        private void DG_Main_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            ValueBrpoTableElement element = (ValueBrpoTableElement)(e.Row.DataContext);
+            if (e.Column == DGC_LValue) element.LeftValue = ((TextBox)(e.EditingElement)).Text;
+            if (e.Column == DGC_Cond) element.Operation = ((ComboBox)(e.EditingElement)).Text;
+            if (e.Column == DGC_RValue) element.RightValue = ((TextBox)(e.EditingElement)).Text;
+            if (e.Column == DGC_Type) element.ValueType = ((ComboBox)(e.EditingElement)).Text;
+            element.SaveToCore();
+            element.LoadFromCore();
+        }
+
+        private void DG_Main_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+
+        }
+
         #endregion
 
         #endregion
-        
+
     }
 }

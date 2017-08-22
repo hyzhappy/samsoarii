@@ -24,6 +24,7 @@ namespace SamSoarII.Core.Models
         
         public void Dispose()
         {
+            PropertyChanged = delegate { };
             Parent = null;
         }
 

@@ -63,6 +63,7 @@ namespace SamSoarII
             wndEInit = new ElementInitWindow(this);
             wndMoni = new MonitorWindow(this);
             wndBrpo = new BreakpointWindow(this);
+            wndVBrpo = new ValueBrpoWindow(this);
             udManager = new UpdateManager(this);
             wndInform = new UpdateWindow(this);
             thmngCore = new CoreThreadManager(this);
@@ -84,6 +85,7 @@ namespace SamSoarII
             wndEInit.Post += OnReceiveIWindowEvent;
             wndMoni.Post += OnReceiveIWindowEvent;
             wndBrpo.Post += OnReceiveIWindowEvent;
+            wndVBrpo.Post += OnReceiveIWindowEvent;
             wndInform.Post += OnReceiveIWindowEvent;
         }
         
@@ -102,6 +104,8 @@ namespace SamSoarII
             wndEList.Post -= OnReceiveIWindowEvent;
             wndEInit.Post -= OnReceiveIWindowEvent;
             wndMoni.Post -= OnReceiveIWindowEvent;
+            wndBrpo.Post -= OnReceiveIWindowEvent;
+            wndVBrpo.Post -= OnReceiveIWindowEvent;
             wndInform.Post -= OnReceiveIWindowEvent;
             tvProj = null;
             tcMain = null;
@@ -114,6 +118,8 @@ namespace SamSoarII
             wndEList = null;
             wndEInit = null;
             wndMoni = null;
+            wndBrpo = null;
+            wndVBrpo = null;
             wndInform = null;
             udManager = null;
         }
@@ -164,6 +170,9 @@ namespace SamSoarII
 
         private BreakpointWindow wndBrpo;
         public BreakpointWindow WNDBrpo { get { return this.wndBrpo; } }
+
+        private ValueBrpoWindow wndVBrpo;
+        public ValueBrpoWindow WNDVBrpo { get { return this.wndVBrpo; } }
 
         private UpdateWindow wndInform;
         public UpdateWindow WNDInform { get { return wndInform; } }
@@ -247,6 +256,7 @@ namespace SamSoarII
             barStatus.Project = mdProj;
             wndEInit.UpdateElements();
             wndMoni.Core = mdProj.Monitor;
+            wndVBrpo.Core = mdProj.ValueBrpo;
             wndMain.LACProj.Show();
             mdProj.IsLoaded = true;
             PropertyChanged(this, new PropertyChangedEventArgs("ProjectName"));
@@ -374,13 +384,14 @@ namespace SamSoarII
             tvProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tvProj.Reset(); });
             barStatus.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { barStatus.Reset(); });
             wndMoni.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { wndMoni.Core = null; });
+            wndVBrpo.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { wndVBrpo.Core = null; });
             vmdProj.PropertyChanged -= OnViewPropertyChanged;
             vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { vmdProj.Dispose(); });
             mdProj.Dispose();
             vmdProj = null;
             mdProj = null;
             mngValue.Initialize();
-            //GC.Collect();
+            GC.Collect(2);
         }
         /// <summary>
         /// 记录每次下载后的选项，判断是否需重新生成Bin,初始化为-1表示第一次打开对话框
@@ -394,7 +405,7 @@ namespace SamSoarII
             if (!CheckLadder(false)) return false;
             if (!CheckFuncBlock(false)) return false;
 #if DEBUG
-            GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
+            //GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
             //DownloadHelper.InitializeData(mdProj);
 #endif
             _option = -1;
