@@ -57,50 +57,51 @@ namespace SamSoarII.Shell.Models
         }
 
         #region Visuals
+        private bool hasAdded = false;
+        public bool HasAdded { get { return hasAdded; } set { hasAdded = value; } }
 
         private LadderDrawingVisual[] visuals = new LadderDrawingVisual[4];
 
         public LadderDrawingVisual[] Visuals { get { return visuals; } }
         protected void RenderUnit()
         {
-            if (visuals[0] != null)
-                ViewParent.LadderCanvas.RemoveVisual(visuals[0]);
-            visuals[0] = new LadderDrawingVisual(this, VisualType.Unit);
+            if (visuals[0] == null)
+                visuals[0] = new LadderDrawingVisual(this, VisualType.Unit);
             visuals[0].Render();
-            //ViewParent.LadderCanvas.AddVisual(visuals[0]);
         }
 
         protected void RenderProperty()
         {
-            if (visuals[1] != null)
-                ViewParent.LadderCanvas.RemoveVisual(visuals[1]);
-            visuals[1] = new LadderDrawingVisual(this, VisualType.Property);
+            if (visuals[1] == null)
+                visuals[1] = new LadderDrawingVisual(this, VisualType.Property);
             visuals[1].Render();
-            //ViewParent.LadderCanvas.AddVisual(visuals[1]);
         }
 
         protected void RenderComment()
         {
-            if (visuals[2] != null)
-                ViewParent.LadderCanvas.RemoveVisual(visuals[2]);
-            visuals[2] = new LadderDrawingVisual(this, VisualType.Comment);
+            if (visuals[2] == null)
+                visuals[2] = new LadderDrawingVisual(this, VisualType.Comment);
             visuals[2].Render();
-            //ViewParent.LadderCanvas.AddVisual(visuals[2]);
         }
         protected void RenderBrpo()
         {
-            if (visuals[3] != null)
-                ViewParent.LadderCanvas.RemoveVisual(visuals[3]);
-            visuals[3] = new LadderDrawingVisual(this, VisualType.Brop);
+            if (visuals[3] == null)
+                visuals[3] = new LadderDrawingVisual(this, VisualType.Brop);
             visuals[3].Render();
-            //ViewParent.LadderCanvas.AddVisual(visuals[3]);
         }
         protected void RenderAll()
         {
             RenderUnit();
-            if(!(this is HLineVisualUnitModel || this is VLineVisualUnitModel))
+            if(!NoPropertyModel())
                 RenderProperty();
             if (IsCommentMode) RenderComment();
+        }
+
+        private bool NoPropertyModel()
+        {
+            return core.Type == LadderUnitModel.Types.HLINE || core.Type == LadderUnitModel.Types.VLINE
+                || core.Type == LadderUnitModel.Types.MEP || core.Type == LadderUnitModel.Types.MEF
+                || core.Type == LadderUnitModel.Types.INV;
         }
         #endregion
 
@@ -186,10 +187,12 @@ namespace SamSoarII.Shell.Models
             for (int i = 0; i < visuals.Length; i++)
             {
                 if (ViewParent.LadderCanvas.Contains(visuals[i]))
-                {
                     ViewParent.LadderCanvas.RemoveVisual(visuals[i]);
+                if (visuals[i] != null)
+                {
+                    visuals[i]?.Dispose();
+                    visuals[i] = null;
                 }
-                visuals[i] = null;
             }
             Core.Visual = null;
             Core = null;
@@ -216,6 +219,7 @@ namespace SamSoarII.Shell.Models
                     RenderAll();
                     break;
                 case RenderType.Brpo:
+                    RenderBrpo();
                     break;
                 case RenderType.State:
                     RenderProperty();

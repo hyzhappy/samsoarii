@@ -24,7 +24,10 @@ namespace SamSoarII.Shell.Models
         }
         public void Render()
         {
-            using (DrawingContext context = RenderOpen())
+            DrawingContext context;
+            if (Drawing == null) context = RenderOpen();
+            else context = Drawing.Open();
+            using (context)
             {
                 switch (type)
                 {
