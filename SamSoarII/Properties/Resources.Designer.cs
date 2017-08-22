@@ -205,7 +205,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Arch System(FLOAT) 的本地化字符串。
+        ///   查找类似 Arch System(Float) 的本地化字符串。
         /// </summary>
         public static string ARCF_Inst {
             get {
@@ -214,7 +214,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Arch System(DWORD) 的本地化字符串。
+        ///   查找类似 Arch System(DWord) 的本地化字符串。
         /// </summary>
         public static string ARCI_Inst {
             get {
@@ -925,6 +925,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Absolute position single pulse output(DWord) 的本地化字符串。
+        /// </summary>
+        public static string DDRVA_Inst {
+            get {
+                return ResourceManager.GetString("DDRVA_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Relative position single pulse output(DWord) 的本地化字符串。
         /// </summary>
         public static string DDRVI_Inst {
@@ -1119,6 +1128,15 @@ namespace SamSoarII.Properties {
         public static string DPWM_Inst {
             get {
                 return ResourceManager.GetString("DPWM_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Absolute position single pulse output(Word) 的本地化字符串。
+        /// </summary>
+        public static string DRVA_Inst {
+            get {
+                return ResourceManager.GetString("DRVA_Inst", resourceCulture);
             }
         }
         
@@ -2734,7 +2752,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Line System(FLOAT) 的本地化字符串。
+        ///   查找类似 Line System(Float) 的本地化字符串。
         /// </summary>
         public static string LINEF_Inst {
             get {
@@ -2743,7 +2761,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Line System(DWORD) 的本地化字符串。
+        ///   查找类似 Line System(DWord) 的本地化字符串。
         /// </summary>
         public static string LINEI_Inst {
             get {
@@ -5074,6 +5092,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 PID Instruction 的本地化字符串。
+        /// </summary>
+        public static string PID_Inst {
+            get {
+                return ResourceManager.GetString("PID_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Analog Quantity 的本地化字符串。
         /// </summary>
         public static string PLC_Analog_Quantity {
@@ -5254,7 +5281,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Polyline System(FLOAT) 的本地化字符串。
+        ///   查找类似 Polyline System(Float) 的本地化字符串。
         /// </summary>
         public static string POLYLINEF_Inst {
             get {
@@ -5263,7 +5290,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Polyline System(DWORD) 的本地化字符串。
+        ///   查找类似 Polyline System(DWord) 的本地化字符串。
         /// </summary>
         public static string POLYLINEI_Inst {
             get {

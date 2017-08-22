@@ -2362,25 +2362,34 @@
     <value>Element Breakpoint</value>
   </data>
   <data name="ARCF_Inst" xml:space="preserve">
-    <value>Arch System(FLOAT)</value>
+    <value>Arch System(Float)</value>
   </data>
   <data name="ARCI_Inst" xml:space="preserve">
-    <value>Arch System(DWORD)</value>
+    <value>Arch System(DWord)</value>
   </data>
   <data name="BLOCK_Inst" xml:space="preserve">
     <value>Image block import</value>
   </data>
+  <data name="DDRVA_Inst" xml:space="preserve">
+    <value>Absolute position single pulse output(DWord)</value>
+  </data>
+  <data name="DRVA_Inst" xml:space="preserve">
+    <value>Absolute position single pulse output(Word)</value>
+  </data>
   <data name="LINEF_Inst" xml:space="preserve">
-    <value>Line System(FLOAT)</value>
+    <value>Line System(Float)</value>
   </data>
   <data name="LINEI_Inst" xml:space="preserve">
-    <value>Line System(DWORD)</value>
+    <value>Line System(DWord)</value>
+  </data>
+  <data name="PID_Inst" xml:space="preserve">
+    <value>PID Instruction</value>
   </data>
   <data name="POLYLINEF_Inst" xml:space="preserve">
-    <value>Polyline System(FLOAT)</value>
+    <value>Polyline System(Float)</value>
   </data>
   <data name="POLYLINEI_Inst" xml:space="preserve">
-    <value>Polyline System(DWORD)</value>
+    <value>Polyline System(DWord)</value>
   </data>
   <data name="STLE_Inst" xml:space="preserve">
     <value>Status End</value>

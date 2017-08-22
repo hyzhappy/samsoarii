@@ -2370,11 +2370,20 @@
   <data name="BLOCK_Inst" xml:space="preserve">
     <value>图形导入</value>
   </data>
+  <data name="DDRVA_Inst" xml:space="preserve">
+    <value>双字绝对位置单段脉冲输出</value>
+  </data>
+  <data name="DRVA_Inst" xml:space="preserve">
+    <value>单字绝对位置单段脉冲输出</value>
+  </data>
   <data name="LINEF_Inst" xml:space="preserve">
     <value>浮点直线插补</value>
   </data>
   <data name="LINEI_Inst" xml:space="preserve">
     <value>双字直线插补</value>
+  </data>
+  <data name="PID_Inst" xml:space="preserve">
+    <value>PID指令</value>
   </data>
   <data name="POLYLINEF_Inst" xml:space="preserve">
     <value>浮点多段线插补</value>

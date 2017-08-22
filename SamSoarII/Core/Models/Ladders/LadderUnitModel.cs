@@ -863,7 +863,7 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
                     new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.DRVA] = new LadderUnitFormat(1617, "DRVA", Types.DRVA, Outlines.Pulse, Shapes.OutputRect,
-                Properties.Resources.DRVI_Inst,
+                Properties.Resources.DRVA_Inst,
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 new ValueFormat[] {
@@ -889,7 +889,7 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
                     new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.DDRVA] = new LadderUnitFormat(1618, "DDRVA", Types.DDRVA, Outlines.Pulse, Shapes.OutputRect,
-                Properties.Resources.DDRVI_Inst,
+                Properties.Resources.DDRVA_Inst,
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 new ValueFormat[] {
@@ -1231,7 +1231,7 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("T", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}, null, "目标", "Destination"),
                     new ValueFormat("N", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "长度", "Count") });
             Formats[(int)Types.PID] = new LadderUnitFormat(1900, "PID", Types.PID, Outlines.PID, Shapes.OutputRect,
-                "", "", "",
+                Properties.Resources.PID_Inst, "", "",
                 new ValueFormat[] {
                     new ValueFormat("LOOP", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex}, null, "PID回路", "PID Loop"),
                     new ValueFormat("AUTO", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyIntKValueRegex}, null, "模式", "Mode"),
