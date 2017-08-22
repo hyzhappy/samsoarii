@@ -2361,4 +2361,34 @@
   <data name="ValueBrpo" xml:space="preserve">
     <value>Element Breakpoint</value>
   </data>
+  <data name="ARCF_Inst" xml:space="preserve">
+    <value>Arch System(FLOAT)</value>
+  </data>
+  <data name="ARCI_Inst" xml:space="preserve">
+    <value>Arch System(DWORD)</value>
+  </data>
+  <data name="BLOCK_Inst" xml:space="preserve">
+    <value>Image block import</value>
+  </data>
+  <data name="LINEF_Inst" xml:space="preserve">
+    <value>Line System(FLOAT)</value>
+  </data>
+  <data name="LINEI_Inst" xml:space="preserve">
+    <value>Line System(DWORD)</value>
+  </data>
+  <data name="POLYLINEF_Inst" xml:space="preserve">
+    <value>Polyline System(FLOAT)</value>
+  </data>
+  <data name="POLYLINEI_Inst" xml:space="preserve">
+    <value>Polyline System(DWORD)</value>
+  </data>
+  <data name="STLE_Inst" xml:space="preserve">
+    <value>Status End</value>
+  </data>
+  <data name="STL_Inst" xml:space="preserve">
+    <value>Status Begin</value>
+  </data>
+  <data name="ST_Inst" xml:space="preserve">
+    <value>Status Transform</value>
+  </data>
 </root>

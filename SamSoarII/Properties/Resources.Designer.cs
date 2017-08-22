@@ -205,6 +205,24 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Arch System(FLOAT) 的本地化字符串。
+        /// </summary>
+        public static string ARCF_Inst {
+            get {
+                return ResourceManager.GetString("ARCF_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Arch System(DWORD) 的本地化字符串。
+        /// </summary>
+        public static string ARCI_Inst {
+            get {
+                return ResourceManager.GetString("ARCI_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Interrupt binding 的本地化字符串。
         /// </summary>
         public static string ATCH_Inst {
@@ -264,6 +282,15 @@ namespace SamSoarII.Properties {
         public static string Bit {
             get {
                 return ResourceManager.GetString("Bit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Image block import 的本地化字符串。
+        /// </summary>
+        public static string BLOCK_Inst {
+            get {
+                return ResourceManager.GetString("BLOCK_Inst", resourceCulture);
             }
         }
         
@@ -2703,6 +2730,24 @@ namespace SamSoarII.Properties {
         public static string Library_Function {
             get {
                 return ResourceManager.GetString("Library_Function", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Line System(FLOAT) 的本地化字符串。
+        /// </summary>
+        public static string LINEF_Inst {
+            get {
+                return ResourceManager.GetString("LINEF_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Line System(DWORD) 的本地化字符串。
+        /// </summary>
+        public static string LINEI_Inst {
+            get {
+                return ResourceManager.GetString("LINEI_Inst", resourceCulture);
             }
         }
         
@@ -5209,6 +5254,24 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Polyline System(FLOAT) 的本地化字符串。
+        /// </summary>
+        public static string POLYLINEF_Inst {
+            get {
+                return ResourceManager.GetString("POLYLINEF_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Polyline System(DWORD) 的本地化字符串。
+        /// </summary>
+        public static string POLYLINEI_Inst {
+            get {
+                return ResourceManager.GetString("POLYLINEI_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Position 的本地化字符串。
         /// </summary>
         public static string Position {
@@ -6145,6 +6208,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Status Transform 的本地化字符串。
+        /// </summary>
+        public static string ST_Inst {
+            get {
+                return ResourceManager.GetString("ST_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Start Address 的本地化字符串。
         /// </summary>
         public static string Start_Address {
@@ -6177,6 +6249,24 @@ namespace SamSoarII.Properties {
         public static string Station_Number_Setting {
             get {
                 return ResourceManager.GetString("Station_Number_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Status Begin 的本地化字符串。
+        /// </summary>
+        public static string STL_Inst {
+            get {
+                return ResourceManager.GetString("STL_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Status End 的本地化字符串。
+        /// </summary>
+        public static string STLE_Inst {
+            get {
+                return ResourceManager.GetString("STLE_Inst", resourceCulture);
             }
         }
         

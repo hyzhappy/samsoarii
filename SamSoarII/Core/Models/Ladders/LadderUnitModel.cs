@@ -733,18 +733,18 @@ namespace SamSoarII.Core.Models
                 new ValueFormat[] {
                     new ValueFormat("F", ValueModel.Types.STRING, true, false, 0, new Regex[] { ValueModel.FuncNameRegex }, null, "函数", "Function") });
             Formats[(int)Types.STL] = new LadderUnitFormat(1106, "STL", Types.STL, Outlines.ProgramControl, Shapes.OutputRect,
-                "",
+                Properties.Resources.STL_Inst,
                 "STL与STLE必须一一配对使用，STL表示一个状态的开始，STLE表示一个状态的结束。",
                 "STL与STLE必须一一配对使用，STL表示一个状态的开始，STLE表示一个状态的结束。",
                 new ValueFormat[] {
                     new ValueFormat("L", ValueModel.Types.BOOL, true, false, -1, new Regex[] {ValueModel.VerifyBitRegex6 }, null, "状态", "Status") });
             Formats[(int)Types.STLE] = new LadderUnitFormat(1107, "STLE", Types.STLE, Outlines.ProgramControl, Shapes.OutputRect,
-                "",
+                Properties.Resources.STLE_Inst,
                 "STL与STLE必须一一配对使用，STL表示一个状态的开始，STLE表示一个状态的结束。",
                 "STL与STLE必须一一配对使用，STL表示一个状态的开始，STLE表示一个状态的结束。",
                 new ValueFormat[] { });
             Formats[(int)Types.ST] = new LadderUnitFormat(1108, "ST", Types.ST, Outlines.ProgramControl, Shapes.OutputRect,
-                "",
+                Properties.Resources.ST_Inst,
                 "当使用ST指令当状态转移条件成立时，下一个待转移状态被置为ON，但当前STL段中的状态不会被复位OFF，ST指令一般在程序需要同时运行多个状态程序时使用；",
                 "当使用ST指令当状态转移条件成立时，下一个待转移状态被置为ON，但当前STL段中的状态不会被复位OFF，ST指令一般在程序需要同时运行多个状态程序时使用；",
                 new ValueFormat[] {
@@ -1059,19 +1059,19 @@ namespace SamSoarII.Core.Models
                 new ValueFormat("S", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex3}),
                 new ValueFormat("NUM", ValueModel.Types.WORD, true, false, -1, new Regex[] { ValueModel.VerifyIntKValueRegex}) };
             Formats[(int)Types.POLYLINEF] = new LadderUnitFormat(1618, "POLYLINEF", Types.POLYLINEF, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "", vformats);
+                Properties.Resources.POLYLINEF_Inst, "", "", vformats);
             Formats[(int)Types.POLYLINEI] = new LadderUnitFormat(1619, "POLYLINEI", Types.POLYLINEI, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "", vformats);
+                Properties.Resources.POLYLINEI_Inst, "", "", vformats);
             Formats[(int)Types.LINEF] = new LadderUnitFormat(1620, "LINEF", Types.LINEF, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "", vformats);
+                Properties.Resources.LINEF_Inst, "", "", vformats);
             Formats[(int)Types.LINEI] = new LadderUnitFormat(1621, "LINEI", Types.LINEI, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "", vformats);
+                Properties.Resources.LINEI_Inst, "", "", vformats);
             Formats[(int)Types.ARCF] = new LadderUnitFormat(1622, "ARCF", Types.ARCF, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "", vformats);
+                Properties.Resources.ARCF_Inst, "", "", vformats);
             Formats[(int)Types.ARCI] = new LadderUnitFormat(1623, "ARCI", Types.ARCI, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "", vformats);
+                Properties.Resources.ARCI_Inst, "", "", vformats);
             Formats[(int)Types.BLOCK] = new LadderUnitFormat(1624, "BLOCK", Types.BLOCK, Outlines.Pulse, Shapes.OutputRect,
-                "", "", "",
+                Properties.Resources.BLOCK_Inst, "", "",
                 new ValueFormat[] {
                     new ValueFormat("NAME", ValueModel.Types.STRING, true, false, 0, new Regex[] {ValueModel.AnyNameRegex }),
                     new ValueFormat("S", ValueModel.Types.BOOL, false, true, 1, new Regex[] { ValueModel.VerifyBitRegex7}) });
