@@ -249,7 +249,6 @@ namespace SamSoarII
             mdProj.Modified += OnProjectModified;
             vmdProj = new ProjectViewModel(mdProj);
             vmdProj.PropertyChanged += OnViewPropertyChanged;
-            //ThMNGView.Add(vmdProj);
             AllThreadStart();
             tcMain.ViewMode = MainTabControl.VIEWMODE_LADDER;
             tcMain.ShowItem(mdProj.MainDiagram.Tab);
