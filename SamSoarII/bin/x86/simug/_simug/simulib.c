@@ -538,7 +538,7 @@ void cpcycle(int32_t _bpaddr, int8_t value)
 		itrpactive = 0;
 	}
 	if (bpjump >= 0)
-		cond &= (bpjump == bpaddr);
+		cond |= (bpjump == bpaddr);
 	if (itrpid > 0)
 	{
 		bpjump = -1;

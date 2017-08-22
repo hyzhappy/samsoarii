@@ -78,7 +78,7 @@ namespace SamSoarII.Core.Models
     {
         public IntArch(POLYLINEModel _parent) : base(_parent)
         {
-            r = new ValueModel(_parent, new ValueFormat("R", valuetype, true, false, 0, regexs));
+            r = new ValueModel(_parent, new ValueFormat("R", valuetype, true, false, 0, regexs, null, "半径", "Radios"));
             r.Text = "K0";
             type = ArchTypes.TwoPoint;
             dir = Directions.Co_Clockwise;

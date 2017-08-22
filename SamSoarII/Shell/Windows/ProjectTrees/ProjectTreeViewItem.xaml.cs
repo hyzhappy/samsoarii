@@ -375,6 +375,7 @@ namespace SamSoarII.Shell.Windows
                             }
                             Text = LadderUnitModel.Formats[(int)type].Name;
                             SubText = LadderUnitModel.Formats[(int)type].Describe;
+                            ToolTip = LadderUnitModel.Formats[(int)type].Detail;
                             switch (Text)
                             {
                                 case "LD": Text = "-|　|-"; break;

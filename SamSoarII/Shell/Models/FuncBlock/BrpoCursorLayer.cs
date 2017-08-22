@@ -43,6 +43,8 @@ namespace SamSoarII.Shell.Models
         public void Dispose()
         {
             cursor.PropertyChanged -= OnCursorPropertyChanged;
+            TextViewWeakEventManager.VisualLinesChanged.RemoveListener(textview, this);
+            TextViewWeakEventManager.ScrollOffsetChanged.RemoveListener(textview, this);
             this.core = null;
             this.textview = null;
         }
