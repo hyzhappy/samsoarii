@@ -151,7 +151,9 @@ namespace SamSoarII.Shell.Models
                     {
                         DynamicDispose();
                         MainCanvas.Visibility = Visibility.Hidden;
+                        LadderCanvas.Visibility = Visibility.Hidden;
                         MainCanvas.Height = 0;
+                        //LadderCanvas.Height = 0;
                         if (ThumbnailButton.ToolTip == null)
                         {
                             ThumbnailButton.ToolTip = GenerateToolTipByLadder();
@@ -161,6 +163,7 @@ namespace SamSoarII.Shell.Models
                     else
                     {
                         MainCanvas.Visibility = Visibility.Visible;
+                        LadderCanvas.Visibility = Visibility.Visible;
                         core.UpdateCanvasTop();
                         if (ThumbnailButton.ToolTip != null)
                         {
@@ -177,17 +180,11 @@ namespace SamSoarII.Shell.Models
                     break;
                 case "CanvasHeight":
                     MainCanvas.Height = core.CanvasHeight;
+                    LadderCanvas.Height = core.CanvasHeight;
                     if (_selectRect != null) _selectRect.Update();
                     if (_selectArea != null) _selectArea.Update();
-                    foreach (UIElement uiele in MainCanvas.Children)
-                    {
-                        if (uiele is LadderUnitViewModel)
-                        {
-                            LadderUnitViewModel unit = (LadderUnitViewModel)uiele;
-                            if (unit.Core != null)
-                                unit.Update(LadderUnitViewModel.UPDATE_TOP);
-                        }
-                    }
+                    foreach (LadderUnitViewModel unit in LadderCanvas.Units)
+                        if (unit.Core != null) unit.Update();
                     isviewmodified = true;
                     break;
                 case "IsExecuting":
@@ -1323,10 +1320,10 @@ namespace SamSoarII.Shell.Models
         public int LoadedRowEnd { get { return this.loadedrowend; } }
 
         private double oldscrolloffset;
+        private double newscrolloffset;
         public void DynamicUpdate()
         {
             double scaleY = 0;
-            double newscrolloffset = 0;
             double scrollheight = 0;
             double titleheight = 0;
             Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
@@ -1382,27 +1379,35 @@ namespace SamSoarII.Shell.Models
                 {
                     if (newscrolloffset > oldscrolloffset)
                     {
-                        if (_loadedrowstart < loadedrowstart)
-                            CreateRange(_loadedrowstart, Math.Min(_loadedrowend, loadedrowstart - 1));
                         if (_loadedrowstart > loadedrowstart)
                             DisposeRange(loadedrowstart, _loadedrowstart - 1);
-                        if (loadedrowend < _loadedrowend)
-                            CreateRange(Math.Max(_loadedrowstart, loadedrowend + 1), _loadedrowend);
                         if (loadedrowend > _loadedrowend)
                             DisposeRange(_loadedrowend + 1, loadedrowend);
+                        //Thread.Sleep(10);
+                        //if (Scroll.VerticalOffset == newscrolloffset)
+                        if (_loadedrowstart < loadedrowstart)
+                            CreateRange(_loadedrowstart, Math.Min(_loadedrowend, loadedrowstart - 1));
+                        //if (Scroll.VerticalOffset == newscrolloffset)
+                        if (loadedrowend < _loadedrowend)
+                            CreateRange(Math.Max(_loadedrowstart, loadedrowend + 1), _loadedrowend);
+                        //if (Scroll.VerticalOffset == newscrolloffset)
                         if (!(_loadedrowstart > loadedrowend) && !(_loadedrowend < loadedrowstart))
                             CreateRange(_loadedrowstart, _loadedrowend);
                     }
                     else
                     {
-                        if (_loadedrowstart < loadedrowstart)
-                            CreateRange(Math.Min(_loadedrowend, loadedrowstart - 1), _loadedrowstart);
                         if (_loadedrowstart > loadedrowstart)
                             DisposeRange(_loadedrowstart - 1, loadedrowstart);
-                        if (loadedrowend < _loadedrowend)
-                            CreateRange(_loadedrowend, Math.Max(_loadedrowstart, loadedrowend + 1));
                         if (loadedrowend > _loadedrowend)
                             DisposeRange(loadedrowend, _loadedrowend + 1);
+                        //Thread.Sleep(10);
+                        //if (Scroll.VerticalOffset == newscrolloffset)
+                        if (_loadedrowstart < loadedrowstart)
+                            CreateRange(Math.Min(_loadedrowend, loadedrowstart - 1), _loadedrowstart);
+                        //if (Scroll.VerticalOffset == newscrolloffset)
+                        if (loadedrowend < _loadedrowend)
+                            CreateRange(_loadedrowend, Math.Max(_loadedrowstart, loadedrowend + 1));
+                        //if (Scroll.VerticalOffset == newscrolloffset)
                         if (!(_loadedrowstart > loadedrowend) && !(_loadedrowend < loadedrowstart))
                             CreateRange(_loadedrowend, _loadedrowstart);
                     }
@@ -1449,9 +1454,13 @@ namespace SamSoarII.Shell.Models
             int dir = (rowstart < rowend ? 1 : -1);
             for (int y = rowstart; y != rowend + dir; y += dir)
             {
+                //if (Scroll.VerticalOffset != newscrolloffset) return;
                 LadderNetworkModel net = core.Children[y];
                 if (net.View == null)
-                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                {
+                    Dispatcher.Invoke(
+                        DispatcherPriority.Normal,
+                        (ThreadStart)delegate ()
                     {
                         net.View = AllResourceManager.CreateNet(net);
                         net.View.Visibility = Visibility.Visible;
@@ -1462,6 +1471,7 @@ namespace SamSoarII.Shell.Models
                             MainCanvas.Children.Add(net.View);
                         }
                     });
+                }
             }
         }
 
@@ -2170,9 +2180,9 @@ namespace SamSoarII.Shell.Models
         
         private void OnMainCanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
-            MainCanvas.ContextMenu = LadderMode == LadderModes.Edit
+            CanvasGrid.ContextMenu = LadderMode == LadderModes.Edit
                 ? (ContextMenu)cmEdit : (ContextMenu)cmMoni;
-            MainCanvas.CaptureMouse();
+            CanvasGrid.CaptureMouse();
             object obj = GetObjectByMouse(e);
             if (obj is LadderUnitModel)
             {
@@ -2320,7 +2330,7 @@ namespace SamSoarII.Shell.Models
         
         private void OnMainCanvasMouseUp(object sender, MouseButtonEventArgs e)
         {
-            MainCanvas.ReleaseMouseCapture();
+            CanvasGrid.ReleaseMouseCapture();
             switch (SelectionStatus)
             {
                 case SelectStatus.SingleSelecting:
@@ -2387,6 +2397,11 @@ namespace SamSoarII.Shell.Models
                         else if (ptvitem.RelativeObject is ModbusModel)
                         {
                             ModbusModel mmodel = (ModbusModel)(ptvitem.RelativeObject);
+                            if (!mmodel.IsValid)
+                            {
+                                LocalizedMessageBox.Show(String.Format("{0:s}{1}", mmodel.Name, Properties.Resources.Message_Modbus_Table_Error), LocalizedMessageIcon.Error);
+                                return;
+                            }
                             IFParent.ShowElementPropertyDialog(mmodel, _selectRect.Core);
                         }
                     }

@@ -102,10 +102,14 @@ namespace SamSoarII.PLCDevice
                     _selectDevice = new FGs32MRDevice(type);
                     break;
                 case PLC_FGs_Type.FGs_32MT_A:
+                    _selectDevice = new FGs32MTADevice(type);
+                    break;
                 case PLC_FGs_Type.FGs_32MT_D:
                     _selectDevice = new FGs32MTDevice(type);
                     break;
                 case PLC_FGs_Type.FGs_64MR_A:
+                    _selectDevice = new FGs64MTADevice(type);
+                    break;
                 case PLC_FGs_Type.FGs_64MR_D:
                     _selectDevice = new FGs64MRDevice(type);
                     break;

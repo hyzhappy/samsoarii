@@ -170,22 +170,16 @@ namespace SamSoarII.Shell.Models
             int dir = (rowstart < rowend ? 1 : -1);
             for (int y = rowstart; y != rowend + dir; y += dir)
             {
+                IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
+                units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
+                units = units.Where(u => u.View == null);
                 Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                 {
-                    IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
-                    units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
+                    if (Core == null) return;
                     foreach (LadderUnitModel unit in units)
                     {
-                        if (unit.View == null)
-                        {
-                            unit.View = LadderUnitViewModel.Create(unit);
-                            if (unit.View.Parent != LadderCanvas)
-                            {
-                                if (unit.View.Parent is Canvas)
-                                    ((Canvas)(unit.View.Parent)).Children.Remove(unit.View);
-                                LadderCanvas.Children.Add(unit.View);
-                            }
-                        }
+                        unit.View = LadderUnitViewModel.Create(unit);
+                        unit.View.CVParent = LadderCanvas;
                     }
                 });
             }
@@ -196,18 +190,14 @@ namespace SamSoarII.Shell.Models
             int dir = (rowstart < rowend ? 1 : -1);
             for (int y = rowstart; y != rowend + dir; y += dir)
             {
+                IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
+                units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
+                units = units.Where(u => u.View != null);
                 Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                 {
                     if (Core == null) return;
-                    IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
-                    units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
                     foreach (LadderUnitModel unit in units)
-                    {
-                        if (unit.View != null)
-                        {
-                            unit.View.Dispose();
-                        }
-                    }
+                        if (unit.View != null) unit.View.Dispose();
                 });
             }
         }

@@ -35,6 +35,7 @@ namespace SamSoarII.PLCDevice
         public abstract IntRange ZRange { get; }
         public abstract IntRange CV16Range { get; }
         public abstract IntRange CV32Range { get; }
+        public abstract IntRange PulseRange { get; }
         static Device()
         {
             _defaultDevice = new BroadDevice();

@@ -74,8 +74,6 @@ namespace SamSoarII.Shell.Models
             Expander.MouseEnter += OnExpanderMouseEnter;
             Expander.MouseLeave += OnExpanderMouseLeave;
             Expander.expandButton.IsExpandChanged += OnExpandChanged;
-            children = new ObservableCollection<InstructionRowViewModel>();
-            children.CollectionChanged += OnChildrenCollectionChanged;
             tberr = new TextBlock();
             tberr.Background = Brushes.Red;
             Recreate(_core);
@@ -84,8 +82,6 @@ namespace SamSoarII.Shell.Models
         public void Dispose()
         {
             Core = null;
-            foreach (InstructionRowViewModel row in children.ToArray())
-                children.Remove(row);
             tberr.Visibility = Visibility.Hidden;
             AllResourceManager.Dispose(this);
         }
@@ -136,20 +132,10 @@ namespace SamSoarII.Shell.Models
                 case "ID": PropertyChanged(this, new PropertyChangedEventArgs("Header")); break;
                 case "IsMasked": BaseUpdate(); break;
                 case "IsCommentMode":
-                    foreach (InstructionRowViewModel row in children)
-                        row.TextBlocks[7].Visibility = IsCommentMode
-                            ? Visibility.Visible : Visibility.Hidden;
                     break;
                 case "CanvasTop":
                     Canvas.SetTop(this, core.CanvasTop);
                     SetPosition(tberr, 0);
-                    foreach (InstructionRowViewModel row in children)
-                    {
-                        for (int i = 0; i < row.TextBlocks.Count; i++)
-                            SetPosition(row.TextBlocks[i], row.ID, i);
-                        row.TextBlocks[7].Visibility = IsCommentMode
-                            ? Visibility.Visible : Visibility.Hidden;
-                    }
                     break;
                 case "ViewHeight":
                     Expander.Height = core.ViewHeight / 0.4;
@@ -202,7 +188,7 @@ namespace SamSoarII.Shell.Models
             ctrl.Height = 18;
             switch (column)
             {
-                case -1: Canvas.SetLeft(ctrl,24+1); ctrl.Width = 520; break;
+                case -1: Canvas.SetLeft(ctrl, 24+1); ctrl.Width = 520; break;
                 case 0: Canvas.SetLeft(ctrl, 24+1); ctrl.Width = 38; break;
                 case 1: Canvas.SetLeft(ctrl, 24+41); ctrl.Width = 78; break;
                 case 2: Canvas.SetLeft(ctrl, 24+121); ctrl.Width = 78; break;
@@ -223,37 +209,7 @@ namespace SamSoarII.Shell.Models
         public int LoadedRowEnd { get { return this.loadedrowend; } }
 
         private double oldscrolloffset;
-
-        private ObservableCollection<InstructionRowViewModel> children;
-        public IList<InstructionRowViewModel> Children { get { return this.children; } }
-        private void OnChildrenCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null)
-                foreach (InstructionRowViewModel row in e.NewItems)
-                {
-                    for (int i = 0; i < row.TextBlocks.Count; i++)
-                    {
-                        SetPosition(row.TextBlocks[i], row.ID, i);
-                        row.TextBlocks[i].Visibility = Visibility.Visible;
-                        if (row.TextBlocks[i].Parent != ViewParent.MainCanvas)
-                        {
-                            if (row.TextBlocks[i].Parent is Canvas)
-                                ((Canvas)(row.TextBlocks[i].Parent)).Children.Remove(row.TextBlocks[i]);
-                            ViewParent.MainCanvas.Children.Add(row.TextBlocks[i]);
-                        }
-                    }
-                    row.TextBlocks[7].Visibility = IsCommentMode
-                        ? Visibility.Visible : Visibility.Hidden;
-                }
-            if (e.OldItems != null)
-                foreach (InstructionRowViewModel row in e.OldItems)
-                {
-                    for (int i = 0; i < row.TextBlocks.Count; i++)
-                        row.TextBlocks[i].Visibility = Visibility.Hidden;
-                    row.Dispose();
-                }
-        }
-
+        private double newscrolloffset;
         public void BaseUpdate()
         {
             Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
@@ -298,8 +254,6 @@ namespace SamSoarII.Shell.Models
                     tberr.Text = "";
                 }
             });
-            DynamicDispose();
-            DynamicUpdate();
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate ()
             {
                 PropertyChanged(this, new PropertyChangedEventArgs("Header"));
@@ -315,7 +269,6 @@ namespace SamSoarII.Shell.Models
             if (core.IsExpand && !Invalid)
             {
                 ScrollViewer scroll = null;
-                double newscrolloffset = 0;
                 Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                 {
                     scroll = ViewParent?.Scroll;
@@ -338,14 +291,16 @@ namespace SamSoarII.Shell.Models
                 }
                 else
                 {
-                    if (_loadedrowstart < loadedrowstart)
-                        CreateRange(_loadedrowstart, Math.Min(_loadedrowend, loadedrowstart - 1));
                     if (_loadedrowstart > loadedrowstart)
                         DisposeRange(loadedrowstart, _loadedrowstart - 1);
-                    if (loadedrowend < _loadedrowend)
-                        CreateRange(Math.Max(_loadedrowstart, loadedrowend + 1), _loadedrowend);
                     if (loadedrowend > _loadedrowend)
                         DisposeRange(_loadedrowend + 1, loadedrowend);
+                    if (_loadedrowstart < loadedrowstart)
+                        CreateRange(_loadedrowstart, Math.Min(_loadedrowend, loadedrowstart - 1));
+                    if (loadedrowend < _loadedrowend)
+                        CreateRange(Math.Max(_loadedrowstart, loadedrowend + 1), _loadedrowend);
+                    if (!(_loadedrowstart > loadedrowend) && !(_loadedrowend < loadedrowstart))
+                        CreateRange(_loadedrowstart, _loadedrowend);
                 }
                 loadedrowstart = _loadedrowstart;
                 loadedrowend = _loadedrowend;
@@ -359,21 +314,24 @@ namespace SamSoarII.Shell.Models
 
         public void DynamicDispose()
         {
-            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            if (loadedrowstart <= loadedrowend)
             {
-                foreach (InstructionRowViewModel row in children.ToArray())
-                    children.Remove(row);
+                DisposeRange(loadedrowstart, loadedrowend);
                 loadedrowstart = 0;
                 loadedrowend = -1;
-            });
+            }
         }
 
         private void CreateRange(int rowstart, int rowend)
         {
-            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
                 for (int i = rowstart; i <= rowend; i++)
-                    children.Add(AllResourceManager.CreateInstRow(Core.Insts[i], i));
+                    if (Core.Insts[i].View == null)
+                    {
+                        Core.Insts[i].View = AllResourceManager.CreateInstRow(Core.Insts[i]);
+                        Core.Insts[i].View.CVParent = ViewParent.RowCanvas;
+                    }
             });
         }
 
@@ -381,8 +339,9 @@ namespace SamSoarII.Shell.Models
         {
             Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
-                foreach (InstructionRowViewModel row in children.Where(r => r.ID >= rowstart && r.ID <= rowend).ToArray())
-                    children.Remove(row);
+                for (int i = rowstart; i <= rowend; i++)
+                    if (Core.Insts[i].View != null)
+                        Core.Insts[i].View.Dispose();
             });
         }
 

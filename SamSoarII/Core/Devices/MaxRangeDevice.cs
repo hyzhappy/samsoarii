@@ -150,5 +150,12 @@ namespace SamSoarII.PLCDevice
                 return new IntRange(0, 8);
             }
         }
+        public override IntRange PulseRange
+        {
+            get
+            {
+                return new IntRange(0, 10);
+            }
+        }
     }
 }

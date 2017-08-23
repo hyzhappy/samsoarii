@@ -35,7 +35,7 @@ namespace SamSoarII.Core.Models
                 lgraph = null;
             }
             foreach (PLCOriginInst inst in insts)
-                inst.Inst = null;
+                inst.Dispose();
             Parent = null;
         }
 
@@ -205,6 +205,7 @@ namespace SamSoarII.Core.Models
         public void Update()
         {
             IsModified = false;
+            View?.DynamicDispose();
             Compile();
             View?.BaseUpdate();
             if (parent.Parent.Inst.View != null)
@@ -214,6 +215,8 @@ namespace SamSoarII.Core.Models
 
         private void Compile()
         {
+            foreach (PLCOriginInst inst in insts)
+                inst.Dispose();
             insts.Clear();
             if (lchart != null)
             {
@@ -249,7 +252,9 @@ namespace SamSoarII.Core.Models
             SortedSet<int> prototypeids = new SortedSet<int>();
             foreach (PLCInstruction inst in _insts)
             {
-                insts.Add(inst.ToOrigin());
+                PLCOriginInst oinst = inst.ToOrigin(this);
+                oinst.ID = insts.Count();
+                insts.Add(oinst);
                 if (inst.PrototypeID != -1)
                 {
                     if (prototypeids.Contains(inst.PrototypeID))

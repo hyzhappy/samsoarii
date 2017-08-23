@@ -405,7 +405,7 @@ namespace SamSoarII
             if (!CheckLadder(false)) return false;
             if (!CheckFuncBlock(false)) return false;
 #if DEBUG
-            //GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
+            GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
             //DownloadHelper.InitializeData(mdProj);
 #endif
             _option = -1;
@@ -1892,7 +1892,7 @@ namespace SamSoarII
                 dlgOption = new OptionDialog(this);
                 dlgOption.EnsureButtonClick += (sender, e) =>
                 {
-                    if (VMDProj != null) VMDProj.UpdateUnit(LadderUnitViewModel.UPDATE_STYLE);
+                    if (VMDProj != null) VMDProj.UpdateUnit();
                 };
             }
             dlgOption.WindowStartupLocation = WindowStartupLocation.CenterScreen;

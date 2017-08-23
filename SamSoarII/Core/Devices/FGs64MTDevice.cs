@@ -142,6 +142,13 @@ namespace SamSoarII.PLCDevice
                 return new IntRange(0, 8);
             }
         }
+        public override IntRange PulseRange
+        {
+            get
+            {
+                return new IntRange(0, 4);
+            }
+        }
         private PLC_FGs_Type _type;
         public override PLC_FGs_Type Type
         {
@@ -150,5 +157,11 @@ namespace SamSoarII.PLCDevice
                 return _type;
             }
         }
+    }
+
+    class FGs64MTADevice : FGs64MTDevice
+    {
+        public FGs64MTADevice(PLC_FGs_Type _type) : base(_type) { }
+        public override IntRange PulseRange { get { return new IntRange(0, 10); } }
     }
 }

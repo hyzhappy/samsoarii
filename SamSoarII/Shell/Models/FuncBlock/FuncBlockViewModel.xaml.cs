@@ -30,6 +30,7 @@ using Xceed.Wpf.AvalonDock.Controls;
 using System.Threading;
 using SamSoarII.Threads;
 using ICSharpCode.AvalonEdit.Rendering;
+using SamSoarII.Shell.Managers;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -568,7 +569,7 @@ namespace SamSoarII.Shell.Models
             int column = CodeTextBox.Column;
             ScrollViewer sv = CodeTextBox.ScrollViewer;
             if (sv == null) return;
-            double y = line * 19 - 25 - sv.ViewportHeight / 2;
+            double y = (line * 18.127 - 17) * FontManager.GetFunc().FontSize / 16.0 - sv.ViewportHeight / 2;
             y = Math.Max(0, y);
             sv.ScrollToVerticalOffset(y);
             double x = column * 16 - sv.ViewportWidth / 2;
@@ -726,11 +727,8 @@ namespace SamSoarII.Shell.Models
             set
             {
                 this.ccstop = value;
-                double top = ccstop * 18.5 - 17 - CodeTextBox.VerticalOffset;
-                if (top + 200 > ActualHeight)
-                {
-                    top -= 220;
-                }
+                double top = (ccstop * 18.127 - 17) * FontManager.GetFunc().FontSize / 16.0 - CodeTextBox.VerticalOffset;
+                if (top + 200 > ActualHeight) top -= 220;
                 Canvas.SetTop(CodeCompletePanel, top);
             }
         }

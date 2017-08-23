@@ -17,6 +17,8 @@ using System.Xml.Linq;
 using SamSoarII.Core.Models;
 using SamSoarII.Shell.Windows;
 using SamSoarII.Global;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace SamSoarII.Shell.Models
 {
@@ -485,7 +487,12 @@ namespace SamSoarII.Shell.Models
         public void Update()
         {
             int unitwidth = GlobalSetting.LadderWidthUnit;
-            int unitheight = IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit;   
+            int unitheight = IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit;
+            if (core.State == SelectAreaCore.Status.SelectCross && (NetStart == null || NetEnd == null || NetOrigin == null))
+            {
+                core.Release();
+                return;
+            }
             switch (core.State)
             {
                 case SelectAreaCore.Status.NotSelected:
@@ -499,11 +506,6 @@ namespace SamSoarII.Shell.Models
                     Height = (core.YEnd - core.YStart + 1) * unitheight;
                     break;
                 case SelectAreaCore.Status.SelectCross:
-                    if (NetStart == null || NetEnd == null || NetOrigin == null)
-                    {
-                        core.Release();
-                        break;
-                    }
                     Visibility = Visibility.Visible;
                     Canvas.SetLeft(this, 0);
                     Canvas.SetTop(this, NetStart.CanvasTop);

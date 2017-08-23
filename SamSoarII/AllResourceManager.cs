@@ -11,29 +11,28 @@ namespace SamSoarII
 {
     public abstract class AllResourceManager
     {
+        static private ResourceManager<LadderUnitViewModel> rmgUnit;
         static private ResourceManager<LadderNetworkViewModel> rmgNet;
         static private ResourceManager<InstructionNetworkViewModel> rmgINet;
-        static private ResourceManager<InputViewModel> rmgInput;
-        static private ResourceManager<OutputViewModel> rmgOutput;
-        static private ResourceManager<OutputRectViewModel> rmgOutRec;
-        static private ResourceManager<SpecialViewModel> rmgSpecial;
-        static private ResourceManager<HLineViewModel> rmgHLine;
-        static private ResourceManager<VLineViewModel> rmgVLine;
         static private ResourceManager<InstructionRowViewModel> rmgIRow;
         static private ResourceManager<LadderBrpoViewModel> rmgBrpo;
         
         static public void Initialize()
         {
+            rmgUnit = new ResourceManager<LadderUnitViewModel>(new LadderUnitViewModel(null), 200, new object[] { null });
             rmgNet = new ResourceManager<LadderNetworkViewModel>(new LadderNetworkViewModel(null), 20, new object[] { null });
             rmgINet = new ResourceManager<InstructionNetworkViewModel>(new InstructionNetworkViewModel(null), 20, new object[] { null });
-            rmgInput = new ResourceManager<InputViewModel>(new InputViewModel(null), 100, new object[] { null });
-            rmgOutput = new ResourceManager<OutputViewModel>(new OutputViewModel(null), 25, new object[] { null });
-            rmgOutRec = new ResourceManager<OutputRectViewModel>(new OutputRectViewModel(null), 25, new object[] { null });
-            rmgSpecial = new ResourceManager<SpecialViewModel>(new SpecialViewModel(null), 25, new object[] { null });
-            rmgHLine = new ResourceManager<HLineViewModel>(new HLineViewModel(null), 125, new object[] { null });
-            rmgVLine = new ResourceManager<VLineViewModel>(new VLineViewModel(null), 75, new object[] { null });
-            rmgIRow = new ResourceManager<InstructionRowViewModel>(new InstructionRowViewModel(null, 0), 25, new object[] { null, 0 });
+            rmgIRow = new ResourceManager<InstructionRowViewModel>(new InstructionRowViewModel(null), 25, new object[] { null});
             rmgBrpo = new ResourceManager<LadderBrpoViewModel>(new LadderBrpoViewModel(null), 20, new object[] { null });
+        }
+
+        static public LadderUnitViewModel CreateUnit(LadderUnitModel core)
+        {
+            return rmgUnit.Create(core);
+        }
+        static public void Dispose(LadderUnitViewModel unit)
+        {
+            rmgUnit.Dispose(unit);
         }
 
         static public LadderNetworkViewModel CreateNet(LadderNetworkModel core)
@@ -63,67 +62,14 @@ namespace SamSoarII
             rmgBrpo.Dispose(brpo);
         }
 
-        static public InstructionRowViewModel CreateInstRow(PLCOriginInst inst, int id)
+        static public InstructionRowViewModel CreateInstRow(PLCOriginInst inst)
         {
-            return rmgIRow.Create(inst, id);
+            return rmgIRow.Create(inst);
         }
         static public void Dispose(InstructionRowViewModel irow)
         {
             rmgIRow.Dispose(irow);
         }
         
-        static public InputViewModel CreateInput(LadderUnitModel _core)
-        {
-            return rmgInput.Create(_core);
-        }
-        static public void Dispose(InputViewModel _view)
-        {
-            rmgInput.Dispose(_view);
-        }
-
-        static public OutputViewModel CreateOutput(LadderUnitModel _core)
-        {
-            return rmgOutput.Create(_core);
-        }
-        static public void Dispose(OutputViewModel _view)
-        {
-            rmgOutput.Dispose(_view);
-        }
-
-        static public OutputRectViewModel CreateOutRec(LadderUnitModel _core)
-        {
-            return rmgOutRec.Create(_core);
-        }
-        static public void Dispose(OutputRectViewModel _view)
-        {
-            rmgOutRec.Dispose(_view);
-        }
-
-        static public SpecialViewModel CreateSpecial(LadderUnitModel _core)
-        {
-            return rmgSpecial.Create(_core);
-        }
-        static public void Dispose(SpecialViewModel _view)
-        {
-            rmgSpecial.Dispose(_view);
-        }
-
-        static public HLineViewModel CreateHLine(LadderUnitModel _core)
-        {
-            return rmgHLine.Create(_core);
-        }
-        static public void Dispose(HLineViewModel _view)
-        {
-            rmgHLine.Dispose(_view);
-        }
-
-        static public VLineViewModel CreateVLine(LadderUnitModel _core)
-        {
-            return rmgVLine.Create(_core);
-        }
-        static public void Dispose(VLineViewModel _view)
-        {
-            rmgVLine.Dispose(_view);
-        }
     }
 }

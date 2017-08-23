@@ -203,6 +203,7 @@
     <Compile Include="Core\Models\FuncBlocks\FuncBlockModel.cs" />
     <Compile Include="Core\Models\FuncBlocks\FuncModel.cs" />
     <Compile Include="Core\Models\FuncBlocks\FuncBrpoModel.cs" />
+    <Compile Include="Shell\Models\Instructions\InstructionRowCanvas.cs" />
     <Compile Include="Core\Models\Interfaces\IElementInitializeModel.cs" />
     <Compile Include="Core\Models\Instructions\InstructionDiagramModel.cs" />
     <Compile Include="Core\Models\Instructions\InstructionNetworkModel.cs" />
@@ -457,6 +458,7 @@
     </Compile>
     <Compile Include="Shell\Models\FuncBlock\BrpoCursorLayer.cs" />
     <Compile Include="Shell\Models\FuncBlock\BrpoLayer.cs" />
+    <Compile Include="Shell\Models\Ladders\LadderCanvas.cs" />
     <Compile Include="Shell\Models\Ladders\LadderBrpoViewModel.xaml.cs">
       <DependentUpon>LadderBrpoViewModel.xaml</DependentUpon>
     </Compile>
@@ -493,25 +495,7 @@
     <Compile Include="Shell\Models\Ladders\LadderNetworkViewModel.xaml.cs">
       <DependentUpon>LadderNetworkViewModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shell\Models\Ladders\Units\HLineViewModel.xaml.cs">
-      <DependentUpon>HLineViewModel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Shell\Models\Ladders\Units\InputViewModel.xaml.cs">
-      <DependentUpon>InputViewModel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Shell\Models\Ladders\Units\LadderUnitViewModel.cs" />
-    <Compile Include="Shell\Models\Ladders\Units\OutputRectViewModel.xaml.cs">
-      <DependentUpon>OutputRectViewModel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Shell\Models\Ladders\Units\OutputViewModel.xaml.cs">
-      <DependentUpon>OutputViewModel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Shell\Models\Ladders\Units\SpecialViewModel.xaml.cs">
-      <DependentUpon>SpecialViewModel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Shell\Models\Ladders\Units\VLineViewModel.xaml.cs">
-      <DependentUpon>VLineViewModel.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Shell\Models\Ladders\LadderUnitViewModel.cs" />
     <Compile Include="Shell\Models\ModbusTableViewModel.xaml.cs">
       <DependentUpon>ModbusTableViewModel.xaml</DependentUpon>
     </Compile>
@@ -1057,30 +1041,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Shell\Models\Ladders\LadderNetworkViewModel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Shell\Models\Ladders\Units\HLineViewModel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Shell\Models\Ladders\Units\InputViewModel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Shell\Models\Ladders\Units\OutputRectViewModel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Shell\Models\Ladders\Units\OutputViewModel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Shell\Models\Ladders\Units\SpecialViewModel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Shell\Models\Ladders\Units\VLineViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -667,39 +667,39 @@ namespace SamSoarII.Core.Generate
                 case "DPLSF":
                     if (!simumode)
                         sw.Write("CI_DPLSF((uint8_t)({0:s}),(uint32_t)({1:s}),{2:s}, {3:d});\n",
-                            cond, inst[1], inst[2], user_id);
+                            cond, inst[1], inst[2], user_id++);
                     break;
                 case "PWM":
                 case "DPWM":
                     if (!simumode)
                         sw.Write("CI_DPWM((uint8_t)({0:s}),(uint32_t)({1:s}),(uint32_t)({2:s}),{3:s},{4:d});\n",
-                            cond, inst[1], inst[2], inst[3], user_id);
+                            cond, inst[1], inst[2], inst[3], user_id++);
                     break;
                 case "PLSY":
                 case "DPLSY":
                     if (!simumode)
                         sw.Write("CI_DPLSY((uint8_t)({0:s}),(uint32_t)({1:s}),(uint32_t)({2:s}),{3:s},{4:d});\n",
-                            cond, inst[1], inst[2], inst[3], user_id);
+                            cond, inst[1], inst[2], inst[3], user_id++);
                     break;
                 case "PLSR":
                     if (!simumode)
                         sw.Write("CI_DPLSR((uint8_t)({0:s}), (uint32_t*)(&{1:s}), (uint32_t)({2:s}), {3:s}, {4:d});\n",
-                            cond, inst[1], inst[2], inst[3], user_id);
+                            cond, inst[1], inst[2], inst[3], user_id++);
                     break;
                 case "DPLSR":
                     if (!simumode)
                         sw.Write("CI_DPLSR((uint8_t)({0:s}), &{1:s}, {2:s}, {3:s}, {4:d});\n",
-                            cond, inst[1], inst[2], inst[3], user_id);
+                            cond, inst[1], inst[2], inst[3], user_id++);
                     break;
                 case "PLSRD":
                     if (!simumode)
                         sw.Write("CI_DPLSRD((uint8_t)({0:s}), (uint32_t*)(&{1:s}), (uint32_t)({2:s}), {3:s}, {4:s}, {5:d});\n",
-                            cond, inst[1], inst[2], inst[3], inst[4], user_id);
+                            cond, inst[1], inst[2], inst[3], inst[4], user_id++);
                     break;
                 case "DPLSRD":
                     if (!simumode)
                         sw.Write("CI_DPLSRD((uint8_t)({0:s}), &{1:s}, {2:s}, {3:s}, {4:s}, {5:d});\n",
-                            cond, inst[1], inst[2], inst[3], inst[4], user_id);
+                            cond, inst[1], inst[2], inst[3], inst[4], user_id++);
                     break;
                 case "HCNT":
                     if (!simumode)
@@ -720,36 +720,36 @@ namespace SamSoarII.Core.Generate
                 case "DZRN":
                     if (!simumode)
                         sw.Write("CI_DZRN((uint8_t)({0:s}),{1:s},{2:s},{3:s},{4:s},{5:d});\n",
-                            cond, inst[1], inst[2], inst[3], inst[4], user_id);
+                            cond, inst[1], inst[2], inst[3], inst[4], user_id++);
                     break;
                 case "ZRND":
                 case "DZRND":
                     if (!simumode)
                         sw.Write("CI_DZRN((uint8_t)({0:s}),{1:s},{2:s},{3:s},{4:s},{5:s},{6:d});\n",
-                            cond, inst[1], inst[2], inst[3], inst[4], inst[5], user_id);
+                            cond, inst[1], inst[2], inst[3], inst[4], inst[5], user_id++);
                     break;
                 case "PTO":
                     if (!simumode)
                         sw.Write("CI_PTO((uint8_t)({0:s}),&{1:s},{2:s},{3:s},{4:d});\n",
-                            cond, inst[1], inst[2], inst[3], user_id);
+                            cond, inst[1], inst[2], inst[3], user_id++);
                     break;
                 case "DRVI":
                 case "DDRVI":
                     if (!simumode)
                         sw.Write("CI_DDRVI((uint8_t)({0:s}),{1:s},{2:s},{3:s},{4:s},{5:d});\n",
-                            cond, inst[2], inst[1], inst[3], inst[4], user_id);
+                            cond, inst[2], inst[1], inst[3], inst[4], user_id++);
                     break;
                 case "DRVA":
                 case "DDRVA":
                     if (!simumode)
                         sw.Write("CI_DDRVA((uint8_t)({0:s}),{1:s},{2:s},{3:s},{4:s},{5:d});\n",
-                            cond, inst[2], inst[1], inst[3], inst[4], user_id);
+                            cond, inst[2], inst[1], inst[3], inst[4], user_id++);
                     break;
                 case "PLSA":
                 case "DPLSA":
                     if (!simumode)
                         sw.Write("CI_DPLSA((uint8_t)({0:s}),&{1:s},{2:s},{3:s},{4:s},{5:d});\n",
-                            cond, inst[1], inst[2], inst[3], inst[4], user_id);
+                            cond, inst[1], inst[2], inst[3], inst[4], user_id++);
                     break;
                 // 实时时钟
                 case "TRD":

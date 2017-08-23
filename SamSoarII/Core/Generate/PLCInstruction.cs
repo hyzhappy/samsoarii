@@ -392,9 +392,9 @@ namespace SamSoarII.Core.Generate
             return ToCStyle(vmodel);
         }
         
-        public PLCOriginInst ToOrigin()
+        public PLCOriginInst ToOrigin(InstructionNetworkModel _parent)
         {
-           return new PLCOriginInst(this);
+           return new PLCOriginInst(_parent, this);
         }
     }
 }

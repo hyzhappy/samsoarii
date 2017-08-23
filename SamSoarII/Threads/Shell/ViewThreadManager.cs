@@ -18,7 +18,7 @@ namespace SamSoarII.Threads
             Aborted += OnAborted;
             oldscrolloffset = 0;
             current = null;
-            TimeSpan = 20;
+            TimeSpan = 50;
         }
         
         #region Number

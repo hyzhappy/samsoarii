@@ -9,18 +9,22 @@
              d:DesignHeight="300" d:DesignWidth="800"
              Focusable="True"
              PreviewKeyDown="MainCanvas_KeyDown"
+             PreviewMouseDown="MainCanvas_MouseDown"
              Background="White">
     <UserControl.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Undo" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
         <CommandBinding Command="ApplicationCommands.Redo" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
     </UserControl.CommandBindings>
     <ScrollViewer x:Uid="Scroll" x:Name="Scroll" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SizeChanged="Scroll_SizeChanged">
-        <Canvas x:Uid="MainCanvas" x:Name="MainCanvas" Focusable="True" MouseDown="MainCanvas_MouseDown" VerticalAlignment="Top" Width="1200">
-            <Rectangle x:Name="Rect" Canvas.Left="24" Width="522" Panel.ZIndex="3" 
+        <Grid>
+            <local:InstructionRowCanvas x:Name="RowCanvas"/>
+            <Canvas x:Uid="MainCanvas" x:Name="MainCanvas" VerticalAlignment="Top" Width="1200">
+                <Rectangle x:Name="Rect" Canvas.Left="24" Width="522" Panel.ZIndex="3" 
                        Opacity="0.2" Fill="{x:Static gb:GlobalSetting.FoldingBrush}" Visibility="Hidden"/>
-            <Line x:Name="LN_LB" X1="10" X2="20" Stroke="Black" StrokeThickness="1.5"/>
-            <Line x:Name="LN_RV" Canvas.Left="1180" Y1="0" Y2="24" Stroke="Black" StrokeThickness="1.5"/>
-            <Line x:Name="LN_RB" Canvas.Left="1180" X1="-10" X2="0" Stroke="Black" StrokeThickness="1.5"/>
-        </Canvas>
+                <Line x:Name="LN_LB" X1="10" X2="20" Stroke="Black" StrokeThickness="1.5"/>
+                <Line x:Name="LN_RV" Canvas.Left="1180" Y1="0" Y2="24" Stroke="Black" StrokeThickness="1.5"/>
+                <Line x:Name="LN_RB" Canvas.Left="1180" X1="-10" X2="0" Stroke="Black" StrokeThickness="1.5"/>
+            </Canvas>
+        </Grid>
     </ScrollViewer>
 </UserControl>

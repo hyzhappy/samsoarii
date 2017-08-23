@@ -65,8 +65,8 @@ namespace SamSoarII.Core.Simulate
         
         #region Thread
 
-        public bool IsAlive { get { return dllmodel.IsAlive || viewer.IsAlive; } }
-        public bool IsActive { get { return dllmodel.IsActive || viewer.IsActive; } }
+        public bool IsAlive { get { return dllmodel.IsAlive; } }
+        public bool IsActive { get { return dllmodel.IsActive; } }
         
         public event RoutedEventHandler Started = delegate { };
         public event RoutedEventHandler Paused = delegate { };
@@ -75,9 +75,9 @@ namespace SamSoarII.Core.Simulate
         public void Abort()
         {
             if (viewer.IsBPPause) viewer.Resume();
-            dllmodel.Abort();
             viewer.Abort();
             mngVBrpo.Abort();
+            dllmodel.Abort();
         }
 
         public void Pause()

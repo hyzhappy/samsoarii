@@ -3,14 +3,16 @@ using SamSoarII.Core.Models;
 using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace SamSoarII.Shell.Models
 {
-    public class InstructionRowViewModel : IResource
+    public class InstructionRowViewModel : DrawingVisual, IResource
     {
         #region IResource
 
@@ -23,64 +25,115 @@ namespace SamSoarII.Shell.Models
 
         public IResource Create(params object[] args)
         {
-            return new InstructionRowViewModel((PLCOriginInst)args[0], (int)args[1]);
+            return new InstructionRowViewModel((PLCOriginInst)args[0]);
         }
-        
+
+        private static double[] xstarts = { 40, 40 + 41, 40 + 121, 40 + 201, 40 + 281, 40 + 361, 40 + 441, 40 + 521 };
+        private static double[] widths = { 38, 78, 78, 78, 78, 78, 78, 78, 600 };
         public void Recreate(params object[] args)
         {
-            core = (PLCOriginInst)args[0];
-            id = (int)args[1];
-            if (core == null) return;
-            LadderUnitModel unit = core.Inst.ProtoType;
-            for (int i = 0; i < 7; i++)
-            {
-                tbs[i].Background = ((id + i) & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
-                tbs[i].Foreground = unit != null ? Brushes.Black : Brushes.Gray;
-                tbs[i].Text = i == 0 ? id.ToString() : core[i - 1];
-            }
-            StringBuilder tbtext = new StringBuilder("");
-            if (unit != null && unit.ValueManager != null)
-            {
-                tbtext.Append("// ");
-                foreach (ValueModel value in unit.Children)
-                {
-                    ValueInfo info = value.ValueManager[value];
-                    tbtext.Append(String.Format("{0:s}:{1:s}, ", value.Text, info.Comment));
-                }
-            }
-            tbs[7].Text = tbtext.ToString();
+            Core = (PLCOriginInst)args[0];
+            Update();
         }
 
         #endregion
 
-        public InstructionRowViewModel(PLCOriginInst _core, int _id)
+        public InstructionRowViewModel(PLCOriginInst _core)
         {
-            tbs = new TextBlock[8];
-            for (int i = 0; i < 8; i++)
-                tbs[i] = new TextBlock();
-            tbs[7].Foreground = Brushes.Green;
-            Recreate(_core, _id);
+            Recreate(_core);
         }
-        
+
         public void Dispose()
         {
-            core = null;
+            Core = null;
             AllResourceManager.Dispose(this);
+            Update();
         }
 
         #region Number
 
         private PLCOriginInst core;
-        public PLCOriginInst Core { get { return this.core; } }
+        public PLCOriginInst Core
+        {
+            get
+            {
+                return this.core;
+            }
+            set
+            {
+                if (core == value) return;
+                PLCOriginInst _core = core;
+                this.core = null;
+                if (_core != null && _core.View != null) _core.View = null;
+                this.core = value;
+                if (core != null && core.View != this) core.View = this;
+            }
+        }
 
-        private int id;
-        public int ID { get { return this.id; } }
-
-        private TextBlock[] tbs;
-        public IList<TextBlock> TextBlocks { get { return this.tbs; } }
+        private InstructionRowCanvas cvparent;
+        public InstructionRowCanvas CVParent
+        {
+            get
+            {
+                return this.cvparent;
+            }
+            set
+            {
+                if (cvparent == value) return;
+                if (cvparent != null) cvparent.Remove(this);
+                this.cvparent = value;
+                if (cvparent != null) cvparent.Add(this);
+            }
+        }
         
         #endregion
 
+        public void Update()
+        {
+            using (DrawingContext context = RenderOpen())
+            {
+                if (core == null) return;
+                LadderUnitModel unit = core.Inst.ProtoType;
+                Brush background;
+                Brush foreground;
+                string text;
+                for (int i = 0; i < 7; i++)
+                {
+                    background = (((i + core.ID) & 1) == 0) ? Brushes.AliceBlue : Brushes.LightCyan;
+                    foreground = unit != null ? Brushes.Black : Brushes.Gray;
+                    text = i == 0 ? (core.ID + 1).ToString() : core[i - 1];
+                    DrawingText(context, text, xstarts[i], widths[i], background, foreground);
+                }
+                if (Core.Parent.IsCommentMode)
+                {
+                    StringBuilder tbtext = new StringBuilder("");
+                    if (unit != null && unit.ValueManager != null)
+                    {
+                        tbtext.Append("// ");
+                        foreach (ValueModel value in unit.Children)
+                        {
+                            ValueInfo info = value.ValueManager[value];
+                            tbtext.Append(String.Format("{0:s}:{1:s}, ", value.Text, info.Comment));
+                        }
+                    }
+                    DrawingText(context, tbtext.ToString(), xstarts[7], widths[7], Brushes.Transparent, Brushes.Green);
+                }
+            }
+        }
 
+        #region Drawing
+
+        static private FontFamily fontfamily = new FontFamily("Courier New");
+        static private int fontsize = 14;
+        private void DrawingText(DrawingContext context, string text, double x, double width, Brush background, Brush foreground)
+        {
+            Typeface face = new Typeface(fontfamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+            FormattedText formattedText = new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, face, fontsize, foreground);
+            double y = core.Parent.CanvasTop + 26 + core.ID * 20;
+            //context.DrawRectangle(background, null, new Rect(x, y, width, 18));
+            context.DrawText(formattedText, new Point(x, y));
+        }
+
+        #endregion
     }
 }

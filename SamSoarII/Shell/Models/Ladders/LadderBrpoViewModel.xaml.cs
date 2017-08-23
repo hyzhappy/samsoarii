@@ -41,12 +41,14 @@ namespace SamSoarII.Shell.Models
         public LadderBrpoViewModel(LadderBrpoModel _core)
         {
             InitializeComponent();
+            Visibility = Visibility.Visible;
             Canvas.SetZIndex(this, 1);
             Recreate(_core);
         }
         
         public void Dispose()
         {
+            Visibility = Visibility.Hidden;
             Core = null;
             AllResourceManager.Dispose(this);
         }

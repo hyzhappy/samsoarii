@@ -88,11 +88,17 @@ namespace SamSoarII.Shell.Models
         {
             switch (e.PropertyName)
             {
+                case "IsCommentMode":
+                    foreach (InstructionRowViewModel row in RowCanvas.Rows)
+                        row.Update();
+                    break;
                 case "ViewHeight":
                     MainCanvas.Height = core.ViewHeight;
                     LN_RV.Y2 = core.ViewHeight;
                     Canvas.SetTop(LN_LB, core.ViewHeight);
                     Canvas.SetTop(LN_RB, core.ViewHeight);
+                    foreach (InstructionRowViewModel row in RowCanvas.Rows)
+                        row.Update();
                     isviewmodified = true;
                     break;
             }
@@ -307,7 +313,10 @@ namespace SamSoarII.Shell.Models
              && cursor.Core.Current?.Inst?.ProtoType != null
              && cursor.Core.Current.Inst.ProtoType.Children.Count > 0)
             {
-                IFParent.ShowElementPropertyDialog(cursor.Core.Current.Inst.ProtoType);
+                if (LadderMode == LadderModes.Edit)
+                    IFParent.ShowElementPropertyDialog(cursor.Core.Current.Inst.ProtoType);
+                else
+                    IFParent.ShowValueModifyDialog(cursor.Core.Current.Inst.ProtoType.UniqueChildren);
             }
         }
         
@@ -374,7 +383,10 @@ namespace SamSoarII.Shell.Models
                     if (cursor.Core.Current?.Inst?.ProtoType != null
                      && cursor.Core.Current.Inst.ProtoType.Children.Count > 0)
                     {
-                        IFParent.ShowElementPropertyDialog(cursor.Core.Current.Inst.ProtoType);
+                        if (LadderMode == LadderModes.Edit)
+                            IFParent.ShowElementPropertyDialog(cursor.Core.Current.Inst.ProtoType);
+                        else
+                            IFParent.ShowValueModifyDialog(cursor.Core.Current.Inst.ProtoType.UniqueChildren);
                     }
                     break;
             }

@@ -459,7 +459,8 @@ namespace SamSoarII.Core.Simulate
         [HandleProcessCorruptedStateExceptions]
         protected override void Handle()
         {
-            BeforeRunLadder();
+            if (SimulateDllModel.IsDllAlive() > 0)
+                BeforeRunLadder();
             try
             {
                 RunLadder();
@@ -469,7 +470,9 @@ namespace SamSoarII.Core.Simulate
                 Pause();
                 SimulateException(exce, new RoutedEventArgs());
             }
-            AfterRunLadder();
+            if (SimulateDllModel.IsDllAlive() > 0)
+                AfterRunLadder();
+            Thread.Sleep(20);
         }
 
         #endregion

@@ -139,6 +139,13 @@ namespace SamSoarII.PLCDevice
                 return new IntRange(uint.MinValue, uint.MaxValue);
             }
         }
+        public override IntRange PulseRange
+        {
+            get
+            {
+                return new IntRange(uint.MinValue, uint.MaxValue);
+            }
+        }
         public override PLC_FGs_Type Type
         {
             get

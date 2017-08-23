@@ -101,12 +101,12 @@ namespace SamSoarII.Shell.Models
             set { core.IsCommentMode = value; PropertyChanged(this,new PropertyChangedEventArgs("IsCommentMode")); }
         }
 
-        public void UpdateUnit(int flags)
+        public void UpdateUnit()
         {
             foreach (LadderDiagramModel diagram in core.Diagrams)
                 foreach (LadderNetworkModel network in diagram.Children)
                     foreach (LadderUnitModel unit in network.Children)
-                        if (unit.View != null) unit.View.Update(flags);
+                        if (unit.View != null) unit.View.Update();
         }
         
         #endregion

@@ -1,4 +1,5 @@
 ﻿using SamSoarII.Core.Models;
+using SamSoarII.Shell.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,11 +7,18 @@ using System.Text;
 
 namespace SamSoarII.Core.Generate
 {
-    public class PLCOriginInst
+    public class PLCOriginInst : IDisposable
     {
-        public PLCOriginInst(PLCInstruction _inst)
+        public PLCOriginInst(InstructionNetworkModel _parent, PLCInstruction _inst)
         {
+            parent = _parent;
             Inst = _inst;
+        }
+
+        public void Dispose()
+        {
+            parent = null;
+            Inst = null;
         }
 
         public override string ToString()
@@ -24,6 +32,16 @@ namespace SamSoarII.Core.Generate
                 return ret.ToString();
             }
             return inst.ProtoType.ToInstString();
+        }
+
+        private InstructionNetworkModel parent;
+        public InstructionNetworkModel Parent { get { return this.parent; } }
+
+        private int id;
+        public int ID
+        {
+            get { return this.id; }
+            set { this.id = value; }
         }
 
         private PLCInstruction inst;
@@ -46,6 +64,24 @@ namespace SamSoarII.Core.Generate
             }
         }
 
+        private InstructionRowViewModel view;
+        public InstructionRowViewModel View
+        {
+            get
+            {
+                return this.view;
+            }
+            set
+            {
+                if (view == value) return;
+                InstructionRowViewModel _view = view;
+                this.view = null;
+                if (_view != null && _view.Core != null) _view.Core = null;
+                this.view = value;
+                if (view != null && view.Core != this) view.Core = this;
+            }
+        }
+        
         public string this[int id]
         {
             get

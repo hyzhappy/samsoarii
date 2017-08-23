@@ -38,6 +38,7 @@ namespace SamSoarII.Core.Helpers
             StreamWriter sw = new StreamWriter(ladderCFile);
             InstHelper.InstToSimuCode(sw, nets.ToArray());
             sw.Write("void InitUserRegisters()\r\n{\r\n");
+            sw.Write("ClearEdge();\r\n");
             ValueManager ValueManager = project.Parent.MNGValue;
             foreach (ValueInfo vinfo in ValueManager)
             {
@@ -363,7 +364,7 @@ namespace SamSoarII.Core.Helpers
                 network.Parent.CName, insts);
             nets.Add(net);
         }
-
+        
         private static string GenerateCType(string type)
         {
             type = type.Replace("BIT", "_BIT");
