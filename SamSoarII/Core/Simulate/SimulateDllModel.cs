@@ -469,7 +469,8 @@ namespace SamSoarII.Core.Simulate
                 Pause();
                 SimulateException(exce, new RoutedEventArgs());
             }
-            AfterRunLadder();
+            if (SimulateDllModel.IsDllAlive() > 0)
+                AfterRunLadder();
         }
 
         #endregion

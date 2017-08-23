@@ -31,8 +31,9 @@ namespace SamSoarII.Shell.Models
 
         public void AddVisual(Visual visual)
         {
-            visuals.Add(visual);
-
+            if(((LadderDrawingVisual)visual).Type != VisualType.BrpoBrush)
+                visuals.Add(visual);
+            else visuals.Insert(0, visual);
             AddVisualChild(visual);
             AddLogicalChild(visual);
         }

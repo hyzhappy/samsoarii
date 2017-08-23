@@ -179,13 +179,10 @@ namespace SamSoarII.Shell.Models
                         if (unit.Visual == null)
                         {
                             unit.Visual = BaseVisualUnitModel.Create(unit);
-                            foreach (var kvPair in unit.Visual.Visuals)
+                            for (int i = 0; i < unit.Visual.Visuals.Length; i++)
                             {
-                                for (int i = 0; i < kvPair.Value.Length; i++)
-                                {
-                                    if (kvPair.Value[i] != null)
-                                        LadderCanvas.AddVisual(kvPair.Value[i]);
-                                }
+                                if (unit.Visual.Visuals[i] != null)
+                                    LadderCanvas.AddVisual(unit.Visual.Visuals[i]);
                             }
                         }
                     }

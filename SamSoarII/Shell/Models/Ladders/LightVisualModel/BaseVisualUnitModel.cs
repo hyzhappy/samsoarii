@@ -54,58 +54,59 @@ namespace SamSoarII.Shell.Models
         #endregion
         public BaseVisualUnitModel()
         {
-            visuals = new Dictionary<VisualType, LadderDrawingVisual[]>();
+            visuals = new LadderDrawingVisual[5];
             //添加形状
-            visuals.Add(VisualType.Shape, new LadderDrawingVisual[1]);
-            //添加仿真及监视时的画刷(第一个为至ON时的画刷，第二个为断点画刷)
-            visuals.Add(VisualType.BrpoBrush, new LadderDrawingVisual[2]);
+            visuals[0] = new LadderDrawingVisual(this, VisualType.Shape);
             //元件及注释用一个DrawingVisual渲染
-            visuals.Add(VisualType.Comment, new LadderDrawingVisual[1]);
-            visuals.Add(VisualType.Property, new LadderDrawingVisual[1]);
+            visuals[1] = new LadderDrawingVisual(this, VisualType.Comment);
+            visuals[2] = new LadderDrawingVisual(this, VisualType.Property);
+            //添加仿真及监视时的画刷
+            visuals[3] = new LadderDrawingVisual(this, VisualType.BrpoBrush);
+            visuals[4] = new LadderDrawingVisual(this, VisualType.OnOffBrush);
         }
 
         #region Visuals
         private bool hasAdded = false;
         public bool HasAdded { get { return hasAdded; } set { hasAdded = value; } }
 
-        protected Dictionary<VisualType, LadderDrawingVisual[]> visuals;
-        public Dictionary<VisualType, LadderDrawingVisual[]> Visuals { get { return visuals; } }
+        protected LadderDrawingVisual[] visuals;
+        public LadderDrawingVisual[] Visuals { get { return visuals; } }
 
         #endregion
 
         #region Shape
         protected virtual void RenderUnitShape()
         {
-            if (visuals[VisualType.Shape][0] == null)
-                visuals[VisualType.Shape][0] = new LadderDrawingVisual(this, VisualType.Shape);
+            if (visuals[0] == null)
+                visuals[0] = new LadderDrawingVisual(this, VisualType.Shape);
             //shape渲染不需要flag
-            visuals[VisualType.Shape][0].Render();
+            visuals[0].Render();
+        }
+        #endregion
+        
+        #region Comment
+        protected void RenderComment()
+        {
+            if (IsCommentMode)
+            {
+                if (visuals[1] == null)
+                    visuals[1] = new LadderDrawingVisual(this, VisualType.Comment);
+                visuals[1].Render();
+            }
+            else
+            {
+                if (ViewParent.LadderCanvas.Contains(visuals[1]))
+                    ViewParent.LadderCanvas.RemoveVisual(visuals[1]);
+            }
         }
         #endregion
 
         #region Property
         protected void RenderProperty()
         {
-            if (visuals[VisualType.Property][0] == null)
-                visuals[VisualType.Property][0] = new LadderDrawingVisual(this, VisualType.Property);
-            visuals[VisualType.Property][0].Render();
-        }
-        #endregion
-
-        #region Comment
-        protected void RenderComment()
-        {
-            if (IsCommentMode)
-            {
-                if (visuals[VisualType.Comment][0] == null)
-                    visuals[VisualType.Comment][0] = new LadderDrawingVisual(this, VisualType.Comment);
-                visuals[VisualType.Comment][0].Render();
-            }
-            else
-            {
-                if (ViewParent.LadderCanvas.Contains(visuals[VisualType.Comment][0]))
-                    ViewParent.LadderCanvas.RemoveVisual(visuals[VisualType.Comment][0]);
-            }
+            if (visuals[2] == null)
+                visuals[2] = new LadderDrawingVisual(this, VisualType.Property);
+            visuals[2].Render();
         }
         #endregion
 
@@ -122,6 +123,7 @@ namespace SamSoarII.Shell.Models
         }
         protected void AddBrpo()
         {
+            if (core.LadderMode != LadderModes.Simulate) return;
             Core.Breakpoint.View = AllResourceManager.CreateBrpo(Core.Breakpoint);
             UpdateBrpoLocation();
             ViewParent.ViewParent.MainCanvas.Children.Add(Core.Breakpoint.View);
@@ -149,11 +151,15 @@ namespace SamSoarII.Shell.Models
         }
         protected void RenderBrpoBrush()
         {
-
+            if(visuals[3] == null)
+                visuals[3] = new LadderDrawingVisual(this, VisualType.BrpoBrush);
+            visuals[3].Render();
         }
         protected void RenderOnOffBrush()
         {
-
+            if (visuals[4] == null)
+                visuals[4] = new LadderDrawingVisual(this, VisualType.OnOffBrush);
+            visuals[4].Render();
         }
         #endregion
 
@@ -254,15 +260,12 @@ namespace SamSoarII.Shell.Models
                     if (vmodel.Store != null)
                         vmodel.Store.PropertyChanged -= OnValueStorePropertyChanged;
             }
-            foreach (var kvPair in visuals)
+            for (int i = 0; i < visuals.Length; i++)
             {
-                for (int i = 0; i < kvPair.Value.Length; i++)
-                {
-                    if (ViewParent.LadderCanvas.Contains(kvPair.Value[i]))
-                        ViewParent.LadderCanvas.RemoveVisual(kvPair.Value[i]);
-                    if (kvPair.Value[i] != null)
-                        kvPair.Value[i] = null;
-                }
+                if (ViewParent.LadderCanvas.Contains(visuals[i]))
+                    ViewParent.LadderCanvas.RemoveVisual(visuals[i]);
+                if (visuals[i] != null)
+                    visuals[i] = null;
             }
             Core = null;
         }
@@ -289,6 +292,7 @@ namespace SamSoarII.Shell.Models
                     break;
                 case RenderType.State:
                     RenderProperty();
+                    RenderBrpo();
                     break;
                 default:
                     break;
