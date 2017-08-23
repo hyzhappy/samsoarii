@@ -709,7 +709,7 @@ namespace SamSoarII.Core.Helpers
             }
             if (time >= 5) return DownloadError.DownloadFailed;
             command = new IAPDESKEYCommand(communManager.ExecLen);
-            for (time = 0; time < 5 && !communManager.CommunicationHandle(command,true,1000);)
+            for (time = 0; time < 5 && !communManager.CommunicationHandle(command,true,2000);)
             {
                 if(command.ErrorCode == FGs_ERR_CODE.COMCODE_DOWNLOAD_BEYOND)
                     return DownloadError.DataSizeBeyond;
@@ -830,7 +830,10 @@ namespace SamSoarII.Core.Helpers
             if (data.Length == 0) return DownloadError.None;
             int time = 0;
             ICommunicationCommand command = new DownloadTypeStart(funcCode, data.Length);
-            for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
+
+            int overTime = funcCode == CommunicationDataDefine.CMD_DOWNLOAD_PRO ? 2000 : 100 ;
+
+            for (time = 0; time < 5 && !communManager.CommunicationHandle(command,true,overTime);)
             {
                 Thread.Sleep(200);
                 time++;
