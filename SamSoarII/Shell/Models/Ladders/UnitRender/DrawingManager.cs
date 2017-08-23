@@ -396,12 +396,17 @@ namespace SamSoarII.Shell.Models
             if (model.IsCommentMode)
             {
                 string comment = string.Empty;
+                int id = 0;
                 for (int i = 0; i < model.Core.Children.Count; i++)
                 {
                     ValueModel vmodel = model.Core.Children[i];
-                    comment = string.Format("{0:s}:{1:s}",
+                    if (vmodel.Base != ValueModel.Bases.K && vmodel.Base != ValueModel.Bases.H)
+                    {
+                        comment = string.Format("{0:s}:{1:s}",
                                         vmodel.Text, vmodel.Comment);
-                    DrawingText(context, model, new Point(10, 300 + (FontManager.GetComment().FontSize + 4) * i), span, comment, null, FontWeights.Normal, 0, 0, TextAlignment.Left, FontType.Comment);
+                        DrawingText(context, model, new Point(10, 300 + (FontManager.GetComment().FontSize + 4) * id), span, comment, null, FontWeights.Normal, 0, 0, TextAlignment.Left, FontType.Comment);
+                        id++;
+                    }
                 }
             }
         }

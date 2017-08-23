@@ -54,14 +54,13 @@ namespace SamSoarII.Shell.Models
         #endregion
         public BaseVisualUnitModel()
         {
-
         }
 
         #region Visuals
         private bool hasAdded = false;
         public bool HasAdded { get { return hasAdded; } set { hasAdded = value; } }
 
-        private Dictionary<VisualType, LadderDrawingVisual[]> visuals = new Dictionary<VisualType, LadderDrawingVisual[]>();
+        private Dictionary<VisualType, LadderDrawingVisual[]> visuals;
         public Dictionary<VisualType, LadderDrawingVisual[]> Visuals { get { return visuals; } }
 
         public bool IsRendering
@@ -101,8 +100,11 @@ namespace SamSoarII.Shell.Models
             }
             else
             {
-                if (ViewParent.LadderCanvas.Contains(visuals[2]))
-                    ViewParent.LadderCanvas.RemoveVisual(visuals[2]);
+                for (int i = 0; i < visuals[VisualType.Comment].Length; i++)
+                {
+                    if (ViewParent.LadderCanvas.Contains(visuals[2]))
+                        ViewParent.LadderCanvas.RemoveVisual(visuals[2]);
+                }
             }
         }
         protected void AddBrpo()
@@ -233,14 +235,16 @@ namespace SamSoarII.Shell.Models
                         vmodel.Store.PropertyChanged -= OnValueStorePropertyChanged;
             }
             while (IsRendering) Thread.Sleep(10);
-            for (int i = 0; i < visuals.Length; i++)
+            foreach (var kvPair in visuals)
             {
-                if (ViewParent.LadderCanvas.Contains(visuals[i]))
-                    ViewParent.LadderCanvas.RemoveVisual(visuals[i]);
-                if (visuals[i] != null)
-                    visuals[i] = null;
+                for (int i = 0; i < kvPair.Value.Length; i++)
+                {
+                    if (ViewParent.LadderCanvas.Contains(kvPair.Value[i]))
+                        ViewParent.LadderCanvas.RemoveVisual(kvPair.Value[i]);
+                    if (kvPair.Value[i] != null)
+                        kvPair.Value[i] = null;
+                }
             }
-            Core.Visual = null;
             Core = null;
         }
 
