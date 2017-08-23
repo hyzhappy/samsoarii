@@ -43,7 +43,7 @@ namespace SamSoarII.Shell.Models
                             DrawingManager.DrawingUnitCommnet(context, core);
                             break;
                         case VisualType.Brop:
-                            DrawingManager.DrawingBrop(context, core);
+                            DrawingManager.DrawingUnitBrop(context, core);
                             break;
                     }
                 }

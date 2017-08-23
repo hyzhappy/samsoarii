@@ -60,7 +60,7 @@ namespace SamSoarII.Shell.Models
         private bool hasAdded = false;
         public bool HasAdded { get { return hasAdded; } set { hasAdded = value; } }
 
-        private LadderDrawingVisual[] visuals = new LadderDrawingVisual[4];
+        private LadderDrawingVisual[] visuals = new LadderDrawingVisual[3];
 
         public LadderDrawingVisual[] Visuals { get { return visuals; } }
 
@@ -93,15 +93,23 @@ namespace SamSoarII.Shell.Models
 
         protected void RenderComment()
         {
-            if (visuals[2] == null)
-                visuals[2] = new LadderDrawingVisual(this, VisualType.Comment);
-            visuals[2].Render();
+            if(IsCommentMode)
+            {
+                if (visuals[2] == null)
+                    visuals[2] = new LadderDrawingVisual(this, VisualType.Comment);
+                visuals[2].Render();
+            }
+            else
+            {
+                if (ViewParent.LadderCanvas.Contains(visuals[2]))
+                    ViewParent.LadderCanvas.RemoveVisual(visuals[2]);
+            }
         }
         protected void RenderBrpo()
         {
-            if (visuals[3] == null)
-                visuals[3] = new LadderDrawingVisual(this, VisualType.Brop);
-            visuals[3].Render();
+            //if (core.Breakpoint.Visual.Visual == null)
+            //    core.Breakpoint.Visual.Visual = new LadderDrawingVisual(this, VisualType.Brop);
+            //core.Breakpoint.Visual.Visual.Render();
         }
         protected void RenderAll()
         {

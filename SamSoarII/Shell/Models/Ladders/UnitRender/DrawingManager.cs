@@ -368,14 +368,50 @@ namespace SamSoarII.Shell.Models
 
         public static void DrawingUnitCommnet(DrawingContext context, IViewModel core)
         {
-
+            BaseVisualUnitModel model = core as BaseVisualUnitModel;
+            int span = Global.GlobalSetting.LadderCommentModeHeightUnit;
+            if (model.IsCommentMode)
+            {
+                string comment = string.Empty;
+                for (int i = 0; i < model.Core.Children.Count; i++)
+                {
+                    ValueModel vmodel = model.Core.Children[i];
+                    comment = string.Format("{0:s}:{1:s}",
+                                        vmodel.Text, vmodel.Comment);
+                    DrawingText(context, model, new Point(10, 300 + (FontManager.GetComment().FontSize + 4) * i), span, comment, null, FontWeights.Normal, 0, 0, TextAlignment.Left, FontType.Comment);
+                }
+            }
         }
 
-        public static void DrawingBrop(DrawingContext context, IViewModel core)
+        public static void DrawingUnitBrop(DrawingContext context, IViewModel core)
         {
+            BaseVisualUnitModel model = core as BaseVisualUnitModel;
+            int span = Global.GlobalSetting.LadderCommentModeHeightUnit;
+            double opacity = model.Core.Breakpoint.IsActive ? 1.0 : 0.4;
+            context.PushOpacity(opacity);
+
+            //switch (model.Core.Breakpoint.Condition)
+            //{
+            //    case LadderBrpoModel.Conditions.NONE: TB_Cond.Text = ""; break;
+            //    case LadderBrpoModel.Conditions.OFF: TB_Cond.Text = "0"; break;
+            //    case LadderBrpoModel.Conditions.ON: TB_Cond.Text = "1"; break;
+            //    case LadderBrpoModel.Conditions.UPEDGE: TB_Cond.Text = "U"; break;
+            //    case LadderBrpoModel.Conditions.DOWNEDGE: TB_Cond.Text = "D"; break;
+            //    case LadderBrpoModel.Conditions.EDGE: TB_Cond.Text = "E"; break;
+            //}
+        }
+        private static void DrawingBaseBrop(DrawingContext context, BaseVisualUnitModel core, int span)
+        {
+            double opacity = core.Core.Breakpoint.IsActive ? 1.0 : 0.4;
+            context.PushOpacity(opacity);
+            
+        }
+        private static void DrawingBrop(DrawingContext context, BaseVisualUnitModel core, int span)
+        {
+            double opacity = core.Core.Breakpoint.IsActive ? 1.0 : 0.4;
+            context.PushOpacity(opacity);
 
         }
-
         public static void DrawingBaseInput(DrawingContext context, BaseVisualUnitModel core,int span)
         {
             Point point1;
@@ -591,7 +627,10 @@ namespace SamSoarII.Shell.Models
                 case FontType.Comment:
                     data = FontManager.GetComment();
                     face = new Typeface(data.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
-                    formattedText = new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, face,data.FontSize,data.FontColor);
+                    formattedText = new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, face, data.FontSize, data.FontColor);
+                    formattedText.MaxTextWidth = 290;
+                    formattedText.MaxLineCount = 1;
+                    formattedText.Trimming = TextTrimming.CharacterEllipsis;
                     break;
                 case FontType.Property:
                     data = FontManager.GetLadder();
