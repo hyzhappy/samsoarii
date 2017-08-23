@@ -105,12 +105,6 @@ namespace SamSoarII.Shell.Models
                     ViewParent.LadderCanvas.RemoveVisual(visuals[2]);
             }
         }
-        protected void RenderBrpo()
-        {
-            //if (core.Breakpoint.Visual.Visual == null)
-            //    core.Breakpoint.Visual.Visual = new LadderDrawingVisual(this, VisualType.Brop);
-            //core.Breakpoint.Visual.Visual.Render();
-        }
         protected void RenderAll()
         {
             RenderUnit();
@@ -118,7 +112,6 @@ namespace SamSoarII.Shell.Models
                 RenderProperty();
             if (IsCommentMode) RenderComment();
         }
-
         private bool NoPropertyModel()
         {
             return core.Type == LadderUnitModel.Types.HLINE || core.Type == LadderUnitModel.Types.VLINE
@@ -240,9 +233,6 @@ namespace SamSoarII.Shell.Models
                 case RenderType.Opacity:
                     RenderAll();
                     break;
-                case RenderType.Brpo:
-                    RenderBrpo();
-                    break;
                 case RenderType.State:
                     RenderProperty();
                     break;
@@ -318,7 +308,7 @@ namespace SamSoarII.Shell.Models
                     break;
                 case "BPEnable":
                 case "BPCursor":
-                    Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { Update(RenderType.Brpo); });
+                    //RenderBrpoBase();
                     break;
             }
         }
@@ -380,7 +370,6 @@ namespace SamSoarII.Shell.Models
         Property,
         Comment,
         Opacity,
-        Brpo,
         State
     }
 }

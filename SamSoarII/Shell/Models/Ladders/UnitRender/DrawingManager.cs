@@ -382,36 +382,6 @@ namespace SamSoarII.Shell.Models
                 }
             }
         }
-
-        public static void DrawingUnitBrop(DrawingContext context, IViewModel core)
-        {
-            BaseVisualUnitModel model = core as BaseVisualUnitModel;
-            int span = Global.GlobalSetting.LadderCommentModeHeightUnit;
-            double opacity = model.Core.Breakpoint.IsActive ? 1.0 : 0.4;
-            context.PushOpacity(opacity);
-
-            //switch (model.Core.Breakpoint.Condition)
-            //{
-            //    case LadderBrpoModel.Conditions.NONE: TB_Cond.Text = ""; break;
-            //    case LadderBrpoModel.Conditions.OFF: TB_Cond.Text = "0"; break;
-            //    case LadderBrpoModel.Conditions.ON: TB_Cond.Text = "1"; break;
-            //    case LadderBrpoModel.Conditions.UPEDGE: TB_Cond.Text = "U"; break;
-            //    case LadderBrpoModel.Conditions.DOWNEDGE: TB_Cond.Text = "D"; break;
-            //    case LadderBrpoModel.Conditions.EDGE: TB_Cond.Text = "E"; break;
-            //}
-        }
-        private static void DrawingBaseBrop(DrawingContext context, BaseVisualUnitModel core, int span)
-        {
-            double opacity = core.Core.Breakpoint.IsActive ? 1.0 : 0.4;
-            context.PushOpacity(opacity);
-            
-        }
-        private static void DrawingBrop(DrawingContext context, BaseVisualUnitModel core, int span)
-        {
-            double opacity = core.Core.Breakpoint.IsActive ? 1.0 : 0.4;
-            context.PushOpacity(opacity);
-
-        }
         public static void DrawingBaseInput(DrawingContext context, BaseVisualUnitModel core,int span)
         {
             Point point1;

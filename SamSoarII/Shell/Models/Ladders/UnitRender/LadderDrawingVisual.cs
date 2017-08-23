@@ -12,8 +12,7 @@ namespace SamSoarII.Shell.Models
     {
         Unit,
         Property,
-        Comment,
-        Brop
+        Comment
     }
     public class LadderDrawingVisual : DrawingVisual, IRenderModel
     {
@@ -41,9 +40,6 @@ namespace SamSoarII.Shell.Models
                             break;
                         case VisualType.Comment:
                             DrawingManager.DrawingUnitCommnet(context, core);
-                            break;
-                        case VisualType.Brop:
-                            DrawingManager.DrawingUnitBrop(context, core);
                             break;
                     }
                 }

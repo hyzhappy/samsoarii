@@ -1,7 +1,6 @@
 ﻿using SamSoarII.Core.Generate;
 using SamSoarII.Core.Models;
 using SamSoarII.Shell.Models;
-using SamSoarII.Shell.Models.Ladders;
 using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
@@ -29,7 +28,6 @@ namespace SamSoarII
         static private ResourceManager<SpecialVisualUnitModel> vuSpecial;
         static private ResourceManager<HLineVisualUnitModel> vuHLine;
         static private ResourceManager<VLineVisualUnitModel> vuVLine;
-        static private ResourceManager<LadderBrpoVisualModel> vuBrpo;
         static public void Initialize()
         {
             rmgNet = new ResourceManager<LadderNetworkViewModel>(new LadderNetworkViewModel(null), 20, new object[] { null });
@@ -49,7 +47,6 @@ namespace SamSoarII
             vuSpecial = new ResourceManager<SpecialVisualUnitModel>(new SpecialVisualUnitModel(null), 25, new object[] { null });
             vuHLine = new ResourceManager<HLineVisualUnitModel>(new HLineVisualUnitModel(null), 125, new object[] { null });
             vuVLine = new ResourceManager<VLineVisualUnitModel>(new VLineVisualUnitModel(null), 75, new object[] { null });
-            vuBrpo = new ResourceManager<LadderBrpoVisualModel>(new LadderBrpoVisualModel(null), 20, new object[] { null });
         }
 
         static public LadderNetworkViewModel CreateNet(LadderNetworkModel core)
@@ -194,14 +191,6 @@ namespace SamSoarII
         static public void Dispose(VLineVisualUnitModel _view)
         {
             vuVLine.Dispose(_view);
-        }
-        static public LadderBrpoVisualModel CreateVisualBrpo(LadderBrpoModel core)
-        {
-            return vuBrpo.Create(core);
-        }
-        static public void Dispose(LadderBrpoVisualModel brpo)
-        {
-            vuBrpo.Dispose(brpo);
         }
     }
 }

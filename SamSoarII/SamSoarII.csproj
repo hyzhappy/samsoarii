@@ -457,7 +457,6 @@
     </Compile>
     <Compile Include="Shell\Models\FuncBlock\BrpoCursorLayer.cs" />
     <Compile Include="Shell\Models\FuncBlock\BrpoLayer.cs" />
-    <Compile Include="Shell\Models\Ladders\LadderBrpoVisualModel.cs" />
     <Compile Include="Shell\Models\Ladders\LadderBrpoViewModel.xaml.cs">
       <DependentUpon>LadderBrpoViewModel.xaml</DependentUpon>
     </Compile>

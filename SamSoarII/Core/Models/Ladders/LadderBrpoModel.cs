@@ -7,7 +7,6 @@ using System.Xml.Linq;
 using SamSoarII.Core.Simulate;
 using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
-using SamSoarII.Shell.Models.Ladders;
 
 namespace SamSoarII.Core.Models
 {
@@ -187,38 +186,17 @@ namespace SamSoarII.Core.Models
                 }
             }
         }
-        private LadderBrpoVisualModel visual;
-        public LadderBrpoVisualModel Visual
+
+        public IViewModel Visual
         {
             get
             {
-                return this.visual;
+                throw new NotImplementedException();
             }
+
             set
             {
-                if (visual == value) return;
-                LadderBrpoVisualModel _visual = visual;
-                this.visual = null;
-                if (_visual != null)
-                {
-                    if (_visual.Core != null) _visual.Core = null;
-                }
-                this.visual = value;
-                if (visual != null)
-                {
-                    if (visual.Core != this) visual.Core = this;
-                }
-            }
-        }
-        IViewModel IModel.Visual
-        {
-            get
-            {
-                return Visual;
-            }
-            set
-            {
-                Visual = (LadderBrpoVisualModel)value;
+                throw new NotImplementedException();
             }
         }
 
