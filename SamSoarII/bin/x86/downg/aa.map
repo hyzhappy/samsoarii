@@ -1184,6 +1184,8 @@ Discarded input sections
  .text          0x00000000        0x0 build\\downc.o
  .data          0x00000000        0x0 build\\downc.o
  .bss           0x00000000        0x0 build\\downc.o
+ .text.ClearEdge
+                0x00000000        0x4 build\\downc.o
  .data.CV32DoubleWord
                 0x00000000        0x4 build\\downc.o
  .text          0x00000000        0x0 build\\downf.o
@@ -1212,8 +1214,7 @@ Discarded input sections
  .text.CRCC     0x00000000       0x58 build\\downf.o
  .text.DDO      0x00000000       0xac build\\downf.o
  .text.DSL      0x00000000       0xac build\\downf.o
- .text.CI__FLOAT32_ADD
-                0x00000000        0x4 build\\downf.o
+ .text.aaa      0x00000000        0x4 build\\downf.o
  .comment       0x00000000       0x6f build\\downf.o
  .ARM.attributes
                 0x00000000       0x33 build\\downf.o

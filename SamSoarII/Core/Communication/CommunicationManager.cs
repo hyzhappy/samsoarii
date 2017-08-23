@@ -469,7 +469,7 @@ namespace SamSoarII.Core.Communication
             return true;
         }
 
-        public bool CommunicationHandle(ICommunicationCommand cmd, bool hasRecvData = true, int waittime = 10)
+        public bool CommunicationHandle(ICommunicationCommand cmd, bool hasRecvData = true, int waittime = 1)
         {
             bool hassend = false;
             bool hasrecv = false;
@@ -501,7 +501,6 @@ namespace SamSoarII.Core.Communication
 
 
         #endregion
-        
 
         #region Arrange
         /*
