@@ -11,6 +11,7 @@ using System.Windows.Threading;
 using System.Threading;
 using System.Windows;
 using SamSoarII.Utility;
+using System.Windows.Controls;
 
 namespace SamSoarII.Shell.Models
 {
@@ -60,9 +61,8 @@ namespace SamSoarII.Shell.Models
         private bool hasAdded = false;
         public bool HasAdded { get { return hasAdded; } set { hasAdded = value; } }
 
-        private LadderDrawingVisual[] visuals = new LadderDrawingVisual[3];
-
-        public LadderDrawingVisual[] Visuals { get { return visuals; } }
+        private Dictionary<VisualType, LadderDrawingVisual[]> visuals = new Dictionary<VisualType, LadderDrawingVisual[]>();
+        public Dictionary<VisualType, LadderDrawingVisual[]> Visuals { get { return visuals; } }
 
         public bool IsRendering
         {
@@ -80,7 +80,7 @@ namespace SamSoarII.Shell.Models
         protected void RenderUnit()
         {
             if (visuals[0] == null)
-                visuals[0] = new LadderDrawingVisual(this, VisualType.Unit);
+                visuals[0] = new LadderDrawingVisual(this, VisualType.Shape);
             visuals[0].Render();
         }
 
@@ -105,13 +105,45 @@ namespace SamSoarII.Shell.Models
                     ViewParent.LadderCanvas.RemoveVisual(visuals[2]);
             }
         }
+        protected void AddBrpo()
+        {
+            Core.Breakpoint.View = AllResourceManager.CreateBrpo(Core.Breakpoint);
+            UpdateBrpoLocation();
+            ViewParent.ViewParent.MainCanvas.Children.Add(Core.Breakpoint.View);
+            //mainCanvas.Background = (Core.BPCursor != null ? Brushes.Yellow : Brushes.Transparent);
+        }
+        protected void RemoveBrpo()
+        {
+            ViewParent.ViewParent.MainCanvas.Children.Remove(Core.Breakpoint.View);
+            Core.Breakpoint.View.Dispose();
+        }
+        protected void RenderBrpo()
+        {
+            if (core.LadderMode != LadderModes.Edit)
+            {
+                if (Core.BPEnable && Core.Breakpoint?.View == null) AddBrpo();
+                if (!Core.BPEnable && Core.Breakpoint?.View != null) RemoveBrpo();
+            }
+            else if (Core.Breakpoint?.View != null) RemoveBrpo();
+        }
         protected void RenderAll()
         {
             RenderUnit();
             if(!NoPropertyModel())
                 RenderProperty();
-            if (IsCommentMode) RenderComment();
+            RenderComment();
+            RenderBrpo();
         }
+
+        public void UpdateBrpoLocation()
+        {
+            if (Core.BPEnable && Core.Breakpoint?.View != null)
+            {
+                Canvas.SetLeft(core.Breakpoint.View, Global.GlobalSetting.LadderWidthUnit * Core.X);
+                Canvas.SetTop(core.Breakpoint.View, Core.Parent.UnitBaseTop + (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) * Core.Y);
+            }
+        }
+
         private bool NoPropertyModel()
         {
             return core.Type == LadderUnitModel.Types.HLINE || core.Type == LadderUnitModel.Types.VLINE
@@ -158,20 +190,21 @@ namespace SamSoarII.Shell.Models
                 if (_core != null)
                 {
                     _core.PropertyChanged -= OnCorePropertyChanged;
-                    _core.ViewPropertyChanged -= OnCorePropertyChanged;
                     _core.Changed -= OnCoreChanged;
+                    _core.Parent.ViewPropertyChanged -= OnCorePropertyChanged;
                     if (_core.Visual != null) _core.Visual = null;
                 }
                 this.core = value;
                 if (core != null)
                 {
                     core.PropertyChanged += OnCorePropertyChanged;
-                    core.ViewPropertyChanged += OnCorePropertyChanged;
                     core.Changed += OnCoreChanged;
+                    core.Parent.ViewPropertyChanged += OnCorePropertyChanged;
                     if (core.Visual != this) core.Visual = this;
                 }
             }
         }
+
         public SimulateManager MNGSimu { get { return Core?.IFParent?.MNGSimu; } }
         public CommunicationManager MNGComu { get { return Core?.IFParent?.MNGComu; } }
 
@@ -226,9 +259,7 @@ namespace SamSoarII.Shell.Models
                     RenderProperty();
                     break;
                 case RenderType.Comment:
-                    RenderUnit();
-                    RenderProperty();
-                    RenderComment();
+                    RenderAll();
                     break;
                 case RenderType.Opacity:
                     RenderAll();
@@ -270,6 +301,7 @@ namespace SamSoarII.Shell.Models
                 case "Y": Update(RenderType.All); break;
                 case "IsUsed": Update(RenderType.Opacity); break;
                 case "IsCommentMode": Update(RenderType.Comment); break;
+                case "UnitBaseTop": UpdateBrpoLocation(); break;
                 case "LadderMode":
                     if (oldladdermode != LadderModes.Edit)
                     {
@@ -308,7 +340,7 @@ namespace SamSoarII.Shell.Models
                     break;
                 case "BPEnable":
                 case "BPCursor":
-                    //RenderBrpoBase();
+                    RenderBrpo();
                     break;
             }
         }
@@ -341,10 +373,7 @@ namespace SamSoarII.Shell.Models
         private void OnSimulateAborted(object sender, RoutedEventArgs e)
         {
             if (MNGSimu != null)
-            {
-                while (MNGSimu.IsActive) Thread.Sleep(10);
                 Update(RenderType.State);
-            }
         }
 
         private void OnMonitorStarted(object sender, RoutedEventArgs e)
@@ -356,10 +385,7 @@ namespace SamSoarII.Shell.Models
         private void OnMonitorAborted(object sender, RoutedEventArgs e)
         {
             if(MNGComu != null)
-            {
-                while (MNGComu.IsActive) Thread.Sleep(10);
                 Update(RenderType.State);
-            }
         }
         #endregion
     }
@@ -370,6 +396,7 @@ namespace SamSoarII.Shell.Models
         Property,
         Comment,
         Opacity,
-        State
+        State,
+        Brpo
     }
 }

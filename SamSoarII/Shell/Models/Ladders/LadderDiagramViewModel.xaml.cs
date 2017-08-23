@@ -2171,7 +2171,7 @@ namespace SamSoarII.Shell.Models
         private void OnMainCanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
             MainCanvas.ContextMenu = LadderMode == LadderModes.Edit
-                ? (ContextMenu)cmEdit : (ContextMenu)cmMoni;
+                ? (ContextMenu)cmEdit : cmMoni;
             MainCanvas.CaptureMouse();
             object obj = GetObjectByMouse(e);
             if (obj is LadderUnitModel)

@@ -187,29 +187,6 @@ namespace SamSoarII.Shell.Models
                             HideComment(i);
                     }
                     break;
-                case UPDATE_BRPO:
-                    if (LadderMode == LadderModes.Edit)
-                    {
-                        if (Core.Breakpoint.View != null)
-                        {
-                            MainCanvas.Children.Remove(Core.Breakpoint.View);
-                            Core.Breakpoint.View.Dispose();
-                        }
-                        MainCanvas.Background = Brushes.Transparent;
-                        break;
-                    }
-                    if (Core.BPEnable && Core.Breakpoint.View == null)
-                    {
-                        Core.Breakpoint.View = AllResourceManager.CreateBrpo(Core.Breakpoint);
-                        MainCanvas.Children.Add(Core.Breakpoint.View);
-                    }
-                    if (!Core.BPEnable && Core.Breakpoint.View != null)
-                    {
-                        MainCanvas.Children.Remove(Core.Breakpoint.View);
-                        Core.Breakpoint.View.Dispose();
-                    }
-                    MainCanvas.Background = (Core.BPCursor != null ? Brushes.Yellow : Brushes.Transparent);
-                    break;
                 case UPDATE_PROPERTY:
                     Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {

@@ -135,29 +135,6 @@ namespace SamSoarII.Shell.Models
         {
             switch (flags)
             {
-                case UPDATE_BRPO:
-                    if (LadderMode == LadderModes.Edit)
-                    {
-                        if (Core.Breakpoint.View != null)
-                        {
-                            mainCanvas.Children.Remove(Core.Breakpoint.View);
-                            Core.Breakpoint.View.Dispose();
-                        }
-                        mainCanvas.Background = Brushes.Transparent;
-                        break;
-                    }
-                    if (Core.BPEnable && Core.Breakpoint.View == null)
-                    {
-                        Core.Breakpoint.View = AllResourceManager.CreateBrpo(Core.Breakpoint);
-                        mainCanvas.Children.Add(Core.Breakpoint.View);
-                    }
-                    if (!Core.BPEnable && Core.Breakpoint.View != null)
-                    {
-                        mainCanvas.Children.Remove(Core.Breakpoint.View);
-                        Core.Breakpoint.View.Dispose();
-                    }
-                    mainCanvas.Background = (Core.BPCursor != null ? Brushes.Yellow : Brushes.Transparent);
-                    break;
                 default:
                     base.Update(flags);
                     break;

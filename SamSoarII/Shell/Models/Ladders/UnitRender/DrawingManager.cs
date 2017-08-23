@@ -26,7 +26,7 @@ namespace SamSoarII.Shell.Models
         static string[] BIT_0_SHOWS = { "0", "OFF", "FALSE" };
         static string[] BIT_1_SHOWS = { "1", "ON", "TRUE" };
 
-        public static void DrawingUnit(DrawingContext context, IViewModel core)
+        public static void DrawingUnitShape(DrawingContext context, IViewModel core)
         {
             BaseVisualUnitModel model = core as BaseVisualUnitModel;
             int span = model.IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit;
@@ -55,6 +55,12 @@ namespace SamSoarII.Shell.Models
                     DrawingVLine(context, model, span);
                     break;
             }
+        }
+        public static void DrawingUnitBrush(DrawingContext context, IViewModel core)
+        {
+            BaseVisualUnitModel model = core as BaseVisualUnitModel;
+            int span = model.IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit;
+            
         }
 
         public static void DrawingUnitProperty(DrawingContext context, IViewModel core)
@@ -96,12 +102,12 @@ namespace SamSoarII.Shell.Models
                             case LadderModes.Simulate:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGSimu.IsActive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGSimu.IsAlive ? "???" : core.Core.Children[0].Value);
                                 break;
                             case LadderModes.Monitor:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGComu.IsActive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGComu.IsAlive ? "???" : core.Core.Children[0].Value);
                                 break;
                             default:
                                 break;
@@ -138,18 +144,18 @@ namespace SamSoarII.Shell.Models
                             case LadderModes.Simulate:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGSimu.IsActive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGSimu.IsAlive ? "???" : core.Core.Children[0].Value);
                                 text2 = string.Format("{0:s} = {1}",
                                         core.Core.Children[1].Text,
-                                        !core.MNGSimu.IsActive ? "???" : core.Core.Children[1].Value);
+                                        !core.MNGSimu.IsAlive ? "???" : core.Core.Children[1].Value);
                                 break;
                             case LadderModes.Monitor:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGComu.IsActive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGComu.IsAlive ? "???" : core.Core.Children[0].Value);
                                 text2 = string.Format("{0:s} = {1}",
                                         core.Core.Children[1].Text,
-                                        !core.MNGComu.IsActive ? "???" : core.Core.Children[1].Value);
+                                        !core.MNGComu.IsAlive ? "???" : core.Core.Children[1].Value);
                                 break;
                         }
                         DrawingText(context, core, new Point(0, 0), span, text1, null, FontWeights.Heavy, 0, 300, TextAlignment.Center, FontType.Property);
@@ -257,12 +263,12 @@ namespace SamSoarII.Shell.Models
                             case LadderModes.Simulate:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGSimu.IsActive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGSimu.IsAlive ? "???" : core.Core.Children[0].Value);
                                 break;
                             case LadderModes.Monitor:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGComu.IsActive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGComu.IsAlive ? "???" : core.Core.Children[0].Value);
                                 break;
                         }
                         DrawingText(context, core, new Point(0, 0), span, text1, null, FontWeights.Heavy, 0, 300, TextAlignment.Center, FontType.Property);
@@ -283,18 +289,18 @@ namespace SamSoarII.Shell.Models
                             case LadderModes.Simulate:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGSimu.IsActive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGSimu.IsAlive ? "???" : core.Core.Children[0].Value);
                                 text2 = string.Format("{0:s} = {1}",
                                         core.Core.Children[1].Text,
-                                        !core.MNGSimu.IsActive ? "???" : core.Core.Children[1].Value);
+                                        !core.MNGSimu.IsAlive ? "???" : core.Core.Children[1].Value);
                                 break;
                             case LadderModes.Monitor:
                                 text1 = string.Format("{0:s} = {1}",
                                         core.Core.Children[0].Text,
-                                        !core.MNGComu.IsActive ? "???" : core.Core.Children[0].Value);
+                                        !core.MNGComu.IsAlive ? "???" : core.Core.Children[0].Value);
                                 text2 = string.Format("{0:s} = {1}",
                                         core.Core.Children[1].Text,
-                                        !core.MNGComu.IsActive ? "???" : core.Core.Children[1].Value);
+                                        !core.MNGComu.IsAlive ? "???" : core.Core.Children[1].Value);
                                 break;
                         }
                         DrawingText(context, core, new Point(0, 0), span, text1, null, FontWeights.Heavy, 0, 300, TextAlignment.Center, FontType.Property);
@@ -317,6 +323,23 @@ namespace SamSoarII.Shell.Models
         }
         public static void DrawingOutputRectProperty(DrawingContext context, BaseVisualUnitModel core, int span)
         {
+            switch (core.Core.Type)
+            {
+                case LadderUnitModel.Types.TON:
+                case LadderUnitModel.Types.TONR:
+                case LadderUnitModel.Types.TOF:
+                    if (core.Core.Children[0].Base == ValueModel.Bases.TV)
+                    {
+                        int offset = core.Core.Children[0].Offset;
+                        if (offset >= 0 && offset < 200)
+                            DrawingText(context, core, new Point(25, 250), span, "100 ms", Arial, FontWeights.Normal, 25);
+                        else if (offset >= 200 && offset < 250)
+                            DrawingText(context, core, new Point(25, 250), span, "10 ms", Arial, FontWeights.Normal, 25);
+                        else
+                            DrawingText(context, core, new Point(25, 250), span, "1 ms", Arial, FontWeights.Normal, 25);
+                    }
+                    break;
+            }
             if (core.Core.IsUsed)
             {
                 ValueModel vmodel;
@@ -542,14 +565,6 @@ namespace SamSoarII.Shell.Models
             else DrawingText(context, core, new Point(35, 85), span, "EN", Arial, FontWeights.Normal, 25);
 
             DrawingText(context, core, new Point(25, 18), span, core.Core.InstName, Arial, FontWeights.Normal, 30);
-            switch (core.Core.Type)
-            {
-                case LadderUnitModel.Types.TON:
-                case LadderUnitModel.Types.TONR:
-                case LadderUnitModel.Types.TOF:
-                    DrawingText(context, core, new Point(25, 250), span, "100 ms", Arial, FontWeights.Normal, 25);
-                    break;
-            }
         }
         public static void DrawingSpecial(DrawingContext context, BaseVisualUnitModel core,int span)
         {
@@ -557,13 +572,13 @@ namespace SamSoarII.Shell.Models
             Point point2;
             switch (core.Core.Type)
             {
-                case Core.Models.LadderUnitModel.Types.MEP:
+                case LadderUnitModel.Types.MEP:
                     DrawingArrow(context, core, span, true);
                     break;
-                case Core.Models.LadderUnitModel.Types.MEF:
+                case LadderUnitModel.Types.MEF:
                     DrawingArrow(context, core, span, false);
                     break;
-                case Core.Models.LadderUnitModel.Types.INV:
+                case LadderUnitModel.Types.INV:
                     point1 = new Point(core.X * Global.GlobalSetting.LadderWidthUnit + 175, core.Y * span + 75);
                     point2 = new Point(core.X * Global.GlobalSetting.LadderWidthUnit + 125, core.Y * span + 125);
                     context.DrawLine(LinePen, point1, point2);

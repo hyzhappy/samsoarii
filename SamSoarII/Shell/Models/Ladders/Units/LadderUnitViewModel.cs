@@ -264,6 +264,26 @@ namespace SamSoarII.Shell.Models
                 case UPDATE_STYLE:
                     break;
                 case UPDATE_BRPO:
+                    if (LadderMode == LadderModes.Edit)
+                    {
+                        if (Core.Breakpoint.View != null)
+                        {
+                            ViewParent.ViewParent.MainCanvas.Children.Remove(Core.Breakpoint.View);
+                            Core.Breakpoint.View.Dispose();
+                        }
+                        break;
+                    }
+                    if (Core.BPEnable && Core.Breakpoint.View == null)
+                    {
+                        Core.Breakpoint.View = AllResourceManager.CreateBrpo(Core.Breakpoint);
+                        ViewParent.ViewParent.MainCanvas.Children.Add(Core.Breakpoint.View);
+                    }
+                    if (!Core.BPEnable && Core.Breakpoint.View != null)
+                    {
+                        ViewParent.ViewParent.MainCanvas.Children.Remove(Core.Breakpoint.View);
+                        Core.Breakpoint.View.Dispose();
+                    }
+                    //mainCanvas.Background = (Core.BPCursor != null ? Brushes.Yellow : Brushes.Transparent);
                     break;
                 case UPDATE_OPACITY:
                     Opacity = core.IsUsed ? 1.0 : 0.3;

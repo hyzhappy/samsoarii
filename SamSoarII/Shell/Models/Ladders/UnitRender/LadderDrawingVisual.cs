@@ -10,9 +10,10 @@ namespace SamSoarII.Shell.Models
 { 
     public enum VisualType
     {
-        Unit,
+        Shape,
         Property,
-        Comment
+        Comment,
+        Brush
     }
     public class LadderDrawingVisual : DrawingVisual, IRenderModel
     {
@@ -32,14 +33,17 @@ namespace SamSoarII.Shell.Models
                 {
                     switch (type)
                     {
-                        case VisualType.Unit:
-                            DrawingManager.DrawingUnit(context, core);
+                        case VisualType.Shape:
+                            DrawingManager.DrawingUnitShape(context, core);
                             break;
                         case VisualType.Property:
                             DrawingManager.DrawingUnitProperty(context, core);
                             break;
                         case VisualType.Comment:
                             DrawingManager.DrawingUnitCommnet(context, core);
+                            break;
+                        case VisualType.Brush:
+                            DrawingManager.DrawingUnitBrush(context, core);
                             break;
                     }
                 }
