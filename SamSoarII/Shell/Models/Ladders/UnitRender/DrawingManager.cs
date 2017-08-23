@@ -33,25 +33,25 @@ namespace SamSoarII.Shell.Models
             context.PushOpacity(model.Opacity);
             switch (model.Core.Shape)
             {
-                case Core.Models.LadderUnitModel.Shapes.Input:
+                case LadderUnitModel.Shapes.Input:
                     DrawingBaseInput(context, model, span);
                     DrawingInput(context, model, span);
                     break;
-                case Core.Models.LadderUnitModel.Shapes.Output:
+                case LadderUnitModel.Shapes.Output:
                     DrawingBaseOutput(context, model, span);
                     DrawingOutput(context, model, span);
                     break;
-                case Core.Models.LadderUnitModel.Shapes.OutputRect:
+                case LadderUnitModel.Shapes.OutputRect:
                     DrawingOutputRect(context, model, span);
                     break;
-                case Core.Models.LadderUnitModel.Shapes.Special:
+                case LadderUnitModel.Shapes.Special:
                     DrawingHLine(context, model, span);
                     DrawingSpecial(context, model, span);
                     break;
-                case Core.Models.LadderUnitModel.Shapes.HLine:
+                case LadderUnitModel.Shapes.HLine:
                     DrawingHLine(context, model, span);
                     break;
-                case Core.Models.LadderUnitModel.Shapes.VLine:
+                case LadderUnitModel.Shapes.VLine:
                     DrawingVLine(context, model, span);
                     break;
             }

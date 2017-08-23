@@ -24,11 +24,10 @@ namespace SamSoarII.Shell.Models
             this.core = core;
             this.type = type;
         }
-        public void Render()
+        public void Render(int flag)
         {
             Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () 
             {
-                isRendering = true;
                 using (DrawingContext context = RenderOpen())
                 {
                     switch (type)
@@ -47,13 +46,11 @@ namespace SamSoarII.Shell.Models
                             break;
                     }
                 }
-                isRendering = false;
             });
         }
-        bool isRendering = false;
-        public bool IsRendering { get { return isRendering;} }
         public void Dispose()
         {
+
         }
         #region Core
         private IViewModel core;

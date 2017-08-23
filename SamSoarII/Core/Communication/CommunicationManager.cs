@@ -501,7 +501,6 @@ namespace SamSoarII.Core.Communication
 
 
         #endregion
-        
 
         #region Arrange
         /*

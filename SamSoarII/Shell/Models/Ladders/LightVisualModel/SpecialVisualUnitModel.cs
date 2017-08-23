@@ -25,7 +25,14 @@ namespace SamSoarII.Shell.Models
 
         public SpecialVisualUnitModel(LadderUnitModel _core)
         {
-            if (_core != null) Recreate(_core);
+            if (_core != null)
+            {
+                Recreate(_core);
+                //添加形状
+                visuals.Add(VisualType.Shape, new LadderDrawingVisual[1]);
+                //添加仿真时的画刷(只有断点画刷)
+                visuals.Add(VisualType.Brush, new LadderDrawingVisual[1]);
+            }
         }
 
         public override void Dispose()

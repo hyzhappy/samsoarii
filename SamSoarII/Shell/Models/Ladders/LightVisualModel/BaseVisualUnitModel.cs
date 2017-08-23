@@ -60,65 +60,42 @@ namespace SamSoarII.Shell.Models
         private bool hasAdded = false;
         public bool HasAdded { get { return hasAdded; } set { hasAdded = value; } }
 
-        private Dictionary<VisualType, LadderDrawingVisual[]> visuals;
+        protected Dictionary<VisualType, LadderDrawingVisual[]> visuals;
         public Dictionary<VisualType, LadderDrawingVisual[]> Visuals { get { return visuals; } }
-
-        public bool IsRendering
+        
+        protected virtual void RenderUnitShape()
         {
-            get
-            {
-                bool ret = false;
-                for (int i = 0; i < visuals.Length; i++)
-                {
-                    if(visuals[i] != null)
-                        ret |= visuals[i].IsRendering;
-                }
-                return ret;
-            }
-        }
-        protected void RenderUnit()
-        {
-            if (visuals[0] == null)
-                visuals[0] = new LadderDrawingVisual(this, VisualType.Shape);
-            visuals[0].Render();
+            //if (visuals[0] == null)
+            //    visuals[0] = new LadderDrawingVisual(this, VisualType.Shape);
+            //visuals[0].Render();
         }
 
-        protected void RenderProperty()
+        protected virtual void RenderProperty(int index)
         {
-            if (visuals[1] == null)
-                visuals[1] = new LadderDrawingVisual(this, VisualType.Property);
-            visuals[1].Render();
+            //if (visuals[1] == null)
+            //    visuals[1] = new LadderDrawingVisual(this, VisualType.Property);
+            //visuals[1].Render();
         }
 
-        protected void RenderComment()
+        protected void RenderComment(int index)
         {
-            if(IsCommentMode)
-            {
-                if (visuals[2] == null)
-                    visuals[2] = new LadderDrawingVisual(this, VisualType.Comment);
-                visuals[2].Render();
-            }
-            else
-            {
-                for (int i = 0; i < visuals[VisualType.Comment].Length; i++)
-                {
-                    if (ViewParent.LadderCanvas.Contains(visuals[2]))
-                        ViewParent.LadderCanvas.RemoveVisual(visuals[2]);
-                }
-            }
+            //if(IsCommentMode)
+            //{
+            //    if (visuals[2] == null)
+            //        visuals[2] = new LadderDrawingVisual(this, VisualType.Comment);
+            //    visuals[2].Render();
+            //}
+            //else
+            //{
+            //    for (int i = 0; i < visuals[VisualType.Comment].Length; i++)
+            //    {
+            //        if (ViewParent.LadderCanvas.Contains(visuals[2]))
+            //            ViewParent.LadderCanvas.RemoveVisual(visuals[2]);
+            //    }
+            //}
         }
-        protected void AddBrpo()
-        {
-            Core.Breakpoint.View = AllResourceManager.CreateBrpo(Core.Breakpoint);
-            UpdateBrpoLocation();
-            ViewParent.ViewParent.MainCanvas.Children.Add(Core.Breakpoint.View);
-            //mainCanvas.Background = (Core.BPCursor != null ? Brushes.Yellow : Brushes.Transparent);
-        }
-        protected void RemoveBrpo()
-        {
-            ViewParent.ViewParent.MainCanvas.Children.Remove(Core.Breakpoint.View);
-            Core.Breakpoint.View.Dispose();
-        }
+
+        #region Brpo
         protected void RenderBrpo()
         {
             if (core.LadderMode != LadderModes.Edit)
@@ -127,23 +104,55 @@ namespace SamSoarII.Shell.Models
                 if (!Core.BPEnable && Core.Breakpoint?.View != null) RemoveBrpo();
             }
             else if (Core.Breakpoint?.View != null) RemoveBrpo();
+            RenderBrpoBrush();
         }
+        protected void AddBrpo()
+        {
+            Core.Breakpoint.View = AllResourceManager.CreateBrpo(Core.Breakpoint);
+            UpdateBrpoLocation();
+            ViewParent.ViewParent.MainCanvas.Children.Add(Core.Breakpoint.View);
+        }
+        protected void RemoveBrpo()
+        {
+            ViewParent.ViewParent.MainCanvas.Children.Remove(Core.Breakpoint.View);
+            Core.Breakpoint.View.Dispose();
+        }
+        #endregion
+        protected void RenderAllProperty()
+        {
+            for (int i = 0; i < visuals[VisualType.Property].Length; i++)
+                RenderProperty(i);
+        }
+        protected void RenderAllComment()
+        {
+
+        }
+        #region brush
+        protected void RenderAllBrush()
+        {
+            RenderBrpoBrush();
+            RenderOnOffBrush();
+        }
+        protected abstract void RenderBrpoBrush();
+        protected abstract void RenderOnOffBrush();
+        #endregion
+
         protected void RenderAll()
         {
-            RenderUnit();
-            if(!NoPropertyModel())
-                RenderProperty();
-            RenderComment();
+            RenderUnitShape();
+            RenderAllProperty();
+            RenderAllComment();
             RenderBrpo();
+            RenderOnOffBrush();
         }
 
         public void UpdateBrpoLocation()
         {
-            if (Core.BPEnable && Core.Breakpoint?.View != null)
-            {
-                Canvas.SetLeft(core.Breakpoint.View, Global.GlobalSetting.LadderWidthUnit * Core.X);
-                Canvas.SetTop(core.Breakpoint.View, Core.Parent.UnitBaseTop + (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) * Core.Y);
-            }
+            //if (Core.BPEnable && Core.Breakpoint?.View != null)
+            //{
+            //    Canvas.SetLeft(core.Breakpoint.View, Global.GlobalSetting.LadderWidthUnit * Core.X);
+            //    Canvas.SetTop(core.Breakpoint.View, Core.Parent.UnitBaseTop + (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) * Core.Y);
+            //}
         }
 
         private bool NoPropertyModel()
@@ -234,7 +243,6 @@ namespace SamSoarII.Shell.Models
                     if (vmodel.Store != null)
                         vmodel.Store.PropertyChanged -= OnValueStorePropertyChanged;
             }
-            while (IsRendering) Thread.Sleep(10);
             foreach (var kvPair in visuals)
             {
                 for (int i = 0; i < kvPair.Value.Length; i++)
@@ -257,7 +265,7 @@ namespace SamSoarII.Shell.Models
                     RenderAll();
                     break;
                 case RenderType.Unit:
-                    RenderUnit();
+                    RenderUnitShape();
                     break;
                 case RenderType.Property:
                     RenderProperty();
