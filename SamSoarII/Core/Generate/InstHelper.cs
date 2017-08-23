@@ -960,7 +960,7 @@ namespace SamSoarII.Core.Generate
                                 sw.Write("CI_FLOAT32_MUL({0:s},{1:s},{2:s},&{3:s});\n",
                                     cond, inst[1], inst[2], inst[3]);
                             else
-                                sw.Write("{3:s} = _mulf({1:s}, {2:s});\n",
+                                sw.Write("{3:s} = _mulff({1:s}, {2:s});\n",
                                     cond, inst[1], inst[2], inst[3]);
                             break;
                         case "DIVF":
@@ -968,7 +968,7 @@ namespace SamSoarII.Core.Generate
                                 sw.Write("CI_FLOAT32_DIV({0:s},{1:s},{2:s},&{3:s});\n",
                                     cond, inst[1], inst[2], inst[3]);
                             else
-                                sw.Write("{3:s} = _divf({1:s}, {2:s});\n",
+                                sw.Write("{3:s} = _divff({1:s}, {2:s});\n",
                                     cond, inst[1], inst[2], inst[3]);
                             break;
                         case "SIN":
@@ -1024,7 +1024,7 @@ namespace SamSoarII.Core.Generate
                                 sw.Write("CI_FLOAT32_POW({0:s},{1:s},{2:s},&{3:s});\n",
                                     cond, inst[1], inst[2], inst[3]);
                             else
-                                sw.Write("{3:s} = _pow({1:s}, {2:s}});\n",
+                                sw.Write("{3:s} = _pow({1:s}, {2:s});\n",
                                     cond, inst[1], inst[2], inst[3]);
                             break;
                         case "SQRT":

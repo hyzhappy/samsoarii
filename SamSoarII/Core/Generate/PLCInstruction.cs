@@ -193,7 +193,7 @@ namespace SamSoarII.Core.Generate
                  * 会影响对应标号的计数器值
                  * 所以标号需要记录到另外的参数
                  */
-                if (args[0].Length > 2 && args[0].Substring(0, 3).Equals("RST") && args[1][0] == 'C')
+                if (args[0].Length > 2 && args[0].Substring(0, 3).Equals("RST") && (args[1][0] == 'C' || args[1][0] == 'T'))
                     args = args.Concat(new string[] { prototype.Children[0].Text.Substring(1), prototype.Children[1].Store.Value.ToString() }).ToArray();
                 if (args[0].Length > 2 && args[0].Substring(0, 2).Equals("CT"))
                     args = args.Concat(new string[] { prototype.Children[0].Text.Substring(2) }).ToArray();
