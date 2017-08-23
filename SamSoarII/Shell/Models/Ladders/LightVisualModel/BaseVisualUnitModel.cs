@@ -62,38 +62,35 @@ namespace SamSoarII.Shell.Models
 
         protected Dictionary<VisualType, LadderDrawingVisual[]> visuals;
         public Dictionary<VisualType, LadderDrawingVisual[]> Visuals { get { return visuals; } }
-        
+        #endregion
+
+        #region Shape
         protected virtual void RenderUnitShape()
         {
-            //if (visuals[0] == null)
-            //    visuals[0] = new LadderDrawingVisual(this, VisualType.Shape);
-            //visuals[0].Render();
+            if (visuals[VisualType.Shape][0] == null)
+                visuals[VisualType.Shape][0] = new LadderDrawingVisual(this, VisualType.Shape);
+            //shape渲染不需要flag
+            visuals[VisualType.Shape][0].Render(-1);
         }
+        #endregion
 
-        protected virtual void RenderProperty(int index)
+        #region Property
+        protected void RenderAllProperty()
         {
-            //if (visuals[1] == null)
-            //    visuals[1] = new LadderDrawingVisual(this, VisualType.Property);
-            //visuals[1].Render();
+            for (int i = 0; i < visuals[VisualType.Property].Length; i++)
+                RenderProperty(i);
         }
+        protected abstract void RenderProperty(int index);
+        #endregion
 
-        protected void RenderComment(int index)
+        #region Comment
+        protected void RenderAllComment()
         {
-            //if(IsCommentMode)
-            //{
-            //    if (visuals[2] == null)
-            //        visuals[2] = new LadderDrawingVisual(this, VisualType.Comment);
-            //    visuals[2].Render();
-            //}
-            //else
-            //{
-            //    for (int i = 0; i < visuals[VisualType.Comment].Length; i++)
-            //    {
-            //        if (ViewParent.LadderCanvas.Contains(visuals[2]))
-            //            ViewParent.LadderCanvas.RemoveVisual(visuals[2]);
-            //    }
-            //}
+            for (int i = 0; i < visuals[VisualType.Comment].Length; i++)
+                RenderComment(i);
         }
+        protected abstract void RenderComment(int index);
+        #endregion
 
         #region Brpo
         protected void RenderBrpo()
@@ -117,16 +114,16 @@ namespace SamSoarII.Shell.Models
             ViewParent.ViewParent.MainCanvas.Children.Remove(Core.Breakpoint.View);
             Core.Breakpoint.View.Dispose();
         }
+        private void UpdateBrpoLocation()
+        {
+            if (Core.BPEnable && Core.Breakpoint?.View != null)
+            {
+                Canvas.SetLeft(core.Breakpoint.View, Global.GlobalSetting.LadderWidthUnit * Core.X);
+                Canvas.SetTop(core.Breakpoint.View, Core.Parent.UnitBaseTop + (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) * Core.Y);
+            }
+        }
         #endregion
-        protected void RenderAllProperty()
-        {
-            for (int i = 0; i < visuals[VisualType.Property].Length; i++)
-                RenderProperty(i);
-        }
-        protected void RenderAllComment()
-        {
-
-        }
+        
         #region brush
         protected void RenderAllBrush()
         {
@@ -137,6 +134,7 @@ namespace SamSoarII.Shell.Models
         protected abstract void RenderOnOffBrush();
         #endregion
 
+        #region All
         protected void RenderAll()
         {
             RenderUnitShape();
@@ -145,16 +143,6 @@ namespace SamSoarII.Shell.Models
             RenderBrpo();
             RenderOnOffBrush();
         }
-
-        public void UpdateBrpoLocation()
-        {
-            //if (Core.BPEnable && Core.Breakpoint?.View != null)
-            //{
-            //    Canvas.SetLeft(core.Breakpoint.View, Global.GlobalSetting.LadderWidthUnit * Core.X);
-            //    Canvas.SetTop(core.Breakpoint.View, Core.Parent.UnitBaseTop + (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) * Core.Y);
-            //}
-        }
-
         private bool NoPropertyModel()
         {
             return core.Type == LadderUnitModel.Types.HLINE || core.Type == LadderUnitModel.Types.VLINE
@@ -268,7 +256,7 @@ namespace SamSoarII.Shell.Models
                     RenderUnitShape();
                     break;
                 case RenderType.Property:
-                    RenderProperty();
+                    RenderAllProperty();
                     break;
                 case RenderType.Comment:
                     RenderAll();
@@ -277,7 +265,7 @@ namespace SamSoarII.Shell.Models
                     RenderAll();
                     break;
                 case RenderType.State:
-                    RenderProperty();
+                    RenderAllProperty();
                     break;
                 default:
                     break;
@@ -305,7 +293,7 @@ namespace SamSoarII.Shell.Models
             }
         }
 
-        protected virtual void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
