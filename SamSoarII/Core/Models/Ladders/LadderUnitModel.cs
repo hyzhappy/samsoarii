@@ -1006,16 +1006,6 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("CV", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "爬行速度", "Crew Velocity"),
                     new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}, null, "信号", "Signal"),
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output") });
-            Formats[(int)Types.ZRND] = new LadderUnitFormat(1614, "ZRND", Types.ZRND, Outlines.Pulse, Shapes.OutputRect,
-                Properties.Resources.ZRN_Inst,
-                "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
-                "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
-                new ValueFormat[] {
-                    new ValueFormat("DV", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "回归速度", "Back Velocity"),
-                    new ValueFormat("CV", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "爬行速度", "Crew Velocity"),
-                    new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}, null, "信号", "Signal"),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "输出", "Output"),
-                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向", "Direction") });
             Formats[(int)Types.DZRN] = new LadderUnitFormat(1615, "DZRN", Types.DZRN, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DZRN_Inst,
                 "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",

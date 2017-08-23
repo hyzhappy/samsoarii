@@ -178,18 +178,14 @@ namespace SamSoarII.Shell.Models
                     {
                         if (unit.Visual == null)
                         {
-                            //unit.View = LadderUnitViewModel.Create(unit);
-                            //if (unit.View.Parent != LadderCanvas)
-                            //{
-                            //    if (unit.View.Parent is Canvas)
-                            //        ((Canvas)(unit.View.Parent)).Children.Remove(unit.View);
-                            //    LadderCanvas.Children.Add(unit.View);
-                            //}
                             unit.Visual = BaseVisualUnitModel.Create(unit);
-                            foreach (var visual in unit.Visual.Visuals)
+                            foreach (var kvPair in unit.Visual.Visuals)
                             {
-                                if (visual != null)
-                                    LadderCanvas.AddVisual(visual);
+                                for (int i = 0; i < kvPair.Value.Length; i++)
+                                {
+                                    if (kvPair.Value[i] != null)
+                                        LadderCanvas.AddVisual(kvPair.Value[i]);
+                                }
                             }
                         }
                     }

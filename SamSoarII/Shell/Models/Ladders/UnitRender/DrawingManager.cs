@@ -56,11 +56,17 @@ namespace SamSoarII.Shell.Models
                     break;
             }
         }
-        public static void DrawingUnitBrush(DrawingContext context, IViewModel core)
+        public static void DrawingUnitBrpoBrush(DrawingContext context, IViewModel core)
         {
             BaseVisualUnitModel model = core as BaseVisualUnitModel;
             int span = model.IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit;
             
+        }
+        public static void DrawingUnitOnOffBrush(DrawingContext context, IViewModel core)
+        {
+            BaseVisualUnitModel model = core as BaseVisualUnitModel;
+            int span = model.IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit;
+
         }
 
         public static void DrawingUnitProperty(DrawingContext context, IViewModel core)

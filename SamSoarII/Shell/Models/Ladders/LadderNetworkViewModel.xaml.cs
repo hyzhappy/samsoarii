@@ -497,12 +497,14 @@ namespace SamSoarII.Shell.Models
                     {
                         foreach (LadderUnitModel unit in units)
                         {
-                            //if (unit.Visual != null) unit.Visual.Dispose();
                             unit.Visual = BaseVisualUnitModel.Create(unit);
-                            foreach (var visual in unit.Visual.Visuals)
+                            foreach (var kvPair in unit.Visual.Visuals)
                             {
-                                if(visual != null)
-                                    LadderCanvas.AddVisual(visual);
+                                for (int i = 0; i < kvPair.Value.Length; i++)
+                                {
+                                    if (kvPair.Value[i] != null)
+                                        LadderCanvas.AddVisual(kvPair.Value[i]);
+                                }
                             }
                         }
                     });

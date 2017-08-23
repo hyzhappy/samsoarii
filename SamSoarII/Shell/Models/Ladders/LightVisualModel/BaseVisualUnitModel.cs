@@ -54,10 +54,11 @@ namespace SamSoarII.Shell.Models
         #endregion
         public BaseVisualUnitModel()
         {
+            visuals = new Dictionary<VisualType, LadderDrawingVisual[]>();
             //添加形状
             visuals.Add(VisualType.Shape, new LadderDrawingVisual[1]);
             //添加仿真及监视时的画刷(第一个为至ON时的画刷，第二个为断点画刷)
-            visuals.Add(VisualType.Brush, new LadderDrawingVisual[2]);
+            visuals.Add(VisualType.BrpoBrush, new LadderDrawingVisual[2]);
             //元件及注释用一个DrawingVisual渲染
             visuals.Add(VisualType.Comment, new LadderDrawingVisual[1]);
             visuals.Add(VisualType.Property, new LadderDrawingVisual[1]);
@@ -85,14 +86,26 @@ namespace SamSoarII.Shell.Models
         #region Property
         protected void RenderProperty()
         {
-
+            if (visuals[VisualType.Property][0] == null)
+                visuals[VisualType.Property][0] = new LadderDrawingVisual(this, VisualType.Property);
+            visuals[VisualType.Property][0].Render();
         }
         #endregion
 
         #region Comment
         protected void RenderComment()
         {
-
+            if (IsCommentMode)
+            {
+                if (visuals[VisualType.Comment][0] == null)
+                    visuals[VisualType.Comment][0] = new LadderDrawingVisual(this, VisualType.Comment);
+                visuals[VisualType.Comment][0].Render();
+            }
+            else
+            {
+                if (ViewParent.LadderCanvas.Contains(visuals[VisualType.Comment][0]))
+                    ViewParent.LadderCanvas.RemoveVisual(visuals[VisualType.Comment][0]);
+            }
         }
         #endregion
 
@@ -134,8 +147,14 @@ namespace SamSoarII.Shell.Models
             RenderBrpoBrush();
             RenderOnOffBrush();
         }
-        protected abstract void RenderBrpoBrush();
-        protected abstract void RenderOnOffBrush();
+        protected void RenderBrpoBrush()
+        {
+
+        }
+        protected void RenderOnOffBrush()
+        {
+
+        }
         #endregion
 
         #region All

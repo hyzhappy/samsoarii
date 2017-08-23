@@ -13,7 +13,8 @@ namespace SamSoarII.Shell.Models
         Shape,
         Property,
         Comment,
-        Brush
+        BrpoBrush,
+        OnOffBrush
     }
     public class LadderDrawingVisual : DrawingVisual, IRenderModel
     {
@@ -41,8 +42,11 @@ namespace SamSoarII.Shell.Models
                         case VisualType.Comment:
                             DrawingManager.DrawingUnitCommnet(context, core);
                             break;
-                        case VisualType.Brush:
-                            DrawingManager.DrawingUnitBrush(context, core);
+                        case VisualType.BrpoBrush:
+                            DrawingManager.DrawingUnitBrpoBrush(context, core);
+                            break;
+                        case VisualType.OnOffBrush:
+                            DrawingManager.DrawingUnitOnOffBrush(context, core);
                             break;
                     }
                 }
