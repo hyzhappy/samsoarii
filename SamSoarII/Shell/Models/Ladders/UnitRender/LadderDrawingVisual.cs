@@ -24,7 +24,7 @@ namespace SamSoarII.Shell.Models
             this.core = core;
             this.type = type;
         }
-        public void Render(int flag)
+        public void Render()
         {
             Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () 
             {

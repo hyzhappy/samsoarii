@@ -8,6 +8,6 @@ namespace SamSoarII.Shell.Models
 {
     public interface IRenderModel : IDisposable
     {
-        void Render(int flag);
+        void Render();
     }
 }

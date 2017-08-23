@@ -54,6 +54,13 @@ namespace SamSoarII.Shell.Models
         #endregion
         public BaseVisualUnitModel()
         {
+            //添加形状
+            visuals.Add(VisualType.Shape, new LadderDrawingVisual[1]);
+            //添加仿真及监视时的画刷(第一个为至ON时的画刷，第二个为断点画刷)
+            visuals.Add(VisualType.Brush, new LadderDrawingVisual[2]);
+            //元件及注释用一个DrawingVisual渲染
+            visuals.Add(VisualType.Comment, new LadderDrawingVisual[1]);
+            visuals.Add(VisualType.Property, new LadderDrawingVisual[1]);
         }
 
         #region Visuals
@@ -62,6 +69,7 @@ namespace SamSoarII.Shell.Models
 
         protected Dictionary<VisualType, LadderDrawingVisual[]> visuals;
         public Dictionary<VisualType, LadderDrawingVisual[]> Visuals { get { return visuals; } }
+
         #endregion
 
         #region Shape
@@ -70,26 +78,22 @@ namespace SamSoarII.Shell.Models
             if (visuals[VisualType.Shape][0] == null)
                 visuals[VisualType.Shape][0] = new LadderDrawingVisual(this, VisualType.Shape);
             //shape渲染不需要flag
-            visuals[VisualType.Shape][0].Render(-1);
+            visuals[VisualType.Shape][0].Render();
         }
         #endregion
 
         #region Property
-        protected void RenderAllProperty()
+        protected void RenderProperty()
         {
-            for (int i = 0; i < visuals[VisualType.Property].Length; i++)
-                RenderProperty(i);
+
         }
-        protected abstract void RenderProperty(int index);
         #endregion
 
         #region Comment
-        protected void RenderAllComment()
+        protected void RenderComment()
         {
-            for (int i = 0; i < visuals[VisualType.Comment].Length; i++)
-                RenderComment(i);
+
         }
-        protected abstract void RenderComment(int index);
         #endregion
 
         #region Brpo
@@ -138,8 +142,8 @@ namespace SamSoarII.Shell.Models
         protected void RenderAll()
         {
             RenderUnitShape();
-            RenderAllProperty();
-            RenderAllComment();
+            RenderProperty();
+            RenderComment();
             RenderBrpo();
             RenderOnOffBrush();
         }
@@ -256,7 +260,7 @@ namespace SamSoarII.Shell.Models
                     RenderUnitShape();
                     break;
                 case RenderType.Property:
-                    RenderAllProperty();
+                    RenderProperty();
                     break;
                 case RenderType.Comment:
                     RenderAll();
@@ -265,7 +269,7 @@ namespace SamSoarII.Shell.Models
                     RenderAll();
                     break;
                 case RenderType.State:
-                    RenderAllProperty();
+                    RenderProperty();
                     break;
                 default:
                     break;

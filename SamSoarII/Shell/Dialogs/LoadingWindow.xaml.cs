@@ -173,6 +173,7 @@ namespace SamSoarII.Shell.Dialogs
 
         public void UpdateMessage(string message)
         {
+            if (_completed) return;
             loadWin.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate () 
             {
                 loadWin.Message = message;
