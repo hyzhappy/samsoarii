@@ -398,10 +398,13 @@ namespace SamSoarII.Core.Generate
         }
         private static void MoveVerticalLines(LadderLogicModule ladderLogicModule, List<LadderUnitModel> VLines)
         {
+            int[] counts = new int[VLines.Count];
+            //注意，这里必须先把同一层级的Count算出来，否则移动后将破坏图的连通性导致后面的count计算错误
+            for (int i = 0; i < counts.Length; i++)
+                counts[i] = GetCount(ladderLogicModule, VLines, VLines[i]);
+
             for (int i = 0; i < VLines.Count(); i++)
-            {
-                MoveVerticalLine(ladderLogicModule, VLines[i], GetCount(ladderLogicModule, VLines, VLines[i]));
-            }
+                MoveVerticalLine(ladderLogicModule, VLines[i], counts[i]);
         }
         private static void MoveVerticalLine(LadderLogicModule ladderLogicModule, LadderUnitModel vLine, int cnt)
         {
