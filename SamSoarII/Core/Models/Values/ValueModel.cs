@@ -231,7 +231,7 @@ namespace SamSoarII.Core.Models
                 if (Type != Types.STRING)
                     value = value.ToUpper();
                 Parse(value);
-                this.text = value;
+                //this.text = value;
             }
         }
 
@@ -455,7 +455,7 @@ namespace SamSoarII.Core.Models
                                 break;
                         }
                         if (!inrange) throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
-                        return;
+                        break;
                     }
                     if (bas == Bases.CV)
                     {
@@ -466,6 +466,50 @@ namespace SamSoarII.Core.Models
                     }
                     if (ofs < 0 || ofs >= device.GetRange(bas).Count)
                         throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                    break;
+            }
+            switch (bas)
+            {
+                case Bases.K:
+                    this.text = String.Format("K{0}", Store.Value);
+                    break;
+                case Bases.H:
+                    this.text = String.Format("H{0:X}", Store.Value);
+                    break;
+                case Bases.NULL:
+                    this.text = text;
+                    break;
+                default:
+                    if (IsWordBit)
+                    {
+                        if (ibs != Bases.V && ibs != Bases.Z)
+                            this.text = String.Format("{0:s}{1:d}.{2:X}",
+                                ValueModel.NameOfBases[(int)bas], ofs>>4, ofs&15);
+                        else
+                            this.text = String.Format("{0:s}{1:d}.{2:X}{3:s}{4:d}",
+                                ValueModel.NameOfBases[(int)bas], ofs>>4, ofs&15,
+                                ValueModel.NameOfBases[(int)ibs], ifs);
+                    }
+                    else if (IsBitWord || IsBitDoubleWord)
+                    {
+                        if (ibs != Bases.V && ibs != Bases.Z)
+                            this.text = String.Format("K{0:d}{1:s}{2:d}}",
+                                siz, ValueModel.NameOfBases[(int)bas], ofs);
+                        else
+                            this.text = String.Format("K{0:d}{1:s}{2:d}{3:s}{4:d}",
+                                siz, ValueModel.NameOfBases[(int)bas], ofs,
+                                ValueModel.NameOfBases[(int)ibs], ifs);
+                    }
+                    else
+                    {
+                        if (ibs != Bases.V && ibs != Bases.Z)
+                            this.text = String.Format("{0:s}{1:d}",
+                                ValueModel.NameOfBases[(int)bas], ofs);
+                        else
+                            this.text = String.Format("{0:s}{1:d}{2:s}{3:d}",
+                                ValueModel.NameOfBases[(int)bas], ofs,
+                                ValueModel.NameOfBases[(int)ibs], ifs);
+                    }
                     break;
             }
             //if (ValueManager != null) ValueManager.Add(this);

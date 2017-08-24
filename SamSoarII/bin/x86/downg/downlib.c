@@ -719,13 +719,13 @@ void _fmovd(int32_t source, int32_t* dest, int16_t size)
 void _imyset(int16_t Yn, int16_t size)
 {
 	while (--size >= 0)
-		OutputIm_Y(Yn + size, 1);
+		OutputIm_Y(Yn+size, YBit[Yn+size]=1);
 }
 
 void _imyrst(int16_t Yn, int16_t size)
 {
 	while (--size >= 0)
-		OutputIm_Y(Yn + size, 0);
+		OutputIm_Y(Yn+size, YBit[Yn+size]=0);
 }
 
 void _set_wbit(int16_t* src, int16_t loc, int16_t size, int16_t value)

@@ -419,8 +419,7 @@ namespace SamSoarII.Core.Simulate
         /// <returns></returns>
         [DllImport(@"simug\simu.dll", EntryPoint = "GetItrpID")]
         public static extern int GetItrpID();
-
-
+        
         #endregion
 
         /// <summary>
@@ -472,7 +471,7 @@ namespace SamSoarII.Core.Simulate
             }
             if (SimulateDllModel.IsDllAlive() > 0)
                 AfterRunLadder();
-            Thread.Sleep(20);
+            Thread.Sleep(10);
         }
 
         #endregion

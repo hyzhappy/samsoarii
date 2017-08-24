@@ -76,7 +76,7 @@ namespace SamSoarII.Core.Simulate
         {
             if (viewer.IsBPPause) viewer.Resume();
             viewer.Abort();
-            mngVBrpo.Abort();
+            //mngVBrpo.Abort();
             dllmodel.Abort();
         }
 
@@ -91,7 +91,7 @@ namespace SamSoarII.Core.Simulate
             if (viewer.IsBPPause) viewer.Resume();
             dllmodel.Start();
             viewer.Start();
-            mngVBrpo.Start();
+            //mngVBrpo.Start();
         }
         
         private void OnStarted(object sender, RoutedEventArgs e)

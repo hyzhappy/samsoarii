@@ -1055,8 +1055,8 @@ namespace SamSoarII.Shell.Models
             double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
             double scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
             if (SelectRectOwner == null) return;
-            double pointX = (LeftBorder + _selectRect.X * WidthUnit) * scaleX;
-            double pointY = (TopBorder + SelectRectOwner.UnitBaseTop + _selectRect.Y * HeightUnit) * scaleY;
+            double pointX = (LeftBorder + _selectRect.X * WidthUnit) * scaleX - MainScrollViewer.HorizontalOffset;
+            double pointY = (TopBorder + SelectRectOwner.UnitBaseTop + _selectRect.Y * HeightUnit) * scaleY - MainScrollViewer.VerticalOffset;
             if (pointX < 0)
                 MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + pointX);
             if (pointX + 2 * _selectRect.ActualWidth * scaleX > MainScrollViewer.ViewportWidth)
@@ -1722,13 +1722,16 @@ namespace SamSoarII.Shell.Models
                     isupper ^= ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift);
                     c = (char)((int)e.Key + (isupper ? 21 : 53));
                     string s = new string(c, 1);
+                    isnavigatable = false;
                     IFParent.ShowInstructionInputDialog(s, _selectRect.Core);
+                    isnavigatable = true;
                 }
             }
             if (LadderMode == LadderModes.Edit)
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
                 {
+                    isnavigatable = false;
                     switch (e.Key)
                     {
                         case Key.OemPlus: IFParent.ShowInstructionInputDialog("ADD", _selectRect.Core); break;
@@ -1752,9 +1755,11 @@ namespace SamSoarII.Shell.Models
                             SelectRectDown();
                             break;
                     }
+                    isnavigatable = true;
                 }
                 else if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.None)
                 {
+                    isnavigatable = false;
                     switch (e.Key)
                     {
                         case Key.F2: IFParent.ShowInstructionInputDialog("LD ", _selectRect.Core); break;
@@ -1766,6 +1771,7 @@ namespace SamSoarII.Shell.Models
                         case Key.F9: Core.QuickInsertElement(LadderUnitModel.Types.HLINE, _selectRect.Core); break;
                         case Key.F10: Core.QuickInsertElement(LadderUnitModel.Types.VLINE, _selectRect.Core); break;
                     }
+                    isnavigatable = true;
                 }
             }
             if (e.Key == Key.Enter)
@@ -1780,13 +1786,16 @@ namespace SamSoarII.Shell.Models
                         _selectRect.X = 0;
                         _selectRect.Y = SelectRectOwner.RowCount - 1;
                         NavigateByInstructionInputDialog();
+                        isnavigatable = true;
                         return;
                     }
                 }
+                isnavigatable = false;
                 if (_selectRect.Current != null && _selectRect.Current.Type != LadderUnitModel.Types.HLINE)
                     IFParent.ShowElementPropertyDialog(_selectRect.Current);
                 else
                     IFParent.ShowInstructionInputDialog(string.Empty, _selectRect.Core);
+                isnavigatable = true;
                 e.Handled = true;
             }
             if (e.Key == Key.Delete)
