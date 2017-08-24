@@ -27,6 +27,7 @@ using System.Windows.Threading;
 using System.Threading;
 using SamSoarII.Shell.Windows;
 using SamSoarII.Shell.Dialogs;
+using System.Windows.Controls.Primitives;
 
 namespace SamSoarII.Shell.Models
 {
@@ -2304,7 +2305,7 @@ namespace SamSoarII.Shell.Models
                 cmMoni.Core = null;
                 cmEdit.Core = net;
                 if (LadderMode != LadderModes.Edit || e.ChangedButton == MouseButton.Left)
-                    ReleaseSelect();   
+                    ReleaseSelect();
             }
             else
             {

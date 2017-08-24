@@ -416,6 +416,7 @@ namespace SamSoarII
             using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom,
                 CommunicationSettingDialogMode.DOWNLOAD))
             {
+                dialog.Owner = wndMain;
                 ComBaseSetting basesetting = dialog.GetBaseSetting();
                 //basesetting.DataLen = mngComu.ExecLen;
                 basesetting.SettingButtonClick += (sender1, e1) =>
@@ -486,55 +487,8 @@ namespace SamSoarII
                             LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                             return;
                         }
-
-                        handle = new LoadingWindowHandle(Properties.Resources.Project_Download);
-                        vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-                        {
-                            handle.Start();
-                            while (!handle.IsActive) Thread.Sleep(10);
-                            var ret = mngComu.DownloadExecute(handle);
-                            mngComu.AbortAll();
-                            handle.Abort();
-                            handle.Completed = true;
-                            switch (ret)
-                            {
-                                case DownloadError.None:
-                                    {
-                                        if (LocalizedMessageBox.Show(string.Format("{0},{1}", Properties.Resources.MessageBox_Download_Successd, Properties.Resources.PLC_Status_To_Run), LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information) == LocalizedMessageResult.Yes)
-                                        {
-                                            ICommunicationCommand command = new SwitchPLCStatusCommand(true);
-                                            if (!mngComu.CommunicationHandle(command))
-                                            {
-                                                switch (command.ErrorCode)
-                                                {
-                                                    case FGs_ERR_CODE.COMCODE_CANNOT_RUN:
-                                                        LocalizedMessageBox.Show(Properties.Resources.PLC_Status_Change_Error, LocalizedMessageIcon.Information);
-                                                        break;
-                                                    default:
-                                                        LocalizedMessageBox.Show(Properties.Resources.State_Failed, LocalizedMessageIcon.Information);
-                                                        break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    break;
-                                case DownloadError.CommuicationFailed:
-                                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Error);
-                                    break;
-                                case DownloadError.DownloadFailed:
-                                    LocalizedMessageBox.Show(Properties.Resources.Download_Fail, LocalizedMessageIcon.Error);
-                                    break;
-                                case DownloadError.DataSizeBeyond:
-                                    LocalizedMessageBox.Show(Properties.Resources.Download_Size_Beyond, LocalizedMessageIcon.Error);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        });
-                        while (!handle.Completed)
-                        {
-                            Thread.Sleep(10);
-                        }
+                        ProgressBarHandle phandle = new ProgressBarHandle(Properties.Resources.Project_Download, 0, 100,  mngComu.DownloadExecute, new BackgroundWorker(), vmdProj.Dispatcher);
+                        phandle.StartWork();
                     }
                     else
                     {
@@ -579,6 +533,7 @@ namespace SamSoarII
                 using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom,
                     CommunicationSettingDialogMode.UPLOAD))
                 {
+                    dialog.Owner = wndMain;
                     ComBaseSetting basesetting = dialog.GetBaseSetting();
                     basesetting.SettingButtonClick += (sender1, e1) =>
                     {
@@ -601,9 +556,6 @@ namespace SamSoarII
                             LocalizedMessageBox.Show(Properties.Resources.Please_Select_UpData, LocalizedMessageIcon.Information);
                             return;
                         }
-
-                        LoadingWindowHandle handle;
-
                         if (mngComu.CheckLink())
                         {
                             if (!mngComu.PasswordHandle(CommunicationType.Upload))
@@ -617,65 +569,8 @@ namespace SamSoarII
                                 ret = LocalizedMessageBox.Show(Properties.Resources.Config_Override, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
                             if (ret == LocalizedMessageResult.Yes)
                             {
-                                handle = new LoadingWindowHandle(Properties.Resources.Project_Upload);
-                                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-                                {
-                                    handle.Start();
-                                    while (!handle.IsActive) Thread.Sleep(10);
-                                    var ret1 = mngComu.UploadExecute(handle);
-                                    mngComu.AbortAll();
-                                    handle.Abort();
-                                    handle.Completed = true;
-                                    switch (ret1)
-                                    {
-                                        case UploadError.None:
-                                            LocalizedMessageBox.Show(Properties.Resources.MessageBox_Upload_Successd, LocalizedMessageIcon.Information);
-                                            break;
-                                        case UploadError.CommuicationFailed:
-                                            LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
-                                            break;
-                                        case UploadError.UploadFailed:
-                                            LocalizedMessageBox.Show(Properties.Resources.Upload_Fail, LocalizedMessageIcon.Information);
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                    if(ret1 == UploadError.None)
-                                    {
-                                        if (UploadHelper.IsUploadProgram)
-                                        {
-                                            if (HandleCurrentProj())
-                                            {
-                                                if (UploadHelper.LoadProjByUploadData(this, FileHelper.GetFullFileName("tempupfile", "7z")))
-                                                    LocalizedMessageBox.Show(Properties.Resources.Project_Load_Success, LocalizedMessageIcon.Information);
-                                                else
-                                                    LocalizedMessageBox.Show(Properties.Resources.Project_Load_Failed, LocalizedMessageIcon.Information);
-                                            }
-                                        }
-                                        if (UploadHelper.IsUploadSetting)
-                                        {
-                                            if (mdProj != null && mdProj.IsLoaded)
-                                            {
-                                                ret = LocalizedMessageBox.Show(Properties.Resources.Config_Applied, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
-                                                if (ret == LocalizedMessageResult.Yes)
-                                                    mdProj.PARAProj.Load(UploadHelper.ProjectParams);
-                                            }
-                                            else if (mdProj == null)
-                                            {
-                                                ret = LocalizedMessageBox.Show(Properties.Resources.Config_Applied_NewProj, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
-                                                if (ret == LocalizedMessageResult.Yes)
-                                                {
-                                                    CreateProject("New Project");
-                                                    mdProj.PARAProj.Load(UploadHelper.ProjectParams);
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-                                while (!handle.Completed)
-                                {
-                                    Thread.Sleep(10);
-                                }
+                                ProgressBarHandle handle = new ProgressBarHandle(Properties.Resources.Project_Upload, 0,100, mngComu.UploadExecute ,new BackgroundWorker(), Application.Current.Dispatcher);
+                                handle.StartWork();
                             }
                         }
                         else
@@ -1551,6 +1446,7 @@ namespace SamSoarII
             if (core.Parent == null) return;
             using (InstructionInputDialog dialog = new InstructionInputDialog(mdProj, initialString))
             {
+                dialog.Owner = wndMain;
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 dialog.EnsureButtonClick += (sender, e) =>
                 {
@@ -1576,6 +1472,7 @@ namespace SamSoarII
             {
                 using (PolylinePropertyDialog dialog = new PolylinePropertyDialog(((POLYLINEModel)current).Clone()))
                 {
+                    dialog.Owner = wndMain;
                     dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     dialog.Ensure += (sender, e) =>
                     {
@@ -1590,6 +1487,7 @@ namespace SamSoarII
             {
                 using (TBLDialog dialog = new TBLDialog(((TBLModel)current).Clone()))
                 {
+                    dialog.Owner = wndMain;
                     dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     dialog.Ensure += (sender, e) =>
                     {
@@ -1613,6 +1511,7 @@ namespace SamSoarII
             {
                 using (PIDDialog dialog = new PIDDialog(this, current))
                 {
+                    dialog.Owner = wndMain;
                     dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     dialog.Ensure += (sender, e) =>
                     {
@@ -1637,6 +1536,7 @@ namespace SamSoarII
             }
             using (ElementPropertyDialog dialog = new ElementPropertyDialog(current))
             {
+                dialog.Owner = wndMain;
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 dialog.Ensure += (sender, e) =>
                 {
@@ -1684,6 +1584,7 @@ namespace SamSoarII
             {
                 using (PolylinePropertyDialog dialog = new PolylinePropertyDialog(((POLYLINEModel)current).Clone()))
                 {
+                    dialog.Owner = wndMain;
                     dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     dialog.Ensure += (sender, e) =>
                     {
@@ -1699,6 +1600,7 @@ namespace SamSoarII
             {
                 using (TBLDialog dialog = new TBLDialog(((TBLModel)current).Clone()))
                 {
+                    dialog.Owner = wndMain;
                     dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     dialog.Ensure += (sender, e) =>
                     {
@@ -1723,6 +1625,7 @@ namespace SamSoarII
             {
                 using (PIDDialog dialog = new PIDDialog(this, current))
                 {
+                    dialog.Owner = wndMain;
                     dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     dialog.Ensure += (sender, e) =>
                     {
@@ -1763,6 +1666,7 @@ namespace SamSoarII
             }
             using (ElementPropertyDialog dialog = new ElementPropertyDialog(current))
             {
+                dialog.Owner = wndMain;
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 dialog.Ensure += (sender, e) =>
                 {
@@ -1802,6 +1706,7 @@ namespace SamSoarII
         {
             using (ProjectPropertyDialog dialog = new ProjectPropertyDialog(mdProj))
             {
+                dialog.Owner = wndMain;
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 dialog.EnsureButtonClick += (sender, e) =>
                 {
@@ -1835,6 +1740,7 @@ namespace SamSoarII
             {
                 using (ValueModifyDialog dialog = new ValueModifyDialog(args.First()))
                 {
+                    dialog.Owner = wndMain;
                     dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     dialog.ShowDialog();
                 }
@@ -1843,6 +1749,7 @@ namespace SamSoarII
             {
                 using (ValueMultiplyModifyDialog dialog = new ValueMultiplyModifyDialog(args))
                 {
+                    dialog.Owner = wndMain;
                     dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     dialog.SelectedIndex = id;
                     dialog.ShowDialog();
@@ -1873,6 +1780,7 @@ namespace SamSoarII
         {
             using (LadderNetworkCommentEditDialog dialog = new LadderNetworkCommentEditDialog(core))
             {
+                dialog.Owner = wndMain;
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 dialog.EnsureButtonClick += (sender1, e1) =>
                 {
@@ -1904,6 +1812,7 @@ namespace SamSoarII
             CommunicationParams paraCom = mdProj.PARAProj.PARACom;
             using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom))
             {
+                dialog.Owner = wndMain;
                 ComBaseSetting baseSetting = dialog.GetBaseSetting();
                 baseSetting.SettingButtonClick += (sender1, e1) =>
                 {
@@ -1935,6 +1844,7 @@ namespace SamSoarII
             {
                 dialog.EnsureButtonClick += (sender1, e1) =>
                 {
+                    dialog.Owner = wndMain;
                     GlobalSetting.IsOpenLSetting = true;
                     GlobalSetting.LanagArea = ischinese ? "zh-Hans" : "en";
                     dialog.Close();
@@ -1957,11 +1867,13 @@ namespace SamSoarII
         public void ShowFileConvertDialog()
         {
             FileConvertDialog dialog = new FileConvertDialog(this);
+            dialog.Owner = wndMain;
             dialog.ShowDialog();
         }
         public void ShowFileConvertDialog(string filename)
         {
             FileConvertDialog dialog = new FileConvertDialog(this,filename);
+            dialog.Owner = wndMain;
             dialog.ShowDialog();
         }
         #endregion

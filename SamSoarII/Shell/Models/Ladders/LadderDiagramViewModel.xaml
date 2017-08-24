@@ -79,9 +79,9 @@
                     </StackPanel>
                     <Grid x:Name="CanvasGrid" 
                           AllowDrop="True" Drop="OnMainCanvasDrop" DragLeave="OnMainCanvasDragLeave" DragOver="OnMainCanvasDragOver" 
-                          PreviewMouseMove="OnMainCanvasMouseMove" PreviewMouseDown="OnMainCanvasMouseDown" PreviewMouseUp="OnMainCanvasMouseUp">
-                        <Canvas x:Name="MainCanvas" Width="3600" HorizontalAlignment="Left" />
+                          MouseMove="OnMainCanvasMouseMove" MouseDown="OnMainCanvasMouseDown" MouseUp="OnMainCanvasMouseUp" Background="Transparent">
                         <local:LadderCanvas x:Name="LadderCanvas" Width="3600"/>
+                        <Canvas x:Name="MainCanvas" Width="3600" HorizontalAlignment="Left" />
                     </Grid>
                     <Line x:Name="line2" Stroke="Black" Margin="-25,-8,0,0" StrokeThickness="3" X1="0" Y1="0" X2="20" Y2="0"/>
                 </StackPanel>

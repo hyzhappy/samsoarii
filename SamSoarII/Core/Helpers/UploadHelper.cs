@@ -11,13 +11,6 @@ using System.Threading;
 
 namespace SamSoarII.Core.Helpers
 {
-    public enum UploadError
-    {
-        Cancel,
-        None,
-        CommuicationFailed,
-        UploadFailed
-    }
     public static class UploadHelper
     {
         #region option
@@ -71,7 +64,7 @@ namespace SamSoarII.Core.Helpers
         }
         #endregion
         
-        public static UploadError UploadExecute(CommunicationManager communManager, LoadingWindowHandle handle)
+        public static CommuicationError UploadExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
             //首先判断PLC运行状态,为Iap时需要切换到App模式
             if (communManager.PLCMessage.RunStatus == RunStatus.Iap)
@@ -82,87 +75,95 @@ namespace SamSoarII.Core.Helpers
                     Thread.Sleep(200);
                     time++;
                 }
-                if (time >= 5) return UploadError.UploadFailed;
+                if (time >= 5) return CommuicationError.UploadFailed;
             }
 
-            UploadError ret = UploadError.None;
+            CommuicationError ret = CommuicationError.None;
             if (IsUploadProgram)
             {
                 handle.UpdateMessage(Properties.Resources.Project_Upload);
                 //上载经过压缩的XML文件（包括程序，注释（可选），软元件表（可选）等）
-                ret = UploadProjExecute(communManager);
-                if (ret != UploadError.None)
+                ret = UploadProjExecute(communManager, handle,0, IsUploadSetting ? 80 : 100);
+                if (ret != CommuicationError.None)
                     return ret;
             }
-            //下载 Config
+            //上载 Config
             if (IsUploadSetting)
             {
                 handle.UpdateMessage(Properties.Resources.Config_Upload);
-                ret = UploadConfigExecute(communManager);
-                if (ret != UploadError.None)
+                ret = UploadConfigExecute(communManager, handle, IsUploadProgram ? 80 : 0, IsUploadProgram ? 20 : 100);
+                if (ret != CommuicationError.None)
                     return ret;
             }
             return ret;
         }
 
-        private static UploadError UploadProjExecute(CommunicationManager communManager)
+        private static CommuicationError UploadProjExecute(CommunicationManager communManager, ProgressBarHandle handle, int start, int span)
         {
-            return _UploadHandle(communManager, ref upProj, CommunicationDataDefine.CMD_UPLOAD_PRO);
+            return _UploadHandle(communManager, ref upProj, CommunicationDataDefine.CMD_UPLOAD_PRO, handle, start, span);
         }
 
-        private static UploadError UploadModbusTableExecute(CommunicationManager communManager)
+        private static CommuicationError UploadModbusTableExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
-            return _UploadHandle(communManager, ref upModbus, CommunicationDataDefine.CMD_UPLOAD_MODBUSTABLE);
+            return _UploadHandle(communManager, ref upModbus, CommunicationDataDefine.CMD_UPLOAD_MODBUSTABLE, handle, 0,0);
         }
 
-        private static UploadError UploadPlsTableExecute(CommunicationManager communManager)
+        private static CommuicationError UploadPlsTableExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
-            return _UploadHandle(communManager, ref upTable, CommunicationDataDefine.CMD_UPLOAD_PLSTABLE);
+            return _UploadHandle(communManager, ref upTable, CommunicationDataDefine.CMD_UPLOAD_PLSTABLE, handle, 0, 0);
         }
 
-        private static UploadError UploadPlsBlockExecute(CommunicationManager communManager)
+        private static CommuicationError UploadPlsBlockExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
-            return _UploadHandle(communManager, ref upBlock, CommunicationDataDefine.CMD_UPLOAD_PLSBLOCK);
+            return _UploadHandle(communManager, ref upBlock, CommunicationDataDefine.CMD_UPLOAD_PLSBLOCK, handle, 0, 0);
         }
 
-        private static UploadError UploadConfigExecute(CommunicationManager communManager)
+        private static CommuicationError UploadConfigExecute(CommunicationManager communManager, ProgressBarHandle handle, int start, int span)
         {
-            return _UploadHandle(communManager, ref upConfig, CommunicationDataDefine.CMD_UPLOAD_CONFIG);
+            return _UploadHandle(communManager, ref upConfig, CommunicationDataDefine.CMD_UPLOAD_CONFIG, handle, start, span);
         }
 
-        private static UploadError _UploadHandle(CommunicationManager communManager,ref List<byte> desdata,byte funcCode)
+        private static CommuicationError _UploadHandle(CommunicationManager communManager,ref List<byte> desdata,byte funcCode, ProgressBarHandle handle,int start,int span)
         {
             if (desdata == null) desdata = new List<byte>();
             else if (desdata.Count() > 0) desdata.Clear();
             int time = 0;//记录重传次数
+            handle.ReportProgress(start + 5, 0.01);
+            span -= 5;
             ICommunicationCommand command = new UploadTypeStart(funcCode);
             for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
             {
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 5) return UploadError.UploadFailed;
+            if (time >= 5) return CommuicationError.UploadFailed;
             Dictionary<int, byte[]> data = new Dictionary<int, byte[]>();
             if (command.RecvDataLen > 0)
             {
                 int len = command.RecvDataLen / communManager.UP_MAX_DATALEN;
                 int rem = command.RecvDataLen % communManager.UP_MAX_DATALEN;
                 if (rem > 0) len++;
+                if (communManager.MNGCurrent == communManager.MNGUSB)
+                    handle.ReportProgress(start + span, 0.01 * len);
+                else
+                    handle.ReportProgress(start + span, 0.02 * len * 115200 / communManager.MNGPort.BaudRate);
+                handle.ReportProgress(start + span, 0.01 * len);
                 for (int i = 0; i < len; i++)
                 {
                     command = new UploadTypeData(funcCode,i);
                     for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
-                    if (time >= 3) return UploadError.UploadFailed;
+                    if (time >= 3) return CommuicationError.UploadFailed;
                     data.Add(i,GetRetData(command.RetData));
                 }
             }
+            handle.ReportProgress(start + span + 5, 0.01);
             command = new UploadTypeOver(funcCode);
             for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
             {
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 5) return UploadError.UploadFailed;
+            if (time >= 5) return CommuicationError.UploadFailed;
             foreach (var kvPair in data)
                 desdata.AddRange(kvPair.Value);
             if(funcCode == CommunicationDataDefine.CMD_UPLOAD_PRO)
@@ -174,7 +175,7 @@ namespace SamSoarII.Core.Helpers
             }
             else if (funcCode == CommunicationDataDefine.CMD_UPLOAD_CONFIG)
                 LoadConfig();
-            return UploadError.None;
+            return CommuicationError.None;
         }
 
         private static byte[] GetRetData(byte[] data)
