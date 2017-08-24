@@ -455,6 +455,7 @@ namespace SamSoarII.Core.Models
                                 break;
                         }
                         if (!inrange) throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                        return;
                     }
                     if (bas == Bases.CV)
                     {
