@@ -573,8 +573,6 @@ namespace SamSoarII
                 {
                     if (vmdProj.LadderMode == LadderModes.Simulate) _CloseSimulate();
                     if (vmdProj.LadderMode == LadderModes.Monitor) _CloseMonitor();
-                    if (!CheckLadder(false)) return false;
-                    if (!CheckFuncBlock(false)) return false;
                 }
                 mngComu.IsEnable = true;
                 CommunicationParams paraCom = mngComu.PARACom;
