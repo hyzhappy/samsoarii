@@ -495,12 +495,14 @@ void callleave()
 
 void bpcycle(int32_t _bpaddr)
 {
-	FILE* f = fopen("log1.txt", "w");
-	fseek(f, 0, SEEK_END);
+	FILE* f = fopen("log.txt", "a");
+	fprintf(f, "================bpcycle bpaddr=%d b1=%x b2=%x b3=%x b4=%x===================\n", 
+		_bpaddr, *(((int*)(&f))+1), *(((int*)(&f))+2), *(((int*)(&f))+3), *(((int*)(&f))+4));
 	if (!bpenable) {fprintf(f, "bpenable=%d\n", bpenable); fclose(f); return;}
 	bpaddr = _bpaddr;
 	fprintf(f, "bpaddr=%d\n", bpaddr);
-	if (bpjump < 0 && (bpdatas[bpaddr>>5] & (1<<(bpaddr&31))))
+	fprintf(f, "index=%d data=%x\n", bpaddr>>5, bpdatas[bpaddr>>5]);
+	if (bpjump < 0 && ((bpdatas[bpaddr>>5] & (1<<(bpaddr&31))) != 0))
 	{
 		fprintf(f, "in a breakpoint!\n");
 		int32_t cpmsg = ((cpdatas[bpaddr>>3]>>((bpaddr&7)<<2)) & 7);
@@ -513,9 +515,10 @@ void bpcycle(int32_t _bpaddr)
 	fprintf(f, "bpjump=%d\n", bpjump);
 	fprintf(f, "bpmsg=%d\n", bpdatas[bpaddr>>5] & (1<<(bpaddr&31)));
 	fclose(f);
-	if (bpstep || bpcstep
-	|| bpjump < 0 && (bpdatas[bpaddr>>5] & (1<<(bpaddr&31)))
-	|| bpjump == bpaddr)
+	if ((bpstep != 0) 
+	|| (bpcstep != 0)
+	|| ((bpjump < 0) && ((bpdatas[bpaddr>>5] & (1<<(bpaddr&31))) != 0))
+	|| (bpjump == bpaddr))
 	{
 		bpjump = -1;
 		bpstep = 0;
@@ -523,15 +526,21 @@ void bpcycle(int32_t _bpaddr)
 		bppause = 1;
 		while (bpenable && bppause);
 	}
+	f = fopen("log.txt", "a");
+	fprintf(f, "resume from bpcycle bpaddr=%d\n", bpaddr);
+	fclose(f);
 }
 
 void cpcycle(int32_t _bpaddr, int8_t value)
 {
-	if (!bpenable || !cpenable) return;
+	FILE* f = fopen("log.txt", "a");
+	fprintf(f, "================cpcycle bpaddr=%d value=%d===================\n", _bpaddr, value);
+	if (!bpenable || !cpenable) {fprintf(f, "bpenable=%d cpenable=%d\n", bpenable, cpenable); fclose(f); return;}
 	bpaddr = _bpaddr;
 	int32_t cpmsg = ((cpdatas[bpaddr>>3]>>((bpaddr&7)<<2)) & 15);
 	int8_t prevalue = cpstack[cpsttop];
 	int32_t cond = 0;
+	fprintf(f, "cpmsg=%d prevalue=%d value=%d", cpmsg, prevalue, value);
 	if (cpmsg) cpstack[cpsttop++] = value;
 	if (cpmsg & 0x01)
 		cond |= (value == 0);
@@ -545,16 +554,21 @@ void cpcycle(int32_t _bpaddr, int8_t value)
 	{
 		itrpactive = 1;
 		itrpid = AssertItrps();
+		fprintf(f, "in itrpdll! itrpid=%d\n", itrpid);
 		//cond |= (itrpid > 0);
 		itrpactive = 0;
 	}
+	fprintf(f, "bpjump=%d\n", bpjump);
 	if (bpjump >= 0)
 		cond |= (bpjump == bpaddr);
+	fprintf(f, "cond=%d\n", cond);
+	fprintf(f, "count=%d maxcount=%d\n", bpcount[bpaddr], bpmaxcount[bpaddr]);
+	fclose(f);
 	if (itrpid > 0)
 	{
 		bpjump = -1;
 		bppause = 3;
-		while (bpenable && bppause);	
+		while (bpenable && bppause);
 		itrpid = 0;
 	}
 	else if (cond && ++bpcount[bpaddr] >= bpmaxcount[bpaddr])
@@ -562,7 +576,7 @@ void cpcycle(int32_t _bpaddr, int8_t value)
 		bpcount[bpaddr] = 0;
 		bpjump = -1;
 		bppause = 2;
-		while (bpenable && bppause);	
+		while (bpenable && bppause);
 	}
 }
 
@@ -607,14 +621,22 @@ EXPORT void SetBPPause(int8_t _bppause)
 
 EXPORT void MoveStep()
 {
+	FILE* f = fopen("log.txt", "a");
+	fprintf(f, "================MoveStep===================\n");
 	bpstep = 1;
 	bppause = 0;
+	fprintf(f, "bpstep=%d bppause=%d bpenable=%d bpaddr=%d\n", bpstep, bppause, bpenable, bpaddr);
+	fclose(f);
 }
 
 EXPORT void CallStep()
 {
+	FILE* f = fopen("log.txt", "a");
+	fprintf(f, "================CallStep===================\n");
 	bpcstep = 1;
 	bppause = 0;
+	fprintf(f, "bpcstep=%d bppause=%d bpenable=%d bpaddr=%d\n", bpcstep, bppause, bpenable, bpaddr);
+	fclose(f);
 }
 
 EXPORT void JumpTo(int32_t _bpaddr)
