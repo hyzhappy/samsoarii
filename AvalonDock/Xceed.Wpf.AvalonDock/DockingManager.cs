@@ -1636,7 +1636,7 @@ namespace Xceed.Wpf.AvalonDock
             Layout.CollectGarbage();
 
             UpdateLayout();
-            
+
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 if (startDrag)
