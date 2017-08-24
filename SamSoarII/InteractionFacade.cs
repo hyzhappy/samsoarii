@@ -873,6 +873,15 @@ namespace SamSoarII
         private bool _CheckLadder(LoadingWindowHandle handle, bool showreport)
         {
             bool result = false;
+            foreach (ModbusModel modbus in mdProj.Modbus.Children)
+                if (!modbus.IsValid)
+                {
+                    ShowMessage(
+                        String.Format("{0:s}{1:s}",
+                            modbus.Name, Properties.Resources.Message_Modbus_Table_Error)
+                        , handle, true, true);
+                    return false;
+                }
             List<ErrorMessage> errorMessages = new List<ErrorMessage>();
             foreach (LadderDiagramModel diagram in mdProj.Diagrams)
             {

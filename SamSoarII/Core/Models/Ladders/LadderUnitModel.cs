@@ -93,14 +93,14 @@ namespace SamSoarII.Core.Models
                 "Access it (ON) when the value of bit is 1, otherwise open it (OFF).",
                 vformats);
             Formats[(int)Types.LDI] = new LadderUnitFormat(201, "LDI", Types.LDI, Outlines.BitOperation, Shapes.Input,
-                Properties.Resources.MainWindow_Immediately_Open,
-                "当实际输入点（位）是1时，立即常开触点接通（ON），否则断开（OFF）。",
-                "Immediately access it (ON) when the value of bit is 1, otherwise open it (OFF).",
-                vformats);
-            Formats[(int)Types.LDIM] = new LadderUnitFormat(202, "LDIM", Types.LDIM, Outlines.BitOperation, Shapes.Input,
                 Properties.Resources.MainWindow_Normally_Closed,
                 "当位等于0时，常闭触点接通（ON），否则断开（OFF）。",
                 "Access it (ON) when the value of bit is 0, otherwise open it (OFF).",
+                vformats);
+            Formats[(int)Types.LDIM] = new LadderUnitFormat(202, "LDIM", Types.LDIM, Outlines.BitOperation, Shapes.Input,
+                Properties.Resources.MainWindow_Immediately_Open,
+                "当实际输入点（位）是1时，立即常开触点接通（ON），否则断开（OFF）。",
+                "Immediately access it (ON) when the value of bit is 1, otherwise open it (OFF).",
                 vformats);
             Formats[(int)Types.LDIIM] = new LadderUnitFormat(203, "LDIIM", Types.LDIIM, Outlines.BitOperation, Shapes.Input,
                 Properties.Resources.MainWindow_Immediately_Close,
