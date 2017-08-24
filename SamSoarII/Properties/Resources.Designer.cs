@@ -4093,7 +4093,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 It is only allowed to use a dexnumber address in X/Y registers.  的本地化字符串。
+        ///   查找类似 It is only allowed to use a dexnumber address in X/Y registers. 的本地化字符串。
         /// </summary>
         public static string Message_Not_DexNumber {
             get {

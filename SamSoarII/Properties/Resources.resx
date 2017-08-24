@@ -2409,4 +2409,7 @@
   <data name="PLC_Status" xml:space="preserve">
     <value>PLC Status</value>
   </data>
+  <data name="Message_Not_DexNumber" xml:space="preserve">
+    <value>It is only allowed to use a dexnumber address in X/Y registers.</value>
+  </data>
 </root>
