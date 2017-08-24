@@ -2231,6 +2231,7 @@ namespace SamSoarII.Shell.Models
                                  && _selectArea.Core.XStart == _selectArea.Core.XEnd
                                  && _selectArea.Core.YStart == _selectArea.Core.YEnd)
                                 {
+
                                     _selectRect.Core.Parent = core.Children[_selectArea.Core.NetOrigin];
                                     _selectRect.Core.X = _selectArea.Core.XStart;
                                     _selectRect.Core.Y = _selectArea.Core.YStart;

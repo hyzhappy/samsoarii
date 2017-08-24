@@ -2538,3 +2538,12 @@ void _zcpf_wbit(float ia, float il, float ir, int16_t* out, int16_t loc, int8_t*
 	_set_wbit(out+((loc+1)>>4), (loc+1)&15, en+((loc+1)>>4), 1, ia < il);
 	_set_wbit(out+((loc+2)>>4), (loc+2)&15, en+((loc+1)>>4), 1, ia > ir);
 }
+
+void reset_timer(uint16_t Tnum) {}
+void reset_counter(uint16_t ucCntIndex) {}
+
+void WritePulseCount(uint16_t Yn, int32_t SetValue) 
+{
+	*((int32_t*)(DWord+(8140+Yn*2))) = SetValue;
+}
+void UpdatePulseCount(uint16_t Yn) {}

@@ -139,8 +139,7 @@ namespace SamSoarII
 
         private MainTabControl tcMain;
         public MainTabControl TCMain { get { return this.tcMain; } }
-        public MainTabDiagramItem CurrentTabItem { get { return tcMain.SelectedItem is MainTabDiagramItem
-            ? (MainTabDiagramItem)(tcMain.SelectedItem) : null; } }
+        public BaseTabItem CurrentTabItem { get { return (BaseTabItem)(tcMain.SelectedItem); } }
         public LadderDiagramViewModel CurrentLadder { get { return tcMain.SelectedItem is MainTabDiagramItem
             ? ((MainTabDiagramItem)(tcMain.SelectedItem)).LDVModel : null; } }
         public FuncBlockViewModel CurrentFuncBlock { get { return tcMain.SelectedItem is FuncBlockViewModel

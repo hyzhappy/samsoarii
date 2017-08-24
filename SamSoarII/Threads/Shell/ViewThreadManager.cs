@@ -32,27 +32,34 @@ namespace SamSoarII.Threads
         private double oldscrolloffset;
         private double oldinstoffset;
         private double oldoutlineoffset;
-        private MainTabDiagramItem currenttab;
+        private BaseTabItem currenttab;
         private LadderDiagramViewModel current;
         protected override void Handle()
         {
-            if (current != parent.CurrentLadder)
+            if (currenttab != parent.CurrentTabItem)
             {
-                if (current != null)
-                {
+                if (currenttab != null)
                     currenttab.FloatOpened -= OnCurrentFloatOpened;
+                if (current != null)
+                { 
+                    currenttab.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                    {
+                        if (!currenttab.IsLoaded)
+                            currenttab.Loaded -= OnCurrentLoaded;
+                    });
                     if (!currenttab.IsFloat && parent.CurrentTabItem != null && !parent.CurrentTabItem.IsFloat)
                         DestoryCurrent();
                 }
                 currenttab = parent.CurrentTabItem;
                 current = parent.CurrentLadder;
+                if (currenttab != null)
+                    currenttab.FloatOpened += OnCurrentFloatOpened;
                 if (current != null)
                 {
-                    currenttab.FloatOpened += OnCurrentFloatOpened;
-                    current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                    currenttab.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
-                        if (!current.Scroll.IsLoaded)
-                            current.Loaded += OnCurrentLoaded;
+                        if (!currenttab.IsLoaded)
+                            currenttab.Loaded += OnCurrentLoaded;
                         else
                             GenerateCurrent();
                     });
@@ -144,27 +151,32 @@ namespace SamSoarII.Threads
 
         private void OnCurrentFloatOpened(object sender, RoutedEventArgs e)
         {
-            MainTabDiagramItem tab = (MainTabDiagramItem)sender;
+            BaseTabItem tab = (BaseTabItem)sender;
             tab.FloatOpened -= OnCurrentFloatOpened;
             tab.FloatClosed += OnCurrentFloatClosed;
             LayoutContent content = parent.TCMain.SelectedContent;
             if (content != null && content.Content is MainTabDiagramItem)
             {
-                tab = (MainTabDiagramItem)(content.Content);
-                Generate(tab.LDVModel);
+                MainTabDiagramItem diatab = (MainTabDiagramItem)(content.Content);
+                Generate(diatab.LDVModel);
             }
         }
 
         private void OnCurrentFloatClosed(object sender, RoutedEventArgs e)
         {
-            MainTabDiagramItem tab = (MainTabDiagramItem)sender;
+            BaseTabItem tab = (BaseTabItem)sender;
             tab.FloatClosed -= OnCurrentFloatClosed;
-            Destory(tab.LDVModel);
+            if (tab is MainTabDiagramItem)
+            {
+                MainTabDiagramItem diatab = (MainTabDiagramItem)tab;
+                Destory(diatab.LDVModel);
+            }
         }
 
         private void OnCurrentLoaded(object sender, RoutedEventArgs e)
         {
-            current.Loaded -= OnCurrentLoaded;
+            if (currenttab == null) return;
+            currenttab.Loaded -= OnCurrentLoaded;
             GenerateCurrent();
         }
 
