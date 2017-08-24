@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 using Xceed.Wpf.AvalonDock.Layout;
 
@@ -161,7 +162,7 @@ namespace SamSoarII.Threads
                 Generate(diatab.LDVModel);
             }
         }
-
+        
         private void OnCurrentFloatClosed(object sender, RoutedEventArgs e)
         {
             BaseTabItem tab = (BaseTabItem)sender;

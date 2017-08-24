@@ -15,5 +15,9 @@ namespace SamSoarII.Shell.Windows
         LayoutFloatingWindowControl FloatControl { get; set; }
         event RoutedEventHandler FloatOpened;
         event RoutedEventHandler FloatClosed;
+        bool IsViewThreadActive { get; }
+        void ViewThreadStart();
+        void ViewThreadPause();
+        event RoutedEventHandler ViewThreadPaused; 
     }
 }

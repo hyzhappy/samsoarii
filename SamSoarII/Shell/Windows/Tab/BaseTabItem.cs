@@ -60,6 +60,7 @@ namespace SamSoarII.Shell.Windows
         
         private MainTabControl tabcontrol;
         public MainTabControl TabControl { get { return this.tabcontrol; } }
+        public InteractionFacade IFParent { get { return TabControl?.IFParent; } }
         
         public void Invoke(TabAction action)
         {
@@ -97,14 +98,41 @@ namespace SamSoarII.Shell.Windows
         public event RoutedEventHandler FloatClosed = delegate { };
         private void OnFloatClosed(object sender, EventArgs e)
         {
-            FloatControl = null;
+            FloatControl = null; 
             Invoke(TabAction.CLOSE);
+        }
+
+        public bool IsViewThreadActive
+        {
+            get
+            {
+                return IFParent.ThMNGView.IsActive;
+            }
+        }
+
+        public void ViewThreadPause()
+        {
+            if (IsViewThreadActive)
+                IFParent.ThMNGView.Paused += OnViewThreadPaused;
+            IFParent.ThMNGView.Pause();
+        }
+
+        public void ViewThreadStart()
+        {
+            IFParent.ThMNGView.Start();
+        }
+
+        public event RoutedEventHandler ViewThreadPaused = delegate { };
+        private void OnViewThreadPaused(object sender, RoutedEventArgs e)
+        {
+            IFParent.ThMNGView.Paused -= OnViewThreadPaused;
+            ViewThreadPaused(this, new RoutedEventArgs());
         }
 
         #endregion
 
         #region Event Handler
-        
+
         private void OnActiveChanged(object sender, EventArgs e)
         {
             if (tabcontainer.IsActive) Invoke(TabAction.ACTIVE);

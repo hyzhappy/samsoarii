@@ -505,7 +505,7 @@ namespace SamSoarII.Shell.Models
             bool normalpriority = false;
             normalpriority |= ViewParent.SelectionStatus == SelectStatus.MultiSelecting;
             Dispatcher.Invoke(
-                normalpriority ? DispatcherPriority.Normal : DispatcherPriority.Background, 
+                normalpriority ? DispatcherPriority.Normal : DispatcherPriority.Normal, 
                 (ThreadStart)delegate ()
             {
                 foreach (LadderUnitModel unit in units)
