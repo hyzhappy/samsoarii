@@ -431,7 +431,7 @@ namespace SamSoarII.Core.Models
                     ifs = match.Groups.Count > 5 && match.Groups[5].Value.Length > 0 ? int.Parse(match.Groups[5].Value) : 0;
                     if (bas == Bases.X || bas == Bases.Y)
                     {
-                        int _ofs = ofs;
+                        int _ofs = 0;
                         int _mul = 1;
                         while (ofs > 0)
                         {
