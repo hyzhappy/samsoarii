@@ -64,13 +64,7 @@ namespace SamSoarII.Core.Models
 
         private CommunicationInterfaceParams paraCom232;
         public CommunicationInterfaceParams PARACom232 { get { return this.paraCom232; } }
-
-        private int stationnumber;
-        public int StationNumber
-        {
-            get { return this.stationnumber; }
-            set { this.stationnumber = value; PropertyChanged(this, new PropertyChangedEventArgs("StationNumber")); }
-        }
+        
         private CommunicationInterfaceParams paraCom485;
         public CommunicationInterfaceParams PARACom485 { get { return this.paraCom485; } }
 

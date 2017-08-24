@@ -309,6 +309,14 @@ namespace SamSoarII.Shell.Windows
             ResetMessage();
         }
 
+        public void Update(double ScanCycle, bool IsRun)
+        {
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                TB_Item1.Text = string.Format("{0}:{1:F1}ms", Properties.Resources.ScanCycle, ScanCycle);
+                TB_Item2.Text = string.Format("{0}:{1}", Properties.Resources.PLC_Status, IsRun ? "Run" : "Stop");
+            });
+        }
         #endregion
 
         #region Event Handler
@@ -322,7 +330,7 @@ namespace SamSoarII.Shell.Windows
                 MainTabControlEventArgs e1 = (MainTabControlEventArgs)e;
                 if (e1.Action == TabAction.ACTIVE)
                 {
-                    if (e1.Tab is MainTabDiagramItem)
+                    if (e1.Tab is MainTabDiagramItem && !ifparent.MNGComu.IsActive)
                         Update(((MainTabDiagramItem)(e1.Tab)).LDVModel);
                     if (e1.Tab is FuncBlockViewModel)
                         Update((FuncBlockViewModel)(e1.Tab));
@@ -360,12 +368,14 @@ namespace SamSoarII.Shell.Windows
 
         private void OnLadderSelectionAreaSelectionChanged(object sender, RoutedEventArgs e)
         {
-            Update((LadderDiagramViewModel)current);
+            if(!ifparent.MNGComu.IsActive)
+                Update((LadderDiagramViewModel)current);
         }
 
         private void OnLadderSelectionRectPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Update((LadderDiagramViewModel)current);
+            if (!ifparent.MNGComu.IsActive)
+                Update((LadderDiagramViewModel)current);
         }
         
         private void OnFuncBlockPropertyChanged(object sender, PropertyChangedEventArgs e)

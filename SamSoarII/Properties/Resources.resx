@@ -2403,7 +2403,10 @@
   <data name="TBL_Inst" xml:space="preserve">
     <value>Located output of multi-segments pulse</value>
   </data>
-  <data name="Message_Not_DexNumber" xml:space="preserve">
-    <value>It is only allowed to use a dexnumber address in X/Y registers. </value>
+  <data name="ScanCycle" xml:space="preserve">
+    <value>ScanCycle</value>
+  </data>
+  <data name="PLC_Status" xml:space="preserve">
+    <value>PLC Status</value>
   </data>
 </root>

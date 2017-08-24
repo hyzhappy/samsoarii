@@ -19,8 +19,18 @@ namespace SamSoarII.Core.Communication
 {
     public enum PortTypes { SerialPort, USB, NULL}
     public enum CommunicationType {Download,Upload,Monitor }
+    
     public class CommunicationManager : BaseThreadManager
     {
+        //监视时读取扫描周期以及PLC运行状态
+        public static GeneralReadCommand MonitorMessage;
+        static CommunicationManager()
+        {
+            MonitorMessage = new GeneralReadCommand();
+            MonitorMessage.Segments.Add(CommandHelper.GetAddrSegment(ValueModel.Bases.D, 8175, 1));
+            MonitorMessage.Segments.Add(CommandHelper.GetAddrSegment(ValueModel.Bases.M, 8175, 1));
+            MonitorMessage.InitializeCommandByElement();
+        }
         public CommunicationManager(InteractionFacade _ifParent) : base(false)
         {
             ifParent = _ifParent;
@@ -105,7 +115,8 @@ namespace SamSoarII.Core.Communication
                     PARACom.PropertyChanged += OnCommunicationParamsChanged;
                     OnCommunicationParamsChanged(this, null);
                     //visualtable = new MonitorTable(MDMoni, "Visual");
-                    readcmds = ValueManager.GetReadCommands().ToArray();
+                    readcmds = ValueManager.GetReadCommands();
+                    readcmds.Add(MonitorMessage);
                 }
                 else
                 {
@@ -184,7 +195,9 @@ namespace SamSoarII.Core.Communication
                     if (readindex >= readcmds.Count())
                     {
                         ValueManager.ReadMonitorData();
-                        readcmds = ValueManager.GetReadCommands().ToArray();
+                        readcmds = ValueManager.GetReadCommands();
+                        readcmds.Add(MonitorMessage);
+                        readcmds = readcmds.ToArray();
                         readindex = 0;
                     }
                     current = readcmds.Count() == 0 ? null : readcmds[readindex++];
@@ -273,12 +286,20 @@ namespace SamSoarII.Core.Communication
 
         private void Execute(ICommunicationCommand cmd)
         {
-            if (cmd.IsSuccess)
+            if (cmd is GeneralReadCommand)
             {
-                //cmd.UpdataValues();
-                if (cmd is GeneralReadCommand)
+                if (cmd != MonitorMessage)
                     ValueManager.AnalyzeReadCommand((GeneralReadCommand)cmd);
+                else AnalyzeReadCommand(MonitorMessage);
             }
+        }
+
+        private void AnalyzeReadCommand(GeneralReadCommand cmd)
+        {
+            List<byte[]> retdatas = cmd.GetRetData();
+            double ScanCycle = ValueConverter.GetValue(retdatas[0]) / 10.0;
+            bool IsRun = retdatas[1][0] == 1 ? true : false;
+            IFParent.BARStatus.Update(ScanCycle, IsRun);
         }
 
         private void OnThreadPaused(object sender, RoutedEventArgs e)
@@ -298,7 +319,7 @@ namespace SamSoarII.Core.Communication
         private void OnAbortedToAbortAll(object sender, RoutedEventArgs e)
         {
             Aborted -= OnAbortedToAbortAll;
-            Application.Current.Dispatcher.Invoke(
+            Application.Current?.Dispatcher.Invoke(
                 System.Windows.Threading.DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
                 mngCurrent.Abort();

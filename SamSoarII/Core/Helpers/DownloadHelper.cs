@@ -389,7 +389,7 @@ namespace SamSoarII.Core.Helpers
             dtConfig.Add((byte)com485params.StopBitIndex);
             dtConfig.Add((byte)com485params.CheckCodeIndex);
 
-            dtConfig.Add((byte)pparams.StationNumber);
+            dtConfig.Add((byte)com232params.StationNumber);
 
             Write(dtConfig,(short)usbparams.Timeout);
 
@@ -585,6 +585,8 @@ namespace SamSoarII.Core.Helpers
 
             for (int i = 0; i < 8; i++)
                 Write(dtConfig, emparams.ExpansionUnitParams[i]);
+
+            dtConfig.Add((byte)com485params.StationNumber);
 
             byte[] lens = ValueConverter.GetBytes((uint)dtConfig.Count,true);
             for (int i = 0; i < 4; i++)

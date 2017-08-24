@@ -759,7 +759,7 @@ namespace SamSoarII
                 LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                 return false;
             }
-                
+            
             mngComu.IsEnable = true;
             vmdProj.LadderMode = LadderModes.Monitor;
             return true;

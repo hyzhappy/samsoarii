@@ -21,7 +21,7 @@ namespace SamSoarII.Core.Models
             stopbitindex = 0;
             checkcodeindex = 0;
             bufferbitindex = 0;
-            StationNumber = 1;
+            stationNumber = 1;
             timeout = 20;
             comtype = ComTypes.Slave;
         }
@@ -81,10 +81,12 @@ namespace SamSoarII.Core.Models
             get { return this.bufferbitindex; }
             set { this.bufferbitindex = value; PropertyChanged(this, new PropertyChangedEventArgs("BufferBitIndex")); }
         }
+
+        private int stationNumber;
         public int StationNumber
         {
-            get { return parent.StationNumber; }
-            set { parent.StationNumber = value; }
+            get { return stationNumber; }
+            set { stationNumber = value; PropertyChanged(this, new PropertyChangedEventArgs("StationNumber")); }
         }
 
         private int timeout;
