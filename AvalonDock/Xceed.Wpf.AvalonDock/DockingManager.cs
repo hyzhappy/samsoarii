@@ -1519,11 +1519,30 @@ namespace Xceed.Wpf.AvalonDock
 
         #region Floating Windows
         List<LayoutFloatingWindowControl> _fwList = new List<LayoutFloatingWindowControl>();
-
+        LayoutContent _contentModel;
+        bool _startDrag;
+        private void OnViewThreadPausedToDragging(object sender, RoutedEventArgs e)
+        {
+            IFloat titem = (IFloat)sender;
+            titem.ViewThreadPaused -= OnViewThreadPausedToDragging;
+            StartDraggingFloatingWindowForContent(_contentModel, _startDrag);
+        }
         internal void StartDraggingFloatingWindowForContent(LayoutContent contentModel, bool startDrag = true)
         {
-            if (!contentModel.CanFloat)
-                return;
+            if (!contentModel.CanFloat) return;
+            IFloat titem = null;
+            if (contentModel.Content is IFloat)
+            { 
+                titem = (IFloat)(contentModel.Content);
+                titem.ViewThreadPause();
+                if (titem.IsViewThreadActive)
+                {
+                    _contentModel = contentModel;
+                    _startDrag = startDrag;
+                    titem.ViewThreadPaused += OnViewThreadPausedToDragging;
+                    return;
+                }
+            }
             var contentModelAsAnchorable = contentModel as LayoutAnchorable;
             if (contentModelAsAnchorable != null &&
                 contentModelAsAnchorable.IsAutoHidden)
@@ -1608,29 +1627,27 @@ namespace Xceed.Wpf.AvalonDock
                     Top = contentModel.FloatingTop
                 };
             }
-
-
+            
             //fwc.Owner = Window.GetWindow(this);
             //fwc.SetParentToMainWindowOf(this);
-
-
+            
             _fwList.Add(fwc);
 
             Layout.CollectGarbage();
 
             UpdateLayout();
             
-            if (contentModel.Content is IFloat)
-            {
-                IFloat titem = (IFloat)(contentModel.Content);
-                titem.FloatControl = fwc;
-            }
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 if (startDrag)
                     fwc.AttachDrag();
                 fwc.Show();
             }), DispatcherPriority.Send);
+            if (titem != null)
+            {
+                titem.FloatControl = fwc;
+                titem.ViewThreadStart();
+            }
         }
 
         internal void StartDraggingFloatingWindowForPane(LayoutAnchorablePane paneModel)

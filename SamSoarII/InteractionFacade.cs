@@ -139,8 +139,7 @@ namespace SamSoarII
 
         private MainTabControl tcMain;
         public MainTabControl TCMain { get { return this.tcMain; } }
-        public MainTabDiagramItem CurrentTabItem { get { return tcMain.SelectedItem is MainTabDiagramItem
-            ? (MainTabDiagramItem)(tcMain.SelectedItem) : null; } }
+        public BaseTabItem CurrentTabItem { get { return (BaseTabItem)(tcMain.SelectedItem); } }
         public LadderDiagramViewModel CurrentLadder { get { return tcMain.SelectedItem is MainTabDiagramItem
             ? ((MainTabDiagramItem)(tcMain.SelectedItem)).LDVModel : null; } }
         public FuncBlockViewModel CurrentFuncBlock { get { return tcMain.SelectedItem is FuncBlockViewModel
@@ -769,6 +768,15 @@ namespace SamSoarII
         private bool _CheckLadder(LoadingWindowHandle handle, bool showreport)
         {
             bool result = false;
+            foreach (ModbusModel modbus in mdProj.Modbus.Children)
+                if (!modbus.IsValid)
+                {
+                    ShowMessage(
+                        String.Format("{0:s}{1:s}",
+                            modbus.Name, Properties.Resources.Message_Modbus_Table_Error)
+                        , handle, true, true);
+                    return false;
+                }
             List<ErrorMessage> errorMessages = new List<ErrorMessage>();
             foreach (LadderDiagramModel diagram in mdProj.Diagrams)
             {

@@ -349,3 +349,8 @@ void _zcpw_wbit(int16_t ia, int16_t il, int16_t ir, int16_t* out, int16_t loc, i
 void _zcpd_wbit(int32_t ia, int32_t il, int32_t ir, int16_t* out, int16_t loc, int8_t* en);
 
 void _zcpf_wbit(float ia, float il, float ir, int16_t* out, int16_t loc, int8_t* en);
+
+void reset_timer(uint16_t Tnum);
+void reset_counter(uint16_t ucCntIndex);
+void WritePulseCount(uint16_t Yn, int32_t SetValue);
+void UpdatePulseCount(uint16_t Yn);

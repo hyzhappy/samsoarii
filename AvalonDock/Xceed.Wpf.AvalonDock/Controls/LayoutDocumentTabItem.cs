@@ -120,7 +120,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
         DocumentPaneTabPanel _parentDocumentTabPanel;
         bool _isMouseDown = false;
         Point _mouseDownPoint;
-
+        
         void UpdateDragDetails()
         {
             _parentDocumentTabPanel = this.FindLogicalAncestor<DocumentPaneTabPanel>();

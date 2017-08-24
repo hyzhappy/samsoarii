@@ -292,7 +292,7 @@ namespace SamSoarII.Core.Generate
                     break;
                 case "LDIM":
                     if (!simumode && inst[1][0] == 'X')
-                        sw.Write("_stack_{0:d} = ScanIm_X({1:s});\n", ++stackTop, inst[2]);
+                        sw.Write("_stack_{0:d} = {1:s} = ScanIm_X({2:s});\n", ++stackTop, inst[1], inst[2]);
                     else
                         sw.Write("_stack_{0:d} = {1:s};\n", ++stackTop, inst[1]);
                     break;
@@ -301,7 +301,7 @@ namespace SamSoarII.Core.Generate
                     break;
                 case "ANDIM":
                     if (!simumode && inst[1][0] == 'X')
-                        sw.Write("_stack_{0:d} = (_stack_{0:d}&&ScanIm_X({1:s}));\n", stackTop, inst[2]);
+                        sw.Write("_stack_{0:d} = (_stack_{0:d}&&({1:s}=ScanIm_X({2:s})));\n", stackTop, inst[1], inst[2]);
                     else
                         sw.Write("_stack_{0:d} = (_stack_{0:d}&&{1:s});\n", stackTop, inst[1]);
                     break;
@@ -310,7 +310,7 @@ namespace SamSoarII.Core.Generate
                     break;
                 case "ORIM":
                     if (!simumode && inst[1][0] == 'X')
-                        sw.Write("_stack_{0:d} = (_stack_{0:d}||ScanIm_X({1:s}));\n", stackTop, inst[2]);
+                        sw.Write("_stack_{0:d} = (_stack_{0:d}||({1:s}=ScanIm_X({2:s})));\n", stackTop, inst[1], inst[2]);
                     else
                         sw.Write("_stack_{0:d} = (_stack_{0:d}||{1:s});\n", stackTop, inst[1]);
                     break;
@@ -319,7 +319,7 @@ namespace SamSoarII.Core.Generate
                     break;
                 case "LDIIM":
                     if (!simumode && inst[1][0] == 'X')
-                        sw.Write("_stack_{0:d} = !ScanIm_X({1:s});\n", ++stackTop, inst[2]);
+                        sw.Write("_stack_{0:d} = !({1:s}=ScanIm_X({2:s}));\n", ++stackTop, inst[1], inst[2]);
                     else
                         sw.Write("_stack_{0:d} = !{1:s};\n", ++stackTop, inst[1]);
                     break;
@@ -328,7 +328,7 @@ namespace SamSoarII.Core.Generate
                     break;
                 case "ANDIIM":
                     if (!simumode && inst[1][0] == 'X')
-                        sw.Write("_stack_{0:d} = (_stack_{0:d}&&!ScanIm_X({1:s}));\n", stackTop, inst[2]);
+                        sw.Write("_stack_{0:d} = (_stack_{0:d}&&!({1:s}=ScanIm_X({2:s})));\n", stackTop, inst[1], inst[2]);
                     else
                         sw.Write("_stack_{0:d} = (_stack_{0:d}&&!{1:s});\n", stackTop, inst[1]);
                     break;
@@ -337,7 +337,7 @@ namespace SamSoarII.Core.Generate
                     break;
                 case "ORIIM":
                     if (!simumode && inst[1][0] == 'X')
-                        sw.Write("_stack_{0:d} = (_stack_{0:d}||!ScanIm_X({1:s}));\n", stackTop, inst[2]);
+                        sw.Write("_stack_{0:d} = (_stack_{0:d}||({1:s}=!ScanIm_X({2:s})));\n", stackTop, inst[1], inst[2]);
                     else
                         sw.Write("_stack_{0:d} = (_stack_{0:d}||!{1:s});\n", stackTop, inst[1]);
                     break;
@@ -492,7 +492,7 @@ namespace SamSoarII.Core.Generate
                     break;
                 case "OUTIM":
                     if (!simumode && inst[1][0] == 'Y')
-                        sw.Write("OutputIm_Y({0:s}, {1:s});\n", inst[2], cond);
+                        sw.Write("OutputIm_Y({0:s}, {1:s} = {2:s});\n", inst[2], inst[1], cond);
                     else
                         sw.Write("{0:s} = {1:s};\n", inst[1], cond);
                     break;
