@@ -2403,4 +2403,10 @@
   <data name="TBL_Inst" xml:space="preserve">
     <value>多端脉冲定位输出</value>
   </data>
+  <data name="ScanCycle" xml:space="preserve">
+    <value>扫描周期</value>
+  </data>
+  <data name="PLC_Status" xml:space="preserve">
+    <value>PLC状态</value>
+  </data>
 </root>

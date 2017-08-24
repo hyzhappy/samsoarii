@@ -5164,6 +5164,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 PLC Status 的本地化字符串。
+        /// </summary>
+        public static string PLC_Status {
+            get {
+                return ResourceManager.GetString("PLC_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 The current PLC DIP switch is in STOP and can not be set to RUN! 的本地化字符串。
         /// </summary>
         public static string PLC_Status_Change_Error {
@@ -5952,6 +5961,15 @@ namespace SamSoarII.Properties {
         public static string SB_Row {
             get {
                 return ResourceManager.GetString("SB_Row", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 ScanCycle 的本地化字符串。
+        /// </summary>
+        public static string ScanCycle {
+            get {
+                return ResourceManager.GetString("ScanCycle", resourceCulture);
             }
         }
         

@@ -247,7 +247,8 @@ namespace SamSoarII.Core.Helpers
                 com485params.StopBitIndex = upConfig[cursor++];
                 com485params.CheckCodeIndex = upConfig[cursor++];
 
-                projectParams.StationNumber = upConfig[cursor++];
+                com232params.StationNumber = upConfig[cursor++];
+
                 usbparams.Timeout = ValueConverter.GetValueByBytes(upConfig[cursor++], upConfig[cursor++]);
 
                 pwparams.PWENUpload = upConfig[cursor++] == 1;
@@ -465,6 +466,8 @@ namespace SamSoarII.Core.Helpers
 
                     cursor += 18;
                 }
+                if (cursor == upConfig.Count) return;
+                com485params.StationNumber = upConfig[cursor++];
             }
             catch (Exception)
             {
