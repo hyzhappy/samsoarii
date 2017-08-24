@@ -2186,7 +2186,7 @@ namespace SamSoarII.Shell.Models
         {
             CanvasGrid.ContextMenu = LadderMode == LadderModes.Edit
                 ? (ContextMenu)cmEdit : (ContextMenu)cmMoni;
-            //CanvasGrid.CaptureMouse();
+            CanvasGrid.CaptureMouse();
             object obj = GetObjectByMouse(e);
             if (obj is LadderUnitModel)
             {
@@ -2334,7 +2334,7 @@ namespace SamSoarII.Shell.Models
         
         private void OnMainCanvasMouseUp(object sender, MouseButtonEventArgs e)
         {
-            //CanvasGrid.ReleaseMouseCapture();
+            CanvasGrid.ReleaseMouseCapture();
             switch (SelectionStatus)
             {
                 case SelectStatus.SingleSelecting:
