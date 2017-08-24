@@ -32,7 +32,9 @@ namespace SamSoarII.Core.Models
 
         public readonly static MaxRangeDevice MaxRange;
         private readonly static int XOffset;
+        private readonly static int EXOffset;
         private readonly static int YOffset;
+        private readonly static int EYOffset;
         private readonly static int MOffset;
         private readonly static int SOffset;
         private readonly static int COffset;
@@ -50,8 +52,10 @@ namespace SamSoarII.Core.Models
         {
             MaxRange = new MaxRangeDevice();
             XOffset = 0;
-            YOffset = XOffset + MaxRange.XRange.Count;
-            MOffset = YOffset + MaxRange.YRange.Count;
+            EXOffset = XOffset + MaxRange.XRange.Count;
+            YOffset = EXOffset + MaxRange.EXRange.Count;
+            EYOffset = YOffset + MaxRange.YRange.Count;
+            MOffset = EYOffset + MaxRange.EYRange.Count;
             SOffset = MOffset + MaxRange.MRange.Count;
             COffset = SOffset + MaxRange.SRange.Count;
             TOffset = COffset + MaxRange.CRange.Count;
@@ -77,8 +81,12 @@ namespace SamSoarII.Core.Models
             bdwordmodel = new ValueModel(null, new ValueFormat("BDW", ValueModel.Types.DWORD, false, false, 0, new Regex[] { ValueModel.BitDoubleWordRegex }));
             for (int i = 0; i < MaxRange.XRange.Count; i++)
                 infos[i + XOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.X, i), i + XOffset);
+            for (int i = 0; i < MaxRange.EXRange.Count; i++)
+                infos[i + EXOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.X, (int)(i + MaxRange.EXRange.Start)), i + EXOffset);
             for (int i = 0; i < MaxRange.YRange.Count; i++)
                 infos[i + YOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.Y, i), i + YOffset);
+            for (int i = 0; i < MaxRange.EYRange.Count; i++)
+                infos[i + EYOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.Y, (int)(i + MaxRange.EYRange.Start)), i + EYOffset);
             for (int i = 0; i < MaxRange.MRange.Count; i++)
                 infos[i + MOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.M, i), i + MOffset);
             for (int i = 0; i < MaxRange.SRange.Count; i++)

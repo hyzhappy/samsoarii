@@ -2403,4 +2403,7 @@
   <data name="TBL_Inst" xml:space="preserve">
     <value>多端脉冲定位输出</value>
   </data>
+  <data name="Message_Not_DexNumber" xml:space="preserve">
+    <value>X/Y寄存器仅支持八进制地址。</value>
+  </data>
 </root>

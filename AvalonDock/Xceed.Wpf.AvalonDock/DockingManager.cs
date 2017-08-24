@@ -1522,12 +1522,6 @@ namespace Xceed.Wpf.AvalonDock
 
         internal void StartDraggingFloatingWindowForContent(LayoutContent contentModel, bool startDrag = true)
         {
-            IFloat titem = null;
-            if (contentModel.Content is IFloat)
-            {
-                titem = (IFloat)(contentModel.Content);
-                titem.IsFloat = true;
-            }
             if (!contentModel.CanFloat)
                 return;
             var contentModelAsAnchorable = contentModel as LayoutAnchorable;
@@ -1625,10 +1619,10 @@ namespace Xceed.Wpf.AvalonDock
             Layout.CollectGarbage();
 
             UpdateLayout();
-
-            if (titem != null)
+            
+            if (contentModel.Content is IFloat)
             {
-                titem.FloatWindow = fw;
+                IFloat titem = (IFloat)(contentModel.Content);
                 titem.FloatControl = fwc;
             }
             Dispatcher.BeginInvoke(new Action(() =>
