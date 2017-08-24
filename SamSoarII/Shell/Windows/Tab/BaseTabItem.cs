@@ -121,7 +121,7 @@ namespace SamSoarII.Shell.Windows
         {
             IFParent.ThMNGView.Start();
         }
-
+        
         public event RoutedEventHandler ViewThreadPaused = delegate { };
         private void OnViewThreadPaused(object sender, RoutedEventArgs e)
         {
