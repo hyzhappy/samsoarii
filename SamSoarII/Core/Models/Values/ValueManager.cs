@@ -219,14 +219,14 @@ namespace SamSoarII.Core.Models
 
         #region IList
 
-        public int GetOffset(ValueModel.Bases bas)
+        public int GetOffset(ValueModel vmodel)
         {
-            switch (bas)
+            switch (vmodel.Base)
             {
                 case ValueModel.Bases.X:
-                    return XOffset;
+                    return vmodel.IsExtend ? EXOffset - XDelta : XOffset;
                 case ValueModel.Bases.Y:
-                    return YOffset - XDelta;
+                    return vmodel.IsExtend ? EYOffset - XDelta - YDelta : YOffset - XDelta;
                 case ValueModel.Bases.M:
                     return MOffset - XDelta - YDelta;
                 case ValueModel.Bases.S:
@@ -257,8 +257,24 @@ namespace SamSoarII.Core.Models
         public int IndexOf(ValueModel value)
         {
             if (value.IsWordBit)
-                return value.Offset < Device.GetRange(value.Base).Count ? GetOffset(value.Base) + (value.Offset>>4) : -1;
-            return value.Offset < Device.GetRange(value.Base).Count ? GetOffset(value.Base) + value.Offset : -1;
+                return value.Offset < Device.GetRange(value.Base).Count ? GetOffset(value) + (value.Offset>>4) : -1;
+            switch (value.Base)
+            {
+                case ValueModel.Bases.X:
+                    if (Device.XRange.AssertValue((uint)(value.Offset)))
+                        return GetOffset(value) + value.Offset;
+                    if (Device.EXRange.AssertValue((uint)(value.Offset)))
+                        return (int)(GetOffset(value) + value.Offset - Device.EXRange.Start);
+                    return -1;
+                case ValueModel.Bases.Y:
+                    if (Device.YRange.AssertValue((uint)(value.Offset)))
+                        return GetOffset(value) + value.Offset;
+                    if (Device.EYRange.AssertValue((uint)(value.Offset)))
+                        return (int)(GetOffset(value) + value.Offset - Device.EYRange.Start);
+                    return -1;
+                default:
+                    return value.Offset < Device.GetRange(value.Base).Count ? GetOffset(value) + value.Offset : -1;
+            }
         }
 
         public int IndexOf(ValueInfo item)
@@ -349,9 +365,9 @@ namespace SamSoarII.Core.Models
         {
             get
             {
-                if (index < GetOffset(ValueModel.Bases.Y))
+                if (index < EXOffset - XDelta)
                     return infos[index];
-                if (index < GetOffset(ValueModel.Bases.M))
+                if (index < EYOffset - XDelta - YDelta)
                     return infos[index + XDelta];
                 return infos[index + XDelta + YDelta];
             }
@@ -487,16 +503,16 @@ namespace SamSoarII.Core.Models
         {
             if (GlobalSetting.IsCheckCoil)
             {
-                CheckCoil(GetOffset(ValueModel.Bases.Y), Device.YRange.Count);
-                CheckCoil(GetOffset(ValueModel.Bases.M), Device.MRange.Count);
-                CheckCoil(GetOffset(ValueModel.Bases.S), Device.SRange.Count);
+                CheckCoil(YOffset - XDelta, Device.YRange.Count + Device.EYRange.Count);
+                CheckCoil(MOffset - XDelta - YDelta, Device.MRange.Count);
+                CheckCoil(SOffset - XDelta - YDelta, Device.SRange.Count);
             }
             int bas = 0;
             int len = 0;
             //int maxlen = 0;
             if (GlobalSetting.IsCheckTimer)
             {
-                bas = GetOffset(ValueModel.Bases.TV);
+                bas = TVOffset - XDelta - YDelta;
                 len = Device.TVRange.Count;
                 for (int i = bas; i < bas + len; i++)
                 {
@@ -517,7 +533,7 @@ namespace SamSoarII.Core.Models
             }
             if (GlobalSetting.IsCheckCounter)
             {
-                bas = GetOffset(ValueModel.Bases.CV);
+                bas = CVOffset - XDelta - YDelta;
                 len = Device.CVRange.Count;
                 for (int i = bas; i < bas + len; i++)
                 {
