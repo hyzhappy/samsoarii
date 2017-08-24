@@ -442,7 +442,7 @@ namespace SamSoarII.Core.Simulate
             base.Before();
             //PLCDevice.Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             //SetBaseBit(device.BitNumber);
-            SetBPEnable(1);
+            SetBPEnable(0);
             SetClockRate(2);
             try
             {
@@ -453,12 +453,13 @@ namespace SamSoarII.Core.Simulate
                 Pause();
                 SimulateException(exce, new RoutedEventArgs());
             }
+            SetBPEnable(1);
         }
 
         [HandleProcessCorruptedStateExceptions]
         protected override void Handle()
         {
-            if (SimulateDllModel.IsDllAlive() > 0)
+            if (IsDllAlive() > 0)
                 BeforeRunLadder();
             try
             {
@@ -469,7 +470,7 @@ namespace SamSoarII.Core.Simulate
                 Pause();
                 SimulateException(exce, new RoutedEventArgs());
             }
-            if (SimulateDllModel.IsDllAlive() > 0)
+            if (IsDllAlive() > 0)
                 AfterRunLadder();
             Thread.Sleep(10);
         }
