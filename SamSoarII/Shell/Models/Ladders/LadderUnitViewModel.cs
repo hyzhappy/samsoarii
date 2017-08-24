@@ -615,14 +615,6 @@ namespace SamSoarII.Shell.Models
                 DrawingText(context, new Point(35, 85), HeightUnit, "EN", Arial, FontWeights.Normal, 25);
 
             DrawingText(context, new Point(25, 18), HeightUnit, core.InstName, Arial, FontWeights.Normal, 30);
-            switch (core.Type)
-            {
-                case LadderUnitModel.Types.TON:
-                case LadderUnitModel.Types.TONR:
-                case LadderUnitModel.Types.TOF:
-                    DrawingText(context, new Point(25, 250), HeightUnit, "100 ms", Arial, FontWeights.Normal, 25);
-                    break;
-            }
         }
         public void DrawingSpecial(DrawingContext context)
         {
@@ -710,6 +702,9 @@ namespace SamSoarII.Shell.Models
                     data = FontManager.GetComment();
                     face = new Typeface(data.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
                     formattedText = new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, face, data.FontSize, data.FontColor);
+                    formattedText.MaxTextWidth = 290;
+                    formattedText.MaxLineCount = 1;
+                    formattedText.Trimming = TextTrimming.CharacterEllipsis;
                     break;
                 case FontTypes.Property:
                     data = FontManager.GetLadder();
