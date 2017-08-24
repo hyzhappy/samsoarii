@@ -271,10 +271,12 @@ namespace SamSoarII.Shell.Models
             switch (Core.Shape)
             {
                 case LadderUnitModel.Shapes.Input:
+                    DrawingCenter(context);
                     DrawingBaseInput(context);
                     DrawingInput(context);
                     break;
                 case LadderUnitModel.Shapes.Output:
+                    DrawingCenter(context);
                     DrawingBaseOutput(context);
                     DrawingOutput(context);
                     break;
@@ -367,6 +369,90 @@ namespace SamSoarII.Shell.Models
         private static string[] BIT_1_SHOWS = { "1", "ON", "TRUE" };
 
         #region Framework
+
+        private void DrawingCenter(DrawingContext context)
+        {
+            if (core.LadderMode == LadderModes.Simulate && !MNGSimu.IsActive) return;
+            if (core.LadderMode == LadderModes.Monitor && !MNGComu.IsActive) return;
+            switch (core.LadderMode)
+            {
+                case LadderModes.Simulate:
+                case LadderModes.Monitor:
+                    bool value = false;
+                    Int32 w1 = 0, w2 = 0;
+                    Int64 d1 = 0, d2 = 0;
+                    double f1 = 0, f2 = 0;
+                    try
+                    {
+                        switch (core.Type)
+                        {
+                            case LadderUnitModel.Types.LD:
+                            case LadderUnitModel.Types.LDIM:
+                                value = BIT_1_SHOWS.Contains(core.Children[0].Value.ToString());
+                                break;
+                            case LadderUnitModel.Types.LDI:
+                            case LadderUnitModel.Types.LDIIM:
+                                value = BIT_0_SHOWS.Contains(core.Children[0].Value.ToString());
+                                break;
+                            case LadderUnitModel.Types.LDWEQ:
+                            case LadderUnitModel.Types.LDWNE:
+                            case LadderUnitModel.Types.LDWGE:
+                            case LadderUnitModel.Types.LDWLE:
+                            case LadderUnitModel.Types.LDWG:
+                            case LadderUnitModel.Types.LDWL:
+                                w1 = short.Parse(core.Children[0].Value.ToString());
+                                w2 = short.Parse(core.Children[1].Value.ToString());
+                                break;
+                            case LadderUnitModel.Types.LDDEQ:
+                            case LadderUnitModel.Types.LDDNE:
+                            case LadderUnitModel.Types.LDDGE:
+                            case LadderUnitModel.Types.LDDLE:
+                            case LadderUnitModel.Types.LDDG:
+                            case LadderUnitModel.Types.LDDL:
+                                d1 = int.Parse(core.Children[0].Value.ToString());
+                                d2 = int.Parse(core.Children[1].Value.ToString());
+                                break;
+                            case LadderUnitModel.Types.LDFEQ:
+                            case LadderUnitModel.Types.LDFNE:
+                            case LadderUnitModel.Types.LDFGE:
+                            case LadderUnitModel.Types.LDFLE:
+                            case LadderUnitModel.Types.LDFG:
+                            case LadderUnitModel.Types.LDFL:
+                                f1 = float.Parse(core.Children[0].Value.ToString());
+                                f2 = float.Parse(core.Children[1].Value.ToString());
+                                break;
+                        }
+                        switch (core.InstName)
+                        {
+                            case "LDWEQ": value = (w1 == w2); break;
+                            case "LDWNE": value = (w1 != w2); break;
+                            case "LDWLE": value = (w1 <= w2); break;
+                            case "LDWGE": value = (w1 >= w2); break;
+                            case "LDWL": value = (w1 < w2); break;
+                            case "LDWG": value = (w1 > w2); break;
+                            case "LDDEQ": value = (d1 == d2); break;
+                            case "LDDNE": value = (d1 != d2); break;
+                            case "LDDLE": value = (d1 <= d2); break;
+                            case "LDDGE": value = (d1 >= d2); break;
+                            case "LDDL": value = (d1 < d2); break;
+                            case "LDDG": value = (d1 > d2); break;
+                            case "LDFEQ": value = (f1 == f2); break;
+                            case "LDFNE": value = (f1 != f2); break;
+                            case "LDFLE": value = (f1 <= f2); break;
+                            case "LDFGE": value = (f1 >= f2); break;
+                            case "LDFL": value = (f1 < f2); break;
+                            case "LDFG": value = (f1 > f2); break;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        context.DrawRectangle(Brushes.Red, Transparent, new Rect(new Point(ActualX + 100, ActualY + 50), new Size(100, 100)));
+                        return;
+                    }
+                    context.DrawRectangle(value ? Brushes.Green : Brushes.Transparent, Transparent, new Rect(new Point(ActualX + 100, ActualY + 50), new Size(100, 100)));
+                    break;
+            }
+        }
 
         public void DrawingBaseInput(DrawingContext context)
         {
@@ -723,84 +809,6 @@ namespace SamSoarII.Shell.Models
                         DrawingText(context, new Point(0, 0), HeightUnit, text1, null, FontWeights.Heavy, 0, 300, TextAlignment.Center, FontTypes.Property);
                         DrawingText(context, new Point(0, 150), HeightUnit, text2, null, FontWeights.Heavy, 0, 300, TextAlignment.Center, FontTypes.Property);
                     }
-                    break;
-            }
-            switch (core.LadderMode)
-            {
-                case LadderModes.Simulate:
-                case LadderModes.Monitor:
-                    bool value = false;
-                    Int32 w1 = 0, w2 = 0;
-                    Int64 d1 = 0, d2 = 0;
-                    double f1 = 0, f2 = 0;
-                    try
-                    {
-                        switch (core.Type)
-                        {
-                            case LadderUnitModel.Types.LD:
-                            case LadderUnitModel.Types.LDIM:
-                                value = BIT_1_SHOWS.Contains(core.Children[0].Value.ToString());
-                                break;
-                            case LadderUnitModel.Types.LDI:
-                            case LadderUnitModel.Types.LDIIM:
-                                value = BIT_0_SHOWS.Contains(core.Children[0].Value.ToString());
-                                break;
-                            case LadderUnitModel.Types.LDWEQ:
-                            case LadderUnitModel.Types.LDWNE:
-                            case LadderUnitModel.Types.LDWGE:
-                            case LadderUnitModel.Types.LDWLE:
-                            case LadderUnitModel.Types.LDWG:
-                            case LadderUnitModel.Types.LDWL:
-                                w1 = short.Parse(core.Children[0].Value.ToString());
-                                w2 = short.Parse(core.Children[1].Value.ToString());
-                                break;
-                            case LadderUnitModel.Types.LDDEQ:
-                            case LadderUnitModel.Types.LDDNE:
-                            case LadderUnitModel.Types.LDDGE:
-                            case LadderUnitModel.Types.LDDLE:
-                            case LadderUnitModel.Types.LDDG:
-                            case LadderUnitModel.Types.LDDL:
-                                d1 = int.Parse(core.Children[0].Value.ToString());
-                                d2 = int.Parse(core.Children[1].Value.ToString());
-                                break;
-                            case LadderUnitModel.Types.LDFEQ:
-                            case LadderUnitModel.Types.LDFNE:
-                            case LadderUnitModel.Types.LDFGE:
-                            case LadderUnitModel.Types.LDFLE:
-                            case LadderUnitModel.Types.LDFG:
-                            case LadderUnitModel.Types.LDFL:
-                                f1 = float.Parse(core.Children[0].Value.ToString());
-                                f2 = float.Parse(core.Children[1].Value.ToString());
-                                break;
-                        }
-                        switch (core.InstName)
-                        {
-                            case "LDWEQ": value = (w1 == w2); break;
-                            case "LDWNE": value = (w1 != w2); break;
-                            case "LDWLE": value = (w1 <= w2); break;
-                            case "LDWGE": value = (w1 >= w2); break;
-                            case "LDWL": value = (w1 < w2); break;
-                            case "LDWG": value = (w1 > w2); break;
-                            case "LDDEQ": value = (d1 == d2); break;
-                            case "LDDNE": value = (d1 != d2); break;
-                            case "LDDLE": value = (d1 <= d2); break;
-                            case "LDDGE": value = (d1 >= d2); break;
-                            case "LDDL": value = (d1 < d2); break;
-                            case "LDDG": value = (d1 > d2); break;
-                            case "LDFEQ": value = (f1 == f2); break;
-                            case "LDFNE": value = (f1 != f2); break;
-                            case "LDFLE": value = (f1 <= f2); break;
-                            case "LDFGE": value = (f1 >= f2); break;
-                            case "LDFL": value = (f1 < f2); break;
-                            case "LDFG": value = (f1 > f2); break;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        context.DrawRectangle(Brushes.Red, Transparent, new Rect(new Point(ActualX + 100, ActualY + 50), new Size(100, 100)));
-                        return;
-                    }
-                    context.DrawRectangle(value ? Brushes.Green : Brushes.Transparent, Transparent, new Rect(new Point(ActualX + 100, ActualY + 50), new Size(100, 100)));
                     break;
             }
         }

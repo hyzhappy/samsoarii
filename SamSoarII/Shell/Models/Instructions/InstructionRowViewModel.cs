@@ -92,7 +92,7 @@ namespace SamSoarII.Shell.Models
         {
             using (DrawingContext context = RenderOpen())
             {
-                if (core == null) return;
+                if (core?.Inst == null) return;
                 LadderUnitModel unit = core.Inst.ProtoType;
                 Brush background;
                 Brush foreground;

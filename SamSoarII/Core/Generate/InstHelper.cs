@@ -792,7 +792,7 @@ namespace SamSoarII.Core.Generate
                         case "ST": sw.Write("{0:s} = 1;\n", inst[1]); break;
                         // 数据格式的转化指令
                         case "WTOD": sw.Write("{1:s} = _WORD_to_DWORD({0:s});\n", inst[1], inst[2]); break;
-                        case "BDWTOD": sw.Write("{1:s} _WORD_to_DWORD({0:s}));\n", inst[1], inst[2]); break;
+                        case "BDWTOD": case "PCWTOD": sw.Write("{1:s} _WORD_to_DWORD({0:s}));\n", inst[1], inst[2]); break;
                         case "DTOW": sw.Write("{1:s} = _DWORD_to_WORD({0:s});\n", inst[1], inst[2]); break;
                         case "BWDTOW": sw.Write("{1:s} _DWORD_to_WORD({0:s}));\n", inst[1], inst[2]); break;
                         case "DTOF": sw.Write("{1:s} = _DWORD_to_FLOAT({0:s});\n", inst[1], inst[2]); break;
@@ -801,21 +801,21 @@ namespace SamSoarII.Core.Generate
                         case "BCD": sw.Write("{1:s} = _WORD_to_BCD({0:s});\n", inst[1], inst[2]); break;
                         case "BWBCD": sw.Write("{1:s} _WORD_to_BCD({0:s}));\n", inst[1], inst[2]); break;
                         case "ROUND": sw.Write("{1:s} = _FLOAT_to_ROUND({0:s});\n", inst[1], inst[2]); break;
-                        case "BDROUND": sw.Write("{1:s} _FLOAT_to_ROUND({0:s}));\n", inst[1], inst[2]); break;
+                        case "BDROUND": case "PCROUND": sw.Write("{1:s} _FLOAT_to_ROUND({0:s}));\n", inst[1], inst[2]); break;
                         case "TRUNC": sw.Write("{1:s} = _FLOAT_to_TRUNC({0:s});\n", inst[1], inst[2]); break;
-                        case "BDTRUNC": sw.Write("{1:s} _FLOAT_to_TRUNC({0:s}));\n", inst[1], inst[2]); break;
+                        case "BDTRUNC": case "PCTRUNC": sw.Write("{1:s} _FLOAT_to_TRUNC({0:s}));\n", inst[1], inst[2]); break;
                         // 位运算指令
                         case "INVW": case "INVD": sw.Write("{1:s} = ~{0:s};\n", inst[1], inst[2]); break;
-                        case "BWINVW": case "BDINVD": sw.Write("{1:s}, ~{0:s});\n", inst[1], inst[2]); break;
+                        case "BWINVW": case "BDINVD": case "PCINVD": sw.Write("{1:s}, ~{0:s});\n", inst[1], inst[2]); break;
                         case "ANDW": case "ANDD": sw.Write("{2:s} = {0:s}&{1:s};\n", inst[1], inst[2], inst[3]); break;
-                        case "BWANDW": case "BDANDD": sw.Write("{2:s}, {0:s}&{1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BWANDW": case "BDANDD": case "PCANDD": sw.Write("{2:s}, {0:s}&{1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "ORW": case "ORD": sw.Write("{2:s} = {0:s}|{1:s};\n", inst[1], inst[2], inst[3]); break;
-                        case "BWORW": case "BDORD": sw.Write("{2:s}, {0:s}|{1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BWORW": case "BDORD": case "PCORD": sw.Write("{2:s}, {0:s}|{1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "XORW": case "XORD": sw.Write("{2:s} = {0:s}^{1:s};\n", inst[1], inst[2], inst[3]); break;
-                        case "BWXORW": case "BDXORD": sw.Write("{2:s}, {0:s}^{1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BWXORW": case "BDXORD": case "PCXORD": sw.Write("{2:s}, {0:s}^{1:s});\n", inst[1], inst[2], inst[3]); break;
                         // 寄存器移动指令
                         case "MOV": case "MOVD": case "MOVF": sw.Write("{1:s} = {0:s};\n", inst[1], inst[2]); break;
-                        case "BWMOV": case "BDMOVD": sw.Write("{1:s} {0:s});\n", inst[1], inst[2]); break;
+                        case "BWMOV": case "BDMOVD": case "PCMOVD": sw.Write("{1:s} {0:s});\n", inst[1], inst[2]); break;
                         case "MVBLK":
                             if (simumode)
                                 sw.Write("_mvwblk(&{0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);
@@ -832,48 +832,48 @@ namespace SamSoarII.Core.Generate
                         case "ADD": sw.Write("{2:s} = _addw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BWADD": sw.Write("{2:s} _addw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "ADDD": sw.Write("{2:s} = _addd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "BDADDD": sw.Write("{2:s} _addd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "BDADDD": case "PCADDD": sw.Write("{2:s} _addd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SUB": sw.Write("{2:s} = _subw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BWSUB": sw.Write("{2:s} _subw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SUBD": sw.Write("{2:s} = _subd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "BDSUBD": sw.Write("{2:s} _subd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "BDSUBD": case "PCSUBD": sw.Write("{2:s} _subd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "MUL": sw.Write("{2:s} = _mulwd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "BDMUL": sw.Write("{2:s} _mulwd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "BDMUL": case "PCMUL": sw.Write("{2:s} _mulwd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "MULW": sw.Write("{2:s} = _mulww({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BWMULW": sw.Write("{2:s} _mulww({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "MULD": sw.Write("{2:s} = _muldd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "BDMULD": sw.Write("{2:s} _muldd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "BDMULD": case "PCMULD": sw.Write("{2:s} _muldd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "DIV": sw.Write("{2:s} = _divwd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "BDDIV": sw.Write("{2:s} _divwd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "BDDIV": case "PCDIV": sw.Write("{2:s} _divwd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "DIVW": sw.Write("{2:s} = _divww({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BWDIVW": sw.Write("{2:s} _divww({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "DIVD": sw.Write("{2:s} = _divdd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "BDDIVD": sw.Write("{2:s} _divdd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "BDDIVD": case "PCDIVD": sw.Write("{2:s} _divdd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "INC": sw.Write("{1:s} = _incw({0:s});\n", inst[1], inst[2]); break;
                         case "BWINC": sw.Write("{1:s} _incw({0:s}));\n", inst[1], inst[2]); break;
                         case "INCD": sw.Write("{1:s} = _incd({0:s});\n", inst[1], inst[2]); break;
-                        case "BDINCD": sw.Write("{1:s} _incd({0:s}));\n", inst[1], inst[2]); break;
+                        case "BDINCD": case "PCINCD": sw.Write("{1:s} _incd({0:s}));\n", inst[1], inst[2]); break;
                         case "DEC": sw.Write("{1:s} = _decw({0:s});\n", inst[1], inst[2]); break;
                         case "BWDEC": sw.Write("{1:s} _decw({0:s}));\n", inst[1], inst[2]); break;
                         case "DECD": sw.Write("{1:s} = _decd({0:s});\n", inst[1], inst[2]); break;
-                        case "BDDECD": sw.Write("{1:s} _decd({0:s}));\n", inst[1], inst[2]); break;
+                        case "BDDECD": case "PCDECD": sw.Write("{1:s} _decd({0:s}));\n", inst[1], inst[2]); break;
                         // 移位指令
                         case "SHL": sw.Write("{2:s} = _shlw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BWSHL": sw.Write("{2:s} _shlw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SHLD": sw.Write("{2:s} = _shld({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "BDSHLD": sw.Write("{2:s} _shld({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "BDSHLD": case "PCSHLD": sw.Write("{2:s} _shld({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SHR": sw.Write("{2:s} = _shrw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BWSHR": sw.Write("{2:s} _shrw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SHRD": sw.Write("{2:s} = _shrd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "BDSHRD": sw.Write("{2:s} _shrd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "BDSHRD": case "PCSHRD": sw.Write("{2:s} _shrd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "ROL": sw.Write("{2:s} = _rolw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BWROL": sw.Write("{2:s} _rolw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "ROR": sw.Write("{2:s} = _rorw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "BWROR": sw.Write("{2:s} _rolw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "ROLD": sw.Write("{2:s} = _rold({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "BDROLD": sw.Write("{2:s} _rold({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "BDROLD": case "PCROLD": sw.Write("{2:s} _rold({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "RORD": sw.Write("{2:s} = _rord({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "BDRORD": sw.Write("{2:s} _rord({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
+                        case "BDRORD": case "PCRORD": sw.Write("{2:s} _rord({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SHLB":
                             if (inst.ProtoType.Children[0].IsWordBit)
                             {
@@ -1082,6 +1082,7 @@ namespace SamSoarII.Core.Generate
                         case "NEG": sw.Write("{1:s} = _negw({0:s});\n", inst[1], inst[2]); break;
                         case "BWNEG": sw.Write("{1:s} _negw({0:s}));\n", inst[1], inst[2]); break;
                         case "NEGD": sw.Write("{1:s} = _negd({0:s});\n", inst[1], inst[2]); break;
+                        case "BWNEGD": case "PCNEGD": sw.Write("{1:s} _negd({0:s}));\n", inst[1], inst[2]); break;
                         case "XCH": sw.Write("_xchw(&{0:s}, &{1:s});\n", inst[1], inst[2]); break;
                         case "BWXCH":
                             if (inst.ProtoType.Children[0].IsBitWord)

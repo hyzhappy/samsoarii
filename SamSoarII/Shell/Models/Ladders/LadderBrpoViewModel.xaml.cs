@@ -33,6 +33,7 @@ namespace SamSoarII.Shell.Models
 
         public void Recreate(params object[] args)
         {
+            Visibility = Visibility.Visible;
             Core = (LadderBrpoModel)(args[0]);
         }
 
@@ -41,8 +42,7 @@ namespace SamSoarII.Shell.Models
         public LadderBrpoViewModel(LadderBrpoModel _core)
         {
             InitializeComponent();
-            Visibility = Visibility.Visible;
-            Canvas.SetZIndex(this, 1);
+            //Canvas.SetZIndex(this, 1);
             Recreate(_core);
         }
         

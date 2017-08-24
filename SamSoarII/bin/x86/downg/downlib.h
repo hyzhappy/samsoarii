@@ -1,5 +1,39 @@
 #include <stdint.h>
 
+#ifndef _PLC_H_
+#define _PLC_H_
+
+typedef uint32_t plc_bool;
+typedef int32_t plc_dw;
+typedef int16_t plc_w;
+
+extern plc_dw 	XDoubleWord[4];
+extern plc_dw 	YDoubleWord[4];
+extern plc_dw 	MDoubleWord[256];
+extern plc_dw 	CDoubleWord[8];
+extern plc_dw 	TDoubleWord[8];
+extern plc_dw 	EXDoubleWord[32];
+extern plc_dw 	EYDoubleWord[32];
+
+extern plc_bool* XBit;
+extern plc_bool* YBit;
+extern plc_bool* MBit;
+extern plc_bool* CBit;
+extern plc_bool* TBit;
+extern plc_bool* SBit;
+extern plc_bool* EXBit;
+extern plc_bool* EYBit;
+
+extern plc_w 	AIWord[32];
+extern plc_w 	AOWord[32];
+extern plc_w 	DWord[8192];
+extern plc_w 	VWord[8];
+extern plc_w 	ZWord[8];
+extern plc_w 	TVWord[256];
+extern plc_w 	CVWord[200];
+extern plc_dw 	CVDoubleWord[56];
+plc_dw*	CV32DoubleWord = &CVDoubleWord[0];
+
 // get a result (16-bit integer) by add a couple of 16-bit integers
 int16_t _addw(int16_t ia, int16_t ib);
 // get a result (32-bit integer) by add a couple of 32-bit integers
@@ -248,8 +282,10 @@ extern void CI_REV(uint8_t en, uint8_t com_id, uint16_t *rev_buf, uint16_t *leng
 extern void reset_timer(uint16_t Tnum);
 extern void reset_counter(uint16_t ucCntIndex);
 
-typedef void (*Interrupt_Handle_Typedef)();
+extern void WritePulseCount(uint16_t Yn, int32_t SetValue);
+extern void UpdatePulseCount(uint16_t Yn);
 
+typedef void (*Interrupt_Handle_Typedef)();
 extern void CI_INTR_ATCH(uint8_t en, Interrupt_Handle_Typedef fx, uint16_t event_index);
 extern void CI_INTR_DTCH(uint8_t en, uint16_t event_index);
 extern void CI_INTR_ENI(uint8_t en);
@@ -308,3 +344,5 @@ void _zcpw_wbit(int16_t ia, int16_t il, int16_t ir, int16_t* out, int16_t loc);
 void _zcpd_wbit(int32_t ia, int32_t il, int32_t ir, int16_t* out, int16_t loc);
 
 void _zcpf_wbit(float ia, float il, float ir, int16_t* out, int16_t loc);
+
+#endif

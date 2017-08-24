@@ -146,6 +146,21 @@ namespace SamSoarII.PLCDevice
                 return new IntRange(0, 2);
             }
         }
+        public override IntRange EXRange
+        {
+            get
+            {
+                return new IntRange(0, 1024);
+            }
+        }
+
+        public override IntRange EYRange
+        {
+            get
+            {
+                return new IntRange(0, 1024);
+            }
+        }
         private PLC_FGs_Type _type;
         public override PLC_FGs_Type Type
         {

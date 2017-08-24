@@ -252,7 +252,8 @@ namespace SamSoarII.Core.Generate
                         case ValueModel.Bases.C:
                         case ValueModel.Bases.T:
                             return String.Format("{0:s}Bit[{1:s}]", 
-                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                                (vmodel.Offset >= 1000 ? "E" : "") + ValueModel.NameOfBases[(int)(vmodel.Base)], 
+                                ToCIndex(vmodel));
                         case ValueModel.Bases.D:
                         case ValueModel.Bases.V:
                         case ValueModel.Bases.Z:
@@ -268,6 +269,16 @@ namespace SamSoarII.Core.Generate
                     switch (vmodel.Base)
                     {
                         case ValueModel.Bases.D:
+                            if (vmodel.IsPulseCount)
+                            {
+                                if (vformat.CanWrite) args[0] = "PC" + args[0];
+                                return String.Format(
+                                    vformat.CanWrite
+                                        ? "(UpdatePulseCount(({0:s}-8140)>>1),DWord[{0:s}])"
+                                        : "WritePulseCount(({0:s}-8140)>>1,",
+                                    ToCIndex(vmodel));
+                            }
+                            return String.Format("DWord[{0:s}]", ToCIndex(vmodel));
                         case ValueModel.Bases.AI:
                         case ValueModel.Bases.AO:
                         case ValueModel.Bases.V:

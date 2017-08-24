@@ -493,15 +493,24 @@ void callleave()
 
 void bpcycle(int32_t _bpaddr)
 {
-	if (!bpenable) return;
+	FILE* f = fopen("log1.txt", "w");
+	fseek(f, 0, SEEK_END);
+	if (!bpenable) {fprintf(f, "bpenable=%d\n", bpenable); fclose(f); return;}
 	bpaddr = _bpaddr;
+	fprintf(f, "bpaddr=%d\n", bpaddr);
 	if (bpjump < 0 && (bpdatas[bpaddr>>5] & (1<<(bpaddr&31))))
 	{
+		fprintf(f, "in a breakpoint!\n");
 		int32_t cpmsg = ((cpdatas[bpaddr>>3]>>((bpaddr&7)<<2)) & 7);
-		if (cpmsg != 0) return;
-		if (++bpcount[bpaddr] < bpmaxcount[bpaddr]) return;
+		if (cpmsg != 0) {fprintf(f, "cpmsg=%d\n", cpmsg); fclose(f); return;}
+		if (++bpcount[bpaddr] < bpmaxcount[bpaddr]) {fprintf(f, "less %d %d\n", bpcount[bpaddr], bpmaxcount[bpaddr]); fclose(f); return;}
 		bpcount[bpaddr] = 0;
 	}
+	fprintf(f, "bpstep=%d\n", bpstep);
+	fprintf(f, "bpcstep=%d\n", bpcstep);
+	fprintf(f, "bpjump=%d\n", bpjump);
+	fprintf(f, "bpmsg=%d\n", bpdatas[bpaddr>>5] & (1<<(bpaddr&31)));
+	fclose(f);
 	if (bpstep || bpcstep
 	|| bpjump < 0 && (bpdatas[bpaddr>>5] & (1<<(bpaddr&31)))
 	|| bpjump == bpaddr)

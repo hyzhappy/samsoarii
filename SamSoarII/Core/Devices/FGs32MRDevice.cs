@@ -150,6 +150,21 @@ namespace SamSoarII.PLCDevice
                 return _type;
             }
         }
+        public override IntRange EXRange
+        {
+            get
+            {
+                return new IntRange(0, 1024);
+            }
+        }
+
+        public override IntRange EYRange
+        {
+            get
+            {
+                return new IntRange(0, 1024);
+            }
+        }
         public override IntRange PulseRange
         {
             get

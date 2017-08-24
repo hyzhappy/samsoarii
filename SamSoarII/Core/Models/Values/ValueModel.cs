@@ -270,6 +270,17 @@ namespace SamSoarII.Core.Models
                     && (Base == Bases.X || Base == Bases.Y || Base == Bases.M || Base == Bases.S); }
         }
 
+        public bool IsPulseCount
+        {
+            get
+            {
+                Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
+                return (Type == Types.DWORD || Type == Types.UDWORD || Type == Types.DHEX) 
+                    && Base == Bases.D && Offset >= 8140 && Offset < 8140 + device.PulseRange.Count * 2;
+            }
+        }
+         
+
         protected ValueStore store;
         public ValueStore Store
         {

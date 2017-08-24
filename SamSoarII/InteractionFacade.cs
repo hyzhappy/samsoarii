@@ -1309,12 +1309,12 @@ namespace SamSoarII
                 return;
             }
             tcMain.ShowItem(diagram.Tab);
-            if (network.View == null)
-                network.View = AllResourceManager.CreateNet(network);
-            network.View.AcquireSelectRect();
+            diagram.View.ReleaseSelect();
             SelectRectCore rect = diagram.View.SelectionRect.Core;
+            rect.Parent = network;
             rect.X = x;
             rect.Y = y;
+            diagram.View.SelectionStatus = SelectStatus.SingleSelected;
             diagram.View.NavigateToSelectRect();
         }
         
