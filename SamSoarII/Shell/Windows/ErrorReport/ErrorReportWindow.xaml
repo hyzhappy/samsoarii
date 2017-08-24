@@ -58,8 +58,12 @@
         <DataGrid x:Uid="DG_FList" x:Name="DG_FList" ItemsSource="{Binding FItems}"
                   Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
                   AutoGenerateColumns="False"
-                  SelectionMode="Single"
-                  SelectedCellsChanged="DG_FList_SelectedCellsChanged">
+                  SelectionMode="Single">
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <EventSetter Event="MouseDown" Handler="DataGridCell_MouseDown"/>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn x:Uid="DataGridTemplateColumn_1" Width="25">
                     <DataGridTemplateColumn.CellTemplate>
@@ -79,8 +83,12 @@
         <DataGrid x:Uid="DG_List" x:Name="DG_List" ItemsSource="{Binding Items}"
                   Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
                   AutoGenerateColumns="False"
-                  SelectionMode="Single"
-                  SelectedCellsChanged="DG_List_SelectedCellsChanged">
+                  SelectionMode="Single">
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <EventSetter Event="MouseDown" Handler="DataGridCell_MouseDown"/>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn x:Uid="DataGridTemplateColumn_2" Width="25" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>

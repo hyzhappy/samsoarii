@@ -226,8 +226,8 @@ namespace SamSoarII.Shell.Windows
         {
 
         }
-
-        private void DG_List_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        
+        private void DataGridCell_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!ifParent.WNDMain.LAErrorList.IsFloat
              && !ifParent.WNDMain.LAErrorList.IsDock)
@@ -238,32 +238,27 @@ namespace SamSoarII.Shell.Windows
                     Properties.Resources.MainWindow_Error_List, ifParent.WNDMain.LAErrorList.AutoHideHeight.ToString());
                 ifParent.WNDMain.LAErrorList.ToggleAutoHide();
             }
-            if (DG_List.SelectedIndex < 0) return;
-            ErrorReportElement inst = (ErrorReportElement)DG_List.SelectedItem;
-            LadderUnitModel unit = inst.Prototype;
-            ifParent.Navigate(unit);
-        }
-
-        private void DG_FList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-        {
-            if (!ifParent.WNDMain.LAErrorList.IsFloat
-             && !ifParent.WNDMain.LAErrorList.IsDock)
+            if (sender is DataGridCell)
             {
-                LayoutSetting.AddDefaultDockWidthAnchorable(
-                    Properties.Resources.MainWindow_Error_List, ifParent.WNDMain.LAErrorList.AutoHideWidth.ToString());
-                LayoutSetting.AddDefaultDockHeighAnchorable(
-                    Properties.Resources.MainWindow_Error_List, ifParent.WNDMain.LAErrorList.AutoHideHeight.ToString());
-                ifParent.WNDMain.LAErrorList.ToggleAutoHide();
+                DataGridCell dgcell = (DataGridCell)sender;
+                if (dgcell.DataContext is ErrorReportElement)
+                {
+                    ErrorReportElement ele = (ErrorReportElement)(dgcell.DataContext);
+                    LadderUnitModel unit = ele.Prototype;
+                    ifParent.Navigate(unit);
+                }
+                if (dgcell.DataContext is ErrorReportElement_FB)
+                {
+                    ErrorReportElement_FB ele = (ErrorReportElement_FB)(dgcell.DataContext);
+                    FuncBlockModel fbmodel = ele.FuncBlock;
+                    int line = ele.Line;
+                    int column = ele.Column;
+                    ifParent.Navigate(fbmodel, line, column);
+                }
             }
-            if (DG_FList.SelectedIndex < 0) return;
-            ErrorReportElement_FB ele = (ErrorReportElement_FB)DG_FList.SelectedItem;
-            FuncBlockModel fbmodel = ele.FuncBlock;
-            int line = ele.Line;
-            int column = ele.Column;
-            ifParent.Navigate(fbmodel, line, column);
         }
 
         #endregion
-        
+
     }
 }
