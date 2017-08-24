@@ -247,12 +247,20 @@ namespace SamSoarII.Core.Generate
                     {
                         case ValueModel.Bases.X:
                         case ValueModel.Bases.Y:
+                            if (vmodel.IsExtend)
+                                return String.Format("E{0:s}Bit[{1:s}-512]",
+                                    ValueModel.NameOfBases[(int)(vmodel.Base)],
+                                    ToCIndex(vmodel));
+                            else
+                                return String.Format("{0:s}Bit[{1:s}]",
+                                    ValueModel.NameOfBases[(int)(vmodel.Base)],
+                                    ToCIndex(vmodel));
                         case ValueModel.Bases.S:
                         case ValueModel.Bases.M:
                         case ValueModel.Bases.C:
                         case ValueModel.Bases.T:
                             return String.Format("{0:s}Bit[{1:s}]", 
-                                (vmodel.Offset >= 1000 ? "E" : "") + ValueModel.NameOfBases[(int)(vmodel.Base)], 
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], 
                                 ToCIndex(vmodel));
                         case ValueModel.Bases.D:
                         case ValueModel.Bases.V:

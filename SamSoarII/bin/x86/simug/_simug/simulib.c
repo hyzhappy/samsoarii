@@ -10,6 +10,8 @@
 // Register Memorys
 int8_t XBit[128];
 int8_t YBit[128];
+int8_t EXBit[1024];
+int8_t EYBit[1024];
 int8_t MBit[256 << 5];
 int8_t CBit[256];
 int8_t TBit[256];
@@ -25,8 +27,8 @@ int16_t ZWord[8];
 // Register writeable
 // Set 1 if you want to modify the value of register
 // othervise, Set 0 to lock the register and make it constant
-int8_t XEnable[128];
-int8_t YEnable[128];
+int8_t XEnable[512+1024];
+int8_t YEnable[512+1024];
 int8_t MEnable[256 << 5];
 int8_t CEnable[256];
 int8_t TEnable[256];

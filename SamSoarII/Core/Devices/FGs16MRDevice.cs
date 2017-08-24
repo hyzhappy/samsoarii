@@ -150,7 +150,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 1024);
+                return new IntRange(512, 512+1024);
             }
         }
 
@@ -158,7 +158,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 1024);
+                return new IntRange(512, 512+1024);
             }
         }
         private PLC_FGs_Type _type;

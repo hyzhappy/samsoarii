@@ -11,8 +11,9 @@ namespace SamSoarII.Shell.Windows
 {
     public interface IFloat
     {
-        bool IsFloat { get; set; }
-        LayoutFloatingWindow FloatWindow { get; set; }
+        bool IsFloat { get; }
         LayoutFloatingWindowControl FloatControl { get; set; }
+        event RoutedEventHandler FloatOpened;
+        event RoutedEventHandler FloatClosed;
     }
 }

@@ -279,6 +279,23 @@ namespace SamSoarII.Core.Models
                     && Base == Bases.D && Offset >= 8140 && Offset < 8140 + device.PulseRange.Count * 2;
             }
         }
+
+        public bool IsExtend
+        {
+            get
+            {
+                Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
+                switch (bas)
+                {
+                    case Bases.X:
+                        return ofs >= device.EXRange.Start && ofs < device.EXRange.End;
+                    case Bases.Y:
+                        return ofs >= device.EYRange.Start && ofs < device.EYRange.End;
+                    default:
+                        return false;
+                }
+            }
+        }
          
 
         protected ValueStore store;
@@ -412,6 +429,34 @@ namespace SamSoarII.Core.Models
                     ofs = match.Groups.Count > 2 ? int.Parse(match.Groups[2].Value) : 0;
                     ibs = match.Groups.Count > 4 && match.Groups[4].Value.Length > 0 ? ParseBase(match.Groups[4].Value) : Bases.NULL;
                     ifs = match.Groups.Count > 5 && match.Groups[5].Value.Length > 0 ? int.Parse(match.Groups[5].Value) : 0;
+                    if (bas == Bases.X || bas == Bases.Y)
+                    {
+                        int _ofs = 0;
+                        int _mul = 1;
+                        while (ofs > 0)
+                        {
+                            int _crt = ofs % 10;
+                            if (_crt >= 8) throw new ValueParseException(Properties.Resources.Message_Not_DexNumber, format);
+                            _ofs += _crt * _mul;
+                            ofs /= 10;
+                            _mul <<= 3;
+                        }
+                        ofs = _ofs;
+                        bool inrange = false;
+                        switch (bas)
+                        {
+                            case Bases.X:
+                                inrange |= ofs >= device.XRange.Start && ofs < device.XRange.End;
+                                inrange |= ofs >= device.EXRange.Start && ofs < device.EXRange.End;
+                                break;
+                            case Bases.Y:
+                                inrange |= ofs >= device.YRange.Start && ofs < device.YRange.End;
+                                inrange |= ofs >= device.EYRange.Start && ofs < device.EYRange.End;
+                                break;
+                        }
+                        if (!inrange) throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                        return;
+                    }
                     if (bas == Bases.CV)
                     {
                         if (Type == Types.WORD && ofs >= 200)

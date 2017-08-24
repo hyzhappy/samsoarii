@@ -150,7 +150,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 1024);
+                return new IntRange(uint.MinValue, uint.MaxValue);
             }
         }
 
@@ -158,7 +158,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 1024);
+                return new IntRange(uint.MinValue, uint.MaxValue);
             }
         }
         public override PLC_FGs_Type Type

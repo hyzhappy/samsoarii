@@ -14,7 +14,7 @@ namespace SamSoarII.Shell.Windows
     {
         public BaseTabItem()
         {
-
+            floatcontrol = null;
         }
 
         public BaseTabItem(MainTabControl _tabcontrol)
@@ -30,7 +30,6 @@ namespace SamSoarII.Shell.Windows
             tabcontrol = null;
             TabContainer.Content = null;
             TabContainer = null;
-            FloatWindow = null;
             FloatControl = null;
         }
         
@@ -71,8 +70,7 @@ namespace SamSoarII.Shell.Windows
 
         #region Float
 
-        public bool IsFloat { get; set; }
-        public LayoutFloatingWindow FloatWindow { get; set; }
+        public bool IsFloat { get { return floatcontrol != null; } }
         private LayoutFloatingWindowControl floatcontrol;
         public LayoutFloatingWindowControl FloatControl
         {
@@ -82,15 +80,23 @@ namespace SamSoarII.Shell.Windows
             }
             set
             {
-                if (floatcontrol != null) floatcontrol.Closed -= OnFloatClosed;
+                if (floatcontrol != null)
+                {
+                    floatcontrol.Closed -= OnFloatClosed;
+                    FloatClosed(this, new RoutedEventArgs());
+                }
                 this.floatcontrol = value;
-                if (floatcontrol != null) floatcontrol.Closed += OnFloatClosed;
+                if (floatcontrol != null)
+                {
+                    floatcontrol.Closed += OnFloatClosed;
+                    FloatOpened(this, new RoutedEventArgs());
+                }
             }
         }
+        public event RoutedEventHandler FloatOpened = delegate { };
+        public event RoutedEventHandler FloatClosed = delegate { };
         private void OnFloatClosed(object sender, EventArgs e)
         {
-            IsFloat = false;
-            FloatWindow = null;
             FloatControl = null;
             Invoke(TabAction.CLOSE);
         }

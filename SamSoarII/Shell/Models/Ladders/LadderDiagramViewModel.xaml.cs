@@ -383,10 +383,14 @@ namespace SamSoarII.Shell.Models
 
         public bool IsFloat { get; set; }
         public LayoutFloatingWindow FloatWindow { get; set; }
+
         private LayoutFloatingWindowControl floatcontrol;
         public LayoutFloatingWindowControl FloatControl
         {
-            get { return this.floatcontrol; }
+            get
+            {
+                return this.floatcontrol;
+            }
             set
             {
                 this.floatcontrol = value;
@@ -2182,7 +2186,7 @@ namespace SamSoarII.Shell.Models
         {
             CanvasGrid.ContextMenu = LadderMode == LadderModes.Edit
                 ? (ContextMenu)cmEdit : (ContextMenu)cmMoni;
-            CanvasGrid.CaptureMouse();
+            //CanvasGrid.CaptureMouse();
             object obj = GetObjectByMouse(e);
             if (obj is LadderUnitModel)
             {
@@ -2330,7 +2334,7 @@ namespace SamSoarII.Shell.Models
         
         private void OnMainCanvasMouseUp(object sender, MouseButtonEventArgs e)
         {
-            CanvasGrid.ReleaseMouseCapture();
+            //CanvasGrid.ReleaseMouseCapture();
             switch (SelectionStatus)
             {
                 case SelectStatus.SingleSelecting:
