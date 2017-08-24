@@ -2289,6 +2289,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_E9D403B3B61D419D99E1E2DCE27F3A00"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_EA17451A49AE4EE487E2F44A1BF060E3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -10317,6 +10323,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E9D403B3B61D419D99E1E2DCE27F3A00"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\msiexec.exe"
+            "TargetName" = "8:msiexec.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:TRUE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EA17451A49AE4EE487E2F44A1BF060E3"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\stddef.h"
@@ -11686,7 +11712,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SamSoarII"
         "ProductCode" = "8:{D8A07A80-3750-422E-A921-59646E9DA217}"
-        "PackageCode" = "8:{4B7C08A4-B74A-4A24-9B86-72BCBB17A673}"
+        "PackageCode" = "8:{F834D335-7F23-45EA-AF96-13411AB880E0}"
         "UpgradeCode" = "8:{A7ED4973-BC60-4163-929E-885AA3DD333F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -11806,6 +11832,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F38A16B448D640D8B6D64EED1A5D9202"
+            {
+            "Name" = "8:uninstall"
+            "Arguments" = "8:/x {D8A07A80-3750-422E-A921-59646E9DA217}"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_E9D403B3B61D419D99E1E2DCE27F3A00"
+            "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
+            "WorkingFolder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {

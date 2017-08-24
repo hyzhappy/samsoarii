@@ -650,6 +650,5 @@ namespace SamSoarII.Shell.Models
         }
 
         #endregion
-
     }
 }

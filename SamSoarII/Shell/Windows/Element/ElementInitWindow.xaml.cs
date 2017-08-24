@@ -161,7 +161,7 @@ namespace SamSoarII.Shell.Windows
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            //Close();
+            ifparent.WNDMain.LAElemInit.Hide();
         }
 
         public string[] DataTypes

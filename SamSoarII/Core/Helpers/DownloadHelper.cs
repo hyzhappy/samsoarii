@@ -10,18 +10,10 @@ using System.Text;
 using SamSoarII.Core.Models;
 using SamSoarII.Global;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace SamSoarII.Core.Helpers
 {
-    public enum DownloadError
-    {
-        Cancel,
-        None,
-        CommuicationFailed,
-        DownloadFailed,
-        DataSizeBeyond
-    }
-
     public static class DownloadHelper
     {
         #region option
@@ -641,7 +633,7 @@ namespace SamSoarII.Core.Helpers
         #region start download
         
         #region main download process
-        public static DownloadError DownloadExecute(CommunicationManager communManager, LoadingWindowHandle handle)
+        public static CommuicationError DownloadExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
             handle.UpdateMessage(Properties.Resources.Initialize_Data);
             //初始化要下载的数据
@@ -653,54 +645,61 @@ namespace SamSoarII.Core.Helpers
                 if (LocalizedMessageBox.Show(Properties.Resources.PLC_Status_To_Stop, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information) == LocalizedMessageResult.Yes)
                 {
                     if (!communManager.CommunicationHandle(new SwitchPLCStatusCommand()))
-                        return DownloadError.CommuicationFailed;
+                        return CommuicationError.CommuicationFailed;
                 }
-                else return DownloadError.Cancel;
+                else return CommuicationError.Cancel;
             }
-            
-            DownloadError ret = DownloadError.None;
+
+            CommuicationError ret = CommuicationError.None;
             if (IsDownloadProgram)
             {
                 handle.UpdateMessage(Properties.Resources.Project_Download);
+                if(communManager.MNGCurrent == communManager.MNGUSB)
+                    handle.ReportProgress(IsDownloadSetting ? 90 : 100, 0.00015 * communManager.ExecData.Count + 2);
+                else
+                    handle.ReportProgress(IsDownloadSetting ? 90 : 100, 0.00025 * communManager.ExecData.Count * 115200 / communManager.MNGPort.BaudRate + 2);
                 //下载Bin文件
-                ret = DownloadBinExecute(communManager);
-                if (ret != DownloadError.None)
+                ret = DownloadBinExecute(communManager, handle);
+                if (ret != CommuicationError.None)
                     return ret;
 
                 //下载用于上载的XML压缩文件（包括程序，注释（可选），软元件表（可选）等）
-                ret = DownloadProjExecute(communManager);
-                if (ret != DownloadError.None)
+                ret = DownloadProjExecute(communManager, handle);
+                if (ret != CommuicationError.None)
                     return ret;
 
                 //下载Modbus表格
-                ret = DownloadModbusTableExecute(communManager);
-                if (ret != DownloadError.None)
+                ret = DownloadModbusTableExecute(communManager, handle);
+                if (ret != CommuicationError.None)
                     return ret;
 
                 //下载 PlsTable
-                ret = DownloadPlsTableExecute(communManager);
-                if (ret != DownloadError.None)
+                ret = DownloadPlsTableExecute(communManager, handle);
+                if (ret != CommuicationError.None)
                     return ret;
 
                 //下载 PlsBlock
-                ret = DownloadPlsBlockExecute(communManager);
-                if (ret != DownloadError.None)
+                ret = DownloadPlsBlockExecute(communManager, handle);
+                if (ret != CommuicationError.None)
                     return ret;
             }
             //下载 Config
             if (IsDownloadSetting)
             {
+                if (communManager.MNGCurrent == communManager.MNGUSB)
+                    handle.ReportProgress(100, 0.00015 * dtConfig.Count);
+                else
+                    handle.ReportProgress(100, 0.00025 * dtConfig.Count * 115200 / communManager.MNGPort.BaudRate);
                 handle.UpdateMessage(Properties.Resources.Config_Download);
-                ret = DownloadConfigExecute(communManager);
-                if (ret != DownloadError.None)
+                if (ret != CommuicationError.None)
                     return ret;
             }
-            return DownloadError.None;
+            return CommuicationError.None;
         }
         #endregion
 
         #region Bin download
-        private static DownloadError DownloadBinExecute(CommunicationManager communManager)
+        private static CommuicationError DownloadBinExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
             int time = 0;
             ICommunicationCommand command = new SwitchToIAPCommand();
@@ -709,16 +708,16 @@ namespace SamSoarII.Core.Helpers
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 5) return DownloadError.DownloadFailed;
+            if (time >= 5) return CommuicationError.DownloadFailed;
             command = new IAPDESKEYCommand(communManager.ExecLen);
             for (time = 0; time < 5 && !communManager.CommunicationHandle(command,true,2000);)
             {
                 if(command.ErrorCode == FGs_ERR_CODE.COMCODE_DOWNLOAD_BEYOND)
-                    return DownloadError.DataSizeBeyond;
+                    return CommuicationError.DataSizeBeyond;
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 5) return DownloadError.DownloadFailed;
+            if (time >= 5) return CommuicationError.DownloadFailed;
             byte[] data = communManager.ExecData.ToArray();
             byte[] pack = new byte[communManager.DOWN_MAX_DATALEN];
             int len = data.Length / communManager.DOWN_MAX_DATALEN;
@@ -729,7 +728,7 @@ namespace SamSoarII.Core.Helpers
                     pack[j] = data[i * communManager.DOWN_MAX_DATALEN + j];
                 command = new TransportBinCommand(i, pack);
                 for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
-                if (time >= 3) return DownloadError.DownloadFailed;
+                if (time >= 3) return CommuicationError.DownloadFailed;
             }
             if (rem > 0)
             {
@@ -738,7 +737,7 @@ namespace SamSoarII.Core.Helpers
                     pack[j] = data[len * communManager.DOWN_MAX_DATALEN + j];
                 command = new TransportBinCommand(len, pack);
                 for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
-                if (time >= 3) return DownloadError.DownloadFailed;
+                if (time >= 3) return CommuicationError.DownloadFailed;
             }
             command = new BinFinishedCommand();
             for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
@@ -746,14 +745,14 @@ namespace SamSoarII.Core.Helpers
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 5) return DownloadError.DownloadFailed;
-            return DownloadError.None;
+            if (time >= 5) return CommuicationError.DownloadFailed;
+            return CommuicationError.None;
         }
         #endregion
 
         #region Proj Download
         //工程文件（包括程序，注释（可选），软元件表（可选）等）
-        private static DownloadError DownloadProjExecute(CommunicationManager communManager)
+        private static CommuicationError DownloadProjExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
             string genPath = string.Format(@"{0}\rar\temp", FileHelper.AppRootPath);
             if (!Directory.Exists(genPath))
@@ -771,17 +770,17 @@ namespace SamSoarII.Core.Helpers
             try
             {
                 byte[] tempdata = FileHelper.GetBytesByBinaryFile(genFile);
-                if (tempdata.Length == 0) return DownloadError.None;
+                if (tempdata.Length == 0) return CommuicationError.None;
                 //先将传送的数据加密(注意密钥为数据的长度)
                 CommandHelper.Encrypt(tempdata.Length, tempdata);
                 //传送前，须在传送数据前加上4字节的数据长度，供上载时使用。
                 byte[] data = ValueConverter.GetBytes((uint)tempdata.Length + 4, true);
                 data = data.Concat(tempdata).ToArray();
-                return _DownloadHandle(communManager, data, CommunicationDataDefine.CMD_DOWNLOAD_PRO);
+                return _DownloadHandle(communManager, data, CommunicationDataDefine.CMD_DOWNLOAD_PRO, handle);
             }
             catch (Exception)
             {
-                return DownloadError.DownloadFailed;
+                return CommuicationError.DownloadFailed;
             }
             finally
             {
@@ -793,43 +792,41 @@ namespace SamSoarII.Core.Helpers
         #endregion
 
         #region Modbus download
-        private static DownloadError DownloadModbusTableExecute(CommunicationManager communManager)
+        private static CommuicationError DownloadModbusTableExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
-            if (dtModbus.Count == 0) return DownloadError.None;
-            return _DownloadHandle(communManager, dtModbus.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_MODBUSTABLE);
+            if (dtModbus.Count == 0) return CommuicationError.None;
+            return _DownloadHandle(communManager, dtModbus.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_MODBUSTABLE, handle);
         }
         #endregion
 
         #region PlsTable download
-        private static DownloadError DownloadPlsTableExecute(CommunicationManager communManager)
+        private static CommuicationError DownloadPlsTableExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
-            if (dtTable.Count == 0) return DownloadError.None;
-            return _DownloadHandle(communManager, dtTable.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_PLSTABLE);
+            if (dtTable.Count == 0) return CommuicationError.None;
+            return _DownloadHandle(communManager, dtTable.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_PLSTABLE, handle);
         }
         #endregion
 
         #region PlsBlock download
-        private static DownloadError DownloadPlsBlockExecute(CommunicationManager communManager)
+        private static CommuicationError DownloadPlsBlockExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
-            if (dtBlock.Count == 0) return DownloadError.None;
-            return _DownloadHandle(communManager, dtBlock.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_PLSBLOCK);
+            if (dtBlock.Count == 0) return CommuicationError.None;
+            return _DownloadHandle(communManager, dtBlock.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_PLSBLOCK, handle);
         }
         #endregion
 
         #region Config download
-        private static DownloadError DownloadConfigExecute(CommunicationManager communManager)
+        private static CommuicationError DownloadConfigExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
-            if (dtConfig.Count == 0) return DownloadError.None;
-            //byte[] data = ValueConverter.GetBytes((uint)dtConfig.Count + 4, true);
-            //dtConfig = data.Concat(dtConfig).ToList();
-            return _DownloadHandle(communManager, dtConfig.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_CONFIG);
+            if (dtConfig.Count == 0) return CommuicationError.None;
+            return _DownloadHandle(communManager, dtConfig.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_CONFIG,handle);
         }
         #endregion
 
         #region DownloadHandle
-        private static DownloadError _DownloadHandle(CommunicationManager communManager, byte[] data, byte funcCode)
+        private static CommuicationError _DownloadHandle(CommunicationManager communManager, byte[] data, byte funcCode, ProgressBarHandle handle)
         {
-            if (data.Length == 0) return DownloadError.None;
+            if (data.Length == 0) return CommuicationError.None;
             int time = 0;
             ICommunicationCommand command = new DownloadTypeStart(funcCode, data.Length);
 
@@ -840,7 +837,7 @@ namespace SamSoarII.Core.Helpers
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 5) return DownloadError.DownloadFailed;
+            if (time >= 5) return CommuicationError.DownloadFailed;
             byte[] pack = new byte[communManager.DOWN_MAX_DATALEN];
             int len = data.Length / communManager.DOWN_MAX_DATALEN;
             int rem = data.Length % communManager.DOWN_MAX_DATALEN;
@@ -850,7 +847,7 @@ namespace SamSoarII.Core.Helpers
                     pack[j] = data[i * communManager.DOWN_MAX_DATALEN + j];
                 command = new DownloadTypeData(i, pack, funcCode);
                 for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
-                if (time >= 3) return DownloadError.DownloadFailed;
+                if (time >= 3) return CommuicationError.DownloadFailed;
             }
             if (rem > 0)
             {
@@ -859,7 +856,7 @@ namespace SamSoarII.Core.Helpers
                     pack[j] = data[len * communManager.DOWN_MAX_DATALEN + j];
                 command = new DownloadTypeData(len, pack, funcCode);
                 for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
-                if (time >= 3) return DownloadError.DownloadFailed;
+                if (time >= 3) return CommuicationError.DownloadFailed;
             }
             command = new DownloadTypeOver(funcCode);
             for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
@@ -867,8 +864,8 @@ namespace SamSoarII.Core.Helpers
                 Thread.Sleep(200);
                 time++;
             }
-            if (time >= 5) return DownloadError.DownloadFailed;
-            return DownloadError.None;
+            if (time >= 5) return CommuicationError.DownloadFailed;
+            return CommuicationError.None;
         }
         #endregion
 

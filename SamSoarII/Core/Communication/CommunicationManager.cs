@@ -19,7 +19,15 @@ namespace SamSoarII.Core.Communication
 {
     public enum PortTypes { SerialPort, USB, NULL}
     public enum CommunicationType {Download,Upload,Monitor }
-    
+    public enum CommuicationError
+    {
+        Cancel,
+        None,
+        CommuicationFailed,
+        DownloadFailed,
+        DataSizeBeyond,
+        UploadFailed
+    }
     public class CommunicationManager : BaseThreadManager
     {
         //监视时读取扫描周期以及PLC运行状态
@@ -73,8 +81,11 @@ namespace SamSoarII.Core.Communication
         public PLCMessage PLCMessage;
 
         private SerialPortManager mngPort;
+        public SerialPortManager MNGPort { get { return mngPort; } }
         private USBManager mngUSB;
+        public USBManager MNGUSB { get { return mngUSB; } }
         private IPortManager mngCurrent;
+        public IPortManager MNGCurrent { get { return mngCurrent; } }
         public PortTypes PortType
         {
             get
@@ -375,14 +386,98 @@ namespace SamSoarII.Core.Communication
             execdata = FileHelper.GetBytesByBinaryFile(execfile).ToList();
         }
 
-        public DownloadError DownloadExecute(LoadingWindowHandle handle)
+        public void DownloadExecute(ProgressBarHandle handle)
         {
-            return DownloadHelper.DownloadExecute(this, handle);
+            CommuicationError ret = DownloadHelper.DownloadExecute(this, handle);
+            handle.Abort();
+            ifParent.MNGComu.AbortAll();
+            switch (ret)
+            {
+                case CommuicationError.None:
+                    {
+                        if (LocalizedMessageBox.Show(string.Format("{0},{1}", Properties.Resources.MessageBox_Download_Successd, Properties.Resources.PLC_Status_To_Run), LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information) == LocalizedMessageResult.Yes)
+                        {
+                            ICommunicationCommand command = new SwitchPLCStatusCommand(true);
+                            if (!ifParent.MNGComu.CommunicationHandle(command))
+                            {
+                                switch (command.ErrorCode)
+                                {
+                                    case FGs_ERR_CODE.COMCODE_CANNOT_RUN:
+                                        LocalizedMessageBox.Show(Properties.Resources.PLC_Status_Change_Error, LocalizedMessageIcon.Information);
+                                        break;
+                                    default:
+                                        LocalizedMessageBox.Show(Properties.Resources.State_Failed, LocalizedMessageIcon.Information);
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case CommuicationError.CommuicationFailed:
+                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Error);
+                    break;
+                case CommuicationError.DownloadFailed:
+                    LocalizedMessageBox.Show(Properties.Resources.Download_Fail, LocalizedMessageIcon.Error);
+                    break;
+                case CommuicationError.DataSizeBeyond:
+                    LocalizedMessageBox.Show(Properties.Resources.Download_Size_Beyond, LocalizedMessageIcon.Error);
+                    break;
+                default:
+                    break;
+            }
         }
 
-        public UploadError UploadExecute(LoadingWindowHandle handle)
+        public void UploadExecute(ProgressBarHandle handle)
         {
-            return UploadHelper.UploadExecute(this, handle);
+            CommuicationError ret = UploadHelper.UploadExecute(this, handle);
+            handle.Abort();
+            ifParent.MNGComu.AbortAll();
+            switch (ret)
+            {
+                case CommuicationError.None:
+                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Upload_Successd, LocalizedMessageIcon.Information);
+                    break;
+                case CommuicationError.CommuicationFailed:
+                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                    break;
+                case CommuicationError.UploadFailed:
+                    LocalizedMessageBox.Show(Properties.Resources.Upload_Fail, LocalizedMessageIcon.Information);
+                    break;
+                default:
+                    break;
+            }
+            if (ret == CommuicationError.None)
+            {
+                if (UploadHelper.IsUploadProgram)
+                {
+                    if (ifParent.HandleCurrentProj())
+                    {
+                        if (UploadHelper.LoadProjByUploadData(ifParent, FileHelper.GetFullFileName("tempupfile", "7z")))
+                            LocalizedMessageBox.Show(Properties.Resources.Project_Load_Success, LocalizedMessageIcon.Information);
+                        else
+                            LocalizedMessageBox.Show(Properties.Resources.Project_Load_Failed, LocalizedMessageIcon.Information);
+                    }
+                }
+                if (UploadHelper.IsUploadSetting)
+                {
+                    LocalizedMessageResult ret1;
+                    if (ifParent.MDProj != null && ifParent.MDProj.IsLoaded)
+                    {
+                        ret1 = LocalizedMessageBox.Show(Properties.Resources.Config_Applied, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
+                        if (ret1 == LocalizedMessageResult.Yes)
+                            ifParent.MDProj.PARAProj.Load(UploadHelper.ProjectParams);
+                    }
+                    else if (ifParent.MDProj == null)
+                    {
+                        ret1 = LocalizedMessageBox.Show(Properties.Resources.Config_Applied_NewProj, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
+                        if (ret1 == LocalizedMessageResult.Yes)
+                        {
+                            ifParent.CreateProject("New Project");
+                            ifParent.MDProj.PARAProj.Load(UploadHelper.ProjectParams);
+                        }
+                    }
+                }
+            }
         }
 
         public bool PasswordHandle(CommunicationType commuType)

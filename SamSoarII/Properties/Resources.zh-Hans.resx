@@ -2409,4 +2409,7 @@
   <data name="PLC_Status" xml:space="preserve">
     <value>PLC状态</value>
   </data>
+  <data name="Message_Not_DexNumber" xml:space="preserve">
+    <value>X/Y寄存器仅支持八进制地址。</value>
+  </data>
 </root>

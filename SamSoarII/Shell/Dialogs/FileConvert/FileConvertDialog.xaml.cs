@@ -76,42 +76,14 @@ namespace SamSoarII.Shell.Dialogs
             else
             {
                 LB_New.Items.Clear();
-                worker = new BackgroundWorker();
-                worker.WorkerReportsProgress = true;
-                worker.DoWork += Worker_DoWork;
-                worker.ProgressChanged += Worker_ProgressChanged;
-                worker.RunWorkerAsync();
+                ProgressBarHandle handle = new ProgressBarHandle(Properties.Resources.File_Convert, 0, 100,_Handle, new BackgroundWorker(),Dispatcher);
+                handle.StartWork();
             }
         }
-        private BackgroundWorker worker;
-        ProgressBarHandle handle;
-        private long currentFileLen = 0;
-        private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            handle.PG_Bar?.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate() 
-            {
-                handle.StartAnimation(handle.PG_Bar.PG_Bar.Value, e.ProgressPercentage * 3.0 / 20.0, currentFileLen / (160.0 * 1024));
-            });
-        }
-
-        private void Worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            handle = new ProgressBarHandle(Properties.Resources.File_Convert,0, LB_Old.Items.Count);
-            handle.Start();
-            Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate () 
-            {
-                _Handle();
-                handle.Completed = true;
-                handle.Abort();
-            });
-            while (!handle.Completed) Thread.Sleep(10);
-            handle = null;
-        }
-
-        private void _Handle()
+        private void _Handle(ProgressBarHandle handle)
         {
             int cnt = 0, covered = 0;
-            worker.ReportProgress((int)(((double)cnt / LB_Old.Items.Count) * 100));
+            long currentFileLen;
             string currentPath = FileHelper.AppRootPath;
             string outPath = TB_Path.Text;
             outPath = StringHelper.RemoveSystemSeparator(outPath);
@@ -126,7 +98,7 @@ namespace SamSoarII.Shell.Dialogs
                     if (ret != LocalizedMessageResult.Yes)
                     {
                         currentFileLen = 0;//不覆盖，因此将文件长度设置为0
-                        worker.ReportProgress((int)(((double)(cnt + 1) / LB_Old.Items.Count) * 100));
+                        handle.ReportProgress((int)(((double)(cnt + 1) / LB_Old.Items.Count) * 100), currentFileLen / (160.0 * 1024));
                         cnt++;
                         continue;
                     }
@@ -142,7 +114,7 @@ namespace SamSoarII.Shell.Dialogs
                 cmd.StartInfo.RedirectStandardError = true;
                 try
                 {
-                    worker.ReportProgress((int)(((double)(cnt + 1) / LB_Old.Items.Count) * 100));
+                    handle.ReportProgress((int)(((double)(cnt + 1) / LB_Old.Items.Count) * 100), currentFileLen / (160.0 * 1024));
                     cmd.Start();
                     cmd.WaitForExit();
                     Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
@@ -161,6 +133,7 @@ namespace SamSoarII.Shell.Dialogs
                     }
                 }
             }
+            handle.Abort();
             if (App.CultureIsZH_CH())
                 LocalizedMessageBox.Show(string.Format("成功{0}{1}，失败{2}！", LB_New.Items.Count, covered == 0 ? string.Empty : string.Format("(覆盖{0})", covered), LB_Old.Items.Count - cnt), LocalizedMessageIcon.Information);
             else
