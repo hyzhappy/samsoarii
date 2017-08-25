@@ -1659,7 +1659,7 @@ namespace SamSoarII.Core.Models
             for (int i = 0; i < children.Length; i++)
                 children[i] = new ValueModel(this, formats[i]);
             IEnumerable<XElement> xele_vs = xele.Elements("Value");
-            Parse(xele_vs.Select(x => x.Value).ToArray());
+            Parse(xele_vs.Select(x => x.Value).ToArray(), true, true);
         }
 
         public virtual void Save(XElement xele)
@@ -1679,7 +1679,7 @@ namespace SamSoarII.Core.Models
 
         #region Parse
 
-        public void Parse(string[] _args, bool updatevmg = true)
+        public void Parse(string[] _args, bool updatevmg = true, bool ignoreerror = false)
         {
             ValueModel[] _children = null;
             if (type == Types.CALLM)
@@ -1688,8 +1688,17 @@ namespace SamSoarII.Core.Models
                 FuncModel func = Project.Funcs.Where(f => f.Name.Equals(_args[0])).FirstOrDefault();
                 if (func == null)
                 {
-                    throw new ValueParseException(
-                        String.Format(App.CultureIsZH_CH() ? "找不到函数{0:s}" : "Cannot found function {0:s}", _args[0]), Format.Formats[0]);
+                    if (ignoreerror)
+                    {
+                        if (updatevmg && ValueManager != null) ValueManager.Remove(this);
+                        children = new ValueModel[1];
+                        children[0] = new ValueModel(this, Format.Formats[0]);
+                        if (updatevmg && ValueManager != null) ValueManager.Add(this);
+                        return;
+                    }
+                    else
+                        throw new ValueParseException(
+                            String.Format(App.CultureIsZH_CH() ? "找不到函数{0:s}" : "Cannot found function {0:s}", _args[0]), Format.Formats[0]);
                 }
                 if (updatevmg && ValueManager != null) ValueManager.Remove(this);
                 children = new ValueModel[1];
@@ -1698,31 +1707,44 @@ namespace SamSoarII.Core.Models
                 children = children.Concat(func.GetValueModels(this)).ToArray();
                 if (_args.Length != children.Length)
                 {
+                    if (ignoreerror)
+                    {
+                        if (updatevmg && ValueManager != null) ValueManager.Add(this);
+                        return;
+                    }
                     children[0].Dispose();
                     children = _children;
                     if (updatevmg && ValueManager != null) ValueManager.Add(this);
                     throw new ValueParseException("输入的参数数量不相符！", null);
                 }
-                try
-                {
-                    for (int i = 1; i < children.Length; i++)
+                for (int i = 1; i < children.Length; i++)
+                    try
+                    {
                         children[i].Text = _args[i];
-                }
-                catch (Exception e)
-                {
-                    foreach (ValueModel vmodel in children)
-                        if (vmodel != null) vmodel.Dispose();
-                    children = _children;
-                    if (updatevmg && ValueManager != null) ValueManager.Add(this);
-                    throw new ValueParseException(e.Message,
-                        (e is ValueParseException) ? ((ValueParseException)e).Format : null);
-                }
+                    }
+                    catch (Exception e)
+                    {
+                        if (!ignoreerror)
+                        {
+                            foreach (ValueModel vmodel in children)
+                                if (vmodel != null) vmodel.Dispose();
+                            children = _children;
+                            if (updatevmg && ValueManager != null) ValueManager.Add(this);
+                            throw new ValueParseException(e.Message,
+                                (e is ValueParseException) ? ((ValueParseException)e).Format : null);
+                        }
+                    }
                 if (updatevmg && ValueManager != null) ValueManager.Add(this);
                 Invoke(LadderUnitAction.UPDATE);
                 return;
             }
             if (_args.Length != children.Length)
             {
+                if (ignoreerror)
+                {
+                    if (updatevmg && ValueManager != null) ValueManager.Add(this);
+                    return;
+                }
                 throw new ValueParseException("输入的参数数量不相符！", null);
             }
             string[] oldtexts = new string[children.Length];
@@ -1736,6 +1758,7 @@ namespace SamSoarII.Core.Models
                 }
                 catch (Exception e)
                 {
+                    if (ignoreerror) continue;
                     if (Format.Outline == Outlines.Counter)
                     {
                         bool issuccess = true;

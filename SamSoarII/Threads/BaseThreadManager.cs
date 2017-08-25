@@ -9,15 +9,17 @@ namespace SamSoarII.Threads
 {
     public abstract class BaseThreadManager : IThreadManager
     {
-        public BaseThreadManager(bool _isMTA, bool _forceabort = false)
+        public BaseThreadManager(bool _isMTA, bool _forceabort = false, ThreadPriority _threadpriority = ThreadPriority.Normal)
         {
             isMTA = _isMTA;
             forceabort = _forceabort;
+            threadpriority = _threadpriority;
         }
 
         #region IThreadManager
 
         private Thread thread;
+        private ThreadPriority threadpriority;
         private bool isalive;
         private bool isactive;
         private bool thalive;
@@ -104,6 +106,7 @@ namespace SamSoarII.Threads
             thactive = true;
             if (IsAlive) return;
             thread = new Thread(_Thread_Run);
+            thread.Priority = threadpriority;
             if (isMTA) thread.SetApartmentState(ApartmentState.MTA);
             thread.Start();
         }
