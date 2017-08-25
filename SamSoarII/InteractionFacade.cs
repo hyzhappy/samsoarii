@@ -954,22 +954,24 @@ namespace SamSoarII
                 cfiles.Add(cfile);
                 ofiles.Add(ofile);
                 StreamWriter cw = new StreamWriter(cfile);
-                cw.Write("#include <math.h>\n");
-                cw.Write("typedef int* BIT;\r\n");
-                cw.Write("typedef short* WORD;\r\n");
-                cw.Write("typedef short* UWORD;\r\n");
-                cw.Write("typedef int* DWORD;\r\n");
-                cw.Write("typedef int* UDWORD;\r\n");
+                cw.Write("#include <stdint.h>\n");
+                cw.Write("typedef uint32_t* BIT;\r\n");
+                cw.Write("typedef int16_t* WORD;\r\n");
+                cw.Write("typedef uint16_t* UWORD;\r\n");
+                cw.Write("typedef int32_t* DWORD;\r\n");
+                cw.Write("typedef uint32_t* UDWORD;\r\n");
                 cw.Write("typedef float* FLOAT;\r\n");
-                sline = 7 + fbmodel.Funcs.Count();
+                cw.Write("#define DW ((DWORD)W)\r\n");
+                cw.Write("#define FW ((FLOAT)W)\r\n");
+                sline = 9 + fbmodel.Funcs.Count();
                 if (fbmodel.IsLibrary)
                 {
-                    cw.Write("double asin(double a) {}");
-                    cw.Write("double acos(double a) {}");
-                    cw.Write("double atan(double a) {}");
-                    cw.Write("double log(double a) {}");
-                    cw.Write("double log10(double a) {}");
-                    cw.Write("double sqrt(double a) {}");
+                    cw.Write("double asin(double a) {}\r\n");
+                    cw.Write("double acos(double a) {}\r\n");
+                    cw.Write("double atan(double a) {}\r\n");
+                    cw.Write("double log(double a) {}\r\n");
+                    cw.Write("double log10(double a) {}\r\n");
+                    cw.Write("double sqrt(double a) {}\r\n");
                     sline += 6;
                 }
                 foreach (FuncModel fmodel in fbmodel.Funcs)

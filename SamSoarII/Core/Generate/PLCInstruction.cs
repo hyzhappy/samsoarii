@@ -332,12 +332,17 @@ namespace SamSoarII.Core.Generate
                         case ValueModel.Bases.Y:
                         case ValueModel.Bases.M:
                         case ValueModel.Bases.S:
-                            if (vformat.CanWrite) args[0] = "BD" + args[0];
-                            return String.Format(
-                                vformat.CanWrite
-                                    ? "_set_bdword({0:s}Bit+{1:s}, {2:d},"
-                                    : "_get_bdword({0:s}Bit+{1:s}, {2:d})",
-                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel), vmodel.Size);
+                            if (vmodel.IsBitDoubleWord)
+                            {
+                                if (vformat.CanWrite) args[0] = "BD" + args[0];
+                                return String.Format(
+                                    vformat.CanWrite
+                                        ? "_set_bdword({0:s}Bit+{1:s}, {2:d},"
+                                        : "_get_bdword({0:s}Bit+{1:s}, {2:d})",
+                                    ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel), vmodel.Size);
+                            }
+                            return String.Format("{0:s}Bit[{1:s}]", 
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
                         case ValueModel.Bases.K:
                         case ValueModel.Bases.H:
                             return vmodel.Store.Value.ToString();
