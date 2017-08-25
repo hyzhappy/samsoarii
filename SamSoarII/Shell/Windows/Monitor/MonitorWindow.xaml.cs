@@ -333,7 +333,7 @@ namespace SamSoarII.Shell.Windows
                 e.CanExecute = false;
                 return;
             }
-            e.CanExecute = ifParent.CanExecute(e);
+            e.CanExecute = ifParent.CanExecute(e.Command);
             if (e.Command == MonitorCommand.DeleteElementsCommand)
                 e.CanExecute &= ElementDataGrid.SelectedItems != null;
             if (e.Command == MonitorCommand.DeleteAllElementCommand)

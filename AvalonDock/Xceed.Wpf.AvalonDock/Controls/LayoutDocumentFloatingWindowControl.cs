@@ -24,6 +24,9 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Microsoft.Windows.Shell;
+using SamSoarII.Shell.Windows;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace Xceed.Wpf.AvalonDock.Controls
 {
@@ -79,6 +82,12 @@ namespace Xceed.Wpf.AvalonDock.Controls
             }
         }
 
+        private IFloat ifloat;
+        public IFloat FloatContent
+        {
+            get { return this.ifloat; }
+            set { this.ifloat = value; }
+        }
         protected override IntPtr FilterMessage(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             switch (msg)
@@ -86,6 +95,19 @@ namespace Xceed.Wpf.AvalonDock.Controls
                 case Win32Helper.WM_NCLBUTTONDOWN: //Left button down on title -> start dragging over docking manager
                     if (wParam.ToInt32() == Win32Helper.HT_CAPTION)
                     {
+                        if (FloatContent != null)
+                        {
+                            FloatContent.ViewThreadPause();
+                            if (FloatContent.IsViewThreadActive)
+                            {
+                                if (!iswaittingtoactive)
+                                {
+                                    iswaittingtoactive = true;
+                                    FloatContent.ViewThreadPaused += OnViewThreadPausedToActive;
+                                }
+                                return base.FilterMessage(hwnd, msg, wParam, lParam, ref handled);
+                            }
+                        }
                         if (_model.RootDocument != null)
                             _model.RootDocument.IsActive = true;
                     }
@@ -99,12 +121,24 @@ namespace Xceed.Wpf.AvalonDock.Controls
                             WindowChrome.GetWindowChrome(this).ShowSystemMenu = !handled;
                         else
                             WindowChrome.GetWindowChrome(this).ShowSystemMenu = false;
+                        if (FloatContent != null) FloatContent.ViewThreadStart();
                     }
                     break;
 
             }
-
             return base.FilterMessage(hwnd, msg, wParam, lParam, ref handled);
+        }
+        private bool iswaittingtoactive = false;
+        private void OnViewThreadPausedToActive(object sender, RoutedEventArgs e)
+        {
+            IFloat ifloat = (IFloat)sender;
+            ifloat.ViewThreadPaused -= OnViewThreadPausedToActive;
+            iswaittingtoactive = false;
+            if (_model.RootDocument != null)
+                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate () 
+                {
+                    _model.RootDocument.IsActive = true;
+                }));
         }
 
         bool OpenContextMenu()

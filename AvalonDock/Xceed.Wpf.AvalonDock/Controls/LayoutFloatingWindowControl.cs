@@ -436,7 +436,12 @@ namespace Xceed.Wpf.AvalonDock.Controls
                         if (dropFlag)
                             InternalClose();
                     }
-
+                    if (this is LayoutDocumentFloatingWindowControl)
+                    {
+                        LayoutDocumentFloatingWindowControl docctrl = (LayoutDocumentFloatingWindowControl)this;
+                        if (docctrl.FloatContent != null)
+                            docctrl.FloatContent.ViewThreadStart();
+                    }
                     break;
                 case Win32Helper.WM_MOVING:
                     {

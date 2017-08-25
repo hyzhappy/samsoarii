@@ -85,12 +85,19 @@ namespace SamSoarII.Shell.Windows
                 {
                     floatcontrol.Closed -= OnFloatClosed;
                     FloatClosed(this, new RoutedEventArgs());
+                    if (floatcontrol is LayoutDocumentFloatingWindowControl)
+                    {
+                        ((LayoutDocumentFloatingWindowControl)floatcontrol).FloatContent = null;
+                        ViewThreadStart();
+                    }
                 }
                 this.floatcontrol = value;
                 if (floatcontrol != null)
                 {
                     floatcontrol.Closed += OnFloatClosed;
                     FloatOpened(this, new RoutedEventArgs());
+                    if (floatcontrol is LayoutDocumentFloatingWindowControl)
+                        ((LayoutDocumentFloatingWindowControl)floatcontrol).FloatContent = this;
                 }
             }
         }
