@@ -691,6 +691,7 @@ namespace SamSoarII.Core.Helpers
                 else
                     handle.ReportProgress(100, 0.00025 * dtConfig.Count * 115200 / communManager.MNGPort.BaudRate);
                 handle.UpdateMessage(Properties.Resources.Config_Download);
+                ret = DownloadConfigExecute(communManager, handle);
                 if (ret != CommuicationError.None)
                     return ret;
             }

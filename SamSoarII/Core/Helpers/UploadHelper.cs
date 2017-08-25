@@ -147,7 +147,6 @@ namespace SamSoarII.Core.Helpers
                     handle.ReportProgress(start + span, 0.01 * len);
                 else
                     handle.ReportProgress(start + span, 0.02 * len * 115200 / communManager.MNGPort.BaudRate);
-                handle.ReportProgress(start + span, 0.01 * len);
                 for (int i = 0; i < len; i++)
                 {
                     command = new UploadTypeData(funcCode,i);

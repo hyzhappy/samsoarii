@@ -97,7 +97,7 @@ namespace SamSoarII.Shell.Dialogs
             worker.WorkerReportsProgress = true;
             worker.DoWork += DoWork;
         }
-
+        
         #region Progress
         public void ReportProgress(int percentProgress,double timeSpan)
         {
@@ -174,6 +174,7 @@ namespace SamSoarII.Shell.Dialogs
         {
             pg_Bar?.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
+                _message = message;
                 pg_Bar.Message = message;
             });
         }
