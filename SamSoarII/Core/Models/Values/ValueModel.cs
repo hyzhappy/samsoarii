@@ -206,9 +206,13 @@ namespace SamSoarII.Core.Models
             }
         }
         IModel IModel.Parent { get { return Parent; } }
+        public InteractionFacade IFParent
+        {
+            get { return parent?.Parent?.Parent?.Parent?.Parent; }
+        }
         public ValueManager ValueManager
         {
-            get { return parent?.Parent?.Parent?.Parent?.Parent.MNGValue; }
+            get { return IFParent?.MNGValue; }
         }
 
         private ValueFormat format;
@@ -235,7 +239,18 @@ namespace SamSoarII.Core.Models
             }
         }
 
-        public string Comment { get { return ValueManager != null ? ValueManager[this].Comment : ""; } }
+        public string Comment
+        {
+            get
+            {
+                if (Parent?.Type == LadderUnitModel.Types.CALLM && Type == Types.STRING)
+                {
+                    FuncModel func = IFParent.MDProj.Funcs.Where(f => f.Name.Equals(text)).FirstOrDefault();
+                    return func != null ? func.Comment : "";
+                }
+                return ValueManager != null ? ValueManager[this].Comment : "";
+            }
+        }
 
         protected Bases bas;
         public Bases Base { get { return this.bas; } }

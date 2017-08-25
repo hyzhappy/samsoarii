@@ -1460,7 +1460,10 @@ namespace SamSoarII.Core.Models
                 {
                     if (children[i].Store?.Parent == null) continue;
                     if (children[i].Store?.Parent == ValueManager.EmptyInfo) continue;
-                    ValueModel fit = children.First(v => ValueManager[v] == ValueManager[children[i]]);
+                    ValueModel fit = children.First(v => ValueManager[v] == ValueManager[children[i]] 
+                        && v.Intra == children[i].Intra 
+                        && v.IntraOffset == children[i].IntraOffset
+                        && v.Size == children[i].Size);
                     if (fit == children[i]) yield return children[i];   
                 }
             }
