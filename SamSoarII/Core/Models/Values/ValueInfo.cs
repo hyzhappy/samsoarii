@@ -69,12 +69,12 @@ namespace SamSoarII.Core.Models
             PropertyChanged = null;
         }
 
-        public void Initialize()
+        public void Initialize(bool storedispose = true)
         {
             foreach (ValueStore store in stores)
             {
                 store.Post -= OnReceiveValueStoreEvent;
-                store.Dispose();
+                if (storedispose) store.Dispose();
             }
             if (comment != null) Comment = null;
             if (alias != null) Alias = null;
