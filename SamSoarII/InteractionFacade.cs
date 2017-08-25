@@ -916,7 +916,7 @@ namespace SamSoarII
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.Funcblock_Check));
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Funcblock_Check);
             wndMain.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-                {
+            {
                 handle.Start();
                 result = _CheckFuncBlock(handle, showreport);
             });
@@ -2202,6 +2202,8 @@ namespace SamSoarII
             {
                 ret &= mdProj != null && vmdProj != null;
                 if (!ret) return ret;
+                if (cmd == ApplicationCommands.Save)
+                    ret &= mdProj.IsModified;
                 if (cmd == GlobalCommand.InstShortCutOpenCommand
                  || cmd == GlobalCommand.InsertRowCommand
                  || cmd == GlobalCommand.DeleteRowCommand)
