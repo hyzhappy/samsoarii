@@ -475,11 +475,15 @@ namespace SamSoarII.Core.Models
             for (int i = bas + len; i < bas + maxlen; i++)
             {
                 ValueInfo vinfo = infos[i];
+                IList<ValueModel> values = vinfo.Values.ToArray();
                 foreach (ValueModel value in vinfo.Values)
+                {
                     value.Text = "???";
+                    EmptyInfo.Add(value);
+                }
                 foreach (LadderUnitModel unit in vinfo.Units)
                     unit.Invoke(LadderUnitAction.UPDATE);
-                vinfo.Initialize();
+                vinfo.Initialize(false);
             }
             bas = YOffset;
             len = Device.YRange.Count;
@@ -488,10 +492,13 @@ namespace SamSoarII.Core.Models
             {
                 ValueInfo vinfo = infos[i];
                 foreach (ValueModel value in vinfo.Values)
+                {
                     value.Text = "???";
+                    EmptyInfo.Add(value);
+                }
                 foreach (LadderUnitModel unit in vinfo.Units)
                     unit.Invoke(LadderUnitAction.UPDATE);
-                vinfo.Initialize();
+                vinfo.Initialize(false);
             }
         }
 

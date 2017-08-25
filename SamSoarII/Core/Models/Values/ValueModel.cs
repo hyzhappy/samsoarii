@@ -344,6 +344,7 @@ namespace SamSoarII.Core.Models
             {
                 bas = Bases.NULL; ofs = 0;
                 ibs = Bases.NULL; ifs = 0;
+                this.text = "???";
                 return;
             }
             Match match = format.Match(text);

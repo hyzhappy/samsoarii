@@ -24,6 +24,7 @@ using System.Windows.Input;
 using Xceed.Wpf.AvalonDock.Layout;
 using System.Diagnostics;
 using System.Windows.Media;
+using SamSoarII.Shell.Windows;
 
 namespace Xceed.Wpf.AvalonDock.Controls
 {
@@ -113,7 +114,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
         }
 
         #endregion
-
+        
         List<Rect> _otherTabsScreenArea = null;
         List<TabItem> _otherTabs = null;
         Rect _parentDocumentTabPanelScreenArea;
@@ -190,13 +191,14 @@ namespace Xceed.Wpf.AvalonDock.Controls
                     }
                 }
             }
-
         }
 
         protected override void OnMouseLeftButtonUp(System.Windows.Input.MouseButtonEventArgs e)
         {
             if (IsMouseCaptured)
+            {
                 ReleaseMouseCapture();
+            }
             _isMouseDown = false;
 
             base.OnMouseLeftButtonUp(e);

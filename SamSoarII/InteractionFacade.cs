@@ -2176,81 +2176,81 @@ namespace SamSoarII
             }
         }
         
-        public bool CanExecute(CanExecuteRoutedEventArgs e)
+        public bool CanExecute(ICommand cmd)
         {
             bool ret = true;
-            if (e.Command == ApplicationCommands.New
-             || e.Command == ApplicationCommands.Open
-             || e.Command == ApplicationCommands.Save
-             || e.Command == ApplicationCommands.Close)
+            if (cmd == ApplicationCommands.New
+             || cmd == ApplicationCommands.Open
+             || cmd == ApplicationCommands.Save
+             || cmd == ApplicationCommands.Close)
             {
                 ret &= !IsWaitForKey;
             }
-            if (e.Command == ApplicationCommands.Close) return ret;
-            if (e.Command != ApplicationCommands.New
-             && e.Command != ApplicationCommands.Open
-             && e.Command != GlobalCommand.UploadCommand
-             && e.Command != GlobalCommand.ShowOptionDialogCommand
-             && e.Command != GlobalCommand.ChangeToChineseCommand
-             && e.Command != GlobalCommand.ChangeToEnglishCommand
-             && e.Command != GlobalCommand.ShowHelpDocumentCommand
-             && e.Command != GlobalCommand.OnlineHelpCommand
-             && e.Command != GlobalCommand.ShowAboutCommand
-             && e.Command != GlobalCommand.FileConvertCommand)
+            if (cmd == ApplicationCommands.Close) return ret;
+            if (cmd != ApplicationCommands.New
+             && cmd != ApplicationCommands.Open
+             && cmd != GlobalCommand.UploadCommand
+             && cmd != GlobalCommand.ShowOptionDialogCommand
+             && cmd != GlobalCommand.ChangeToChineseCommand
+             && cmd != GlobalCommand.ChangeToEnglishCommand
+             && cmd != GlobalCommand.ShowHelpDocumentCommand
+             && cmd != GlobalCommand.OnlineHelpCommand
+             && cmd != GlobalCommand.ShowAboutCommand
+             && cmd != GlobalCommand.FileConvertCommand)
             {
                 ret &= mdProj != null && vmdProj != null;
                 if (!ret) return ret;
-                if (e.Command == GlobalCommand.InstShortCutOpenCommand
-                 || e.Command == GlobalCommand.InsertRowCommand
-                 || e.Command == GlobalCommand.DeleteRowCommand)
+                if (cmd == GlobalCommand.InstShortCutOpenCommand
+                 || cmd == GlobalCommand.InsertRowCommand
+                 || cmd == GlobalCommand.DeleteRowCommand)
                 {
                     ret &= CurrentLadder != null && CurrentLadder.SelectionStatus != SelectStatus.Idle;
                 }
-                if (e.Command == MonitorCommand.StartCommand
-                 || e.Command == GlobalCommand.SimuStartCommand)
+                if (cmd == MonitorCommand.StartCommand
+                 || cmd == GlobalCommand.SimuStartCommand)
                 {
                     ret &= CanStart;
                 }
-                if (e.Command == MonitorCommand.StopCommand
-                 || e.Command == GlobalCommand.SimuStopCommand)
+                if (cmd == MonitorCommand.StopCommand
+                 || cmd == GlobalCommand.SimuStopCommand)
                 {
                     ret &= CanStop;
                 }
-                if (e.Command == GlobalCommand.SimuPauseCommand)
+                if (cmd == GlobalCommand.SimuPauseCommand)
                 {
                     ret &= CanPause;
                 }
-                if (e.Command == GlobalCommand.BrpoNowCommand
-                 || e.Command == GlobalCommand.BrpoOutCommand)
+                if (cmd == GlobalCommand.BrpoNowCommand
+                 || cmd == GlobalCommand.BrpoOutCommand)
                 {
-                    ret &= mngSimu.IsBPPause;
+                    ret &= mdProj.LadderMode == LadderModes.Simulate && mngSimu.IsBPPause;
                 }
-                if (e.Command == GlobalCommand.BrpoCallCommand
-                 || e.Command == GlobalCommand.BrpoStepCommand)
+                if (cmd == GlobalCommand.BrpoCallCommand
+                 || cmd == GlobalCommand.BrpoStepCommand)
                 {
-                    ret &= mngSimu.IsBPPause || !mngSimu.IsActive;
+                    ret &= mdProj.LadderMode == LadderModes.Simulate && (mngSimu.IsBPPause || !mngSimu.IsActive);
                 }
-                if (e.Command == GlobalCommand.AddNewFuncBlockCommand
-                 || e.Command == GlobalCommand.AddNewModbusCommand
-                 || e.Command == GlobalCommand.AddNewSubRoutineCommand
-                 || e.Command == ApplicationCommands.Replace)
-                 //|| e.Command == GlobalCommand.CompileCommand
+                if (cmd == GlobalCommand.AddNewFuncBlockCommand
+                 || cmd == GlobalCommand.AddNewModbusCommand
+                 || cmd == GlobalCommand.AddNewSubRoutineCommand
+                 || cmd == ApplicationCommands.Replace)
+                 //|| cmd == GlobalCommand.CompileCommand
                 {
                     ret &= vmdProj.LadderMode == LadderModes.Edit;
                 }
             }
-            if (e.Command == ApplicationCommands.New
-             || e.Command == ApplicationCommands.Open
-             || e.Command == ApplicationCommands.Save
-             || e.Command == ApplicationCommands.SaveAs
-             || e.Command == GlobalCommand.CloseProjectCommand
-             || e.Command == GlobalCommand.SimulateCommand
-             || e.Command == GlobalCommand.DownloadCommand
-             || e.Command == GlobalCommand.MonitorCommand
-             || e.Command == GlobalCommand.AddNewFuncBlockCommand
-             || e.Command == GlobalCommand.AddNewModbusCommand
-             || e.Command == GlobalCommand.AddNewSubRoutineCommand
-             || e.Command == GlobalCommand.CompileCommand)
+            if (cmd == ApplicationCommands.New
+             || cmd == ApplicationCommands.Open
+             || cmd == ApplicationCommands.Save
+             || cmd == ApplicationCommands.SaveAs
+             || cmd == GlobalCommand.CloseProjectCommand
+             || cmd == GlobalCommand.SimulateCommand
+             || cmd == GlobalCommand.DownloadCommand
+             || cmd == GlobalCommand.MonitorCommand
+             || cmd == GlobalCommand.AddNewFuncBlockCommand
+             || cmd == GlobalCommand.AddNewModbusCommand
+             || cmd == GlobalCommand.AddNewSubRoutineCommand
+             || cmd == GlobalCommand.CompileCommand)
             {
                 ret &= !ProjectTreeViewItem.HasRenaming;
             }

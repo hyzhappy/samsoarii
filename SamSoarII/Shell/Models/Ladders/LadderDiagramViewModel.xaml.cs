@@ -1742,19 +1742,11 @@ namespace SamSoarII.Shell.Models
 
                         case Key.F2: IFParent.ShowInstructionInputDialog("LDIM ", _selectRect.Core); break;
                         case Key.F3: IFParent.ShowInstructionInputDialog("LDIIM ", _selectRect.Core); break;
-                        case Key.F5: Core.QuickInsertElement(LadderUnitModel.Types.MEP, _selectRect.Core); break;
-                        case Key.F6: Core.QuickInsertElement(LadderUnitModel.Types.MEF, _selectRect.Core); break;
+                        case Key.F5: QuickInsertElement(LadderUnitModel.Types.MEP); break;
+                        case Key.F6: QuickInsertElement(LadderUnitModel.Types.MEF); break;
                         case Key.F8: IFParent.ShowInstructionInputDialog("OUTIM ", _selectRect.Core); break;
-                        case Key.F9:
-                            if (_selectRect.Current.Type == LadderUnitModel.Types.HLINE)
-                                Core.RemoveSingleUnit(_selectRect.Current);
-                            SelectRectRight();
-                            break;
-                        case Key.F10:
-                            if (_selectRect.Current.Type == LadderUnitModel.Types.VLINE)
-                                Core.RemoveSingleUnit(_selectRect.Current);
-                            SelectRectDown();
-                            break;
+                        case Key.F9: QuickRemoveElement(LadderUnitModel.Types.HLINE); break;
+                        case Key.F10: QuickRemoveElement(LadderUnitModel.Types.VLINE); break;
                     }
                     isnavigatable = true;
                 }
@@ -1767,10 +1759,10 @@ namespace SamSoarII.Shell.Models
                         case Key.F3: IFParent.ShowInstructionInputDialog("LDI ", _selectRect.Core); break;
                         case Key.F5: IFParent.ShowInstructionInputDialog("LDP ", _selectRect.Core); break;
                         case Key.F6: IFParent.ShowInstructionInputDialog("LDF ", _selectRect.Core); break;
-                        case Key.F7: Core.QuickInsertElement(LadderUnitModel.Types.INV, _selectRect.Core); break;
+                        case Key.F7: QuickInsertElement(LadderUnitModel.Types.INV); break;
                         case Key.F8: IFParent.ShowInstructionInputDialog("OUT ", _selectRect.Core); break;
-                        case Key.F9: Core.QuickInsertElement(LadderUnitModel.Types.HLINE, _selectRect.Core); break;
-                        case Key.F10: Core.QuickInsertElement(LadderUnitModel.Types.VLINE, _selectRect.Core); break;
+                        case Key.F9: QuickInsertElement(LadderUnitModel.Types.HLINE); break;
+                        case Key.F10: QuickInsertElement(LadderUnitModel.Types.VLINE); break;
                     }
                     isnavigatable = true;
                 }

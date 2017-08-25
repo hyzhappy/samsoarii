@@ -3,6 +3,7 @@ using SamSoarII.Core.Models;
 using SamSoarII.Global;
 using SamSoarII.PLCDevice;
 using SamSoarII.Shell.Dialogs;
+using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
 using SamSoarII.Utility;
 using System;
@@ -683,17 +684,7 @@ namespace SamSoarII
 
         private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (e.Command == GlobalCommand.SimulateCommand)
-                TB_Simulate.IsChecked = !TB_Simulate.IsChecked;
-            if (e.Command == GlobalCommand.MonitorCommand)
-                TB_Monitor.IsChecked = !TB_Monitor.IsChecked;
-            if (e.Command == GlobalCommand.SimuStartCommand)
-                TB_Start.IsChecked = !TB_Start.IsChecked;
-            if (e.Command == GlobalCommand.SimuPauseCommand)
-                TB_Pause.IsChecked = !TB_Pause.IsChecked;
-            if (e.Command == GlobalCommand.SimuStopCommand)
-                TB_Stop.IsChecked = !TB_Stop.IsChecked;
-
+            if (!ifParent.CanExecute(e.Command)) return;
             if (e.Command == ApplicationCommands.New
              || e.Command == ApplicationCommands.Open
              || e.Command == ApplicationCommands.Close
@@ -830,7 +821,7 @@ namespace SamSoarII
 
         private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = ifParent != null ? ifParent.CanExecute(e) : false;
+            e.CanExecute = ifParent != null ? ifParent.CanExecute(e.Command) : false;
         }
 
         private void OnInstShortCutClick(object sender, RoutedEventArgs e)
