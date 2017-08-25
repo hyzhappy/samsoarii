@@ -1204,6 +1204,7 @@ namespace SamSoarII
         {
             if (network == null || network.IsMasked) return;
             LadderDiagramModel diagram = network.Parent;
+            if (diagram == null) return;
             if (diagram.Tab == null)
             {
                 _lastnet = network;
@@ -1769,6 +1770,7 @@ namespace SamSoarII
         {
             using (LadderDiagramCommentEditDialog dialog = new LadderDiagramCommentEditDialog(core))
             {
+                dialog.Owner = wndMain;
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 dialog.EnsureButtonClick += (sender1, e1) =>
                 {
@@ -1806,6 +1808,7 @@ namespace SamSoarII
             if (dlgOption == null)
             {
                 dlgOption = new OptionDialog(this);
+                dlgOption.Owner = wndMain;
                 dlgOption.EnsureButtonClick += (sender, e) =>
                 {
                     if (VMDProj != null) VMDProj.UpdateUnit();
@@ -1850,9 +1853,9 @@ namespace SamSoarII
         {
             using (LanaEnsureDialog dialog = new LanaEnsureDialog())
             {
+                dialog.Owner = wndMain;
                 dialog.EnsureButtonClick += (sender1, e1) =>
                 {
-                    dialog.Owner = wndMain;
                     GlobalSetting.IsOpenLSetting = true;
                     GlobalSetting.LanagArea = ischinese ? "zh-Hans" : "en";
                     dialog.Close();

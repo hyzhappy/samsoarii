@@ -68,7 +68,14 @@ namespace SamSoarII.Shell.Windows
                 window.DragMove();
             }
         }
-        
+        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                ChangeWindowState();
+            }
+            timestamp = e.Timestamp;
+        }
 
         private void OnCloseWindow(object sender, RoutedEventArgs e)
         {
@@ -116,15 +123,6 @@ namespace SamSoarII.Shell.Windows
                 window.LACInform.Hide();
                 model.Hide();
             }
-        }
-        
-        private void OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-            {
-                ChangeWindowState();
-            }
-            timestamp = e.Timestamp;
         }
     }
 }

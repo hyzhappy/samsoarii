@@ -93,7 +93,7 @@ namespace SamSoarII.Shell.Dialogs
             animation.From = -80;
             animation.To = 598;
             animation.Duration = TimeSpan.FromSeconds(3.5);
-            animation.RepeatBehavior = new RepeatBehavior(2000);
+            animation.RepeatBehavior = RepeatBehavior.Forever;
             BeginAnimation(OffsetProperty, animation);
         }
         private const int GWL_STYLE = -16;

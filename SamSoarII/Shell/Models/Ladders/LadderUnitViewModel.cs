@@ -259,7 +259,6 @@ namespace SamSoarII.Shell.Models
             using (DrawingContext context = RenderOpen())
             {
                 if (!visibility) return;
-                context.PushOpacity(core.IsUsed ? 1.0 : 0.3);
                 UpdateBreakpoint(context);
                 UpdateFramework(context);
                 UpdatePropertyText(context);
