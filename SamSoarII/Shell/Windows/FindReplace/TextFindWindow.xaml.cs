@@ -232,12 +232,8 @@ namespace SamSoarII.Shell.Windows
             Find();
             TB_Input.Background = Brushes.White;
         }
-        /// <summary>
-        /// 当在查找列表中选择时发生
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DG_List_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        
+        private void DataGridCell_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!ifParent.WNDMain.LAFind.IsFloat
              && !ifParent.WNDMain.LAFind.IsDock)
@@ -248,21 +244,13 @@ namespace SamSoarII.Shell.Windows
                     Properties.Resources.MainWindow_Search, ifParent.WNDMain.LAFind.AutoHideHeight.ToString());
                 ifParent.WNDMain.LAFind.ToggleAutoHide();
             }
-            if (DG_List.SelectedIndex < 0) return;
-            /*
-            TextFindElement element = null;
-            if (e.AddedItems.Count > 0)
-                element = (TextFindElement)(e.AddedItems[0]);
-            else if (e.RemovedItems.Count > 0)
-                element = (TextFindElement)(e.RemovedItems[0]);
-            else
-                return;
+            DataGridCell dgcell = (DataGridCell)sender;
+            TextFindElement element = (TextFindElement)(dgcell.DataContext);
             FuncBlockViewModel fbvmodel = element.FBVModel;
             int offset = element.Offset;
             int count = element.Word.Length;
-            ifParent.NavigateToFuncBlock(fbvmodel, offset);
+            ifParent.Navigate(fbvmodel.Core, offset);
             fbvmodel.SetOffset(offset, count);
-            */
         }
 
         #region Config
@@ -295,6 +283,7 @@ namespace SamSoarII.Shell.Windows
         #endregion
 
         #endregion
+        
     }
 
     public class TextFindElement : TextReplaceElement

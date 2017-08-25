@@ -318,7 +318,7 @@ namespace SamSoarII.Shell.Models
             {
                 string comment = string.Empty;
                 int id = 0;
-                foreach (ValueModel vmodel in Core.UniqueChildren)
+                foreach (ValueModel vmodel in Core.AllChildren)
                 {
                     comment = string.Format("{0:s}:{1:s}", vmodel.Text, vmodel.Comment);
                     DrawingText(context, new Point(10, 300 + (FontManager.GetComment().FontSize + 4) * id), HeightUnit, comment, null, FontWeights.Normal, 0, 0, TextAlignment.Left, FontTypes.Comment);

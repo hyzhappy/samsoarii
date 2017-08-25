@@ -16,6 +16,16 @@ using System.Windows;
 
 namespace SamSoarII.Core.Models
 {
+    public enum LadderDiagramActions { INSERT, REMOVE, UPDATE };
+
+    public class LadderDiagramChangedEventArgs : EventArgs
+    {
+        public LadderDiagramActions Action { get; private set; }
+        public LadderDiagramChangedEventArgs(LadderDiagramActions _action) { Action = _action; }
+    }
+
+    public delegate void LadderDiagramChangedEventHandler(LadderDiagramModel sender, LadderDiagramChangedEventArgs e);
+
     public class LadderDiagramModel : IModel
     {
         public LadderDiagramModel(ProjectModel _parent, string _name = "")
@@ -529,6 +539,7 @@ namespace SamSoarII.Core.Models
                 for (i2 = cmd.NewNetworks.Count - 1; i2 >= 0; i2--)
                 {
                     net = (LadderNetworkModel)(cmd.NewNetworks[i2]);
+                    net.Invoke(LadderNetworkActions.REMOVE);
                     net.ID = cmd.NewNetIDs[i2];
                     children.RemoveAt(net.ID);
                     net.Parent = null;
@@ -545,6 +556,7 @@ namespace SamSoarII.Core.Models
                             children.Insert(i1, net);
                             i2++;
                         }
+                        net.Invoke(LadderNetworkActions.INSERT);
                     }
                     children[i1].ID = i1;
                 }
@@ -819,6 +831,7 @@ namespace SamSoarII.Core.Models
                 for (i2 = cmd.OldNetworks.Count - 1; i2 >= 0; i2--)
                 {
                     net = (LadderNetworkModel)(cmd.OldNetworks[i2]);
+                    net.Invoke(LadderNetworkActions.REMOVE);
                     net.ID = cmd.OldNetIDs[i2];
                     children.RemoveAt(net.ID);
                     net.Parent = null;
@@ -835,6 +848,7 @@ namespace SamSoarII.Core.Models
                             children.Insert(i1, net);
                             i2++;
                         }
+                        net.Invoke(LadderNetworkActions.INSERT);
                     }
                     children[i1].ID = i1;
                 }
@@ -1186,7 +1200,18 @@ namespace SamSoarII.Core.Models
             LadderUnitModel unit = new LadderUnitModel(null, type) { X = x, Y = y };
             AddSingleUnit(unit, net, cover);
         }
-        
+
+        #endregion
+
+        #region Event Handler
+
+        public event LadderDiagramChangedEventHandler Changed = delegate { };
+
+        public void Invoke(LadderDiagramActions action)
+        {
+            Changed(this, new LadderDiagramChangedEventArgs(action));
+        }
+
         #endregion
     }
 }

@@ -175,6 +175,7 @@ namespace SamSoarII.Shell.Windows
             int _warningcount = 0;
             foreach (ErrorReportElement inst in insts)
             {
+                inst.Changed += OnInstChanged;
                 items.Add(inst);
                 switch (inst.Status)
                 {
@@ -191,6 +192,14 @@ namespace SamSoarII.Shell.Windows
             WarningCount = _warningcount;
             IsShowError = true;
             IsShowWarning = true;
+        }
+        private void OnInstChanged(object sender, RoutedEventArgs e)
+        {
+            ErrorReportElement ele = (ErrorReportElement)sender;
+            ele.Changed -= OnInstChanged;
+            items.Remove(ele);
+            ele.Dispose();
+            PropertyChanged(this, new PropertyChangedEventArgs("Items"));
         }
 
         public void Update(IEnumerable<ErrorReportElement_FB> eles)
@@ -244,7 +253,7 @@ namespace SamSoarII.Shell.Windows
                 if (dgcell.DataContext is ErrorReportElement)
                 {
                     ErrorReportElement ele = (ErrorReportElement)(dgcell.DataContext);
-                    LadderUnitModel unit = ele.Prototype;
+                    LadderUnitModel unit = ele.Unit;
                     ifParent.Navigate(unit);
                 }
                 if (dgcell.DataContext is ErrorReportElement_FB)

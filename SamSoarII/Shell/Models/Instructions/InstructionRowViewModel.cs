@@ -110,7 +110,7 @@ namespace SamSoarII.Shell.Models
                     if (unit != null && unit.ValueManager != null)
                     {
                         tbtext.Append("// ");
-                        foreach (ValueModel value in unit.UniqueChildren)
+                        foreach (ValueModel value in unit.AllChildren)
                             tbtext.Append(String.Format("{0:s}:{1:s}, ", value.Text, value.Comment));
                     }
                     DrawingText(context, tbtext.ToString(), xstarts[7], widths[7], Brushes.Transparent, Brushes.Green);

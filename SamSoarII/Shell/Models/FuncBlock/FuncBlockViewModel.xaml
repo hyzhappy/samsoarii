@@ -16,6 +16,8 @@
         <CommandBinding Command="{x:Static ApplicationCommands.Copy}" CanExecute="OnCommandCanExecute"/>
         <CommandBinding Command="{x:Static ApplicationCommands.Paste}" CanExecute="OnCommandCanExecute"/>
         <CommandBinding Command="{x:Static ApplicationCommands.SelectAll}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>
+        <CommandBinding Command="{x:Static ApplicationCommands.Find}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>
+        <CommandBinding Command="{x:Static ApplicationCommands.Replace}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>
         <CommandBinding Command="{x:Static local:FuncBlockViewModel.AddBreakpoint}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>
         <CommandBinding Command="{x:Static local:FuncBlockViewModel.RemoveBreakpoint}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>
         <CommandBinding Command="{x:Static local:FuncBlockViewModel.ActiveBreakpoint}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>

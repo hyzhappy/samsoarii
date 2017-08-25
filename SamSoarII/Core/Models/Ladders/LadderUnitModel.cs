@@ -1468,7 +1468,22 @@ namespace SamSoarII.Core.Models
                 }
             }
         }
-        
+        public IEnumerable<ValueModel> AllChildren
+        {
+            get
+            {
+                for (int i = 0; i < children.Count(); i++)
+                {
+                    if (children[i].Base == ValueModel.Bases.K) continue;
+                    if (children[i].Base == ValueModel.Bases.H) continue;
+                    ValueModel fit = children.First(v => ValueManager[v] == ValueManager[children[i]]
+                        && v.Intra == children[i].Intra
+                        && v.IntraOffset == children[i].IntraOffset
+                        && v.Size == children[i].Size);
+                    if (fit == children[i]) yield return children[i];
+                }
+            }
+        }
         private int x;
         public int X
         {

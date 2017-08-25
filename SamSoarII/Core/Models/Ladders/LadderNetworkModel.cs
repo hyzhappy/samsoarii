@@ -31,6 +31,16 @@ namespace SamSoarII.Core.Models
 
     public delegate void RowChangedEventHandler(LadderNetworkModel sender, RowChangedEventArgs e);
 
+    public enum LadderNetworkActions { INSERT, REMOVE, UPDATE};
+    
+    public class LadderNetworkChangedEventArgs : EventArgs
+    {
+        public LadderNetworkActions Action { get; private set; }
+        public LadderNetworkChangedEventArgs(LadderNetworkActions _action) { Action = _action; }
+    }
+
+    public delegate void LadderNetworkChangedEventHandler(LadderNetworkModel sender, LadderNetworkChangedEventArgs e);
+    
     public class LadderNetworkModel : IModel
     {
         public LadderNetworkModel(LadderDiagramModel _parent, int _id)
@@ -411,6 +421,13 @@ namespace SamSoarII.Core.Models
         public void InvokeByChildren(LadderUnitModel unit, LadderUnitAction action)
         {
             ChildrenChanged(unit, new LadderUnitChangedEventArgs(action));
+        }
+
+        public event LadderNetworkChangedEventHandler Changed = delegate { };
+
+        public void Invoke(LadderNetworkActions action)
+        {
+            Changed(this, new LadderNetworkChangedEventArgs(action));
         }
 
         #endregion

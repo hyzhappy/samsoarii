@@ -1029,7 +1029,8 @@ namespace SamSoarII.Shell.Models
                 e.Command == ApplicationCommands.Copy ||
                 e.Command == ApplicationCommands.Paste ||
                 e.Command == ApplicationCommands.Undo ||
-                e.Command == ApplicationCommands.Redo)
+                e.Command == ApplicationCommands.Redo ||
+                e.Command == ApplicationCommands.Replace)
             {
                 e.CanExecute = core != null && LadderMode == LadderModes.Edit && !IsReadOnly;
             }
@@ -1054,6 +1055,10 @@ namespace SamSoarII.Shell.Models
         
         private void OnCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
+            if (e.Command == ApplicationCommands.Find)
+                IFParent.WNDMain.LACFind.Show();
+            if (e.Command == ApplicationCommands.Replace)
+                IFParent.WNDMain.LACReplace.Show();
             if (e.Command == ApplicationCommands.SelectAll)
                 CodeTextBox.SelectAll();
             if (e.Command == AddBreakpoint)

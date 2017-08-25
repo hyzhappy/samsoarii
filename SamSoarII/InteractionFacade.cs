@@ -897,7 +897,7 @@ namespace SamSoarII
                         if (inst.Status == PLCOriginInst.STATUS_ERROR)
                         {
                             ecount++;
-                            weinsts.Add(new ErrorReportElement(inst, inmodel.Parent));
+                            weinsts.Add(new ErrorReportElement(inst));
                         } 
             foreach (LadderDiagramModel ldmodel in mdProj.Diagrams)
                 foreach (InstructionNetworkModel inmodel in ldmodel.Inst.Children)
@@ -905,7 +905,7 @@ namespace SamSoarII
                         if (inst.Status == PLCOriginInst.STATUS_WARNING)
                         {
                             wcount++;
-                            weinsts.Add(new ErrorReportElement(inst, inmodel.Parent));
+                            weinsts.Add(new ErrorReportElement(inst));
                         } 
             return weinsts;
         }
