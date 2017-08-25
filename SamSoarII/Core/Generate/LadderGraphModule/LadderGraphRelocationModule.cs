@@ -711,6 +711,13 @@ namespace SamSoarII.Core.Generate
                 }
             }
         }
+        /// <summary>
+        /// 计算同一层级间，VLine之前的元素数量
+        /// </summary>
+        /// <param name="ladderLogicModule"></param>
+        /// <param name="VLines">同一层级的VLines</param>
+        /// <param name="VLine">当前VLine</param>
+        /// <returns></returns>
         private static int GetCount(LadderLogicModule ladderLogicModule, List<LadderUnitModel> VLines, LadderUnitModel VLine)
         {
             //cnt 表示前面的元素数量，初始化为0

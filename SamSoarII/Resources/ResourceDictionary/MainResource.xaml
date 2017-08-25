@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:control="clr-namespace:SamSoarII.Shell.Windows"
                     xmlns:win="clr-namespace:SamSoarII"
-                    xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Xceed.Wpf.AvalonDock"
+                    xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
                     xmlns:local="clr-namespace:SamSoarII.Resources.ResourceDictionary">
     <Style x:Key="MainWindowBorderStyle"
        TargetType="{x:Type Window}">
@@ -11,9 +11,7 @@
         <Setter Property="shell:WindowChrome.WindowChrome">
             <Setter.Value>
                 <shell:WindowChrome
-                    ShowSystemMenu="True"
                     ResizeBorderThickness="6"
-                    CornerRadius="0"
                     GlassFrameThickness="2"/>
             </Setter.Value>
         </Setter>

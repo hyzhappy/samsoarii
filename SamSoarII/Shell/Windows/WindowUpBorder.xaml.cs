@@ -24,8 +24,12 @@ namespace SamSoarII.Shell.Windows
         public WindowUpBorder()
         {
             InitializeComponent();
+            Loaded += WindowUpBorder_Loaded;
+        }
+
+        private void WindowUpBorder_Loaded(object sender, RoutedEventArgs e)
+        {
             window = (MainWindow)Application.Current.MainWindow;
-            DataContext = window;
             window.StateChanged += Window_StateChanged;
             window.IFParent.UDManager.InformationsCountChanged += UDManager_InformationsCountChanged;
         }
@@ -55,22 +59,16 @@ namespace SamSoarII.Shell.Windows
             }
         }
 
+        int timestamp = 0;
         private void OnDragWindow(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                if (window.WindowState == WindowState.Maximized) window.WindowState = WindowState.Normal;
+                if (window.WindowState == WindowState.Maximized && timestamp > 0 && e.Timestamp - timestamp < 150) window.WindowState = WindowState.Normal;
                 window.DragMove();
             }
         }
-
-        //private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        //{
-        //    if (e.ClickCount == 2)
-        //    {
-        //        ChangeWindowState();
-        //    }
-        //}
+        
 
         private void OnCloseWindow(object sender, RoutedEventArgs e)
         {
@@ -118,6 +116,15 @@ namespace SamSoarII.Shell.Windows
                 window.LACInform.Hide();
                 model.Hide();
             }
+        }
+        
+        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                ChangeWindowState();
+            }
+            timestamp = e.Timestamp;
         }
     }
 }

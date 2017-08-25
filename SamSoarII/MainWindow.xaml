@@ -8,7 +8,7 @@
         xmlns:wnd="clr-namespace:SamSoarII.Shell.Windows"
         xmlns:properties="clr-namespace:SamSoarII.Properties"
         mc:Ignorable="d" MinHeight="48" MinWidth="240" Icon="/Resources/Image/SamSoarII.ico"
-        Title="MainWindow" Height="400" Width="600" WindowState="Maximized"
+        Height="400" Width="600" WindowState="Maximized"
         PreviewKeyDown="MainWindow_KeyDown" Style="{StaticResource MainWindowBorderStyle}"
         Closing="Window_Closing" ResizeMode="CanResizeWithGrip">
     <Window.CommandBindings>

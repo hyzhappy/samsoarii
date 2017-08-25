@@ -79,7 +79,7 @@ namespace SamSoarII.Shell.Dialogs
         Action<ProgressBarHandle> action;
         //调用后台方法的Dispatcher
         Dispatcher dispatcher;
-        public Dispatcher Dispatcher { get { return dispatcher; } }
+
         private string _message;
         //进度条的最小最大值
         private int minimum;
@@ -154,12 +154,11 @@ namespace SamSoarII.Shell.Dialogs
 
         public void Abort()
         {
-            //Completed = true;窗口关闭不代表耗时操作已完成，比如可能被Messagebox阻塞
-
             while (started && pg_Bar == null)
             {
                 Thread.Sleep(10);//线程已启动，但还未执行ThreadStartingPoint方法时，需等待
             }
+
             if (started)
             {
                 pg_Bar.Dispatcher.Invoke(new Execute(() =>

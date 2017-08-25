@@ -1,4 +1,5 @@
-﻿using SamSoarII.Core.Models;
+﻿using Microsoft.Windows.Shell;
+using SamSoarII.Core.Models;
 using SamSoarII.Global;
 using SamSoarII.PLCDevice;
 using SamSoarII.Shell.Dialogs;
