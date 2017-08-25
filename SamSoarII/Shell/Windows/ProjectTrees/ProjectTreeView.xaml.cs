@@ -987,7 +987,7 @@ namespace SamSoarII.Shell.Windows
         private void TV_Main_DragLeave(object sender, DragEventArgs e)
         {
             CurrentItem = null;
-            if (e.Source == this)
+            if ((DragItem.Flags & 0xf) == ProjectTreeViewItem.TYPE_INSTRUCTION)
                 ifParent.WNDMain.LACProj.Hide();
         }
         

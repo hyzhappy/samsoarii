@@ -897,7 +897,7 @@ namespace SamSoarII
                         if (inst.Status == PLCOriginInst.STATUS_ERROR)
                         {
                             ecount++;
-                            weinsts.Add(new ErrorReportElement(inst, inmodel.Parent));
+                            weinsts.Add(new ErrorReportElement(inst));
                         } 
             foreach (LadderDiagramModel ldmodel in mdProj.Diagrams)
                 foreach (InstructionNetworkModel inmodel in ldmodel.Inst.Children)
@@ -905,7 +905,7 @@ namespace SamSoarII
                         if (inst.Status == PLCOriginInst.STATUS_WARNING)
                         {
                             wcount++;
-                            weinsts.Add(new ErrorReportElement(inst, inmodel.Parent));
+                            weinsts.Add(new ErrorReportElement(inst));
                         } 
             return weinsts;
         }
@@ -916,7 +916,7 @@ namespace SamSoarII
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.Funcblock_Check));
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Funcblock_Check);
             wndMain.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-                {
+            {
                 handle.Start();
                 result = _CheckFuncBlock(handle, showreport);
             });
@@ -954,22 +954,24 @@ namespace SamSoarII
                 cfiles.Add(cfile);
                 ofiles.Add(ofile);
                 StreamWriter cw = new StreamWriter(cfile);
-                cw.Write("#include <math.h>\n");
-                cw.Write("typedef int* BIT;\r\n");
-                cw.Write("typedef short* WORD;\r\n");
-                cw.Write("typedef short* UWORD;\r\n");
-                cw.Write("typedef int* DWORD;\r\n");
-                cw.Write("typedef int* UDWORD;\r\n");
+                cw.Write("#include <stdint.h>\n");
+                cw.Write("typedef uint32_t* BIT;\r\n");
+                cw.Write("typedef int16_t* WORD;\r\n");
+                cw.Write("typedef uint16_t* UWORD;\r\n");
+                cw.Write("typedef int32_t* DWORD;\r\n");
+                cw.Write("typedef uint32_t* UDWORD;\r\n");
                 cw.Write("typedef float* FLOAT;\r\n");
-                sline = 7 + fbmodel.Funcs.Count();
+                cw.Write("#define DW ((DWORD)W)\r\n");
+                cw.Write("#define FW ((FLOAT)W)\r\n");
+                sline = 9 + fbmodel.Funcs.Count();
                 if (fbmodel.IsLibrary)
                 {
-                    cw.Write("double asin(double a) {}");
-                    cw.Write("double acos(double a) {}");
-                    cw.Write("double atan(double a) {}");
-                    cw.Write("double log(double a) {}");
-                    cw.Write("double log10(double a) {}");
-                    cw.Write("double sqrt(double a) {}");
+                    cw.Write("double asin(double a) {}\r\n");
+                    cw.Write("double acos(double a) {}\r\n");
+                    cw.Write("double atan(double a) {}\r\n");
+                    cw.Write("double log(double a) {}\r\n");
+                    cw.Write("double log10(double a) {}\r\n");
+                    cw.Write("double sqrt(double a) {}\r\n");
                     sline += 6;
                 }
                 foreach (FuncModel fmodel in fbmodel.Funcs)
@@ -1421,11 +1423,13 @@ namespace SamSoarII
             openFileDialog.Filter = string.Format("{0}|*.{1};*.{2}",Properties.Resources.Project_File, FileHelper.NewFileExtension, FileHelper.OldFileExtension);
             if (openFileDialog.ShowDialog() == true)
             {
+                /*
                 if (mdProj != null && openFileDialog.FileName.Equals(mdProj.FileName))
                 {
                     LocalizedMessageBox.Show(Properties.Resources.Message_Project_Loaded, LocalizedMessageIcon.Information);
                     return;
                 }
+                */
                 if (openFileDialog.FileName.EndsWith(FileHelper.OldFileExtension))
                 {
                     ShowFileConvertDialog(openFileDialog.FileName);
@@ -2203,6 +2207,8 @@ namespace SamSoarII
             {
                 ret &= mdProj != null && vmdProj != null;
                 if (!ret) return ret;
+                if (cmd == ApplicationCommands.Save)
+                    ret &= mdProj.IsModified;
                 if (cmd == GlobalCommand.InstShortCutOpenCommand
                  || cmd == GlobalCommand.InsertRowCommand
                  || cmd == GlobalCommand.DeleteRowCommand)

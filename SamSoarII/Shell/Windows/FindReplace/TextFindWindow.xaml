@@ -49,7 +49,6 @@
             <TextBlock x:Uid="TextBlock_6" Grid.Row="0" Grid.Column="0"
                    VerticalAlignment="Center" Margin="6,0,0,0"
                    FontSize="14" Text="{x:Static properties:Resources.MainWindow_Search}"/>
-
             <TextBox x:Uid="TB_Input" x:Name="TB_Input"
                  Grid.Row="0" Grid.Column="0"
                  Margin="60,4,4,4"
@@ -58,12 +57,12 @@
             </TextBox>
             <DataGrid x:Uid="DG_List" x:Name="DG_List" ItemsSource="{Binding Items}"
                   Grid.Row="1" Grid.Column="0"
-                  AutoGenerateColumns="False" CanUserResizeColumns="False"
-                  RowBackground="White" AlternatingRowBackground="AliceBlue"
-                  SelectionChanged="DG_List_SelectionChanged">
+                  AutoGenerateColumns="False" CanUserResizeColumns="True" CanUserSortColumns="False"
+                  RowBackground="White" AlternatingRowBackground="AliceBlue">
                 <DataGrid.CellStyle>
                     <Style x:Uid="Style_1" TargetType="DataGridCell">
                         <Setter x:Uid="Setter_1" Property="IsSelected" Value="{Binding IsSelected}"/>
+                        <EventSetter Event="MouseDown" Handler="DataGridCell_MouseDown"/>
                         <Style.Triggers>
                             <Trigger x:Uid="Trigger_1" Property="IsSelected" Value="True">
                                 <Setter x:Uid="Setter_2" Property="Background" Value="LightBlue"/>

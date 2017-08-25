@@ -243,6 +243,11 @@ namespace SamSoarII.Core.Models
         {
             get
             {
+                if (Parent?.Type == LadderUnitModel.Types.MBUS && Type == Types.STRING)
+                {
+                    ModbusModel modbus = IFParent.MDProj.Modbus.Children.Where(m => m.Name.Equals(text)).FirstOrDefault();
+                    return modbus != null ? modbus.Comment : "";
+                }
                 if (Parent?.Type == LadderUnitModel.Types.CALLM && Type == Types.STRING)
                 {
                     FuncModel func = IFParent.MDProj.Funcs.Where(f => f.Name.Equals(text)).FirstOrDefault();
@@ -276,13 +281,15 @@ namespace SamSoarII.Core.Models
         public bool IsBitWord
         {
             get { return (Type == Types.WORD || Type == Types.UWORD || Type == Types.BCD || Type == Types.HEX) 
-                    && (Base == Bases.X || Base == Bases.Y || Base == Bases.M || Base == Bases.S); }
+                    && (Base == Bases.X || Base == Bases.Y || Base == Bases.M || Base == Bases.S)
+                    && Size > 0 && Size <= 16; }
         }
         
         public bool IsBitDoubleWord
         {
             get { return (Type == Types.DWORD || Type == Types.UDWORD || Type == Types.DHEX) 
-                    && (Base == Bases.X || Base == Bases.Y || Base == Bases.M || Base == Bases.S); }
+                    && (Base == Bases.X || Base == Bases.Y || Base == Bases.M || Base == Bases.S)
+                    && Size > 0 && Size <= 32; }
         }
 
         public bool IsPulseCount
@@ -513,7 +520,7 @@ namespace SamSoarII.Core.Models
                     else if (IsBitWord || IsBitDoubleWord)
                     {
                         if (ibs != Bases.V && ibs != Bases.Z)
-                            this.text = String.Format("K{0:d}{1:s}{2:d}}",
+                            this.text = String.Format("K{0:d}{1:s}{2:d}",
                                 siz, ValueModel.NameOfBases[(int)bas], oldofs);
                         else
                             this.text = String.Format("K{0:d}{1:s}{2:d}{3:s}{4:d}",

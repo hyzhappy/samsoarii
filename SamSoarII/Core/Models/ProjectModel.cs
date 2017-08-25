@@ -436,6 +436,7 @@ namespace SamSoarII.Core.Models
             if (e.OldItems != null)
                 foreach (LadderDiagramModel ldmodel in e.OldItems)
                 {
+                    ldmodel.Invoke(LadderDiagramActions.REMOVE);
                     ldmodel.PropertyChanged -= OnDiagramPropertyChanged;
                     ldmodel.Parent = null;
                 }
@@ -444,6 +445,7 @@ namespace SamSoarII.Core.Models
                 {
                     ldmodel.PropertyChanged += OnDiagramPropertyChanged;
                     ldmodel.Parent = this;
+                    ldmodel.Invoke(LadderDiagramActions.INSERT);
                 }
             InvokeModify(this);
             DiagramChanged(this, e);

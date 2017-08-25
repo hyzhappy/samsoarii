@@ -94,7 +94,7 @@
             </TextBox>
             <DataGrid x:Uid="DG_List" x:Name="DG_List" ItemsSource="{Binding Items}"
                   Grid.Row="2" Grid.Column="0"
-                  AutoGenerateColumns="False" CanUserResizeColumns="False"
+                  AutoGenerateColumns="False" CanUserResizeColumns="True" CanUserSortColumns="False"
                   RowBackground="White" AlternatingRowBackground="AliceBlue"
                   SelectionChanged="DG_List_SelectionChanged"
                   KeyDown="TB_Change_KeyDown">

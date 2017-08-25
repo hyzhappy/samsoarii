@@ -522,7 +522,7 @@ namespace SamSoarII.Shell.Windows
 
         protected virtual void OnTextChanged(object sender, RoutedEventArgs e)
         {
-            tpwindow.Initialize();
+            tpwindow?.Initialize();
         }
     }
 

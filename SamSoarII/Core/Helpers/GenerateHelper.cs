@@ -119,6 +119,8 @@ namespace SamSoarII.Core.Helpers
             sw.Write("typedef int32_t* D_WORD;\r\n");
             sw.Write("typedef uint32_t* UD_WORD;\r\n");
             sw.Write("typedef float* _FLOAT;\r\n");
+            sw.Write("#define DW ((D_WORD)W)\r\n");
+            sw.Write("#define FW ((_FLOAT)W)\r\n");
             sw.Write("extern void callinfo();\r\n");
             sw.Write("extern void callleave();\r\n");
             sw.Write("extern void bpcycle(int addr);\r\n");
@@ -286,6 +288,8 @@ namespace SamSoarII.Core.Helpers
             sw.Write("typedef int32_t* D_WORD;\n");
             sw.Write("typedef uint32_t* UD_WORD;\n");
             sw.Write("typedef float* _FLOAT;\n");
+            sw.Write("#define DW ((D_WORD)W)\r\n");
+            sw.Write("#define FW ((_FLOAT)W)\r\n");
             foreach (FuncBlockModel fbmodel in project.FuncBlocks)
                 GenerateCHeader(fbmodel, sw);
             sw.Close();

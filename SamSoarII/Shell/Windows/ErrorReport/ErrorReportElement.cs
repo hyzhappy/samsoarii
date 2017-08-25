@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Windows.Media;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace SamSoarII.Shell.Windows
 {
@@ -13,41 +14,51 @@ namespace SamSoarII.Shell.Windows
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        private PLCOriginInst inst;
+        private int status;
+        private string message;
+        private LadderUnitModel unit;
         private LadderNetworkModel network;
+        private LadderDiagramModel diagram;
 
-        public ErrorReportElement
-        (
-            PLCOriginInst _inst,
-            LadderNetworkModel _network
-        )
+        public ErrorReportElement(PLCOriginInst _inst)
         {
-            this.inst = _inst;
-            this.network = _network;
+            this.status = _inst.Status;
+            this.message = _inst.Message;
+            this.unit = _inst.Inst.ProtoType;
+            this.network = unit.Parent;
+            this.diagram = network.Parent;
+            unit.Changed += OnUnitChanged;
+            network.Changed += OnNetworkChanged;
+            diagram.Changed += OnDiagramChanged;
         }
-
+        
         public void Dispose()
         {
-            inst = null;
+            unit.Changed -= OnUnitChanged;
+            network.Changed -= OnNetworkChanged;
+            diagram.Changed -= OnDiagramChanged;
+            unit = null;
             network = null;
-            PropertyChanged = null;
+            diagram = null;
+            Changed = delegate { };
+            PropertyChanged = delegate { };
         }
 
-        public LadderUnitModel Prototype
+        public LadderUnitModel Unit
         {
-            get { return inst.Inst.ProtoType; }
+            get { return this.unit; }
         }
 
         public int Status
         {
-            get { return inst.Status; }
+            get { return this.status; }
         }
 
         public Brush BrushFill
         {
             get
             {
-                switch (inst.Status)
+                switch (status)
                 {
                     case PLCOriginInst.STATUS_WARNING:
                         return Brushes.Yellow;
@@ -58,16 +69,15 @@ namespace SamSoarII.Shell.Windows
                 }
             }
         }
-
-
+        
         public string Detail
         {
-            get { return inst.Message; }
+            get { return this.message; }
         }
 
         public string InstText
         {
-            get { return inst.ToString(); }
+            get { return unit.ToInstString(); }
         }
 
         public string Network
@@ -77,7 +87,28 @@ namespace SamSoarII.Shell.Windows
 
         public string Diagram
         {
-            get { return network.Parent.Name; }
+            get { return diagram.Name; }
         }
+
+        #region Event Handler
+
+        public event RoutedEventHandler Changed = delegate { };
+
+        private void OnUnitChanged(LadderUnitModel sender, LadderUnitChangedEventArgs e)
+        {
+            Changed(this, new RoutedEventArgs());
+        }
+
+        private void OnNetworkChanged(LadderNetworkModel sender, LadderNetworkChangedEventArgs e)
+        {
+            Changed(this, new RoutedEventArgs());
+        }
+
+        private void OnDiagramChanged(LadderDiagramModel sender, LadderDiagramChangedEventArgs e)
+        {
+            Changed(this, new RoutedEventArgs());
+        }
+
+        #endregion
     }
 }
