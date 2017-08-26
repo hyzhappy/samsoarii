@@ -251,6 +251,13 @@ namespace SamSoarII.Core.Simulate
         private static extern void InitRunLadder();
 
         /// <summary>
+        /// 判断RunLadder是否结束
+        /// </summary>
+        /// <returns></returns>
+        [DllImport(@"simug\simu.dll", EntryPoint = "IsRunLadderFinished")]
+        public static extern int IsRunLadderFinished();
+
+        /// <summary>
         /// 每运行一次仿真PLC之前，要运行的函数
         /// </summary>
         [DllImport(@"simug\simu.dll", EntryPoint = "BeforeRunLadder")]
@@ -261,6 +268,18 @@ namespace SamSoarII.Core.Simulate
         /// </summary>
         [DllImport(@"simug\simu.dll", EntryPoint = "AfterRunLadder")]
         private static extern void AfterRunLadder();
+
+        /// <summary>
+        /// 继续运行RunLadder
+        /// </summary>
+        [DllImport(@"simug\simu.dll", EntryPoint = "ResumeRunLadder")]
+        public static extern void ResumeRunLadder();
+
+        /// <summary>
+        /// 强制终止RunLadder
+        /// </summary>
+        [DllImport(@"simug\simu.dll", EntryPoint = "KillRunLadder")]
+        public static extern void KillRunLadder();
 
         /// <summary>
         /// 初始化仿真计时时间
@@ -336,13 +355,14 @@ namespace SamSoarII.Core.Simulate
         [DllImport(@"simug\simu.dll", EntryPoint = "GetBPPause")]
         public static extern byte GetBPPause();
 
+
         /// <summary>
-        /// 设置当前断点状态（可以继续运行）
+        /// 设置当前断点状态为0来恢复运行
         /// </summary>
-        /// <param name="bppause"></param>
+        /// <returns></returns>
         [DllImport(@"simug\simu.dll", EntryPoint = "SetBPPause")]
-        public static extern void SetBPPause(byte bppause);
-        
+        public static extern void SetBPPause(int bppause);
+
         /// <summary>
         /// 设置断点使能
         /// </summary>
@@ -425,7 +445,7 @@ namespace SamSoarII.Core.Simulate
         /// <summary>
         /// 初始化构造函数
         /// </summary>
-        public SimulateDllModel(SimulateManager _parent) : base(false, true, ThreadPriority.BelowNormal)
+        public SimulateDllModel(SimulateManager _parent) : base(false, true, ThreadPriority.Lowest)
         {
             parent = _parent;
         }
@@ -447,6 +467,7 @@ namespace SamSoarII.Core.Simulate
             try
             {
                 InitRunLadder();
+                //while (IsRunLadderFinished() == 0) Thread.Sleep(5);
             }
             catch (Exception exce)
             {
@@ -464,6 +485,7 @@ namespace SamSoarII.Core.Simulate
             try
             {
                 RunLadder();
+                //while (IsRunLadderFinished() == 0) Thread.Sleep(5);
             }
             catch (Exception exce)
             {

@@ -16,7 +16,7 @@ namespace SamSoarII.Core.Helpers
         {
             List<InstHelper.PLCInstNetwork> nets =
                 new List<InstHelper.PLCInstNetwork>();
-            project.MainDiagram.CName = "RunLadder";
+            project.MainDiagram.CName = "_RunLadder";
             int diagramid = 0;
             foreach (LadderDiagramModel diagram in project.Diagrams)
                 if (!diagram.IsMainLadder)

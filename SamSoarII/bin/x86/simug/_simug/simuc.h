@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 
+extern HANDLE hdThread;
 // Register Memorys
 extern int8_t XBit[128];
 extern int8_t YBit[128];

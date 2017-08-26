@@ -1,4 +1,6 @@
 #include <stdint.h>
+#include <Windows.h>
+#include <Process.h>
 
 #ifdef BUILD_DLL
 #define DLL_EXPORT __declspec(dllexport)
@@ -90,13 +92,13 @@ void InitRegisters();
 
 void InitUserRegisters();
 
-EXPORT void InitRunLadder();
+EXPORT void InitRunLadder(HANDLE _hdThread);
 
 EXPORT void BeforeRunLadder();
 
 EXPORT void AfterRunLadder();
 
-EXPORT void RunLadder();
+EXPORT void RunLadder(HANDLE _hdThread);
 
 // get a result (16-bit integer) by add a couple of 16-bit integers
 int16_t _addw(int16_t ia, int16_t ib);

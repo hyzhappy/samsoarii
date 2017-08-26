@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <Windows.h>
+#include <Process.h>
 
 #ifdef BUILD_DLL
 #define DLL_EXPORT __declspec(dllexport)
@@ -17,6 +18,7 @@
 #endif
 
 typedef void(*vDllfun)(void);
+typedef void(*vhDllfun)(HANDLE);
 typedef void(*viDllfun)(int);
 typedef void(*vv8Dllfun)(int8_t);
 typedef void(*viiDllfun)(int, int);
@@ -40,9 +42,9 @@ static char cmd[1024];
 static char dllPath[256];
 static HINSTANCE hdll;
 static vDllfun dfBeforeRunLadder;
-static vDllfun dfRunLadder;
+static vhDllfun dfRunLadder;
 static vDllfun dfAfterRunLadder;
-static vDllfun dfInitRunLadder;
+static vhDllfun dfInitRunLadder;
 static isii8Dllfun dfSetBit;
 static isii16Dllfun dfSetWord;
 static isii32Dllfun dfSetDWord;
@@ -64,7 +66,7 @@ static viiDllfun dfSetBPCount;
 static viiDllfun dfSetCPAddr;
 static vv8Dllfun dfSetBPEnable;
 static v8Dllfun dfGetBPPause;
-static vv8Dllfun dfSetBPPause;
+static viDllfun dfSetBPPause;
 static pDllfun dfGetRBP;
 static ipDllfun dfGetBackTrace;
 static vDllfun dfMoveStep;
@@ -100,10 +102,13 @@ EXPORT int IsDllAlive()
 	return hdll != NULL ? 1 : 0;
 }
 
+EXPORT void KillRunLadder();
+
 EXPORT void FreeDll()
 {
 	if (hdll != NULL)
 	{
+		KillRunLadder();
 		if (dfForceFreeItrpDll != NULL)
 			dfForceFreeItrpDll();
 		FreeLibrary(hdll);
@@ -123,7 +128,7 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeLibrary(hdll);
 		return 1;
 	}
-	dfRunLadder = (vDllfun)GetProcAddress(hdll, "_RunLadder@0");
+	dfRunLadder = (vhDllfun)GetProcAddress(hdll, "_RunLadder@4");
 	if (dfRunLadder == NULL)
 	{
 		FreeDll();
@@ -207,7 +212,7 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeDll();
 		return 15;
 	}
-	dfInitRunLadder = (vDllfun)GetProcAddress(hdll, "_InitRunLadder@0");
+	dfInitRunLadder = (vhDllfun)GetProcAddress(hdll, "_InitRunLadder@4");
 	if (dfInitRunLadder == NULL)
 	{
 		FreeDll();
@@ -261,7 +266,7 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeDll();
 		return 25;
 	}
-	dfSetBPPause = (vv8Dllfun)GetProcAddress(hdll, "_SetBPPause@4");
+	dfSetBPPause = (viDllfun)GetProcAddress(hdll, "_SetBPPause@4");
 	if (dfSetBPPause == NULL)
 	{
 		FreeDll();
@@ -342,26 +347,56 @@ EXPORT int LoadDll(char* simudllPath)
 	return 0;
 }
 
+HANDLE hdRunLadder = NULL;
+DWORD idRunLadder = 0;
+int isRunLadderFinished = 0;
+EXPORT int IsRunLadderFinished()
+{
+	return isRunLadderFinished;
+}
+DWORD WINAPI thRunLadder(LPVOID lpvThreadparm)
+{
+	dfRunLadder(thRunLadder);
+	isRunLadderFinished = 1;
+}
 EXPORT void RunLadder()
 {
-	dfRunLadder();
+	isRunLadderFinished = 0;
+	//hdRunLadder = CreateThread(NULL, 0, thRunLadder, NULL, 0, &idRunLadder);
+	thRunLadder(NULL);
 }
-
+DWORD WINAPI thInitRunLadder(LPVOID lpvThreadparm)
+{
+	dfInitRunLadder(thRunLadder);
+	isRunLadderFinished = 1;
+}
 EXPORT void InitRunLadder()
 {
-	dfInitRunLadder();
+	isRunLadderFinished = 0;
+	//hdRunLadder = CreateThread(NULL, 0, thInitRunLadder, NULL, 0, &idRunLadder);
+	thInitRunLadder(NULL);
 }
-
+EXPORT void ResumeRunLadder()
+{
+	ResumeThread(hdRunLadder);
+}
+EXPORT void KillRunLadder()
+{
+	if (hdRunLadder != NULL)
+	{
+		TerminateThread(hdRunLadder, 0);
+		hdRunLadder = NULL;
+	}
+}
 EXPORT void BeforeRunLadder()
 {
 	dfBeforeRunLadder();
 }
-
 EXPORT void AfterRunLadder()
 {
 	dfAfterRunLadder();
+	KillRunLadder();
 }
-
 EXPORT int GetBit(char* name, int size, int8_t* output)
 {
 	return dfGetBit(name, size, output);
@@ -467,7 +502,7 @@ EXPORT int8_t GetBPPause()
 	return dfGetBPPause();
 }
 
-EXPORT void SetBPPause(int8_t bppause)
+EXPORT void SetBPPause(int bppause)
 {
 	dfSetBPPause(bppause);
 }
