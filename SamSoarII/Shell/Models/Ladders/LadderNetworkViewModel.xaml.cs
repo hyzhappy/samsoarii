@@ -510,6 +510,7 @@ namespace SamSoarII.Shell.Models
             {
                 foreach (LadderUnitModel unit in units)
                 {
+                    if (unit.View != null) continue;
                     unit.View = LadderUnitViewModel.Create(unit);
                     unit.View.CVParent = ViewParent.LadderCanvas;
                 }
@@ -529,7 +530,7 @@ namespace SamSoarII.Shell.Models
             Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
                 foreach (LadderUnitModel unit in units)
-                    unit.View.Dispose();
+                    unit.View?.Dispose();
             });
         }
 

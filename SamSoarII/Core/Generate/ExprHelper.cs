@@ -102,7 +102,7 @@ namespace SamSoarII.Core.Generate
             {
                 for (i = left + 1; i <= right; i++)
                 {
-                    if (exprs[i][padding] != exprs[left][padding])
+                    if (exprs[i][padding] != exprs[i-1][padding])
                     {
                         allequal = false;
                         // 若比当前分歧点更优则替换掉

@@ -1334,7 +1334,9 @@ namespace SamSoarII
             {
                 vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                 {
-                    Navigate(((LadderBrpoModel)ibrpo).Parent);
+                    LadderUnitModel unit = ((LadderBrpoModel)ibrpo).Parent;
+                    Navigate(unit);
+                    SelectToBrpoTable(unit);
                 });
             }
             if (ibrpo is FuncBrpoModel)
@@ -1344,6 +1346,12 @@ namespace SamSoarII
                     Navigate(((FuncBrpoModel)ibrpo).Parent);
                 });
             }
+        }
+
+        public void SelectToBrpoTable(LadderUnitModel unit)
+        {
+            wndMain.LACBreakpoint.Show();
+            wndBrpo.Select(unit);
         }
 
         #endregion

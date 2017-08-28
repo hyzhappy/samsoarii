@@ -204,9 +204,8 @@ namespace SamSoarII.Core.Generate
         /// 当存在入度不等于出度的环时，说明这个环存在分支，即符合混联错误的条件
         /// 入度大于出度时存在向内的分支，入度小于出度时存在向外的分支
         /// 所以可以检查所有的联通分量，判断是否都合法
-        /// 合法的条件为in(T)-out(S)+sum(in(a)-out(a)) == 0, a为环内不包含原终点的点
-        /// in(T)是相对于终点T的出度，即所有能到达T的边的总数
-        /// out(S)是相对于起点S的出度，即所有能从S到达该点的边的总数
+        /// 合法的条件为out(T)-in(S)+sum(in(a)-out(a)) == 0, a为环内不包含原终点的点
+        /// 其中out(T)是终点T的出度, in(S)是起点S的入度
         /// </detail>
         public bool CheckFusionCircuit()
         {
@@ -222,13 +221,6 @@ namespace SamSoarII.Core.Generate
                 // 出度为1的点不可能是环的原点
                 if (lgv1.NextEdges.Count <= 1)
                     continue;
-                /*
-                 * in(T)和out(S)是无法直接获得的，需要从起点出发访问所有的边
-                 * 并且点和边上的四个标记以位的方式存储这条边是否到达某个节点
-                 * 标记1存储编号1-32，标记2存33-64，以此类推
-                 * 对于每个相对于S的in(T)，找到标记过的后向边的数量
-                 * 对于每个相对于T的out(S)，找出在对应位标记的前向边的数量
-                 */
                 foreach (LadderGraphVertex lgv2 in vertexs)
                     for (int i = 0; i < flagcount; i++) lgv2[i] = 0;
                 foreach (LadderGraphEdge lge in edges)
@@ -239,8 +231,8 @@ namespace SamSoarII.Core.Generate
                 foreach (LadderGraphVertex lgv2 in vertexs)
                 {
                     // 该点应不为起点
-                    if (lgv2.ID == lgv1.ID)
-                        continue;
+                    if (lgv2.ID == lgv1.ID) continue;
+                    // 计算准备
                     int sum = 0, sumin = 0, sumout = 0;
                     for (int i = 0; i < flagcount; i++)
                         flagedge[i] = ~0;
@@ -249,7 +241,7 @@ namespace SamSoarII.Core.Generate
                     {
                         if (!_EdgeEmptyFlag(lge)) sumin++;
                     }
-                    // 检查起点的所有前向边，统计out(S)
+                    // 检查起点的所有前向边，获得所有可以通过T到达的点
                     foreach (LadderGraphEdge lge in lgv1.NextEdges)
                     {
                         if (_EdgeGetFlag(lge, lgv2.ID))
@@ -267,25 +259,27 @@ namespace SamSoarII.Core.Generate
                     }
                     // 若不能构成两条以上的路径则忽略
                     if (sumin < 2 || sumout < 2) continue;
-                    // 计算in(T)-out(S)
-                    sum = sumin - sumout;
-                    // 检查所有能够到达终点的点，统计sum(in(a)-out(a))
+                    // 计算out(T)-in(S)
+                    sum = lgv2.NextEdges.Count - lgv1.BackEdges.Count;
+                    // 存在连通分量的桥点则忽略
                     bool hasbridge = false;
-                    foreach (LadderGraphVertex lgv3 in vertexs)
-                    {
-                        if (lgv3.ID == lgv1.ID) continue;
-                        if (lgv3.ID == lgv2.ID) continue;
-                        // 该点是连通分量的桥点
-                        if (_EdgeGetFlag(flagedge, lgv3.ID))
+                    for (int i = 0; i < flagcount; i++)
+                        if (flagedge[i] != 0)
                         {
                             hasbridge = true;
                             break;
                         }
+                    if (hasbridge) continue;
+                    // 检查所有能够到达终点的点，统计sum(in(a)-out(a))
+                    foreach (LadderGraphVertex lgv3 in vertexs)
+                    {
+                        if (lgv3.ID == lgv1.ID) continue;
+                        if (lgv3.ID == lgv2.ID) continue;
                         if (_VertexGetFlag(lgv3, lgv2.ID))
-                            sum += lgv3.BackEdges.Count() - lgv3.NextEdges.Count();
+                            sum += lgv3.BackEdges.Count - lgv3.NextEdges.Count;
                     }
-                    // 如果不存在桥点，并且不满足等式则混连错误
-                    if (!hasbridge && sum != 0) return true;
+                    // 如果不满足等式则混连错误
+                    if (sum != 0) return true;
                 }
             }
             return false;

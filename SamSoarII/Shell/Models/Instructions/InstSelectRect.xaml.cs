@@ -94,8 +94,17 @@ namespace SamSoarII.Shell.Models
                     {
                         isnavigatable = false;
                         View.IsNavigatable = false;
-                        Parent = _current?.Parent?.Inst;
-                        Row = Parent != null ? Parent.Insts.IndexOf(_current.Inst.Origin) : -1;
+                        InstructionNetworkModel _parent = _current?.Parent?.Inst;
+                        if (_parent == null || _parent.Invalid)
+                        {
+                            Parent = null;
+                            Row = -1;
+                        }
+                        else
+                        {
+                            Parent = _parent;
+                            Row = Parent != null ? Parent.Insts.IndexOf(_current.Inst.Origin) : -1;
+                        }
                         View.IsNavigatable = true;
                         View.Navigate();
                         isnavigatable = true;

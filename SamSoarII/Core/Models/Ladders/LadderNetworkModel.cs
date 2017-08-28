@@ -503,7 +503,7 @@ namespace SamSoarII.Core.Models
                 if (_lumodel != null) Remove(_lumodel);
                 children[lumodel.X, lumodel.Y] = lumodel;
                 lumodel.Invoke(LadderUnitAction.MOVE);
-                yield return _lumodel;
+                if (_lumodel != null) yield return _lumodel;
             }
         }
 
@@ -514,7 +514,7 @@ namespace SamSoarII.Core.Models
         public LadderUnitModel AddV(LadderUnitModel lumodel)
         {
             LadderUnitModel _lumodel = vlines[lumodel.X, lumodel.Y];
-            if (_lumodel != null) Remove(_lumodel);
+            if (_lumodel != null) RemoveV(_lumodel);
             vlines[lumodel.X, lumodel.Y] = lumodel;
             lumodel.Parent = this;
             lumodel.Invoke(LadderUnitAction.ADD);
@@ -562,7 +562,7 @@ namespace SamSoarII.Core.Models
                 if (_lumodel != null) RemoveV(_lumodel);
                 vlines[lumodel.X, lumodel.Y] = lumodel;
                 lumodel.Invoke(LadderUnitAction.MOVE);
-                yield return _lumodel;
+                if (_lumodel != null) yield return _lumodel;
             }
         }
 

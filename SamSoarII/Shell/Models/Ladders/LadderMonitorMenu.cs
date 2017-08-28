@@ -121,6 +121,8 @@ namespace SamSoarII.Shell.Models
                 core.Breakpoint.IsActive = false;
                 core.Breakpoint.IsEnable = false;
             }
+            if (sender == miBPSetting)
+                IFParent.SelectToBrpoTable(core);
             if (sender == miJumpTo)
                 IFParent.MNGSimu.JumpTo(core.Breakpoint.Address);
         }

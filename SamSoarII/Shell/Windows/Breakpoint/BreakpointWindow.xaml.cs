@@ -65,6 +65,12 @@ namespace SamSoarII.Shell.Windows
             BT_RemoveAll.IsEnabled = items.Count() + fitems.Count() > 0;
         }
 
+        public void Select(LadderUnitModel unit)
+        {
+            LadderBrpoTableElement element = items.Where(e => e.Parent.Parent == unit).FirstOrDefault();
+            DG_Main.SelectedItem = element;
+        }
+        
         #region Event Handler
 
         public event IWindowEventHandler Post = delegate { };
