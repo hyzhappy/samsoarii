@@ -226,7 +226,7 @@ namespace SamSoarII.Core.Generate
             while (ladderLogicModule.LadderVerticalLines.Exists(a => { return a.X == p.X && a.Y == p.Y; }))
             {
                 vline = ladderLogicModule.LadderVerticalLines.Where(a => { return a.X == p.X && a.Y == p.Y; }).First();
-                if (!ladderLogicModule.Parent.CheckVerticalLine(vline))
+                if (!LadderGraphCheckModule.CheckVerticalLine(ladderLogicModule.Parent,vline))
                 {
                     ladderLogicModule.RemoveVerticalLine(vline.X,vline.Y);
                 }
@@ -374,9 +374,9 @@ namespace SamSoarII.Core.Generate
             p2.Y += 1;
             /*
              * Down_p:
-             * direction:         <--    
+             * direction:         <--
                                  
-                    |              -->    |  
+                    |              -->    |
                     |__________           |______________
              */
             if (!ladderLogicModule.LadderElements.Exists(x => { return x.X == p1.X && x.Y == p1.Y; }) && ladderLogicModule.LadderElements.Exists(x => { return x.X == p2.X && x.Y == p2.Y; }))
@@ -742,7 +742,8 @@ namespace SamSoarII.Core.Generate
             int cnt = 0;
             var tempEle = ladderLogicModule.LadderElements.Where(x =>
                 { return x.Shape != LadderUnitModel.Shapes.Output && x.Shape != LadderUnitModel.Shapes.OutputRect && x.Shape != LadderUnitModel.Shapes.HLine; });
-
+            //每个VLine关联两行
+            //计算VLine上，下扫描的范围(当前行是完整行，则停止累加，完整行表示对该VLine而言，那一行的起始到该VLine是连通的)
             int start, end;
             ComputeRange(ladderLogicModule, VLines,VLine,out start,out end);
             //先计算直接与VLine相连的元素数量
@@ -774,10 +775,10 @@ namespace SamSoarII.Core.Generate
             int low = ladderLogicModule.startY;
             start = VLine.Y;
             end = VLine.Y;
-            while (IsUpConnected(ladderLogicModule.LadderElements, VLines, VLine, start - 1) && low < start) start--;
+            while (IsUpConnected(ladderLogicModule.LadderElements, VLine, start - 1) && low < start) start--;
             while (IsDownConnected(ladderLogicModule.LadderElements, VLines, VLine, end + 1)) end++;
         }
-        private static bool IsUpConnected(List<LadderUnitModel> models, List<LadderUnitModel> VLines, LadderUnitModel VLine, int index)
+        private static bool IsUpConnected(List<LadderUnitModel> models, LadderUnitModel VLine, int index)
         {
             return !(models.Exists(model => { return model.X == VLine.X && model.Y == index + 1; }) && models.Exists(model => { return model.X == 0 && model.Y == index + 1; }));
         }

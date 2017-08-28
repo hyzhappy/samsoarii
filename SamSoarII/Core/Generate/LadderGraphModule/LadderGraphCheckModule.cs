@@ -62,7 +62,7 @@ namespace SamSoarII.Core.Generate
         }
         private static ErrorType CheckNetwork(LadderNetworkModel ladderNetwork)
         {
-            ladderNetwork.PreCompile();
+            PreCheck(ladderNetwork);
             if (ladderNetwork.Children.Count() == 0 && ladderNetwork.VLines.Count() == 0)
             {
                 return ErrorType.None;
@@ -71,6 +71,7 @@ namespace SamSoarII.Core.Generate
             {
                 return ErrorType.Open;
             }
+            //单个网络可分为更多的逻辑单元，故弃用
             //if (!IsAllLinkedToRoot(ladderNetwork))
             //{
             //    return ErrorType.Open;
@@ -91,15 +92,11 @@ namespace SamSoarII.Core.Generate
             {
                 return ErrorType.HybridLink;
             }
-            //if (!CheckSpecialModel(ladderNetwork))
-            //{
-            //    return ErrorType.Special;
-            //}
             return ErrorType.None;
         }
         private static bool IsLadderGraphShort(LadderNetworkModel ladderNetwork)
         {
-            ladderNetwork.ClearSearchedFlag();
+            ClearSearchedFlag(ladderNetwork);
             var rootElements = ladderNetwork.Children.Where(x => x.Shape == LadderUnitModel.Shapes.Output || x.Shape == LadderUnitModel.Shapes.OutputRect);
             Queue<LadderUnitModel> tempQueue = new Queue<LadderUnitModel>(rootElements);
             while (tempQueue.Count > 0)
@@ -335,48 +332,6 @@ namespace SamSoarII.Core.Generate
             }
             return true;
         }
-        //特殊模块检测
-        private static bool CheckSpecialModel(LadderNetworkModel ladderNetwork)
-        {
-            var allElements = ladderNetwork.Children.Where(x => { return x.Type != LadderUnitModel.Types.HLINE; });
-            var allSpecialModels = ladderNetwork.Children.Where(x => { return x.Shape == LadderUnitModel.Shapes.Special; });
-            foreach (var specialmodel in allSpecialModels)
-            {
-                //定义特殊模块的所有子元素及其自身为一个结果集
-                var subElementsOfSpecialModel = specialmodel.SubElements;
-                var tempList = new List<LadderUnitModel>(allElements);
-                //得到除去结果集的元素集合
-                foreach (var ele in subElementsOfSpecialModel)
-                {
-                    if (tempList.Contains(ele))
-                    {
-                        tempList.Remove(ele);
-                    }
-                }
-                //得到包含特殊模块的所有父元素集合
-                var list = tempList.Where(x => { return x.SubElements.Contains(specialmodel); });
-                foreach (var ele in tempList)
-                {
-                    var subElementsOfEle = ele.SubElements;
-                    //结果集之外的任一元素与该结果集相交的元素集合
-                    int count = subElementsOfEle.Intersect(subElementsOfSpecialModel).Count();
-                    //其数量若大于0且小于整个结果集，且属于特殊模块的父元素的子元素
-                    if (count < subElementsOfSpecialModel.Count && count > 0)
-                    {
-                        foreach (var item in list)
-                        {
-                            if (item.SubElements.Contains(ele))
-                            {
-                                ladderNetwork.ErrorModels.Clear();
-                                ladderNetwork.ErrorModels.Add(specialmodel);//add error element
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-            return true;
-        }
         //得到所有子元素，包括自身和NULL元素。
         private static List<LadderUnitModel> GetSubElements(LadderUnitModel model)
         {
@@ -489,7 +444,7 @@ namespace SamSoarII.Core.Generate
         }
         private static bool IsLadderGraphOpen(LadderNetworkModel ladderNetwork)
         {
-            ladderNetwork.ClearSearchedFlag();
+            ClearSearchedFlag(ladderNetwork);
             //首先检查元素的基本性质
             if (!Assert(ladderNetwork))
             {
@@ -538,11 +493,12 @@ namespace SamSoarII.Core.Generate
                 return x.Assert();
             }) && CheckVerticalLines(ladderNetwork,ladderNetwork.VLines);
         }
+
         private static bool CheckVerticalLines(LadderNetworkModel ladderNetwork,IEnumerable<LadderUnitModel> VLines)
         {
             foreach (var VLine in VLines)
             {
-                if (!ladderNetwork.CheckVerticalLine(VLine))
+                if (!CheckVerticalLine(ladderNetwork,VLine))
                 {
                     ladderNetwork.ErrorModels.Clear();
                     ladderNetwork.ErrorModels.Add(VLine);
@@ -575,6 +531,175 @@ namespace SamSoarII.Core.Generate
             tempList.Add(new IntPoint() { X = x, Y = y - 1 });
             tempList.Add(new IntPoint() { X = x, Y = y });
             return tempList;
+        }
+
+        private static void PreCheck(LadderNetworkModel ladderNetwork)
+        {
+            ClearSearchedFlag(ladderNetwork);
+            ClearNextElements(ladderNetwork);
+            Queue<LadderUnitModel> tempQueue = new Queue<LadderUnitModel>(ladderNetwork.Children.Where(
+                x => { return x.Shape == LadderUnitModel.Shapes.Output || x.Shape == LadderUnitModel.Shapes.OutputRect; }));
+            while (tempQueue.Count > 0)
+            {
+                var tempElement = tempQueue.Dequeue();
+                if (tempElement.Type != LadderUnitModel.Types.NULL)
+                {
+                    var templist = SearchFrom(ladderNetwork,tempElement);
+                    foreach (var ele in templist)
+                    {
+                        tempQueue.Enqueue(ele);
+                    }
+                }
+            }
+            InitializeSubElements(ladderNetwork);
+        }
+
+        private static void InitializeSubElements(LadderNetworkModel ladderNetwork)
+        {
+            ClearSearchedFlag(ladderNetwork);
+            ClearSubElements(ladderNetwork);
+            var rootElements = ladderNetwork.Children.Where(x => { return x.Shape == LadderUnitModel.Shapes.Output || x.Shape == LadderUnitModel.Shapes.OutputRect; });
+            foreach (var rootElement in rootElements)
+            {
+                GetSubElements(rootElement);
+            }
+        }
+        private static void ClearSubElements(LadderNetworkModel ladderNetwork)
+        {
+            foreach (var ele in ladderNetwork.Children)
+            {
+                ele.SubElements.Clear();
+            }
+        }
+
+        private static void ClearSearchedFlag(LadderNetworkModel ladderNetwork)
+        {
+            foreach (var model in ladderNetwork.Children.Concat(ladderNetwork.VLines))
+            {
+                model.IsSearched = false;
+            }
+        }
+        private static void ClearNextElements(LadderNetworkModel ladderNetwork)
+        {
+            foreach (var ele in ladderNetwork.Children)
+            {
+                ele.NextElements.Clear();
+            }
+        }
+
+        public static bool CheckVerticalLine(LadderNetworkModel ladderNetwork,LadderUnitModel VLine)
+        {
+            IntPoint pos = new IntPoint();
+            IntPoint one = new IntPoint();
+            IntPoint two = new IntPoint();
+            pos.X = VLine.X;
+            pos.Y = VLine.Y;
+            one.X = pos.X + 1;
+            one.Y = pos.Y;
+            two.X = pos.X;
+            two.Y = pos.Y - 1;
+            if (ladderNetwork.Children[one.X, one.Y] == null
+             && ladderNetwork.VLines[two.X, two.Y] == null)
+            {
+                return false;
+            }
+            if (ladderNetwork.Children[pos.X, pos.Y] == null
+             && ladderNetwork.VLines[two.X, two.Y] == null)
+            {
+                return false;
+            }
+            pos.Y += 1;
+            one.Y += 1;
+            two.Y += 2;
+            if (ladderNetwork.Children[pos.X, pos.Y] == null
+             && ladderNetwork.Children[one.X, one.Y] == null
+             && ladderNetwork.VLines[two.X, two.Y] == null)
+            {
+                return false;
+            }
+            return true;
+        }
+        private static List<LadderUnitModel> SearchFrom(LadderNetworkModel ladderNetwork,LadderUnitModel viewmodel)
+        {
+            if (viewmodel.IsSearched)
+            {
+                return viewmodel.NextElements;
+            }
+            List<LadderUnitModel> result = new List<LadderUnitModel>();
+            if (viewmodel.X == 0)
+            {
+                viewmodel.IsSearched = true;
+                LadderUnitModel nullModel = new LadderUnitModel(ladderNetwork, LadderUnitModel.Types.NULL);
+                nullModel.X = 0;
+                nullModel.Y = viewmodel.Y;
+                result.Add(nullModel);
+                //result.Add(BaseViewModel.Null);
+                viewmodel.NextElements = result;
+                return result;
+            }
+            else
+            {
+                int x = viewmodel.X;
+                int y = viewmodel.Y;
+                var relativePoints = GetRelativePoint(ladderNetwork,x - 1, y);
+                foreach (var p in relativePoints)
+                {
+                    LadderUnitModel leftmodel = ladderNetwork.Children[p.X, p.Y];
+                    if (leftmodel != null)
+                    {
+                        if (leftmodel.Type == LadderUnitModel.Types.HLINE)
+                        {
+                            var _leftresult = SearchFrom(ladderNetwork,leftmodel);
+                            foreach (var temp in SearchFrom(ladderNetwork,leftmodel))
+                            {
+                                result.Add(temp);
+                            }
+                        }
+                        else
+                        {
+                            result.Add(leftmodel);
+                        }
+                    }
+                }
+                viewmodel.IsSearched = true;
+                viewmodel.NextElements = result;
+                return result;
+            }
+        }
+        private static IEnumerable<IntPoint> GetRelativePoint(LadderNetworkModel ladderNetwork,int x, int y)
+        {
+            List<IntPoint> result = new List<IntPoint>();
+            Stack<IntPoint> tempStack = new Stack<IntPoint>();
+            var p = new IntPoint() { X = x, Y = y };
+
+            var q1 = new IntPoint() { X = x, Y = y };
+            var q2 = new IntPoint() { X = x, Y = y };
+            while (SearchUpVLine(ladderNetwork,q1))
+            {
+                q1 = new IntPoint() { X = q1.X, Y = q1.Y - 1 };
+                tempStack.Push(q1);
+            }
+            while (tempStack.Count > 0)
+            {
+                result.Add(tempStack.Pop());
+            }
+            result.Add(p);
+            while (SearchDownVLine(ladderNetwork,q2))
+            {
+                q2 = new IntPoint() { X = q2.X, Y = q2.Y + 1 };
+                result.Add(q2);
+            }
+            return result;
+        }
+
+        private static bool SearchUpVLine(LadderNetworkModel ladderNetwork, IntPoint p)
+        {
+            return ladderNetwork.VLines.Any(e => { return (e.X == p.X) && (e.Y == p.Y - 1); });
+        }
+
+        private static bool SearchDownVLine(LadderNetworkModel ladderNetwork, IntPoint p)
+        {
+            return ladderNetwork.VLines.Any(e => { return (e.X == p.X) && (e.Y == p.Y); });
         }
     }
 }
