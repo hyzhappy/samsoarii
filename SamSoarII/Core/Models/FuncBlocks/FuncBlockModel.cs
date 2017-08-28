@@ -126,7 +126,7 @@ namespace SamSoarII.Core.Models
 
         static private string[] registernames = {
             "XBit", "YBit", "SBit", "MBit", "CBit", "TBit",
-            "DWord", "VWord", "ZWord", "TVWord", "CVWord", "CV32DoubleWord", "AIWord", "AOWord"};
+            "DWord", "VWord", "ZWord", "TVWord", "CVWord", "CVDoubleWord", "AIWord", "AOWord"};
         public List<string> GetCodeCompleteNames(string profix)
         {
             List<string> ret = new List<string>();

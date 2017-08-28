@@ -1,22 +1,6 @@
 #include "downlib.h"
 #include <math.h>
 
-// Register Memorys
-extern int32_t* XBit;
-extern int32_t* YBit;
-extern int32_t* MBit;
-extern int32_t* CBit;
-extern int32_t* TBit;
-extern int32_t* SBit;
-extern int16_t* DWord;
-extern int16_t* CVWord;
-extern int32_t* CV32DoubleWord;
-extern int16_t* TVWord;
-extern int16_t* AIWord;
-extern int16_t* AOWord;
-extern int16_t* VWord;
-extern int16_t* ZWord;
-
 // get a result (16-bit integer) by add a couple of 16-bit integers
 int16_t _addw(int16_t ia, int16_t ib)
 {

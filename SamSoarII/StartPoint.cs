@@ -30,7 +30,6 @@ namespace SamSoarII.AppMain
                 //FilePath为Main程序的数据成员属性
                 App.AutoOpenFileFullPath = filePath;
                 new App().Run();
-
             /*}
             else
             {

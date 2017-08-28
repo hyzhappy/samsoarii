@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,14 +15,7 @@ namespace SamSoarII.Core.Models
             switch (_bas)
             {
                 case Bases.X: case Bases.Y:
-                    text = _ofs > 0 ? "" : "0";
-                    while (_ofs > 0)
-                    {
-                        int _crt = _ofs & 7;
-                        text = String.Format("{0:d}{1:s}", _crt, text);
-                        _ofs >>= 3;
-                    }
-                    text = String.Format("{0:s}{1:s}", ValueModel.NameOfBases[(int)bas], text);
+                    text = String.Format("{0:s}{1:d}", ValueModel.NameOfBases[(int)bas], ValueConverter.IntToDex(ofs));
                     break;
                 default:
                     text = String.Format("{0:s}{1:d}", ValueModel.NameOfBases[(int)bas], ofs);

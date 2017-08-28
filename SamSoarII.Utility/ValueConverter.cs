@@ -125,6 +125,32 @@ namespace SamSoarII.Utility
         {
             return *((float*)&value);
         }
+        public static int IntToDex(int value)
+        {
+            int result = 0;
+            int multiple = 1;
+            while (value > 0)
+            {
+                result += (value & 7) * multiple;
+                multiple *= 10;
+                value >>= 3;
+            }
+            return result;
+        }
+        public static int DexToInt(int value)
+        {
+            int result = 0;
+            int multiple = 1;
+            while (value > 0)
+            {
+                if (value % 10 >= 8) throw new FormatException("{0:d} is not a DexNumber!");
+                result += (value % 10) * multiple;
+                multiple <<= 3;
+                value /= 10;
+            }
+            return result;
+        }
+        
         unsafe
         public static string ChangeShowValue(WordType sourceType,WordType desType,uint value)
         {

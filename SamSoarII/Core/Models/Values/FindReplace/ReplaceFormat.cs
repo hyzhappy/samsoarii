@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -248,8 +249,20 @@ namespace SamSoarII.Core.Models
                     offset = newrange.Base.Offset;
                     if (!oldrange.IsAny && newrange.OffsetCount > 1)
                         offset += value.Offset - oldrange.Base.Offset;
-                    newargs.Append(String.Format("{0:s}{1:d}",
-                        ValueModel.NameOfBases[(int)(newrange.Base.Base)], offset));
+                    switch (newrange.Base.Base)
+                    {
+                        case ValueModel.Bases.X:
+                        case ValueModel.Bases.Y:
+                            newargs.Append(String.Format("{0:s}{1:d}",
+                                ValueModel.NameOfBases[(int)(newrange.Base.Base)], 
+                                ValueConverter.IntToDex(offset)));
+                            break;
+                        default:
+                            newargs.Append(String.Format("{0:s}{1:d}",
+                                ValueModel.NameOfBases[(int)(newrange.Base.Base)], 
+                                offset));
+                            break;
+                    }
                 }
                 if (newrange.Base.Intra != ValueModel.Bases.NULL)
                 {

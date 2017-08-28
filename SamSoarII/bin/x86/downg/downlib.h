@@ -32,7 +32,6 @@ extern plc_w 	ZWord[8];
 extern plc_w 	TVWord[256];
 extern plc_w 	CVWord[200];
 extern plc_dw 	CVDoubleWord[56];
-plc_dw*	CV32DoubleWord = &CVDoubleWord[0];
 
 // get a result (16-bit integer) by add a couple of 16-bit integers
 int16_t _addw(int16_t ia, int16_t ib);

@@ -1,6 +1,7 @@
 ﻿using SamSoarII.PLCDevice;
 using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
+using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -455,18 +456,15 @@ namespace SamSoarII.Core.Models
                     ifs = match.Groups.Count > 5 && match.Groups[5].Value.Length > 0 ? int.Parse(match.Groups[5].Value) : 0;
                     if (bas == Bases.X || bas == Bases.Y)
                     {
-                        int _ofs = 0;
-                        int _mul = 1;
                         oldofs = ofs;
-                        while (ofs > 0)
+                        try
                         {
-                            int _crt = ofs % 10;
-                            if (_crt >= 8) throw new ValueParseException(Properties.Resources.Message_Not_DexNumber, format);
-                            _ofs += _crt * _mul;
-                            ofs /= 10;
-                            _mul <<= 3;
+                            ofs = ValueConverter.DexToInt(ofs);
                         }
-                        ofs = _ofs;
+                        catch (FormatException)
+                        {
+                            throw new ValueParseException(Properties.Resources.Message_Not_DexNumber, format);
+                        }
                         bool inrange = false;
                         switch (bas)
                         {
