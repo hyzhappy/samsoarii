@@ -64,6 +64,8 @@ namespace SamSoarII.Core.Generate
             sw.Write("#include \"simulib.h\"\r\n");
             sw.Write("#include \"simuf.h\"\r\n");
             sw.Write("#include \"simuc.h\"\r\n\r\n");
+            sw.Write("void _RunLadder();\r\n");
+            sw.Write("void RunLadder(HANDLE _hdThread) { hdThread = _hdThread; _RunLadder(); }\r\n");
             _InstToCCode(sw, networks, true);
         }
         /// <summary>
@@ -194,8 +196,12 @@ namespace SamSoarII.Core.Generate
             }
             // 建立扫描的主函数
             bool ismain = true;
-            sw.Write("void RunLadder()\n{\n");
-            if (simumode) sw.Write("_itr_invoke();\n");
+            if (simumode)
+                sw.Write("void _RunLadder()\n{\n");
+            else
+                sw.Write("void RunLadder()\n{\n");
+            if (simumode)
+                sw.Write("_itr_invoke();\n");
             //if (!simumode) sw.Write("if (MBit[8150]) InitUserRegisters();\n");
             // STL取消标志
             sw.Write("int8_t _stlrst;\n");

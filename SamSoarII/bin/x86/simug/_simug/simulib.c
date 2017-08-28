@@ -3,10 +3,9 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include <Windows.h>
-
 #include "simulib.h"
 
+HANDLE hdThread = NULL;
 // Register Memorys
 int8_t XBit[128];
 int8_t YBit[128];
@@ -479,10 +478,12 @@ void callinto()
 	callcount++;
 	bpostep = bpstep;
 	bpstep = 0;
-	if (bpenable && callcount > 256)
+	if (bpenable && hdThread && callcount > 256)
 	{
 		bppause = 1;
-		while (bpenable && bppause);
+		//SuspendThread(hdThread);
+		while (bpenable && bppause) Sleep(20);
+		bppause = 0;
 	}
 }
 
@@ -499,7 +500,7 @@ void bpcycle(int32_t _bpaddr)
 	//fprintf(f, "================bpcycle bpaddr=%d b1=%x b2=%x b3=%x b4=%x===================\n", 
 	//	_bpaddr, *(((int*)(&f))+1), *(((int*)(&f))+2), *(((int*)(&f))+3), *(((int*)(&f))+4));
 	//if (!bpenable) {fprintf(f, "bpenable=%d\n", bpenable); fclose(f); return;}
-	if (!bpenable) return;
+	if (!bpenable || !hdThread) return;
 	bpaddr = _bpaddr;
 	//fprintf(f, "bpaddr=%d\n", bpaddr);
 	//fprintf(f, "index=%d data=%x\n", bpaddr>>5, bpdatas[bpaddr>>5]);
@@ -527,7 +528,9 @@ void bpcycle(int32_t _bpaddr)
 		bpstep = 0;
 		bpcstep = 0;
 		bppause = 1;
-		while (bpenable && bppause);
+		//SuspendThread(hdThread);
+		while (bpenable && bppause) Sleep(20);
+		bppause = 0;
 	}
 	//f = fopen("log.txt", "a");
 	//fprintf(f, "resume from bpcycle bpaddr=%d\n", bpaddr);
@@ -539,7 +542,7 @@ void cpcycle(int32_t _bpaddr, int8_t value)
 	//FILE* f = fopen("log.txt", "a");
 	//fprintf(f, "================cpcycle bpaddr=%d value=%d===================\n", _bpaddr, value);
 	//if (!bpenable || !cpenable) {fprintf(f, "bpenable=%d cpenable=%d\n", bpenable, cpenable); fclose(f); return;}
-	if (!bpenable || !cpenable) return;
+	if (!bpenable || !cpenable || !hdThread) return;
 	bpaddr = _bpaddr;
 	int32_t cpmsg = ((cpdatas[bpaddr>>3]>>((bpaddr&7)<<2)) & 15);
 	int8_t prevalue = cpstack[cpsttop];
@@ -572,7 +575,9 @@ void cpcycle(int32_t _bpaddr, int8_t value)
 	{
 		bpjump = -1;
 		bppause = 3;
-		while (bpenable && bppause);
+		//SuspendThread(hdThread);
+		while (bpenable && bppause) Sleep(20);
+		bppause = 0;
 		itrpid = 0;
 	}
 	else if (cond && ++bpcount[bpaddr] >= bpmaxcount[bpaddr])
@@ -580,7 +585,9 @@ void cpcycle(int32_t _bpaddr, int8_t value)
 		bpcount[bpaddr] = 0;
 		bpjump = -1;
 		bppause = 2;
-		while (bpenable && bppause);
+		//SuspendThread(hdThread);
+		while (bpenable && bppause) Sleep(20);
+		bppause = 0;
 	}
 }
 
@@ -629,6 +636,7 @@ EXPORT void MoveStep()
 	//fprintf(f, "================MoveStep===================\n");
 	bpstep = 1;
 	bppause = 0;
+	//ResumeThread(hdThread);
 	//fprintf(f, "bpstep=%d bppause=%d bpenable=%d bpaddr=%d\n", bpstep, bppause, bpenable, bpaddr);
 	//fclose(f);
 }
@@ -639,6 +647,7 @@ EXPORT void CallStep()
 	//fprintf(f, "================CallStep===================\n");
 	bpcstep = 1;
 	bppause = 0;
+	//ResumeThread(hdThread);
 	//fprintf(f, "bpcstep=%d bppause=%d bpenable=%d bpaddr=%d\n", bpcstep, bppause, bpenable, bpaddr);
 	//fclose(f);
 }
@@ -646,12 +655,14 @@ EXPORT void CallStep()
 EXPORT void JumpTo(int32_t _bpaddr)
 {
 	bpjump = _bpaddr;
+	bppause = 0;
 }
 
 EXPORT void JumpOut()
 {
 	bpostep = 1;
 	bppause = 0;
+	//ResumeThread(hdThread);
 }
 
 EXPORT void SetCPAddr(int32_t _cpaddr, int32_t _cpmsg)
@@ -778,13 +789,13 @@ EXPORT void AfterRunLadder()
 	counttimems = counttime / 1000;
 }
 
-EXPORT void InitRunLadder()
+EXPORT void InitRunLadder(HANDLE _hdThread)
 {
 	InitRegisters();
 	InitUserRegisters();
 	InitClock(0);
 	BeforeRunLadder();
-	RunLadder();
+	RunLadder(_hdThread);
 	AfterRunLadder();
 	MBit[8151] = 1;
 	MBit[8152] = 0;
