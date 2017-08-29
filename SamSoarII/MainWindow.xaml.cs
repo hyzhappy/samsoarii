@@ -551,15 +551,10 @@ namespace SamSoarII
             }
             else
             {
-                if (ifParent.MDProj != null && projectMessage.Value.Item2 == ifParent.MDProj.FileName)
-                    LocalizedMessageBox.Show(string.Format("{0}", Properties.Resources.Message_Project_Loaded), LocalizedMessageIcon.Information);
-                else
+                if (ifParent.HandleCurrentProj())
                 {
-                    if (ifParent.HandleCurrentProj())
-                    {
-                        ifParent.LoadProject(projectMessage.Value.Item2);
-                        LACProj.Show();
-                    }
+                    ifParent.LoadProject(projectMessage.Value.Item2);
+                    LACProj.Show();
                 }
             }
             e.Handled = true;
@@ -567,7 +562,7 @@ namespace SamSoarII
 
         private void About(object sender, RoutedEventArgs e)
         {
-            LocalizedMessageBox.Show(string.Format("Version : 2.0.8"), LocalizedMessageIcon.Information);
+            LocalizedMessageBox.Show(string.Format("Version : 2.1.1"), LocalizedMessageIcon.Information);
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)

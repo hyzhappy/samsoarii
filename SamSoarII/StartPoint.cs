@@ -15,8 +15,8 @@ namespace SamSoarII.AppMain
         [STAThread]
         static void Main(string[] args)
         {
-            //if (CheckPrincipal())
-            //{
+            if (CheckPrincipal())
+            {
                 string filePath = "";
                 if ((args != null) && (args.Length > 0))
                 {
@@ -31,7 +31,7 @@ namespace SamSoarII.AppMain
                 App.AutoOpenFileFullPath = filePath;
                 new App().Run();
 
-            /*}
+            }
             else
             {
                 //创建启动对象
@@ -46,7 +46,7 @@ namespace SamSoarII.AppMain
                 Process.Start(startInfo);
                 //退出
                 return;
-            }*/
+            }
         }
         /// <summary>
         /// 检查是否以管理员权限运行
