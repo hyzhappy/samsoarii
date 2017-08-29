@@ -1320,11 +1320,13 @@ void _ton(int8_t en, int16_t id, int16_t sv, int32_t* otim)
 	{
 		// get the new time
 		int32_t ntim = counttimems;
+		// get the time unit
+		int32_t unit = ((id < 200) ? 100 : ((id < 250) ? 10 : 1));
 		// get the inteval from old to new
-		int32_t itv = (ntim - *otim) / 100;
+		int32_t itv = (ntim - *otim) / unit;
 		// increase the counter value and old time
 		TVWord[id] += itv;
-		*otim += itv * 100;
+		*otim += itv * unit;
 		// arrive at the end value?
 		if (TVWord[id] >= sv)
 		{
@@ -1358,11 +1360,13 @@ void _tonr(int8_t en, int16_t id, int16_t sv, int32_t* otim)
 	{
 		// get the new time
 		int32_t ntim = counttimems;
+		// get the time unit
+		int32_t unit = ((id < 200) ? 100 : ((id < 250) ? 10 : 1));
 		// get the inteval from old to new
-		int32_t itv = (ntim - *otim) / 100;
+		int32_t itv = (ntim - *otim) / unit;
 		// increase the counter value and old time
 		TVWord[id] += itv;
-		*otim += itv * 100;
+		*otim += itv * unit;
 		// arrive at the end value?
 		if (TVWord[id] >= sv)
 		{

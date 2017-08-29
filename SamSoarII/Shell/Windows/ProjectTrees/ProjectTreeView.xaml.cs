@@ -887,17 +887,14 @@ namespace SamSoarII.Shell.Windows
         {
             CurrentItem = GetPTVIParent(e.OriginalSource);
             var p = e.GetPosition(Scroll);
-            if (Scroll.ViewportHeight < p.Y)
+            if (Scroll.ViewportHeight - 10 < p.Y)
                 Scroll.ScrollToVerticalOffset(Scroll.VerticalOffset + 10.0);
             else if (p.Y < 10)
                 Scroll.ScrollToVerticalOffset(Scroll.VerticalOffset - 10.0);
             else if (p.X < 10)
                 Scroll.ScrollToHorizontalOffset(Scroll.HorizontalOffset - 10.0);
-            else if (Scroll.ViewportWidth < p.X)
-            {
+            else if (Scroll.ViewportWidth - 10 < p.X)
                 Scroll.ScrollToHorizontalOffset(Scroll.HorizontalOffset + 10.0);
-                //Scroll.ScrollToVerticalOffset(TV_Main.ActualHeight * (p.Y - Scroll.VerticalOffset) / Scroll.ViewportHeight);
-            }
         }
 
         private void TV_Main_Drop(object sender, DragEventArgs e)
