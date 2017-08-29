@@ -427,9 +427,9 @@ namespace SamSoarII.Shell.Models
         {
             get { return _selectArea.Core.State != SelectAreaCore.Status.NotSelected ? _selectArea.NetOrigin : null; }
         }
-        public IEnumerable<LadderNetworkViewModel> SelectAllNetworks
+        public IEnumerable<LadderNetworkModel> SelectAllNetworks
         {
-            get { return _selectArea.Core.SelectNetworks.Select(n => n.View); }
+            get { return _selectArea.Core.SelectNetworks; }
         }
     
         private SelectStatus _selectStatus = SelectStatus.Idle;
@@ -2584,21 +2584,9 @@ namespace SamSoarII.Shell.Models
                     break;
                 case LadderEditEventArgs.Types.NetInsertBefore:
                     Core.AddN(cmEdit.Core.ID);
-                    /*
-                    if (_selectStatus == SelectStatus.SingleSelected)
-                        Core.AddN(SelectRectOwner.ID);
-                    else
-                        Core.AddN(_selectArea.NetStart.ID);
-                    */                
                     break;
                 case LadderEditEventArgs.Types.NetInsertAfter:
                     Core.AddN(cmEdit.Core.ID + 1);
-                    /*
-                    if (_selectStatus == SelectStatus.SingleSelected)
-                        Core.AddN(SelectRectOwner.ID + 1);
-                    else
-                        Core.AddN(_selectArea.NetEnd.ID + 1);
-                    */
                     break;
                 case LadderEditEventArgs.Types.NetInsertEnd:
                     Core.AddN(Core.NetworkCount);
@@ -2609,13 +2597,6 @@ namespace SamSoarII.Shell.Models
                         Core.RemoveN(SelectStartNetwork.ID, SelectStartNetwork);
                     else if (cmEdit.Core != null)
                         Core.RemoveN(cmEdit.Core.ID, cmEdit.Core);
-                    /*
-                    if (_selectStatus == SelectStatus.SingleSelected)
-                        Core.RemoveN(SelectRectOwner.ID, SelectRectOwner);
-                    else if (_selectStatus == SelectStatus.MultiSelected
-                     && _selectArea.Core.State == SelectAreaCore.Status.SelectRange)
-                        Core.RemoveN(SelectStartNetwork.ID, SelectStartNetwork);
-                    */
                     break;
                 case LadderEditEventArgs.Types.NetCopy:
                     if (_selectStatus == SelectStatus.MultiSelected
@@ -2623,13 +2604,6 @@ namespace SamSoarII.Shell.Models
                         CutAndCopy(false);
                     else if (cmEdit.Core != null)
                         cmEdit.Core.CopyToClipboard();
-                    /*
-                    if (_selectStatus == SelectStatus.SingleSelected)
-                        SelectRectOwner.CopyToClipboard();
-                    else if (_selectStatus == SelectStatus.MultiSelected
-                     && _selectArea.Core.State == SelectAreaCore.Status.SelectRange)
-                        SelectStartNetwork.CopyToClipboard();
-                    */
                     break;
                 case LadderEditEventArgs.Types.NetCut:
                     if (_selectStatus == SelectStatus.MultiSelected
@@ -2640,19 +2614,6 @@ namespace SamSoarII.Shell.Models
                         cmEdit.Core.CopyToClipboard();
                         Core.RemoveN(cmEdit.Core.ID, cmEdit.Core);
                     }
-                    /*
-                    if (_selectStatus == SelectStatus.SingleSelected)
-                    {
-                        SelectRectOwner.CopyToClipboard();
-                        Core.RemoveN(SelectRectOwner.ID, SelectRectOwner);
-                    }
-                    else if (_selectStatus == SelectStatus.MultiSelected
-                     && _selectArea.Core.State == SelectAreaCore.Status.SelectRange)
-                    {
-                        SelectStartNetwork.CopyToClipboard();
-                        Core.RemoveN(SelectStartNetwork.ID, SelectStartNetwork);
-                    }
-                    */
                     break;
                 case LadderEditEventArgs.Types.NetShield:
                     if (_selectStatus == SelectStatus.MultiSelected)
@@ -2691,6 +2652,22 @@ namespace SamSoarII.Shell.Models
                 case LadderEditEventArgs.Types.NetCollapsedAll:
                     foreach (LadderNetworkModel net in core.Children)
                         net.IsExpand = false;
+                    break;
+                case LadderEditEventArgs.Types.NetMerge:
+                    if (_selectArea.Core.State == SelectAreaCore.Status.SelectCross
+                     && SelectAllNetworks.Count() > 0)
+                    {
+                        core.MergeNetworks(SelectAllNetworks, SelectAllNetworks.Select(n => n.ID).Min());
+                    }
+                    break;
+                case LadderEditEventArgs.Types.NetSplit:
+                    if (_selectStatus == SelectStatus.SingleSelected)
+                        core.SplitNetwork(SelectRectOwner, 0, _selectRect.Y);
+                    else if (_selectStatus == SelectStatus.MultiSelected
+                      && _selectArea.Core.State == SelectAreaCore.Status.SelectRange)
+                    {
+                        core.SplitNetwork(_selectArea.NetOrigin, _selectArea.Core.YStart, _selectArea.Core.YEnd);
+                    }
                     break;
             }
         }

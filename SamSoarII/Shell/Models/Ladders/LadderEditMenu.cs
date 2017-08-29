@@ -40,6 +40,8 @@ namespace SamSoarII.Shell.Models
             CollapsedAll = new MenuItem();
             miZoomIn = new MenuItem();
             miZoomOut = new MenuItem();
+            miNetMerge = new MenuItem();
+            miNetSplit = new MenuItem();
             miRowInsert.Items.Add(miRowIBefore);
             miRowInsert.Items.Add(miRowIAfter);
             miRowInsert.Items.Add(miRowIEnd);
@@ -74,6 +76,8 @@ namespace SamSoarII.Shell.Models
             miNetShield.Header = Properties.Resources.LadderNetwork_Shield_Network;
             miZoomIn.Header = Properties.Resources.MainWindow_Zoom_In;
             miZoomOut.Header = Properties.Resources.MainWindow_Zoom_Out;
+            miNetMerge.Header = Properties.Resources.LadderNetwork_Network_Merge;
+            miNetSplit.Header = Properties.Resources.LadderNetwork_Network_Split;
             miCut.Command = ApplicationCommands.Cut;
             miCopy.Command = ApplicationCommands.Copy;
             miPaste.Command = ApplicationCommands.Paste;
@@ -89,6 +93,8 @@ namespace SamSoarII.Shell.Models
             miNetCut.Click += OnMenuItemClicked;
             miNetCopy.Click += OnMenuItemClicked;
             miNetShield.Click += OnMenuItemClicked;
+            miNetMerge.Click += OnMenuItemClicked;
+            miNetSplit.Click += OnMenuItemClicked;
             Expand.Click += OnMenuItemClicked;
             Collapsed.Click += OnMenuItemClicked;
             ExpandAll.Click += OnMenuItemClicked;
@@ -107,6 +113,8 @@ namespace SamSoarII.Shell.Models
             Items.Add(miNetRemove);
             Items.Add(miNetCut);
             Items.Add(miNetCopy);
+            Items.Add(miNetMerge);
+            Items.Add(miNetSplit);
             Items.Add(new Separator());
             Items.Add(ExpandOrCollapsed);
             Items.Add(miNetShield);
@@ -132,6 +140,8 @@ namespace SamSoarII.Shell.Models
             miNetCut.Click -= OnMenuItemClicked;
             miNetCopy.Click -= OnMenuItemClicked;
             miNetShield.Click -= OnMenuItemClicked;
+            miNetMerge.Click -= OnMenuItemClicked;
+            miNetSplit.Click -= OnMenuItemClicked;
             Expand.Click -= OnMenuItemClicked;
             Collapsed.Click -= OnMenuItemClicked;
             ExpandAll.Click -= OnMenuItemClicked;
@@ -141,7 +151,7 @@ namespace SamSoarII.Shell.Models
         }
 
         #region Number
-
+        
         private LadderNetworkModel core;
         public LadderNetworkModel Core
         {
@@ -188,6 +198,9 @@ namespace SamSoarII.Shell.Models
         private MenuItem Collapsed;
         private MenuItem ExpandAll;
         private MenuItem CollapsedAll;
+        private MenuItem miNetMerge;
+        private MenuItem miNetSplit;
+
         #endregion
 
         #region Event Handler
@@ -208,6 +221,8 @@ namespace SamSoarII.Shell.Models
             if (sender == miNetCut) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetCut));
             if (sender == miNetCopy) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetCopy));
             if (sender == miNetShield) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetShield));
+            if (sender == miNetMerge) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetMerge));
+            if (sender == miNetSplit) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetSplit));
             if (sender == Expand) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetExpand));
             if (sender == ExpandAll) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetExpandAll));
             if (sender == Collapsed) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetCollapsed));
@@ -232,6 +247,8 @@ namespace SamSoarII.Shell.Models
                     miNetRemove.IsEnabled = !core.IsMasked;
                     miNetCut.IsEnabled = !core.IsMasked;
                     miNetCopy.IsEnabled = !core.IsMasked;
+                    miNetMerge.IsEnabled = !core.IsMasked;
+                    miNetSplit.IsEnabled = !core.IsMasked;
                     break;
             }
         }
@@ -245,7 +262,8 @@ namespace SamSoarII.Shell.Models
         public enum Types { Delete,
             RowInsertBefore, RowInsertAfter, RowInsertEnd, RowDelete,
             NetInsertBefore, NetInsertAfter, NetInsertEnd, NetDelete, NetCut, NetCopy, NetShield,
-            NetExpand, NetExpandAll, NetCollapsed, NetCollapsedAll}
+            NetExpand, NetExpandAll, NetCollapsed, NetCollapsedAll,
+            NetMerge, NetSplit}
         private Types type;
         public Types Type { get { return this.type; } }
 

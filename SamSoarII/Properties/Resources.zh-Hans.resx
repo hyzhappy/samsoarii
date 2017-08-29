@@ -2412,4 +2412,10 @@
   <data name="Message_Not_DexNumber" xml:space="preserve">
     <value>X/Y寄存器仅支持八进制地址。</value>
   </data>
+  <data name="LadderNetwork_Network_Merge" xml:space="preserve">
+    <value>网络合并</value>
+  </data>
+  <data name="LadderNetwork_Network_Split" xml:space="preserve">
+    <value>网络分割</value>
+  </data>
 </root>

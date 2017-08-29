@@ -2412,4 +2412,10 @@
   <data name="Message_Not_DexNumber" xml:space="preserve">
     <value>It is only allowed to use a dexnumber address in X/Y registers.</value>
   </data>
+  <data name="LadderNetwork_Network_Merge" xml:space="preserve">
+    <value>Networks Merge</value>
+  </data>
+  <data name="LadderNetwork_Network_Split" xml:space="preserve">
+    <value>Network Split</value>
+  </data>
 </root>
