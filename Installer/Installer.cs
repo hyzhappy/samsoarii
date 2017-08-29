@@ -15,6 +15,18 @@ namespace Installer
         {
             InitializeComponent();
         }
+        protected override void OnAfterInstall(IDictionary savedState)
+        {
+            base.OnAfterInstall(savedState);
+            DeleteTempFile();
+        }
+
+        protected override void OnCommitted(IDictionary savedState)
+        {
+            base.OnCommitted(savedState);
+            CreateUnInstallBat();
+        }
+
         public override void Uninstall(IDictionary savedState)
         {
             base.Uninstall(savedState);
@@ -27,9 +39,46 @@ namespace Installer
             {
             }
         }
-        public override void Install(IDictionary stateSaver)
+        private string GetTargetDir()
         {
-            base.Install(stateSaver);
+            string dir = Path.GetDirectoryName(Context.Parameters["assemblypath"].ToString());
+            if (dir[dir.Length - 1] != '\\')
+            {
+                dir += @"\";
+            }
+            return dir;
+        }
+
+        private void CreateUnInstallBat()
+        {
+            try
+            {
+                string dir = GetTargetDir();
+                FileStream fs = new FileStream(dir + "unins000.bat", FileMode.Create, FileAccess.Write);
+                StreamWriter sw = new StreamWriter(fs);
+                sw.WriteLine("@echo off");
+                sw.WriteLine(string.Format("start /normal %windir%\\system32\\msiexec /x {0}", Context.Parameters["productCode"].ToString()));
+                sw.WriteLine("exit");
+                sw.Flush();
+                sw.Close();
+                fs.Close();
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void DeleteTempFile()
+        {
+            try
+            {
+                string dir = GetTargetDir();
+                foreach (var file in Directory.GetFiles(dir))
+                    if (file.EndsWith("tmp")) File.Delete(file);
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

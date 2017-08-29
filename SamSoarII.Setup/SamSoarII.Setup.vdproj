@@ -513,6 +513,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2E4CC5DD6DF548EBBDF80C2C435F3907"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3271CC18D90A40B4B6B885D44FC7C0E5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1342,6 +1348,12 @@
         "Entry"
         {
         "MsmKey" = "8:_8D9826C82D9D420EBE9546DF22D1F208"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8DBF27AFF37240FFAAD605A201D5D9F4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2307,12 +2319,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E9D403B3B61D419D99E1E2DCE27F3A00"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_EA17451A49AE4EE487E2F44A1BF060E3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2554,6 +2560,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_8DBF27AFF37240FFAAD605A201D5D9F4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D0B6D06ECB85493DAFF651C2DE02658E"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2694,6 +2706,48 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_9F3936BBC9F24F6983B35A806470EFE6"
+            {
+            "Name" = "8:Commit"
+            "Condition" = "8:"
+            "Object" = "8:_8DBF27AFF37240FFAAD605A201D5D9F4"
+            "FileType" = "3:1"
+            "InstallAction" = "3:2"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_0D34F90D_2492_4CC7_8F59_D5504B0A29B4"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:/productCode=[ProductCode]"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B7AC5FE3EB7D4BA5811AC2A73A95502B"
+            {
+            "Name" = "8:Uninstall"
+            "Condition" = "8:"
+            "Object" = "8:_8DBF27AFF37240FFAAD605A201D5D9F4"
+            "FileType" = "3:1"
+            "InstallAction" = "3:4"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_A116B35D_B191_4B7E_8FED_CA607C17ADB5"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_E1BD3985DEAA49029485771CF63E4E45"
+            {
+            "Name" = "8:Install"
+            "Condition" = "8:"
+            "Object" = "8:_8DBF27AFF37240FFAAD605A201D5D9F4"
+            "FileType" = "3:1"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_6D18F8A9_CFF4_4DD2_A4B5_E792E1EC6893"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
         }
         "DefaultFeature"
         {
@@ -4367,6 +4421,26 @@
             "TargetName" = "8:AppUpdate.xml"
             "Tag" = "8:"
             "Folder" = "8:_12364201BB8D477E9F2FCCD5C8B6D2C2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2E4CC5DD6DF548EBBDF80C2C435F3907"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\unins000.bat"
+            "TargetName" = "8:unins000.bat"
+            "Tag" = "8:"
+            "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10387,26 +10461,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E9D403B3B61D419D99E1E2DCE27F3A00"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\msiexec.exe"
-            "TargetName" = "8:msiexec.exe"
-            "Tag" = "8:"
-            "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:TRUE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EA17451A49AE4EE487E2F44A1BF060E3"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\stddef.h"
@@ -11784,15 +11838,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SamSoarII"
-        "ProductCode" = "8:{942805F6-465A-426B-9AA8-2FEBB0CE6BA4}"
-        "PackageCode" = "8:{7BFF5C2E-2C91-46E4-BDE8-70D305CA4241}"
+        "ProductCode" = "8:{0B749EFD-4910-4F9C-B3BD-70FDF808D8BA}"
+        "PackageCode" = "8:{DAFC8F59-A3DB-49FF-BB1E-0566BBD18F71}"
         "UpgradeCode" = "8:{A7ED4973-BC60-4163-929E-885AA3DD333F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.1.0"
+        "ProductVersion" = "8:2.1.1"
         "Manufacturer" = "8:Samkoon"
         "ARPHELPTELEPHONE" = "8:4007776399"
         "ARPHELPLINK" = "8:http://www.samkoon.com.cn/"
@@ -11919,15 +11973,15 @@
             "Icon" = "8:_F976E0F2542D4105A33818D93B27AF03"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F38A16B448D640D8B6D64EED1A5D9202"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_AA3730B4777541F1A874190DF67EA403"
             {
-            "Name" = "8:uninstall"
-            "Arguments" = "8:/x {942805F6-465A-426B-9AA8-2FEBB0CE6BA4}"
+            "Name" = "8:unins000.exe"
+            "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_E9D403B3B61D419D99E1E2DCE27F3A00"
+            "Target" = "8:_2E4CC5DD6DF548EBBDF80C2C435F3907"
             "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
             "WorkingFolder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
             "Icon" = "8:"
@@ -12346,6 +12400,34 @@
         }
         "ProjectOutput"
         {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8DBF27AFF37240FFAAD605A201D5D9F4"
+            {
+            "SourcePath" = "8:..\\Installer\\obj\\Debug\\Installer.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{03926AA8-4C2C-4899-825A-DD438E9B8C97}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BB7F166FC28A41D1829CB505B3B263A0"
             {
             "SourcePath" = "8:..\\SamSoarII\\obj\\x86\\Debug\\SamSoarII.exe"
