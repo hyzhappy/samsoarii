@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -110,6 +111,24 @@ namespace SamSoarII.Core.Models
                 ValueModel.Analyzer_String.Text = basetext.ToString();
                 bas = ValueModel.Analyzer_String.Clone();
             }
+            switch (bas.Base)
+            {
+                case ValueModel.Bases.X:
+                case ValueModel.Bases.Y:
+                    if (bas.IsBitWord || bas.IsBitDoubleWord)
+                    {
+                        m = BitWordRegex.Match(text);
+                        if (m.Success && m.Groups[9].Value.Length > 0)
+                            oct = ValueConverter.DexToInt(int.Parse(m.Groups[11].Value)) - ValueConverter.DexToInt(int.Parse(m.Groups[10].Value)) + 1;
+                    }
+                    else
+                    {
+                        m = NormalRegex.Match(text);
+                        if (m.Success && m.Groups[3].Value.Length > 0)
+                            oct = ValueConverter.DexToInt(int.Parse(m.Groups[5].Value)) - ValueConverter.DexToInt(int.Parse(m.Groups[4].Value)) + 1;
+                    }
+                    break;
+            }
         }
         
         private void Build(StringBuilder basetext, GroupCollection groups, int id, ref int count)
@@ -126,7 +145,7 @@ namespace SamSoarII.Core.Models
                 count = 1;
             }
         }
-
+        
         private void BuildHex(StringBuilder basetext, GroupCollection groups, int id, ref int count)
         {
             basetext.Append(groups[id].Value);

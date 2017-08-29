@@ -5,6 +5,8 @@ typedef uint16_t* U_WORD;
 typedef int32_t* D_WORD;
 typedef uint32_t* UD_WORD;
 typedef float* _FLOAT;
+#define DW ((D_WORD)W)
+#define FW ((_FLOAT)W)
 void CACI(_WORD in,_FLOAT out);
 void RPCI(_WORD in,_FLOAT out);
 void CACF(_FLOAT in,_FLOAT out);
@@ -28,4 +30,3 @@ void MDPF(_FLOAT in,_WORD ct,_FLOAT out);
 void CRCC(_WORD in,_WORD ct);
 void DDO(_WORD in,_WORD ct);
 void DSL(_WORD in,_WORD ct);
-int ttt();int ttt1();int rrr();

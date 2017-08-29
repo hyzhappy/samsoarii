@@ -2296,6 +2296,7 @@ namespace SamSoarII.Shell.Models
                                     _selectArea.Core.Release();
                                     _selectStatus = SelectStatus.SingleSelecting;
                                 }
+
                                 break;
                         }
                     }

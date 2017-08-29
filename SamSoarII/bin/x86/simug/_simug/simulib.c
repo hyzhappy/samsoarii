@@ -17,7 +17,7 @@ int8_t TBit[256];
 int8_t SBit[32 << 5];
 int16_t DWord[8192];
 int16_t CVWord[200];
-int32_t CV32DoubleWord[56];
+int32_t CVDoubleWord[56];
 int16_t TVWord[256];
 int16_t AIWord[32];
 int16_t AOWord[32];
@@ -34,7 +34,6 @@ int8_t TEnable[256];
 int8_t SEnable[32 << 5];
 int8_t DEnable[8192];
 int8_t CVEnable[256];
-int8_t CV32Enable[56];
 int8_t TVEnable[256];
 int8_t AIEnable[32];
 int8_t AOEnable[32];
@@ -220,7 +219,7 @@ int _Assert(
 				}
 				else if (*offset >= 200 || *offset + size/2 < 256)
 				{
-					*addr = (int32_t*)(&CV32DoubleWord[0]);
+					*addr = (int32_t*)(&CVDoubleWord[0]);
 					*offset -= 200;
 				}
 				else
@@ -270,7 +269,7 @@ EXPORT int GetWord(char* name, int size, int16_t* output)
 	while (size--) output[size] = *(((int16_t*)addr)+offset+size);
 	return 0;
 }
-// Get the DWORD (32 bit unsigned int) value from targeted register (D/CV32)
+// Get the DWORD (32 bit unsigned int) value from targeted register (D/CV)
 EXPORT int GetDoubleWord(char* name, int size, int32_t* output)
 {
 	int32_t* addr; int offset;
@@ -386,18 +385,7 @@ EXPORT int SetEnable(char* name, int size, int8_t value)
 		switch (name[1])
 		{
 		case 'V':
-			if (addr == (int32_t*)(&CVWord[0]))
-			{
-				while (size--) CVEnable[offset + size] = value;
-			}
-			if (addr == (int32_t*)(&CV32DoubleWord[0]))
-			{
-				while (size--)
-				{
-					CVEnable[offset + size] = value;
-					CV32Enable[offset + size - 200] = value;
-				}
-			}
+			while (size--) CVEnable[offset + size] = value;
 			break;
 		default:
 			while (size--) CEnable[offset + size] = value;
@@ -695,7 +683,7 @@ EXPORT int SetItrpDll(char* dllpath)
 		AssertItrps = (dfAssertItrps)GetProcAddress(itrpdll, "_AssertItrps@0");
 		SetRegisters(XBit, YBit, MBit, CBit, TBit, SBit,
 			DWord, CVWord, TVWord, AIWord, AOWord, VWord, ZWord, 
-			CV32DoubleWord);
+			CVDoubleWord);
 	}
 	itrpactive = 0;
 	return 0;
@@ -741,7 +729,7 @@ void InitRegisters()
 	memset(AOWord, 0, sizeof(AOWord));
 	memset(VWord, 0, sizeof(VWord));
 	memset(ZWord, 0, sizeof(ZWord));
-	memset(CV32DoubleWord, 0, sizeof(CV32DoubleWord));
+	memset(CVDoubleWord, 0, sizeof(CVDoubleWord));
 	
 	
 	memset(XEnable, 0, sizeof(XEnable));
@@ -757,7 +745,6 @@ void InitRegisters()
 	memset(AOEnable, 0, sizeof(AOEnable));
 	memset(VEnable, 0, sizeof(VEnable));
 	memset(ZEnable, 0, sizeof(ZEnable));
-	memset(CV32Enable, 0, sizeof(CV32Enable));
 	
 	MBit[8151] = 0;
 	MBit[8152] = 1;

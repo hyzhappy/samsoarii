@@ -274,7 +274,9 @@ namespace SamSoarII.Shell.Windows
                     switch (area.State)
                     {
                         case SelectAreaCore.Status.SelectRange:
-                            TB_Item2.Text = String.Format("{0:s} {1:d}", Properties.Resources.Network, area.NetOrigin);
+                            TB_Item2.Text = (area.View.NetOrigin.Brief.Length > 0)
+                                ? String.Format("{0:s} {1:d} - {2:s}", Properties.Resources.Network, area.NetOrigin, area.View.NetOrigin.Brief)
+                                : String.Format("{0:s} {1:d}", Properties.Resources.Network, area.NetOrigin);
                             TB_Item1.Text = String.Format("(X1={0:d},X2={1:d},Y1={2:d},Y2={3:d})",
                                 area.XStart, area.XEnd, area.YStart, area.YEnd);
                             break;

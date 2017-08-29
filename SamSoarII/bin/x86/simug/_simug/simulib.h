@@ -19,7 +19,7 @@ int _Assert(char* name, int size, int32_t** addr, int* offset);
 EXPORT int GetBit(char* name, int size, int8_t* output);
 // Get the WORD value from targeted register (D/CV/TV)
 EXPORT int GetWord(char* name, int size, int16_t* output);
-// Get the DWORD (32 bit unsigned int) value from targeted register (D/CV32)
+// Get the DWORD (32 bit unsigned int) value from targeted register (D/CV)
 EXPORT int GetDoubleWord(char* name, int size, int32_t* output);
 // Get the FLOAT value from targeted register (D)
 EXPORT int GetFloat(char* name, int size, float* output);

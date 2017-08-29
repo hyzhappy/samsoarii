@@ -144,7 +144,7 @@ namespace SamSoarII.Core.Helpers
             sw.Write("extern _WORD ZWord;\r\n");
             sw.Write("extern _WORD AIWord;\r\n");
             sw.Write("extern _WORD AOWord;\r\n");
-            sw.Write("extern D_WORD CV32DoubleWord;\r\n");
+            sw.Write("extern D_WORD CVDoubleWord;\r\n");
             foreach (FuncBlockModel fbmodel in project.FuncBlocks)
                 GenerateCCode(fbmodel, sw, true);
             sw.Close();
@@ -310,7 +310,7 @@ namespace SamSoarII.Core.Helpers
             sw.Write("extern _WORD ZWord;\r\n");
             sw.Write("extern _WORD AIWord;\r\n");
             sw.Write("extern _WORD AOWord;\r\n");
-            sw.Write("extern D_WORD CV32DoubleWord;\r\n");
+            sw.Write("extern D_WORD CVDoubleWord;\r\n");
             foreach (FuncBlockModel fbmodel in project.FuncBlocks)
                 GenerateCCode(fbmodel, sw);
             sw.Close();
