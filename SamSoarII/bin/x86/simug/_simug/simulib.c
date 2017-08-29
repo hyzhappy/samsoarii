@@ -484,29 +484,41 @@ void callleave()
 
 void bpcycle(int32_t _bpaddr)
 {
-	//FILE* f = fopen("log.txt", "a");
-	//fprintf(f, "================bpcycle bpaddr=%d b1=%x b2=%x b3=%x b4=%x===================\n", 
-	//	_bpaddr, *(((int*)(&f))+1), *(((int*)(&f))+2), *(((int*)(&f))+3), *(((int*)(&f))+4));
-	//if (!bpenable) {fprintf(f, "bpenable=%d\n", bpenable); fclose(f); return;}
+	#ifdef DEBUG
+		FILE* f = fopen("log.txt", "a");
+		fprintf(f, "================bpcycle bpaddr=%d b1=%x b2=%x b3=%x b4=%x===================\n", 
+			_bpaddr, *(((int*)(&f))+1), *(((int*)(&f))+2), *(((int*)(&f))+3), *(((int*)(&f))+4));
+		if (!bpenable) {fprintf(f, "bpenable=%d\n", bpenable); fclose(f); return;}
+	#endif
 	if (!bpenable || !hdThread) return;
 	bpaddr = _bpaddr;
-	//fprintf(f, "bpaddr=%d\n", bpaddr);
-	//fprintf(f, "index=%d data=%x\n", bpaddr>>5, bpdatas[bpaddr>>5]);
+	#ifdef DEBUG
+		fprintf(f, "bpaddr=%d\n", bpaddr);
+		fprintf(f, "index=%d data=%x\n", bpaddr>>5, bpdatas[bpaddr>>5]);
+	#endif
 	if (bpjump < 0 && ((bpdatas[bpaddr>>5] & (1<<(bpaddr&31))) != 0))
 	{
-		//fprintf(f, "in a breakpoint!\n");
+		#ifdef DEBUG
+			fprintf(f, "in a breakpoint!\n");
+		#endif
 		int32_t cpmsg = ((cpdatas[bpaddr>>3]>>((bpaddr&7)<<2)) & 7);
-		//if (cpmsg != 0) {fprintf(f, "cpmsg=%d\n", cpmsg); fclose(f); return;}
+		#ifdef DEBUG
+			if (cpmsg != 0) {fprintf(f, "cpmsg=%d\n", cpmsg); fclose(f); return;}
+		#endif
 		if (cpmsg != 0) return;
-		//if (++bpcount[bpaddr] < bpmaxcount[bpaddr]) {fprintf(f, "less %d %d\n", bpcount[bpaddr], bpmaxcount[bpaddr]); fclose(f); return;}
+		#ifdef DEBUG
+			if (++bpcount[bpaddr] < bpmaxcount[bpaddr]) {fprintf(f, "less %d %d\n", bpcount[bpaddr], bpmaxcount[bpaddr]); fclose(f); return;}
+		#endif
 		if (++bpcount[bpaddr] < bpmaxcount[bpaddr]) return;
 		bpcount[bpaddr] = 0;
 	}
-	//fprintf(f, "bpstep=%d\n", bpstep);
-	//fprintf(f, "bpcstep=%d\n", bpcstep);
-	//fprintf(f, "bpjump=%d\n", bpjump);
-	//fprintf(f, "bpmsg=%d\n", bpdatas[bpaddr>>5] & (1<<(bpaddr&31)));
-	//fclose(f);
+	#ifdef DEBUG
+		fprintf(f, "bpstep=%d\n", bpstep);
+		fprintf(f, "bpcstep=%d\n", bpcstep);
+		fprintf(f, "bpjump=%d\n", bpjump);
+		fprintf(f, "bpmsg=%d\n", bpdatas[bpaddr>>5] & (1<<(bpaddr&31)));
+		fclose(f);
+	#endif
 	if ((bpstep != 0) 
 	|| (bpcstep != 0)
 	|| ((bpjump < 0) && ((bpdatas[bpaddr>>5] & (1<<(bpaddr&31))) != 0))
@@ -516,13 +528,14 @@ void bpcycle(int32_t _bpaddr)
 		bpstep = 0;
 		bpcstep = 0;
 		bppause = 1;
-		//SuspendThread(hdThread);
 		while (bpenable && bppause) Sleep(20);
 		bppause = 0;
 	}
-	//f = fopen("log.txt", "a");
-	//fprintf(f, "resume from bpcycle bpaddr=%d\n", bpaddr);
-	//fclose(f);
+	#ifdef DEBUG
+		f = fopen("log.txt", "a");
+		fprintf(f, "resume from bpcycle bpaddr=%d\n", bpaddr);
+		fclose(f);
+	#endif
 }
 
 void cpcycle(int32_t _bpaddr, int8_t value)

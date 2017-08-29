@@ -144,8 +144,10 @@ namespace SamSoarII.Core.Simulate
             foreach (IBreakpoint ibrpo in items)
                 ibrpo.PropertyChanged -= OnBrpoPropertyChanged;
             items.Clear();
-            enableitems.Clear();
-            activeitems.Clear();
+            foreach (IBreakpoint ibrpo in activeitems.ToArray())
+                activeitems.Remove(ibrpo);
+            foreach (IBreakpoint ibrpo in enableitems.ToArray())
+                enableitems.Remove(ibrpo);
             if (IFParent.MDProj == null) return;
             foreach (LadderDiagramModel diagram in IFParent.MDProj.Diagrams)
                 foreach (LadderNetworkModel network in diagram.Children)

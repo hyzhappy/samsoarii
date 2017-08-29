@@ -162,21 +162,53 @@ namespace SamSoarII.Core.Generate
         {
             // 做一次拓扑排序来检查
             // 初始化每个节点的访问标记和后向计数
+            // 将MEP，MEF，INV相连的节点，合并为同一个节点来计算入度
             foreach (LadderGraphVertex lgv in vertexs)
             {
+                lgv.FlagCount = 1;
                 lgv[0] = 0;
             }
             foreach (LadderGraphEdge lge in edges)
             {
-                lge.Destination[0]++;
+                lge.FlagCount = 1;
+                lge[0] = 0;
             }
-            // 开始拓扑排序，将计数为0的点加入队列中
             Queue<LadderGraphVertex> queue = new Queue<LadderGraphVertex>();
+            int mergecount = 0;
             foreach (LadderGraphVertex lgv in vertexs)
-            {
                 if (lgv[0] == 0)
+                {
+                    lgv[0] = ++mergecount;
+                    queue.Clear();
                     queue.Enqueue(lgv);
-            }
+                    while (queue.Count() > 0)
+                    {
+                        LadderGraphVertex _lgv = queue.Dequeue();
+                        foreach (LadderGraphEdge lge in _lgv.NextEdges.Concat(_lgv.BackEdges)
+                            .Where(e => e.Prototype.Prototype.Shape == Models.LadderUnitModel.Shapes.Special && e[0] == 0))
+                        {
+                            lge[0] = lgv[0];
+                            if (lge.Destination[0] == 0)
+                            {
+                                lge.Destination[0] = _lgv[0];
+                                queue.Enqueue(lge.Destination);
+                            }
+                            else
+                            {
+                                // 若已经标记的节点又被线路转换指令相连则视为短路
+                                return true;
+                            }
+                        }
+                    }
+                }
+            int[] degrees = new int[mergecount];
+            foreach (LadderGraphVertex lgv in vertexs)
+                foreach (LadderGraphEdge lge in lgv.BackEdges)
+                    if (lge.Source[0] != lgv[0]) degrees[lgv[0] - 1]++;
+            // 开始拓扑排序，将计数为0的点加入队列中
+            queue.Clear();
+            foreach (LadderGraphVertex lgv in vertexs)
+                if (degrees[lgv[0] - 1] == 0) queue.Enqueue(lgv);
             // 记录已经进行拓扑排序的节点数量
             int solveCount = 0;
             while (queue.Count > 0)
@@ -184,12 +216,9 @@ namespace SamSoarII.Core.Generate
                 solveCount++;
                 LadderGraphVertex lgv = queue.Dequeue();
                 foreach (LadderGraphEdge lge in lgv.NextEdges)
-                {
-                    if ((--lge.Destination[0]) == 0)
-                    {
-                        queue.Enqueue(lge.Destination);
-                    }
-                }
+                    if (lge.Destination[0] != lgv[0] && --degrees[lge.Destination[0] - 1] == 0)
+                        foreach (LadderGraphVertex _lgv in vertexs)
+                            if (_lgv[0] == lge.Destination[0]) queue.Enqueue(_lgv);
             }
             // 若存在节点未被排序，则在环中
             if (solveCount < vertexs.Count)
