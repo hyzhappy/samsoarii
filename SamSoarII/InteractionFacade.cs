@@ -708,6 +708,7 @@ namespace SamSoarII
                 mngSimu.Abort();
                 mngSimu.IsEnable = false;
                 while (mngSimu.IsAlive) Thread.Sleep(10);
+                mngSimu.MNGBrpo.Initialize();
                 SimulateDllModel.FreeDll();
                 vmdProj.LadderMode = LadderModes.Edit;
                 handle.Completed = true;

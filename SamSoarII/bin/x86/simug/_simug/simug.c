@@ -356,7 +356,7 @@ EXPORT int IsRunLadderFinished()
 }
 DWORD WINAPI thRunLadder(LPVOID lpvThreadparm)
 {
-	dfRunLadder(hdRunLadder);
+	dfRunLadder(thRunLadder);
 	isRunLadderFinished = 1;
 }
 EXPORT void RunLadder()
@@ -367,7 +367,7 @@ EXPORT void RunLadder()
 }
 DWORD WINAPI thInitRunLadder(LPVOID lpvThreadparm)
 {
-	dfInitRunLadder(hdRunLadder);
+	dfInitRunLadder(thRunLadder);
 	isRunLadderFinished = 1;
 }
 EXPORT void InitRunLadder()

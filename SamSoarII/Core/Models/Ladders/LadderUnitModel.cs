@@ -423,16 +423,16 @@ namespace SamSoarII.Core.Models
                 "将（长度）个单字从IN开始的一段连续的寄存器移动到从OUT开始的一段寄存器中，长度的范围是（1 - 1024）",
                 "Move a range of 16-bit word register started from IN, to another range started from OUT, the maximum length is 1024.",
                 new ValueFormat[] {
-                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.BitWordRegex}, null, "源", "Source"),
-                    new ValueFormat("D", ValueModel.Types.WORD, false, true, 1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.BitWordRegex}, null, "目标", "Destination"),
+                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1}, null, "源", "Source"),
+                    new ValueFormat("D", ValueModel.Types.WORD, false, true, 1, new Regex[] { ValueModel.VerifyWordRegex2}, null, "目标", "Destination"),
                     new ValueFormat("N", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}, null, "长度", "Number") });
             Formats[(int)Types.MVDBLK] = new LadderUnitFormat(604, "MVDBLK", Types.MVDBLK, Outlines.Move, Shapes.OutputRect,
                 Properties.Resources.Move_Blocks_DWord,
                 "将（长度）个双字从IN开始的一段连续的寄存器移动到从OUT开始的一段寄存器中，长度的范围是（1-1024）",
                 "Move a range of 32-bit double word register started from IN, to another range started from OUT, the maximum length is 1024.",
                 new ValueFormat[] {
-                    new ValueFormat("S", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}, null, "源", "Source"),
-                    new ValueFormat("D", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}, null, "目标", "Destination"),
+                    new ValueFormat("S", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2}, null, "源", "Source"),
+                    new ValueFormat("D", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2}, null, "目标", "Destination"),
                     new ValueFormat("N", ValueModel.Types.DWORD, true, false, 2, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex }, null, "长度", "Number")});
             vformats = new ValueFormat[] {
                     new ValueFormat("IN", ValueModel.Types.FLOAT, true, false, 0, new Regex[] {ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}, null, "输入", "Input"),
