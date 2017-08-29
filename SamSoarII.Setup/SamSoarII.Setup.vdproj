@@ -2493,6 +2493,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F976E0F2542D4105A33818D93B27AF03"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_FB34ECB5CBED4335B63234D3CDFE37BF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -11012,6 +11018,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F976E0F2542D4105A33818D93B27AF03"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Resources\\Image\\SamSoarII.ico"
+            "TargetName" = "8:SamSoarII.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_3A836C3787C34399A78F2251C65E46F3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FB34ECB5CBED4335B63234D3CDFE37BF"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\include\\stdio.h"
@@ -11731,10 +11757,10 @@
                 {
                 }
             }
-            "{1525181F-901A-416C-8A58-119130FE478E}:_6A97314B1B0A48EAAC8DD065F6DDE5BE"
+            "{1525181F-901A-416C-8A58-119130FE478E}:_5C83754CA8D94395B153A1C158EE095D"
             {
             "Name" = "8:#1919"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:ProgramMenuFolder"
@@ -11758,18 +11784,18 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SamSoarII"
-        "ProductCode" = "8:{D8A07A80-3750-422E-A921-59646E9DA217}"
-        "PackageCode" = "8:{B0435862-4185-411E-A4F8-4B190BF8C7F8}"
+        "ProductCode" = "8:{942805F6-465A-426B-9AA8-2FEBB0CE6BA4}"
+        "PackageCode" = "8:{7BFF5C2E-2C91-46E4-BDE8-70D305CA4241}"
         "UpgradeCode" = "8:{A7ED4973-BC60-4163-929E-885AA3DD333F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
-        "DetectNewerInstalledVersion" = "11:TRUE"
+        "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.5"
+        "ProductVersion" = "8:2.1.0"
         "Manufacturer" = "8:Samkoon"
-        "ARPHELPTELEPHONE" = "8:"
-        "ARPHELPLINK" = "8:"
+        "ARPHELPTELEPHONE" = "8:4007776399"
+        "ARPHELPLINK" = "8:http://www.samkoon.com.cn/"
         "Title" = "8:SamSoarII"
         "Subject" = "8:"
         "ARPCONTACT" = "8:"
@@ -11879,10 +11905,24 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_9596879FA298440BB6B352979B48315D"
+            {
+            "Name" = "8:SamSoarII"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_BB7F166FC28A41D1829CB505B3B263A0"
+            "Folder" = "8:_485B0AEF68464EA5AA6256F398DA79E5"
+            "WorkingFolder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
+            "Icon" = "8:_F976E0F2542D4105A33818D93B27AF03"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F38A16B448D640D8B6D64EED1A5D9202"
             {
             "Name" = "8:uninstall"
-            "Arguments" = "8:/x {D8A07A80-3750-422E-A921-59646E9DA217}"
+            "Arguments" = "8:/x {942805F6-465A-426B-9AA8-2FEBB0CE6BA4}"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"

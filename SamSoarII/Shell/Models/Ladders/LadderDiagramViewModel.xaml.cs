@@ -2373,6 +2373,12 @@ namespace SamSoarII.Shell.Models
                 case SelectStatus.UnitDraging:
                     ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
                     if (_selectRect.Core.Parent == null) return;
+                    object obj = GetObjectByMouse(e);
+                    LadderNetworkModel net;
+                    if (obj is LadderUnitModel) net = ((LadderUnitModel)obj).Parent;
+                    else if(obj is LadderNetworkModel) net = (LadderNetworkModel)obj;
+                    else net = ((LadderNetworkPositionModel)obj).Network;
+                    if (net == null || net.IsMasked) return;
                     if (e.Data.GetDataPresent(ptvitem.GetType()))
                     {
                         ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
@@ -2448,6 +2454,7 @@ namespace SamSoarII.Shell.Models
                             if (obj is LadderUnitModel)
                             {
                                 LadderUnitModel unit = (LadderUnitModel)obj;
+                                if (unit.Parent.IsMasked) return;
                                 _selectArea.Core.Release();
                                 _selectRect.Core.Parent = unit.Parent;
                                 _selectRect.X = unit.X;
@@ -2456,6 +2463,7 @@ namespace SamSoarII.Shell.Models
                             else if (obj is LadderNetworkPositionModel)
                             {
                                 LadderNetworkPositionModel pos = (LadderNetworkPositionModel)obj;
+                                if (pos.Network.IsMasked) return;
                                 _selectArea.Core.Release();
                                 _selectRect.Core.Parent = pos.Network;
                                 _selectRect.X = pos.X;

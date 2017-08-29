@@ -1859,7 +1859,6 @@ namespace SamSoarII
             else
                 LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
             mngComu.IsEnable = false;
-            ((Window)sender).Close();
         }
 
         public void ShowLanaEnsureDialog(bool ischinese)
