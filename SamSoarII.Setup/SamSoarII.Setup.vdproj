@@ -135,12 +135,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0BF482812F884370B652CDC0B024B02D"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_0CC72AA0379A4FF8B45BC4D02D03B951"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -316,12 +310,6 @@
         "Entry"
         {
         "MsmKey" = "8:_1FDBD641F12F4AA8B9658B96985253B9"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_206ACD2734A246B692FA474D38237113"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -771,6 +759,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4F2086B986DA4C068B931F38FC884EC5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4F3B363F6EF6F196199E773E8DF74590"
         "OwnerKey" = "8:_BB7F166FC28A41D1829CB505B3B263A0"
         "MsmSig" = "8:_UNDEFINED"
@@ -1036,6 +1030,12 @@
         "Entry"
         {
         "MsmKey" = "8:_6ED0E1C8DF714A9EBFE9F4CFF777A567"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_709A5F50DC544D68A317E513FB589348"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -3079,26 +3079,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0BF482812F884370B652CDC0B024B02D"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\ssr.ico"
-            "TargetName" = "8:ssr.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0CC72AA0379A4FF8B45BC4D02D03B951"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\armv7-m\\linux.specs"
@@ -3685,26 +3665,6 @@
             "TargetName" = "8:mem(F103PLC).ld"
             "Tag" = "8:"
             "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_206ACD2734A246B692FA474D38237113"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\ssp.ico"
-            "TargetName" = "8:ssp.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5203,6 +5163,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4F2086B986DA4C068B931F38FC884EC5"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Resources\\Image\\ssp.ico"
+            "TargetName" = "8:ssp.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_CD1ECD3D5ACF4565B4EC02954BA7B78B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4F3B363F6EF6F196199E773E8DF74590"
             {
             "AssemblyRegister" = "3:1"
@@ -6100,6 +6080,26 @@
             "TargetName" = "8:user32.def"
             "Tag" = "8:"
             "Folder" = "8:_0F1639571ECA4DFFB03505C514D37007"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_709A5F50DC544D68A317E513FB589348"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Resources\\Image\\ssr.ico"
+            "TargetName" = "8:ssr.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_CD1ECD3D5ACF4565B4EC02954BA7B78B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -11403,6 +11403,17 @@
                     "Property" = "8:_543817F4E6834CDB8BAAA217A05B89E9"
                         "Folders"
                         {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_CD1ECD3D5ACF4565B4EC02954BA7B78B"
+                            {
+                            "Name" = "8:Image"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_9C2C8BDA93184A8CAFE1175256FB8B75"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_E2C18B5EC0244CD2919BB0750E7CEFFE"
@@ -11468,7 +11479,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SamSoarII"
         "ProductCode" = "8:{0B749EFD-4910-4F9C-B3BD-70FDF808D8BA}"
-        "PackageCode" = "8:{54CEF23A-C3A5-4E6B-9FFE-6AB31BB2455F}"
+        "PackageCode" = "8:{91B6CE97-29A2-466E-B68C-E764A2CF8264}"
         "UpgradeCode" = "8:{A7ED4973-BC60-4163-929E-885AA3DD333F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
