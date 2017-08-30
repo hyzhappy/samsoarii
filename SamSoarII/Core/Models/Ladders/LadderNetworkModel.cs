@@ -436,6 +436,8 @@ namespace SamSoarII.Core.Models
 
         public LadderUnitModel Add(LadderUnitModel lumodel)
         {
+            if (lumodel.Shape == LadderUnitModel.Shapes.VLine)
+                return AddV(lumodel);
             if (lumodel.X < 0 || lumodel.Y < 0)
                 throw new LadderUnitChangedEventException(LadderUnitAction.ADD, Properties.Resources.LadderUnit_LocationError);
             switch (lumodel.Shape)
@@ -468,6 +470,8 @@ namespace SamSoarII.Core.Models
 
         public void Remove(LadderUnitModel lumodel)
         {
+            if (lumodel.Shape == LadderUnitModel.Shapes.VLine)
+                RemoveV(lumodel);
             lumodel.Invoke(LadderUnitAction.REMOVE);
             children[lumodel.X, lumodel.Y] = null;
             lumodel.Parent = null;
@@ -479,6 +483,8 @@ namespace SamSoarII.Core.Models
 
         public LadderUnitModel Move(LadderUnitModel lumodel, int dx, int dy)
         {
+            if (lumodel.Shape == LadderUnitModel.Shapes.VLine)
+                MoveV(lumodel, dx, dy);
             children[lumodel.X, lumodel.Y] = null;
             lumodel.X += dx;
             lumodel.Y += dy;
@@ -513,6 +519,8 @@ namespace SamSoarII.Core.Models
 
         public LadderUnitModel AddV(LadderUnitModel lumodel)
         {
+            if (lumodel.Shape != LadderUnitModel.Shapes.VLine)
+                return Add(lumodel);
             LadderUnitModel _lumodel = vlines[lumodel.X, lumodel.Y];
             if (_lumodel != null) RemoveV(_lumodel);
             vlines[lumodel.X, lumodel.Y] = lumodel;
@@ -528,6 +536,8 @@ namespace SamSoarII.Core.Models
 
         public void RemoveV(LadderUnitModel lumodel)
         {
+            if (lumodel.Shape != LadderUnitModel.Shapes.VLine)
+                Remove(lumodel);
             lumodel.Invoke(LadderUnitAction.REMOVE);
             vlines[lumodel.X, lumodel.Y] = null;
             lumodel.Parent = null;
@@ -539,6 +549,8 @@ namespace SamSoarII.Core.Models
 
         public LadderUnitModel MoveV(LadderUnitModel lumodel, int dx, int dy)
         {
+            if (lumodel.Shape != LadderUnitModel.Shapes.VLine)
+                Move(lumodel, dx, dy);
             vlines[lumodel.X, lumodel.Y] = null;
             lumodel.X += dx;
             lumodel.Y += dy;

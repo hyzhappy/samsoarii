@@ -2418,4 +2418,7 @@
   <data name="LadderNetwork_Network_Split" xml:space="preserve">
     <value>网络分割</value>
   </data>
+  <data name="Error_VerticalLineBorder" xml:space="preserve">
+    <value>分割块边缘存在相连的竖线，无法执行分割操作！</value>
+  </data>
 </root>

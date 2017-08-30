@@ -46,6 +46,8 @@
         <CommandBinding Command="{x:Static gb:GlobalCommand.InstShortCutOpenCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.InsertRowCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.DeleteRowCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.InsertNetCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.DeleteNetCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.CompileCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"/>
         <!-- Tool Command-->
         <CommandBinding Command="{x:Static gb:GlobalCommand.CloseProjectCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
@@ -186,7 +188,11 @@
                 <Separator/>
                 <MenuItem Header="{x:Static properties:Resources.Close_Proj}" Command="{x:Static gb:GlobalCommand.CloseProjectCommand}" InputGestureText="Ctrl+Q,E"></MenuItem>
                 <Separator/>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Exit}" Command="ApplicationCommands.Close" InputGestureText="Alt+F4"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Exit}" Command="ApplicationCommands.Close" InputGestureText="Alt+F4">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Close.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Edit}" Margin="0,-5,0,0">
                 <MenuItem Header="{x:Static properties:Resources.Undo}" Command="ApplicationCommands.Undo">
@@ -215,7 +221,11 @@
                         <Image Source="/Resources/Image/Paste.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.Del}" Command="ApplicationCommands.Delete"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.Del}" Command="ApplicationCommands.Delete">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Delete.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Select_All}" Command="ApplicationCommands.SelectAll"></MenuItem>
                 <Separator/>
@@ -430,6 +440,12 @@
                 </Button>
                 <Button Style="{StaticResource ButtonStyle}" ToolTip="{x:Static properties:Resources.MainWindow_Row_Delete}" Command="{x:Static gb:GlobalCommand.DeleteRowCommand}">
                     <Image Source="/Resources/Image/DeleteRow.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                </Button>
+                <Button Style="{StaticResource ButtonStyle}" ToolTip="{x:Static properties:Resources.LadderNetwork_Network_Insert}" Command="{x:Static gb:GlobalCommand.InsertNetCommand}">
+                    <Image Source="/Resources/Image/InsertNet.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                </Button>
+                <Button Style="{StaticResource ButtonStyle}" ToolTip="{x:Static properties:Resources.LadderNetwork_Network_Delete}" Command="{x:Static gb:GlobalCommand.DeleteNetCommand}">
+                    <Image Source="/Resources/Image/DeleteNet.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
             </ToolBar>
         </ToolBarTray>
