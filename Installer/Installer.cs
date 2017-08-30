@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Configuration.Install;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Windows;
 
 namespace Installer
 {
@@ -14,6 +16,14 @@ namespace Installer
         public Installer()
         {
             InitializeComponent();
+        }
+        public override void Install(IDictionary stateSaver)
+        {
+            base.Install(stateSaver);
+        }
+        protected override void OnBeforeInstall(IDictionary savedState)
+        {
+            base.OnBeforeInstall(savedState);
         }
         protected override void OnAfterInstall(IDictionary savedState)
         {
@@ -32,7 +42,7 @@ namespace Installer
             base.Uninstall(savedState);
             try
             {
-                var dir = Directory.GetParent(Context.Parameters["assemblypath"]).FullName;
+                var dir = GetTargetDir();
                 if (Directory.Exists(dir)) Directory.Delete(dir, true);
             }
             catch (Exception)
@@ -41,20 +51,14 @@ namespace Installer
         }
         private string GetTargetDir()
         {
-            string dir = Path.GetDirectoryName(Context.Parameters["assemblypath"].ToString());
-            if (dir[dir.Length - 1] != '\\')
-            {
-                dir += @"\";
-            }
-            return dir;
+            return Directory.GetParent(Context.Parameters["assemblypath"]).FullName;
         }
 
         private void CreateUnInstallBat()
         {
             try
             {
-                string dir = GetTargetDir();
-                FileStream fs = new FileStream(dir + "unins000.bat", FileMode.Create, FileAccess.Write);
+                FileStream fs = new FileStream(Path.Combine(GetTargetDir(), "unins000.bat"), FileMode.Create);
                 StreamWriter sw = new StreamWriter(fs);
                 sw.WriteLine("@echo off");
                 sw.WriteLine(string.Format("start /normal %windir%\\system32\\msiexec /x {0}", Context.Parameters["productCode"].ToString()));
