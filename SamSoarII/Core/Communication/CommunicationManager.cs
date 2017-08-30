@@ -390,7 +390,6 @@ namespace SamSoarII.Core.Communication
         {
             CommuicationError ret = DownloadHelper.DownloadExecute(this, handle);
             handle.Abort();
-            ifParent.MNGComu.AbortAll();
             switch (ret)
             {
                 case CommuicationError.None:
@@ -410,6 +409,7 @@ namespace SamSoarII.Core.Communication
                                         break;
                                 }
                             }
+
                         }
                     }
                     break;
@@ -425,13 +425,13 @@ namespace SamSoarII.Core.Communication
                 default:
                     break;
             }
+            ifParent.MNGComu.AbortAll();
         }
 
         public void UploadExecute(ProgressBarHandle handle)
         {
             CommuicationError ret = UploadHelper.UploadExecute(this, handle);
             handle.Abort();
-            ifParent.MNGComu.AbortAll();
             switch (ret)
             {
                 case CommuicationError.None:
@@ -478,6 +478,7 @@ namespace SamSoarII.Core.Communication
                     }
                 }
             }
+            ifParent.MNGComu.AbortAll();
         }
 
         public bool PasswordHandle(CommunicationType commuType)
