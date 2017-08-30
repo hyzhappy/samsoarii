@@ -22,6 +22,7 @@
         <CommandBinding Command="{x:Static ApplicationCommands.Redo}" CanExecute="RedoCommandCanExecute" Executed="OnRedoCommandExecute"></CommandBinding>
         <CommandBinding Command="{x:Static ApplicationCommands.Find}" CanExecute="FindCommandCanExecute" Executed="OnFindCommandExecute"></CommandBinding>
         <CommandBinding Command="{x:Static ApplicationCommands.Replace}" CanExecute="ReplaceCommandCanExecute" Executed="OnReplaceCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static ApplicationCommands.Delete}" CanExecute="DeleteCommandCanExecute" Executed="OnDeleteCommandExecute"></CommandBinding>
         <CommandBinding Command="{x:Static ApplicationCommands.SelectAll}" CanExecute="SelectAllCommandCanExecute" Executed="OnSelectAllCommandExecute"></CommandBinding>
     </UserControl.CommandBindings>
     <UserControl.Resources>

@@ -15,6 +15,8 @@ namespace SamSoarII.Global
         public static RoutedUICommand AddNewModbusCommand { get; set; }
         public static RoutedUICommand InsertRowCommand { get; set; }
         public static RoutedUICommand DeleteRowCommand { get; set; }
+        public static RoutedUICommand InsertNetCommand { get; set; }
+        public static RoutedUICommand DeleteNetCommand { get; set; }
         public static RoutedUICommand ZoomInCommand { get; set; }
         public static RoutedUICommand ZoomOutCommand { get; set; }
         public static RoutedUICommand ShowProjectTreeViewCommand { get; set; }
@@ -69,6 +71,10 @@ namespace SamSoarII.Global
             commands.Add(InsertRowCommand);
             DeleteRowCommand = new RoutedUICommand();
             commands.Add(DeleteRowCommand);
+            InsertNetCommand = new RoutedUICommand();
+            commands.Add(InsertNetCommand);
+            DeleteNetCommand = new RoutedUICommand();
+            commands.Add(DeleteNetCommand);
             ZoomInCommand = new RoutedUICommand();
             commands.Add(ZoomInCommand);
             ZoomOutCommand = new RoutedUICommand();

@@ -1996,6 +1996,18 @@ namespace SamSoarII
             CurrentLadder.RemoveRow();
         }
 
+        public void InsertNet()
+        {
+            if (CurrentLadder == null) return;
+            CurrentLadder.InsertNet();
+        }
+
+        public void RemoveNet()
+        {
+            if (CurrentLadder == null) return;
+            CurrentLadder.RemoveNet();
+        }
+
         public void ProjectCompile()
         {
             if (vmdProj.LadderMode != LadderModes.Edit)
@@ -2223,7 +2235,9 @@ namespace SamSoarII
                     ret &= mdProj.IsModified;
                 if (cmd == GlobalCommand.InstShortCutOpenCommand
                  || cmd == GlobalCommand.InsertRowCommand
-                 || cmd == GlobalCommand.DeleteRowCommand)
+                 || cmd == GlobalCommand.DeleteRowCommand
+                 || cmd == GlobalCommand.InsertNetCommand
+                 || cmd == GlobalCommand.DeleteNetCommand)
                 {
                     ret &= CurrentLadder != null && CurrentLadder.SelectionStatus != SelectStatus.Idle;
                 }

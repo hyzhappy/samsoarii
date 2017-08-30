@@ -1573,6 +1573,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Here exists vertical lines linked from border of split fragment, so it is prohibited to spilt! 的本地化字符串。
+        /// </summary>
+        public static string Error_VerticalLineBorder {
+            get {
+                return ResourceManager.GetString("Error_VerticalLineBorder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Error 的本地化字符串。
         /// </summary>
         public static string ErrorReportWindow_Error {

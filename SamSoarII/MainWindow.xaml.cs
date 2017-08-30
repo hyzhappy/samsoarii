@@ -743,6 +743,10 @@ namespace SamSoarII
                 ifParent.InsertRow();
             if (e.Command == GlobalCommand.DeleteRowCommand)
                 ifParent.RemoveRow();
+            if (e.Command == GlobalCommand.InsertNetCommand)
+                ifParent.InsertNet();
+            if (e.Command == GlobalCommand.DeleteNetCommand)
+                ifParent.RemoveNet();
             if (e.Command == GlobalCommand.AddNewSubRoutineCommand)
                 ifParent.AddNewSubRoutine();
             if (e.Command == GlobalCommand.AddNewFuncBlockCommand)

@@ -346,6 +346,32 @@ namespace SamSoarII.Shell.Models
             }
         }
 
+        public void InsertNet()
+        {
+            switch (SelectionStatus)
+            {
+                case SelectStatus.SingleSelected:
+                    Core.AddN(SelectRectOwner.ID);
+                    break;
+                case SelectStatus.MultiSelected:
+                    Core.AddN(_selectArea.Core.NetStart);
+                    break;
+            }
+        }
+
+        public void RemoveNet()
+        {
+            switch (SelectionStatus)
+            {
+                case SelectStatus.SingleSelected:
+                    Core.RemoveN(SelectRectOwner.ID, SelectRectOwner);
+                    break;
+                case SelectStatus.MultiSelected:
+                    Core.ReplaceN(SelectAllNetworks, new LadderNetworkModel[] { });
+                    break;
+            }
+        }
+
         #endregion
 
         #region Shell
@@ -2025,6 +2051,10 @@ namespace SamSoarII.Shell.Models
         {
             IFParent.WNDMain.LACReplace.Show();
         }
+        private void OnDeleteCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            Delete();
+        }
         
         private void CutCopyCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -2035,9 +2065,20 @@ namespace SamSoarII.Shell.Models
             }
             e.CanExecute = SelectionStatus == SelectStatus.SingleSelected;
             e.CanExecute &= _selectRect.Current != null;
-            e.CanExecute |= SelectionStatus == SelectStatus.MultiSelected;
-            
+            e.CanExecute |= SelectionStatus == SelectStatus.MultiSelected;   
         }
+        private void DeleteCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (IFParent == null || LadderMode != LadderModes.Edit || IFParent.IsWaitForKey)
+            {
+                e.CanExecute = false;
+                return;
+            }
+            e.CanExecute = SelectionStatus == SelectStatus.SingleSelected;
+            e.CanExecute &= _selectRect.Current != null;
+            e.CanExecute |= SelectionStatus == SelectStatus.MultiSelected;
+        }
+
         private void PasteCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (IFParent == null || LadderMode != LadderModes.Edit || IFParent.IsWaitForKey)
@@ -2662,18 +2703,34 @@ namespace SamSoarII.Shell.Models
                     break;
                 case LadderEditEventArgs.Types.NetSplit:
                     if (_selectStatus == SelectStatus.SingleSelected)
+                    {
+                        if (!AssertSplitRow(SelectRectOwner, _selectRect.Y))
+                        {
+                            LocalizedMessageBox.Show(Properties.Resources.Error_VerticalLineBorder, LocalizedMessageIcon.Warning);
+                            return;
+                        }
                         core.SplitNetwork(SelectRectOwner, 0, _selectRect.Y);
+                    }
                     else if (_selectStatus == SelectStatus.MultiSelected
                       && _selectArea.Core.State == SelectAreaCore.Status.SelectRange)
                     {
+                        if (!AssertSplitRow(_selectArea.NetOrigin, _selectArea.Core.YStart - 1)
+                         || !AssertSplitRow(_selectArea.NetOrigin, _selectArea.Core.YEnd))
+                        {
+                            LocalizedMessageBox.Show(Properties.Resources.Error_VerticalLineBorder, LocalizedMessageIcon.Warning);
+                            return;
+                        }
                         core.SplitNetwork(_selectArea.NetOrigin, _selectArea.Core.YStart, _selectArea.Core.YEnd);
                     }
                     break;
             }
         }
+
+        private bool AssertSplitRow(LadderNetworkModel network, int y)
+        {
+            return network.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y).Count() == 0;
+        }
         
-
-
         #endregion
 
         #endregion
