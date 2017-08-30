@@ -1223,7 +1223,7 @@ namespace SamSoarII.Core.Models
                 LadderUnitModel newunit = new LadderUnitModel(newnet, LadderUnitModel.Types.VLINE);
                 newunit.X = oldunit.X + dx;
                 newunit.Y = oldunit.Y + dy;
-                newnet.Add(newunit);
+                newnet.AddV(newunit);
             }
         }
         
@@ -1263,7 +1263,7 @@ namespace SamSoarII.Core.Models
             {
                 newnet = new LadderNetworkModel(this, network.ID + newnets.Count());
                 newnet.RowCount = network.RowCount - end - 1;
-                CloneTo(network, newnet, 0, GlobalSetting.LadderXCapacity, end + 1, network.RowCount - 1, 0, -end - 1);
+                CloneTo(network, newnet, 0, GlobalSetting.LadderXCapacity - 1, end + 1, network.RowCount - 1, 0, -end - 1);
                 newnets.Add(newnet);
             }
             ReplaceN(new LadderNetworkModel[] { network }, newnets);

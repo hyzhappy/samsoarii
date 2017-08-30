@@ -1323,8 +1323,8 @@ namespace SamSoarII
         
         private void OnViewLoadedToSelectNetworks(object sender, RoutedEventArgs e)
         {
-            Select(_lastdia, _laststart, _lastend);
             _lastdia.Tab.Loaded -= OnViewLoadedToSelectNetworks;
+            Select(_lastdia, _laststart, _lastend);
         }
 
         public void NavigateToBreakpointCursor()
@@ -1337,7 +1337,8 @@ namespace SamSoarII
                 {
                     LadderUnitModel unit = ((LadderBrpoModel)ibrpo).Parent;
                     Navigate(unit);
-                    SelectToBrpoTable(unit);
+                    if (unit.Breakpoint?.IsEnable == true)
+                        SelectToBrpoTable(unit);
                 });
             }
             if (ibrpo is FuncBrpoModel)

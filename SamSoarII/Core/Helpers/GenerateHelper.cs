@@ -317,7 +317,28 @@ namespace SamSoarII.Core.Helpers
             Process cmd = null;
             cmd = new Process();
             cmd.StartInfo.WorkingDirectory = String.Format(@"{0:s}\downg\.", currentPath);
-            cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make.cmd", currentPath);
+            switch (project.Device.Type)
+            {
+                case PLCDevice.PLC_FGs_Type.FGs_16MR_A:
+                case PLCDevice.PLC_FGs_Type.FGs_16MR_D:
+                case PLCDevice.PLC_FGs_Type.FGs_16MT_A:
+                case PLCDevice.PLC_FGs_Type.FGs_16MT_D:
+                case PLCDevice.PLC_FGs_Type.FGs_32MR_A:
+                case PLCDevice.PLC_FGs_Type.FGs_32MR_D:
+                case PLCDevice.PLC_FGs_Type.FGs_32MT_A:
+                case PLCDevice.PLC_FGs_Type.FGs_32MT_D:
+                    cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make32.cmd", currentPath);
+                    break;
+                case PLCDevice.PLC_FGs_Type.FGs_64MR_A:
+                case PLCDevice.PLC_FGs_Type.FGs_64MR_D:
+                case PLCDevice.PLC_FGs_Type.FGs_64MT_A:
+                case PLCDevice.PLC_FGs_Type.FGs_64MT_D:
+                    cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make64.cmd", currentPath);
+                    break;
+                default:
+                    cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make.cmd", currentPath);
+                    break;
+            }
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             //cmd.StartInfo.RedirectStandardOutput = true;

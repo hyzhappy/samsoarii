@@ -264,31 +264,34 @@ namespace SamSoarII.Core.Models
                             break;
                     }
                 }
-                if (newrange.Base.Intra != ValueModel.Bases.NULL)
+                if (!oldrange.IsAny && !newrange.IsAny)
                 {
-                    offset = newrange.Base.IntraOffset;
-                    if (!oldrange.IsAny 
-                     && value.Intra == newrange.Base.Intra
-                     && oldrange.Base.Intra == newrange.Base.Intra
-                     && newrange.IntraCount > 1)
+                    if (newrange.Base.Intra != ValueModel.Bases.NULL)
                     {
-                        offset += value.IntraOffset - oldrange.Base.IntraOffset;
+                        offset = newrange.Base.IntraOffset;
+                        if (!oldrange.IsAny
+                         && value.Intra == newrange.Base.Intra
+                         && oldrange.Base.Intra == newrange.Base.Intra
+                         && newrange.IntraCount > 1)
+                        {
+                            offset += value.IntraOffset - oldrange.Base.IntraOffset;
+                        }
+                        newargs.Append(String.Format("{0:s}{1:d}",
+                            ValueModel.NameOfBases[(int)(newrange.Base.Intra)], offset));
                     }
-                    newargs.Append(String.Format("{0:s}{1:d}",
-                        ValueModel.NameOfBases[(int)(newrange.Base.Intra)], offset));
-                }
-                else if (Mode == Modes.Base && value.Intra != ValueModel.Bases.NULL)
-                {
-                    offset = value.IntraOffset;
-                    if (!oldrange.IsAny
-                     && value.Intra == newrange.Base.Intra
-                     && oldrange.Base.Intra == newrange.Base.Intra
-                     && newrange.IntraCount > 1)
+                    else if (Mode == Modes.Base && value.Intra != ValueModel.Bases.NULL)
                     {
-                        offset += value.IntraOffset - oldrange.Base.IntraOffset;
+                        offset = value.IntraOffset;
+                        if (!oldrange.IsAny
+                         && value.Intra == newrange.Base.Intra
+                         && oldrange.Base.Intra == newrange.Base.Intra
+                         && newrange.IntraCount > 1)
+                        {
+                            offset += value.IntraOffset - oldrange.Base.IntraOffset;
+                        }
+                        newargs.Append(String.Format("{0:s}{1:d}",
+                            ValueModel.NameOfBases[(int)(value.Intra)], offset));
                     }
-                    newargs.Append(String.Format("{0:s}{1:d}",
-                        ValueModel.NameOfBases[(int)(value.Intra)], offset));
                 }
             }
         }

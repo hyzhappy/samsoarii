@@ -20,7 +20,7 @@ namespace SamSoarII.Core.Simulate
             parent = _parent;
             DllModel.SimulateException += OnSimulateException;
             parent.Aborted += OnSimulateAborted;
-            TimeSpan = 100;
+            TimeSpan = 50;
             cursor = new BreakpointCursor(this);
         }
         

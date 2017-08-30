@@ -445,7 +445,7 @@ namespace SamSoarII.Core.Simulate
         /// <summary>
         /// 初始化构造函数
         /// </summary>
-        public SimulateDllModel(SimulateManager _parent) : base(false, true, ThreadPriority.Lowest)
+        public SimulateDllModel(SimulateManager _parent) : base(false, true)
         {
             parent = _parent;
         }
@@ -494,7 +494,7 @@ namespace SamSoarII.Core.Simulate
             }
             if (IsDllAlive() > 0)
                 AfterRunLadder();
-            Thread.Sleep(5);
+            Thread.Sleep(2);
         }
 
         #endregion

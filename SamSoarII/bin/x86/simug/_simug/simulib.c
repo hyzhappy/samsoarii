@@ -213,14 +213,14 @@ int _Assert(
 		case 2:
 			if (name[0] == 'C' && name[1] == 'V')
 			{
-				if (*offset >= 0 && *offset + size < 200)
+				if (*offset >= 0 && *offset + size <= 200)
 				{
 					*addr = (int32_t*)(&CVWord[0]);
 				}
-				else if (*offset >= 200 || *offset + size/2 < 256)
+				else if (*offset >= 200 || *offset + size/2 <= 256)
 				{
 					*addr = (int32_t*)(&CVDoubleWord[0]);
-					*offset -= 200;
+					*offset = (*offset - 200) * 2;
 				}
 				else
 				{
@@ -275,12 +275,7 @@ EXPORT int GetDoubleWord(char* name, int size, int32_t* output)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
-	while (size--) 
-	{
-		output[size] = *(((int16_t*)addr)+offset+size*2+1);
-		output[size] <<= 16;
-		output[size] |= *(((int16_t*)addr)+offset+size*2);
-	}
+	while (size--) output[size] = *(((int32_t*)(((int16_t*)(addr))+offset))+size);
 	return 0;
 }
 // Get the FLOAT value from targeted register (D)
@@ -330,11 +325,7 @@ EXPORT int SetDoubleWord(char* name, int size, int32_t* input)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
-	while (size--) 
-	{
-		*(((int16_t*)addr)+offset+size*2+1) = (((uint32_t)(input[size]))>>16);
-		*(((int16_t*)addr)+offset+size*2) = (((uint32_t)(input[size]))&0xffff);
-	}
+	while (size--) *(((int32_t*)(((int16_t*)(addr))+offset))+size) = input[size];
 	return 0;
 }
 // Set the FLOAT value to targeted register (D)
