@@ -11,6 +11,7 @@ using SamSoarII.Core.Models;
 using SamSoarII.Global;
 using System.Threading;
 using System.Windows.Threading;
+using SamSoarII.PLCDevice;
 
 namespace SamSoarII.Core.Helpers
 {
@@ -639,6 +640,15 @@ namespace SamSoarII.Core.Helpers
             //初始化要下载的数据
             InitializeData(communManager.IFParent.MDProj);
 
+            //判断当前工程PLC型号与底层是否一致
+            if ((int)PLCDeviceManager.GetPLCDeviceManager().SelectDevice.Type != (int)communManager.PLCMessage.PLCType)
+            {
+                if (LocalizedMessageBox.Show(Properties.Resources.PLC_Type_Not_Equal, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information) == LocalizedMessageResult.Yes)
+                {
+                    PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(communManager.PLCMessage.PLCType);
+                }
+            }
+
             //首先判断PLC运行状态
             if (communManager.PLCMessage.RunStatus == RunStatus.Run)
             {
@@ -655,9 +665,9 @@ namespace SamSoarII.Core.Helpers
             {
                 handle.UpdateMessage(Properties.Resources.Project_Download);
                 if(communManager.MNGCurrent == communManager.MNGUSB)
-                    handle.ReportProgress(IsDownloadSetting ? 90 : 100, 0.00015 * communManager.ExecData.Count + 2);
+                    handle.ReportProgress(IsDownloadSetting ? 90 : 100, 0.15 * communManager.ExecData.Count + 2);
                 else
-                    handle.ReportProgress(IsDownloadSetting ? 90 : 100, 0.00025 * communManager.ExecData.Count * 115200 / communManager.MNGPort.BaudRate + 2);
+                    handle.ReportProgress(IsDownloadSetting ? 90 : 100, 0.25 * communManager.ExecData.Count * 115200 / communManager.MNGPort.BaudRate + 2);
                 //下载Bin文件
                 ret = DownloadBinExecute(communManager, handle);
                 if (ret != CommuicationError.None)
@@ -687,9 +697,9 @@ namespace SamSoarII.Core.Helpers
             if (IsDownloadSetting)
             {
                 if (communManager.MNGCurrent == communManager.MNGUSB)
-                    handle.ReportProgress(100, 0.00015 * dtConfig.Count);
+                    handle.ReportProgress(100, 0.15 * dtConfig.Count);
                 else
-                    handle.ReportProgress(100, 0.00025 * dtConfig.Count * 115200 / communManager.MNGPort.BaudRate);
+                    handle.ReportProgress(100, 0.25 * dtConfig.Count * 115200 / communManager.MNGPort.BaudRate);
                 handle.UpdateMessage(Properties.Resources.Config_Download);
                 ret = DownloadConfigExecute(communManager, handle);
                 if (ret != CommuicationError.None)

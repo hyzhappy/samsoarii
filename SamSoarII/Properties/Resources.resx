@@ -2418,4 +2418,7 @@
   <data name="LadderNetwork_Network_Split" xml:space="preserve">
     <value>Network Split</value>
   </data>
+  <data name="PLC_Type_Not_Equal" xml:space="preserve">
+    <value>The PLC type of  current project is inconsistent with the underlying PLC type,whether to switch the current type?</value>
+  </data>
 </root>

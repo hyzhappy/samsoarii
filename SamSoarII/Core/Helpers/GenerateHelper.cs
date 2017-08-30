@@ -1,6 +1,7 @@
 ﻿using SamSoarII.Core.Generate;
 using SamSoarII.Core.Models;
 using SamSoarII.Core.Simulate;
+using SamSoarII.PLCDevice;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -173,7 +174,7 @@ namespace SamSoarII.Core.Helpers
             return SimulateDllModel.LoadDll(outputDllFile);
         }
 
-        public static void GenerateFinal(ProjectModel project, string plclibAFile)
+        public static void GenerateFinal(ProjectModel project)
         {
             List<InstHelper.PLCInstNetwork> nets =
                 new List<InstHelper.PLCInstNetwork>();
@@ -193,13 +194,7 @@ namespace SamSoarII.Core.Helpers
             string funcBlockHFile = String.Format(@"{0:s}\downg\downf.h", currentPath);
             string funcBlockCFile = String.Format(@"{0:s}\downg\downf.c", currentPath);
             string downlibOFile = String.Format(@"{0:s}\downg\downlib.o", currentPath);
-            string memLDFile = String.Format(@"{0:s}\downg\mem.ld", currentPath);
-            string libsLDFile = String.Format(@"{0:s}\downg\libs.ld", currentPath);
-            string sectionsLDFile = String.Format(@"{0:s}\downg\sections.ld", currentPath);
-            string outputElfFile = String.Format(@"{0:s}\downc.elf", currentPath);
-            string outputBinFile = String.Format(@"{0:s}\downc.bin", currentPath);
-            string aaMapFile = String.Format(@"{0:s}\downg\aa.map", currentPath);
-            plclibAFile = String.Format(@"{0:s}\downg\{1:s}", currentPath, plclibAFile);
+            
             // 生成梯形图的c语言
             StreamWriter sw = new StreamWriter(ladderCFile);
             sw.Write("void InitUserRegisters();\r\n");
@@ -317,22 +312,23 @@ namespace SamSoarII.Core.Helpers
             Process cmd = null;
             cmd = new Process();
             cmd.StartInfo.WorkingDirectory = String.Format(@"{0:s}\downg\.", currentPath);
-            switch (project.Device.Type)
+            //由于暂不支持多脉冲，故默认为(PLC_FGs_Type)
+            switch ((PLC_FGs_Type)project.Parent.MNGComu.PLCMessage.PLCType)
             {
-                case PLCDevice.PLC_FGs_Type.FGs_16MR_A:
-                case PLCDevice.PLC_FGs_Type.FGs_16MR_D:
-                case PLCDevice.PLC_FGs_Type.FGs_16MT_A:
-                case PLCDevice.PLC_FGs_Type.FGs_16MT_D:
-                case PLCDevice.PLC_FGs_Type.FGs_32MR_A:
-                case PLCDevice.PLC_FGs_Type.FGs_32MR_D:
-                case PLCDevice.PLC_FGs_Type.FGs_32MT_A:
-                case PLCDevice.PLC_FGs_Type.FGs_32MT_D:
+                case PLC_FGs_Type.FGs_16MR_A:
+                case PLC_FGs_Type.FGs_16MR_D:
+                case PLC_FGs_Type.FGs_16MT_A:
+                case PLC_FGs_Type.FGs_16MT_D:
+                case PLC_FGs_Type.FGs_32MR_A:
+                case PLC_FGs_Type.FGs_32MR_D:
+                case PLC_FGs_Type.FGs_32MT_A:
+                case PLC_FGs_Type.FGs_32MT_D:
                     cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make32.cmd", currentPath);
                     break;
-                case PLCDevice.PLC_FGs_Type.FGs_64MR_A:
-                case PLCDevice.PLC_FGs_Type.FGs_64MR_D:
-                case PLCDevice.PLC_FGs_Type.FGs_64MT_A:
-                case PLCDevice.PLC_FGs_Type.FGs_64MT_D:
+                case PLC_FGs_Type.FGs_64MR_A:
+                case PLC_FGs_Type.FGs_64MR_D:
+                case PLC_FGs_Type.FGs_64MT_A:
+                case PLC_FGs_Type.FGs_64MT_D:
                     cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make64.cmd", currentPath);
                     break;
                 default:

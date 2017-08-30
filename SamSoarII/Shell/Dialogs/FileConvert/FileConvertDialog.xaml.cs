@@ -98,7 +98,7 @@ namespace SamSoarII.Shell.Dialogs
                     if (ret != LocalizedMessageResult.Yes)
                     {
                         currentFileLen = 0;//不覆盖，因此将文件长度设置为0
-                        handle.ReportProgress((int)(((double)(cnt + 1) / LB_Old.Items.Count) * 100), currentFileLen / (160.0 * 1024));
+                        handle.ReportProgress((int)(((double)(cnt + 1) / LB_Old.Items.Count) * 100), currentFileLen / 160.0);
                         cnt++;
                         continue;
                     }
@@ -114,7 +114,7 @@ namespace SamSoarII.Shell.Dialogs
                 cmd.StartInfo.RedirectStandardError = true;
                 try
                 {
-                    handle.ReportProgress((int)(((double)(cnt + 1) / LB_Old.Items.Count) * 100), currentFileLen / (160.0 * 1024));
+                    handle.ReportProgress((int)(((double)(cnt + 1) / LB_Old.Items.Count) * 100), currentFileLen / 160.0);
                     cmd.Start();
                     cmd.WaitForExit();
                     Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()

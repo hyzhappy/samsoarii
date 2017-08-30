@@ -2418,4 +2418,7 @@
   <data name="LadderNetwork_Network_Split" xml:space="preserve">
     <value>网络分割</value>
   </data>
+  <data name="PLC_Type_Not_Equal" xml:space="preserve">
+    <value>当前工程PLC型号与底层PLC型号不一致，是否切换当前PLC型号？</value>
+  </data>
 </root>

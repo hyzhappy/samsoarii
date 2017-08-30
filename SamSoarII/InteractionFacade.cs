@@ -406,7 +406,7 @@ namespace SamSoarII
             if (!CheckLadder(false)) return false;
             if (!CheckFuncBlock(false)) return false;
 #if DEBUG
-            GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
+            //GenerateHelper.GenerateFinal(mdProj);
             //DownloadHelper.InitializeData(mdProj);
 #endif
             _option = -1;
@@ -460,24 +460,6 @@ namespace SamSoarII
                         LocalizedMessageBox.Show(Properties.Resources.Please_Select_DownData, LocalizedMessageIcon.Information);
                         return;
                     }
-                    LoadingWindowHandle handle;
-                    if (DownloadHelper.IsDownloadProgram && (_option < 0 || !DownloadHelper.CheckOption(_option, DownloadHelper.DownloadOption)))
-                    {
-                        //按下下载键时再生成Bin,判断是否要包括软元件初始化
-                        handle = new LoadingWindowHandle(Properties.Resources.Generating_Final);
-                        handle.Start();
-                        Thread genthread = new Thread(() =>
-                        {
-                            GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
-                            mngComu.LoadExecute();
-                            handle.Completed = true;
-                            handle.Abort();
-                        });
-                        genthread.Start();
-                        while (!handle.Completed) Thread.Sleep(10);
-                    }
-
-                    _option = DownloadHelper.DownloadOption;
 
                     if (mngComu.CheckLink())
                     {
@@ -486,6 +468,27 @@ namespace SamSoarII
                             LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                             return;
                         }
+
+                        LoadingWindowHandle handle;
+
+                        if (DownloadHelper.IsDownloadProgram && (_option < 0 || !DownloadHelper.CheckOption(_option, DownloadHelper.DownloadOption)))
+                        {
+                            //按下下载键时再生成Bin,判断是否要包括软元件初始化
+                            handle = new LoadingWindowHandle(Properties.Resources.Generating_Final);
+                            handle.Start();
+                            Thread genthread = new Thread(() =>
+                            {
+                                GenerateHelper.GenerateFinal(mdProj);
+                                mngComu.LoadExecute();
+                                handle.Completed = true;
+                                handle.Abort();
+                            });
+                            genthread.Start();
+                            while (!handle.Completed) Thread.Sleep(10);
+                        }
+
+                        _option = DownloadHelper.DownloadOption;
+
                         ProgressBarHandle phandle = new ProgressBarHandle(Properties.Resources.Project_Download, 0, 100,  mngComu.DownloadExecute, new BackgroundWorker(), vmdProj.Dispatcher);
                         phandle.StartWork();
                     }

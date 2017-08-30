@@ -112,7 +112,7 @@ namespace SamSoarII.Shell.Dialogs
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = from;
             animation.To = to;
-            animation.Duration = TimeSpan.FromSeconds(duration);
+            animation.Duration = TimeSpan.FromMilliseconds(duration);
             pg_Bar.PG_Bar.BeginAnimation(RangeBase.ValueProperty, animation);
         }
         #endregion

@@ -87,7 +87,7 @@ namespace SamSoarII.Shell.Dialogs
 
         public void Save()
         {
-            PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType((PLC_FGs_Type)Enum.ToObject(typeof(PLC_FGs_Type), MainList.SelectedIndex));
+            PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(Enum.ToObject(typeof(PLC_FGs_Type), MainList.SelectedIndex));
             core.Device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
         }
     }
