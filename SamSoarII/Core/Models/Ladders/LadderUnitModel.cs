@@ -1813,7 +1813,7 @@ namespace SamSoarII.Core.Models
             children = children.Concat(func.GetValueModels(this)).ToArray();
             try
             {
-                Parse(_args);
+                Parse(_args, false);
             }
             catch (ValueParseException e)
             {

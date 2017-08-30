@@ -108,7 +108,9 @@ namespace SamSoarII.Core.Models
             {
                 value.Store.Parent = this;
                 value.Store.RefNum++;
-                Stores.Add(value.Store);
+                value.Store.VisualRefNum += value.Parent.View != null ? 1 : 0;
+                if (prototype.Base != ValueModel.Bases.NULL && value.Store.RefNum == 1)
+                    Stores.Add(value.Store);
             }
             else
             {
@@ -119,7 +121,8 @@ namespace SamSoarII.Core.Models
                 if (vstore == null)
                 {
                     vstore = new ValueStore(this, value.Type, value.Intra, value.IntraOffset, flag);
-                    Stores.Add(vstore);
+                    if (prototype.Base != ValueModel.Bases.NULL)
+                        Stores.Add(vstore);
                 }
                 vstore.RefNum++;
                 vstore.VisualRefNum += value.Parent.View != null ? 1 : 0;
@@ -137,7 +140,7 @@ namespace SamSoarII.Core.Models
                 isvar &= value.Store.Base != ValueModel.Bases.H;
                 value.Store.RefNum--;
                 value.Store.VisualRefNum -= value.Parent.View != null ? 1 : 0;
-                if (value.Store.RefNum == 0)
+                if (prototype.Base != ValueModel.Bases.NULL && value.Store.RefNum == 0)
                     Stores.Remove(value.Store);
                 if (isvar) value.Store = null;
             }
