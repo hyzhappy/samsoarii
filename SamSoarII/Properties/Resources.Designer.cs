@@ -2662,11 +2662,29 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Networks Merge 的本地化字符串。
+        /// </summary>
+        public static string LadderNetwork_Network_Merge {
+            get {
+                return ResourceManager.GetString("LadderNetwork_Network_Merge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Network Paste 的本地化字符串。
         /// </summary>
         public static string LadderNetwork_Network_Paste {
             get {
                 return ResourceManager.GetString("LadderNetwork_Network_Paste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Network Split 的本地化字符串。
+        /// </summary>
+        public static string LadderNetwork_Network_Split {
+            get {
+                return ResourceManager.GetString("LadderNetwork_Network_Split", resourceCulture);
             }
         }
         

@@ -558,53 +558,56 @@ namespace SamSoarII.Core.Generate
             // 比较表达式的长度都不小于6
             if (end - start > 4)
             {
-                if (profix.Equals("AND"))
-                    profix = "A";
                 // 找到比较符的位置
                 int op = start + 2;
-                while (expr[op] != '=' && expr[op] != '<' && expr[op] != '>') op++;
+                while (op <= end && expr[op] != '=' && expr[op] != '<' && expr[op] != '>') op++;
                 // 识别比较符前的数据类型
-                switch (expr[op - 1])
+                if (op <= end)
                 {
-                    case 'w': profix += 'W'; break;
-                    case 'd': profix += 'D'; break;
-                    case 'f': profix += 'F'; break;
-                }
-                // 等比较（M0w=M1）
-                if (expr[op] == '=')
-                {
-                    InstHelper.AddInst(insts, profix + "EQ " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op), id);
-                    return;
-                }
-                // 不等比较（M0w<>M1）
-                if (expr[op] == '<' && expr[op + 1] == '>')
-                {
-                    InstHelper.AddInst(insts, profix + "NE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1), id);
-                    return;
-                }
-                // 小等比较（M0w<=M1）
-                if (expr[op] == '<' && expr[op + 1] == '=')
-                {
-                    InstHelper.AddInst(insts, profix + "LE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1), id);
-                    return;
-                }
-                // 大等比较（M0w>=M1）
-                if (expr[op] == '>' && expr[op + 1] == '=')
-                {
-                    InstHelper.AddInst(insts, profix + "GE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1), id);
-                    return;
-                }
-                // 小于比较（M0w<M1）
-                if (expr[op] == '<')
-                {
-                    InstHelper.AddInst(insts, profix + "L " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op), id);
-                    return;
-                }
-                // 大于比较（M0w>M1）
-                if (expr[op] == '>')
-                {
-                    InstHelper.AddInst(insts, profix + "G " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op), id);
-                    return;
+                    if (profix.Equals("AND"))
+                        profix = "A";
+                    switch (expr[op - 1])
+                    {
+                        case 'w': profix += 'W'; break;
+                        case 'd': profix += 'D'; break;
+                        case 'f': profix += 'F'; break;
+                    }
+                    // 等比较（M0w=M1）
+                    if (expr[op] == '=')
+                    {
+                        InstHelper.AddInst(insts, profix + "EQ " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op), id);
+                        return;
+                    }
+                    // 不等比较（M0w<>M1）
+                    if (expr[op] == '<' && expr[op + 1] == '>')
+                    {
+                        InstHelper.AddInst(insts, profix + "NE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1), id);
+                        return;
+                    }
+                    // 小等比较（M0w<=M1）
+                    if (expr[op] == '<' && expr[op + 1] == '=')
+                    {
+                        InstHelper.AddInst(insts, profix + "LE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1), id);
+                        return;
+                    }
+                    // 大等比较（M0w>=M1）
+                    if (expr[op] == '>' && expr[op + 1] == '=')
+                    {
+                        InstHelper.AddInst(insts, profix + "GE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1), id);
+                        return;
+                    }
+                    // 小于比较（M0w<M1）
+                    if (expr[op] == '<')
+                    {
+                        InstHelper.AddInst(insts, profix + "L " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op), id);
+                        return;
+                    }
+                    // 大于比较（M0w>M1）
+                    if (expr[op] == '>')
+                    {
+                        InstHelper.AddInst(insts, profix + "G " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op), id);
+                        return;
+                    }
                 }
             }
             // 单一的位寄存器（M0）

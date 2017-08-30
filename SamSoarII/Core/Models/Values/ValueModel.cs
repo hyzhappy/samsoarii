@@ -82,8 +82,7 @@ namespace SamSoarII.Core.Models
         public readonly static ValueRegex VerifyBitRegex9 = new ValueRegex(
             @"^(M)([0-9]+)((V|Z)([0-9]+))?$",
             new string[] { "M" });
-
-
+        
         public readonly static ValueRegex WordBitRegex = new ValueRegex(
             @"^(D|V|Z)([0-9]+)\.([0-9A-F])((V|Z)([0-9]+))?$", 
             new string[] { "Dm.n" });

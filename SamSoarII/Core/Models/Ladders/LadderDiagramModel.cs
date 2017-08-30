@@ -1201,6 +1201,74 @@ namespace SamSoarII.Core.Models
             AddSingleUnit(unit, net, cover);
         }
 
+        private void CloneTo(LadderNetworkModel oldnet, LadderNetworkModel newnet, int x1, int x2, int y1, int y2, int dx, int dy)
+        {
+            foreach (LadderUnitModel oldunit in oldnet.Children.SelectRange(x1, x2, y1, y2))
+            {
+                LadderUnitModel newunit = null;
+                if (oldunit is POLYLINEModel)
+                    newunit = ((POLYLINEModel)oldunit).Clone();
+                else if (oldunit is TBLModel)
+                    newunit = ((TBLModel)oldunit).Clone();
+                else
+                    newunit = new LadderUnitModel(newnet, oldunit.Type);
+                newunit.Parent = newnet;
+                newunit.X = oldunit.X + dx;
+                newunit.Y = oldunit.Y + dy;
+                newunit.InstArgs = oldunit.InstArgs;
+                newnet.Add(newunit);
+            }
+            foreach (LadderUnitModel oldunit in oldnet.VLines.SelectRange(x1, x2, y1, y2))
+            {
+                LadderUnitModel newunit = new LadderUnitModel(newnet, LadderUnitModel.Types.VLINE);
+                newunit.X = oldunit.X + dx;
+                newunit.Y = oldunit.Y + dy;
+                newnet.Add(newunit);
+            }
+        }
+        
+        public void MergeNetworks(IEnumerable<LadderNetworkModel> networks, int newid)
+        {
+            LadderNetworkModel newnet = new LadderNetworkModel(this, newid);
+            int top = 0;
+            foreach (LadderNetworkModel oldnet in networks)
+            {
+                CloneTo(oldnet, newnet, 0, GlobalSetting.LadderXCapacity - 1, 0, oldnet.RowCount - 1, 0, top);
+                if (oldnet.Children.Count() > 0)
+                    top += oldnet.Children.Select(u => u.Y).Max() + 1;
+            }
+            newnet.RowCount = top;
+            ReplaceN(networks, new LadderNetworkModel[] { newnet });
+        }
+
+        public void SplitNetwork(LadderNetworkModel network, int start, int end)
+        {
+            List<LadderNetworkModel> newnets = new List<LadderNetworkModel>();
+            LadderNetworkModel newnet = null;
+            if (start > 0)
+            {
+                newnet = new LadderNetworkModel(this, network.ID + newnets.Count());
+                newnet.RowCount = start;
+                CloneTo(network, newnet, 0, GlobalSetting.LadderXCapacity - 1, 0, start - 1, 0, 0);
+                newnets.Add(newnet);
+            }
+            if (end >= start)
+            {
+                newnet = new LadderNetworkModel(this, network.ID + newnets.Count());
+                newnet.RowCount = end - start + 1;
+                CloneTo(network, newnet, 0, GlobalSetting.LadderXCapacity - 1, start, end, 0, -start);
+                newnets.Add(newnet);
+            }
+            if (end < network.RowCount - 1)
+            {
+                newnet = new LadderNetworkModel(this, network.ID + newnets.Count());
+                newnet.RowCount = network.RowCount - end - 1;
+                CloneTo(network, newnet, 0, GlobalSetting.LadderXCapacity, end + 1, network.RowCount - 1, 0, -end - 1);
+                newnets.Add(newnet);
+            }
+            ReplaceN(new LadderNetworkModel[] { network }, newnets);
+        }
+        
         #endregion
 
         #region Event Handler

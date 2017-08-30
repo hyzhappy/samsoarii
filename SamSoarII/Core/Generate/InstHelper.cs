@@ -150,7 +150,7 @@ namespace SamSoarII.Core.Generate
                         break;
                 }
                 // 找到所有计数器的预设值
-                if (inst[0].Length >= 2 && inst[0].Substring(0, 2).Equals("CT"))
+                if (inst[0].Length >= 2 && inst[0].Equals("CTD"))
                     ctsv[int.Parse(inst[4])] = inst[2];
             }
             // 建立C代码的全局环境
@@ -440,9 +440,9 @@ namespace SamSoarII.Core.Generate
                 case "WBOUT":
                 case "WBOUTIM":
                     if (simumode)
-                        sw.Write("{0:s} &{2:s}, 1, {1:s});", inst[1], cond, inst.EnBit);
+                        sw.Write("{0:s} &{2:s}, 1, {1:s});\n", inst[1], cond, inst.EnBit);
                     else
-                        sw.Write("{0:s} 1, {1:s})", inst[1], cond);
+                        sw.Write("{0:s} 1, {1:s});\n", inst[1], cond);
                     break;
                 case "OUTIM":
                     if (!simumode && inst[1][0] == 'Y')
@@ -506,12 +506,15 @@ namespace SamSoarII.Core.Generate
                             else
                                 sw.Write("CVWord[{0:d}] = {1:s};\n", i, ctsv[i]);
                     }
-                    if (inst[1][0] == 'T' && !simumode)
+                    if (inst[1][0] == 'T')
                     {
                         int begin = int.Parse(inst[3]);
                         int end = begin + int.Parse(inst[4]);
                         for (int i = begin; i < end; i++)
-                            sw.Write("reset_timer({0:d});\n", i);
+                            if (!simumode)
+                                sw.Write("reset_timer({0:d});\n", i);
+                            else
+                                sw.Write("TVWord[{0:d}] = 0;\n", i);
                     }
                     sw.Write("}\n");
                     break;
@@ -575,7 +578,7 @@ namespace SamSoarII.Core.Generate
                 // 向下计数器
                 case "CTD":
                     sw.Write("if ({3:s} && _global[{0:d}]==0 && _stack_{1:d}==1 && !{2:s})\n", globalCount, stackTop, inst[3], cond);
-                    sw.Write("if (--{0:s}<={1:s}) {2:s} = 1;\n", inst[1], inst[2], inst[3]);
+                    sw.Write("if (--{0:s}<=0) {2:s} = 1;\n", inst[1], inst[2], inst[3]);
                     sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount++, stackTop);
                     break;
                 // 向上向下计数器，当当前计数小于目标则加1，大于目标则减1
@@ -910,7 +913,7 @@ namespace SamSoarII.Core.Generate
                         case "INC": sw.Write("{1:s} = _incw({0:s});\n", inst[1], inst[2]); break;
                         case "BWINC":
                             if (simumode)
-                                sw.Write("{1:s} &{2:s},_incw({0:s});\n", inst[1], inst[2], inst.EnBit);
+                                sw.Write("{1:s} &{2:s},_incw({0:s}));\n", inst[1], inst[2], inst.EnBit);
                             else
                                 sw.Write("{1:s} _incw({0:s}));\n", inst[1], inst[2]);
                             break;
@@ -924,14 +927,14 @@ namespace SamSoarII.Core.Generate
                         case "DEC": sw.Write("{1:s} = _decw({0:s});\n", inst[1], inst[2]); break;
                         case "BWDEC":
                             if (simumode)
-                                sw.Write("{1:s} &{2:s},_decw({0:s});\n", inst[1], inst[2], inst.EnBit);
+                                sw.Write("{1:s} &{2:s},_decw({0:s}));\n", inst[1], inst[2], inst.EnBit);
                             else
                                 sw.Write("{1:s} _decw({0:s}));\n", inst[1], inst[2]);
                             break;
                         case "DECD": sw.Write("{1:s} = _decd({0:s});\n", inst[1], inst[2]); break;
                         case "BDDECD": case "PCDECD":
                             if (simumode && !inst[0].Equals("PCDECD"))
-                                sw.Write("{1:s} &{2:s},_decd({0:s});\n", inst[1], inst[2], inst.EnBit);
+                                sw.Write("{1:s} &{2:s},_decd({0:s}));\n", inst[1], inst[2], inst.EnBit);
                             else
                                 sw.Write("{1:s} _decd({0:s}));\n", inst[1], inst[2]);
                             break;
