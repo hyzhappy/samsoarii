@@ -6091,6 +6091,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 The serial port is occupied! 的本地化字符串。
+        /// </summary>
+        public static string SerialPort_Occupied {
+            get {
+                return ResourceManager.GetString("SerialPort_Occupied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Set coil 的本地化字符串。
         /// </summary>
         public static string Set_Coil {

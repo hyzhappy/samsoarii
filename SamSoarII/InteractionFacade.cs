@@ -429,8 +429,10 @@ namespace SamSoarII
                 {
                     if (mngComu.CheckLink())
                         LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Success, LocalizedMessageIcon.Information);
-                    else
-                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                    else if (mngComu.MNGCurrent.Ex != null && mngComu.MNGCurrent.Ex is UnauthorizedAccessException)
+                    {
+                        LocalizedMessageBox.Show(Properties.Resources.SerialPort_Occupied, LocalizedMessageIcon.Information);
+                    }else LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                 };
                 basesetting.ModifyButtonClick += (sender2, e2) =>
                 {
@@ -492,10 +494,11 @@ namespace SamSoarII
                         ProgressBarHandle phandle = new ProgressBarHandle(Properties.Resources.Project_Download, 0, 100,  mngComu.DownloadExecute, new BackgroundWorker(), vmdProj.Dispatcher);
                         phandle.StartWork();
                     }
-                    else
+                    else if (mngComu.MNGCurrent.Ex != null && mngComu.MNGCurrent.Ex is UnauthorizedAccessException)
                     {
-                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                        LocalizedMessageBox.Show(Properties.Resources.SerialPort_Occupied, LocalizedMessageIcon.Information);
                     }
+                    else LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                 };
                 dialog.ShowDialog();
             }
@@ -548,8 +551,11 @@ namespace SamSoarII
                     {
                         if (mngComu.CheckLink())
                             LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Success, LocalizedMessageIcon.Information);
-                        else
-                            LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                        else if (mngComu.MNGCurrent.Ex != null && mngComu.MNGCurrent.Ex is UnauthorizedAccessException)
+                        {
+                            LocalizedMessageBox.Show(Properties.Resources.SerialPort_Occupied, LocalizedMessageIcon.Information);
+                        }
+                        else LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                     };
                     dialog.Ensure += (sender3, e3) =>
                     {
@@ -575,10 +581,11 @@ namespace SamSoarII
                                 handle.StartWork();
                             }
                         }
-                        else
+                        else if (mngComu.MNGCurrent.Ex != null && mngComu.MNGCurrent.Ex is UnauthorizedAccessException)
                         {
-                            LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                            LocalizedMessageBox.Show(Properties.Resources.SerialPort_Occupied, LocalizedMessageIcon.Information);
                         }
+                        else LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                     };
                     dialog.ShowDialog();
                 }
@@ -647,7 +654,11 @@ namespace SamSoarII
                   | MainWindowEventArgs.FLAG_MONITOR));
                 PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
                     UnderBarStatus.Error, Properties.Resources.MessageBox_Communication_Failed));
-                LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                if (mngComu.MNGCurrent.Ex != null && mngComu.MNGCurrent.Ex is UnauthorizedAccessException)
+                {
+                    LocalizedMessageBox.Show(Properties.Resources.SerialPort_Occupied, LocalizedMessageIcon.Information);
+                }
+                else LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                 mngComu.IsEnable = false;
                 return false;
             }
@@ -1860,8 +1871,11 @@ namespace SamSoarII
             mngComu.IsEnable = true;
             if (mngComu.CheckLink())
                 LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Success, LocalizedMessageIcon.Information);
-            else
-                LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+            else if (mngComu.MNGCurrent.Ex != null && mngComu.MNGCurrent.Ex is UnauthorizedAccessException)
+            {
+                LocalizedMessageBox.Show(Properties.Resources.SerialPort_Occupied, LocalizedMessageIcon.Information);
+            }
+            else LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
             mngComu.IsEnable = false;
         }
 

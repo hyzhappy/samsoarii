@@ -2421,4 +2421,10 @@
   <data name="PLC_Type_Not_Equal" xml:space="preserve">
     <value>当前工程PLC型号与底层PLC型号不一致，是否切换当前PLC型号？</value>
   </data>
+  <data name="Error_VerticalLineBorder" xml:space="preserve">
+    <value>分割块边缘存在相连的竖线，无法执行分割操作！</value>
+  </data>
+  <data name="SerialPort_Occupied" xml:space="preserve">
+    <value>串口被占用！</value>
+  </data>
 </root>

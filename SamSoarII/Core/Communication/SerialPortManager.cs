@@ -1,4 +1,5 @@
 ﻿using SamSoarII.Core.Models;
+using SamSoarII.Shell.Dialogs;
 using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
@@ -185,6 +186,15 @@ namespace SamSoarII.Core.Communication
                 }
             }
         }
+        private Exception ex;
+        public Exception Ex
+        {
+            get
+            {
+                return ex;
+            }
+        }
+
         public void InitializePort()
         {
             if (port.IsOpen) port.Close();
@@ -388,11 +398,11 @@ namespace SamSoarII.Core.Communication
         }
         private bool PortTest()
         {
-            port.Open();
-            byte[] command = testCommand.GetBytes();
-            port.Write(command, 0, command.Length);
             try
             {
+                port.Open();
+                byte[] command = testCommand.GetBytes();
+                port.Write(command, 0, command.Length);
                 int recvcount = 0;
                 readbuffercount = 0;
                 do
@@ -424,8 +434,9 @@ namespace SamSoarII.Core.Communication
                     }
                 }
             }
-            catch (TimeoutException)
+            catch (Exception e)
             {
+                ex = e;
                 port.Close();
                 return false;
             }

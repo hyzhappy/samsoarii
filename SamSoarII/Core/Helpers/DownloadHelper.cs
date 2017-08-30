@@ -48,7 +48,7 @@ namespace SamSoarII.Core.Helpers
         /// <summary> 条形码 </summary>
         static private List<byte> dtIcon;
         /// <summary> 工程 </summary>
-        //static private List<byte> dtProject;
+        static private List<byte> dtProject;
         /// <summary> 注释 </summary>
         //static private List<byte> dtComment;
         /// <summary> 元件表 </summary>
@@ -75,7 +75,6 @@ namespace SamSoarII.Core.Helpers
             dtModbus = new List<byte>();
             dtTable = new List<byte>();
             dtBlock = new List<byte>();
-            
             // 条形码
 
             // 配置
@@ -205,157 +204,7 @@ namespace SamSoarII.Core.Helpers
             Write(data, (short)1000);
         }
         #endregion
-        
-        //工程，注释，软元件等用于上载的信息直接压缩xml
-        #region Initialize Project
 
-        //static private void Write(ValueManager ValueManager)
-        //{
-        //    int id = 0;
-        //    foreach (ValueInfo vinfo in ValueManager)
-        //        foreach (ValueStore vstore in vinfo.Stores)
-        //            vstore.ID = ++id;
-        //    Write(dtProject, (short)id);
-        //    foreach (ValueInfo vinfo in ValueManager)
-        //        foreach (ValueStore vstore in vinfo.Stores)
-        //            Write(vstore, ValueManager);
-        //    foreach (ValueStore vstore in ValueManager.EmptyInfo.Stores)
-        //        vstore.ID = ++id;
-        //    Write(dtProject, (short)id);
-        //    foreach (ValueStore vstore in ValueManager.EmptyInfo.Stores)
-        //        Write(vstore, ValueManager);
-
-        //}
-
-        //static private void Write(ValueStore vstore, ValueManager ValueManager)
-        //{
-        //    if (vstore.Parent == ValueManager.EmptyInfo)
-        //    {
-        //        switch (vstore.Type)
-        //        {
-        //            case ValueModel.Types.BOOL:
-        //            case ValueModel.Types.WORD:
-        //            case ValueModel.Types.DWORD:
-        //                Write(dtProject, int.Parse(vstore.Value.ToString()));
-        //                break;
-        //            case ValueModel.Types.FLOAT:
-        //                Write(dtProject, (int)(ValueConverter.FloatToUInt((float)(vstore.Value))));
-        //                break;
-        //            default:
-        //                Write(dtProject, (int)0);
-        //                break;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Write(dtProject, (short)(ValueManager.IndexOf(vstore.Parent)));
-        //        int i = 0;
-        //        i |= ((int)(vstore.Type) & 0x0f);
-        //        i <<= 4;
-        //        i |= ((int)(vstore.Flag - 1) & 0x1f);
-        //        i <<= 5;
-        //        switch (vstore.Intra)
-        //        {
-        //            case ValueModel.Bases.V: i |= 0x01; break;
-        //            case ValueModel.Bases.Z: i |= 0x02; break;
-        //        }
-        //        i <<= 2;
-        //        i |= (vstore.IntraOffset & 0x07);
-        //        Write(dtProject, (short)i);
-        //    }
-        //}
-
-        //static private void Write(LadderDiagramModel ldmodel)
-        //{
-        //    Write(dtProject, ldmodel.IsMainLadder);
-        //    Write(dtProject, ldmodel.IsExpand);
-        //    Write(dtProject, ldmodel.Name);
-        //    Write(dtProject, ldmodel.Brief);
-        //    Write(dtProject, ldmodel.NetworkCount);
-        //    foreach (LadderNetworkModel lnmodel in ldmodel.Children)
-        //        Write(lnmodel);
-        //}
-
-        //static private void Write(LadderNetworkModel lnmodel)
-        //{
-        //    Write(dtProject, lnmodel.IsExpand);
-        //    Write(dtProject, lnmodel.IsMasked);
-        //    Write(dtProject, lnmodel.Description);
-        //    Write(dtProject, lnmodel.Brief);
-        //    Write(dtProject, lnmodel.RowCount);
-        //    for (int y = 0; y < lnmodel.RowCount; y++)
-        //    {
-        //        int link = 0;
-        //        for (int x = 0; x < GlobalSetting.LadderXCapacity; x++)
-        //        {
-        //            link |= (lnmodel.Children[x, y] != null ? 1 : 0) << (x + x);
-        //            link |= (lnmodel.VLines[x, y] != null ? 1 : 0) << (x + x + 1);
-        //        }
-        //        Write(dtProject, link);
-        //    }
-        //    Write(dtProject, lnmodel.Children.Count());
-        //    foreach (LadderUnitModel unit in lnmodel.Children)
-        //        Write(unit);
-        //}
-
-        //static private void Write(LadderUnitModel unit)
-        //{
-        //    Write(dtProject, (short)(unit.X | (unit.Y << 4)));
-        //    dtProject.Add((byte)unit.Type);
-        //    if (unit.Type == LadderUnitModel.Types.CALLM)
-        //    {
-        //        FuncModel func = ltFuncs.Where(f => f.Name.Equals(unit.Children[0].Text)).First();
-        //        Write(dtProject, (short)(ltFuncs.IndexOf(func)));
-        //        Write(dtProject, (byte)(unit.Children.Count - 1));
-        //        for (int i = 1; i < unit.Children.Count; i++)
-        //            Write(dtProject, (short)(unit.Children[i].Store.ID));
-        //    }
-        //    else
-        //    {
-        //        for (int i = 0; i < unit.Children.Count; i++)
-        //            if (unit.Children[i].Type == ValueModel.Types.STRING)
-        //            {
-        //                if (unit.Type == LadderUnitModel.Types.CALLM && i == 0
-        //                 || unit.Type == LadderUnitModel.Types.ATCH && i == 1)
-        //                {
-        //                    LadderDiagramModel diagram = unit.Project.Diagrams.Where(d => d.Name.Equals(unit.Children[i].Text)).First();
-        //                    Write(dtProject, (short)(unit.Project.Diagrams.IndexOf(diagram)));
-        //                }
-        //                if (unit.Type == LadderUnitModel.Types.MBUS && i == 1)
-        //                {
-        //                    ModbusModel modbus = unit.Project.Modbus.Children.Where(m => m.Name.Equals(unit.Children[i].Text)).First();
-        //                    Write(dtProject, (short)(unit.Project.Modbus.Children.IndexOf(modbus)));
-        //                }
-        //            }
-        //            else
-        //                Write(dtProject, (short)(unit.Children[i].Store.ID));
-        //    }
-        //}
-
-        //static private void Write(FuncBlockModel fbmodel)
-        //{
-        //    Write(dtProject, fbmodel.IsLibrary);
-        //    if (!fbmodel.IsLibrary)
-        //    {
-        //        Write(dtProject, fbmodel.Name);
-        //        Write(dtProject, fbmodel.View != null ? fbmodel.View.Code : fbmodel.Code);
-        //    }
-        //}
-
-        //static private void Write(MonitorTable mtable)
-        //{
-        //    Write(dtProject, mtable.Name);
-        //    Write(dtProject, mtable.Children.Count);
-        //    foreach (MonitorElement melement in mtable.Children) Write(melement);
-        //}
-
-        //static private void Write(MonitorElement melement)
-        //{
-        //    Write(dtProject, (short)(melement.Store.ID));
-        //}
-
-        #endregion
-        
         #region Initialize Config data
         
         static private void WriteConfig(ProjectPropertyParams pparams)
@@ -630,13 +479,19 @@ namespace SamSoarII.Core.Helpers
         #endregion
 
         #endregion
-        
+
         #region start download
-        
+
+        static ProgressBarHandle Handle;
+        static uint TotalLen;
+        static uint currentLen;
         #region main download process
         public static CommuicationError DownloadExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
-            handle.UpdateMessage(Properties.Resources.Initialize_Data);
+            TotalLen = 0;
+            currentLen = 0;
+            Handle = handle;
+            Handle.UpdateMessage(Properties.Resources.Initialize_Data);
             //初始化要下载的数据
             InitializeData(communManager.IFParent.MDProj);
 
@@ -663,63 +518,71 @@ namespace SamSoarII.Core.Helpers
             CommuicationError ret = CommuicationError.None;
             if (IsDownloadProgram)
             {
-                handle.UpdateMessage(Properties.Resources.Project_Download);
-                if(communManager.MNGCurrent == communManager.MNGUSB)
-                    handle.ReportProgress(IsDownloadSetting ? 90 : 100, 0.15 * communManager.ExecData.Count + 2);
-                else
-                    handle.ReportProgress(IsDownloadSetting ? 90 : 100, 0.25 * communManager.ExecData.Count * 115200 / communManager.MNGPort.BaudRate + 2);
+                //先初始化project的压缩文件,文件大小用于记录进度条
+                string genFile, _filename;
+                dtProject = PrepareForProj(communManager, out genFile, out _filename);
+
+                //记录下载数据的总长度
+                TotalLen += (uint)communManager.ExecData.ToArray().Length;
+                TotalLen += (uint)dtProject.Count;
+                TotalLen += (uint)dtModbus.Count;
+                TotalLen += (uint)dtTable.Count;
+                TotalLen += (uint)dtBlock.Count;
+                TotalLen += (uint)dtIcon.Count;
+                if(IsDownloadSetting) TotalLen += (uint)dtConfig.Count;
+
+                Handle.UpdateMessage(Properties.Resources.Project_Download);
                 //下载Bin文件
-                ret = DownloadBinExecute(communManager, handle);
+                ret = DownloadBinExecute(communManager);
                 if (ret != CommuicationError.None)
                     return ret;
 
                 //下载用于上载的XML压缩文件（包括程序，注释（可选），软元件表（可选）等）
-                ret = DownloadProjExecute(communManager, handle);
+                ret = DownloadProjExecute(communManager, genFile, _filename);
                 if (ret != CommuicationError.None)
                     return ret;
 
                 //下载Modbus表格
-                ret = DownloadModbusTableExecute(communManager, handle);
+                ret = DownloadModbusTableExecute(communManager);
                 if (ret != CommuicationError.None)
                     return ret;
 
                 //下载 PlsTable
-                ret = DownloadPlsTableExecute(communManager, handle);
+                ret = DownloadPlsTableExecute(communManager);
                 if (ret != CommuicationError.None)
                     return ret;
 
                 //下载 PlsBlock
-                ret = DownloadPlsBlockExecute(communManager, handle);
+                ret = DownloadPlsBlockExecute(communManager);
                 if (ret != CommuicationError.None)
                     return ret;
             }
             //下载 Config
             if (IsDownloadSetting)
             {
-                if (communManager.MNGCurrent == communManager.MNGUSB)
-                    handle.ReportProgress(100, 0.15 * dtConfig.Count);
-                else
-                    handle.ReportProgress(100, 0.25 * dtConfig.Count * 115200 / communManager.MNGPort.BaudRate);
                 handle.UpdateMessage(Properties.Resources.Config_Download);
-                ret = DownloadConfigExecute(communManager, handle);
+                ret = DownloadConfigExecute(communManager);
                 if (ret != CommuicationError.None)
                     return ret;
             }
+            Handle = null;
             return CommuicationError.None;
         }
         #endregion
 
         #region Bin download
-        private static CommuicationError DownloadBinExecute(CommunicationManager communManager, ProgressBarHandle handle)
+        private static CommuicationError DownloadBinExecute(CommunicationManager communManager)
         {
             int time = 0;
             ICommunicationCommand command = new SwitchToIAPCommand();
+
             for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
             {
                 Thread.Sleep(200);
                 time++;
             }
             if (time >= 5) return CommuicationError.DownloadFailed;
+
             command = new IAPDESKEYCommand(communManager.ExecLen);
             for (time = 0; time < 5 && !communManager.CommunicationHandle(command,true,2000);)
             {
@@ -729,14 +592,19 @@ namespace SamSoarII.Core.Helpers
                 time++;
             }
             if (time >= 5) return CommuicationError.DownloadFailed;
+
             byte[] data = communManager.ExecData.ToArray();
             byte[] pack = new byte[communManager.DOWN_MAX_DATALEN];
             int len = data.Length / communManager.DOWN_MAX_DATALEN;
             int rem = data.Length % communManager.DOWN_MAX_DATALEN;
+
             for (int i = 0; i < len; i++)
             {
+                ReportProgress(communManager, (uint)communManager.DOWN_MAX_DATALEN);
+
                 for (int j = 0; j < communManager.DOWN_MAX_DATALEN; j++)
                     pack[j] = data[i * communManager.DOWN_MAX_DATALEN + j];
+
                 command = new TransportBinCommand(i, pack);
                 for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
                 if (time >= 3) return CommuicationError.DownloadFailed;
@@ -746,6 +614,9 @@ namespace SamSoarII.Core.Helpers
                 pack = new byte[rem];
                 for (int j = 0; j < rem; j++)
                     pack[j] = data[len * communManager.DOWN_MAX_DATALEN + j];
+
+                ReportProgress(communManager, (uint)pack.Length);
+
                 command = new TransportBinCommand(len, pack);
                 for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
                 if (time >= 3) return CommuicationError.DownloadFailed;
@@ -762,13 +633,12 @@ namespace SamSoarII.Core.Helpers
         #endregion
 
         #region Proj Download
-        //工程文件（包括程序，注释（可选），软元件表（可选）等）
-        private static CommuicationError DownloadProjExecute(CommunicationManager communManager, ProgressBarHandle handle)
+        private static List<byte> PrepareForProj(CommunicationManager communManager ,out string genFile,out string _filename)
         {
             string genPath = string.Format(@"{0}\rar\temp", FileHelper.AppRootPath);
             if (!Directory.Exists(genPath))
                 Directory.CreateDirectory(genPath);
-            string _filename = communManager.IFParent.MDProj.FileName;
+            _filename = communManager.IFParent.MDProj.FileName;
             _filename = string.Format(@"{0}\{1}.{2}", genPath,
                 FileHelper.InvalidFileName(_filename) ? "tempdfile" : FileHelper.GetFileName(_filename),
                 FileHelper.NewFileExtension);
@@ -777,17 +647,29 @@ namespace SamSoarII.Core.Helpers
             //重新生成程序
             communManager.IFParent.MDProj.SaveToPLC(_filename);
             //返回生成的压缩文件全名
-            string genFile = FileHelper.CompressFile(_filename);
+            genFile = FileHelper.CompressFile(_filename);
             try
             {
                 byte[] tempdata = FileHelper.GetBytesByBinaryFile(genFile);
-                if (tempdata.Length == 0) return CommuicationError.None;
+                if (tempdata.Length == 0) return new List<byte>();
                 //先将传送的数据加密(注意密钥为数据的长度)
                 CommandHelper.Encrypt(tempdata.Length, tempdata);
                 //传送前，须在传送数据前加上4字节的数据长度，供上载时使用。
                 byte[] data = ValueConverter.GetBytes((uint)tempdata.Length + 4, true);
-                data = data.Concat(tempdata).ToArray();
-                return _DownloadHandle(communManager, data, CommunicationDataDefine.CMD_DOWNLOAD_PRO, handle);
+                return data.Concat(tempdata).ToList();
+            }
+            catch
+            {
+                return new List<byte>();
+            }
+        }
+        //工程文件（包括程序，注释（可选），软元件表（可选）等）
+        private static CommuicationError DownloadProjExecute(CommunicationManager communManager, string genFile, string _filename)
+        {
+            try
+            {
+                if (dtProject.Count == 0) return CommuicationError.None;
+                return _DownloadHandle(communManager, dtProject.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_PRO);
             }
             catch (Exception)
             {
@@ -803,39 +685,39 @@ namespace SamSoarII.Core.Helpers
         #endregion
 
         #region Modbus download
-        private static CommuicationError DownloadModbusTableExecute(CommunicationManager communManager, ProgressBarHandle handle)
+        private static CommuicationError DownloadModbusTableExecute(CommunicationManager communManager)
         {
             if (dtModbus.Count == 0) return CommuicationError.None;
-            return _DownloadHandle(communManager, dtModbus.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_MODBUSTABLE, handle);
+            return _DownloadHandle(communManager, dtModbus.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_MODBUSTABLE);
         }
         #endregion
 
         #region PlsTable download
-        private static CommuicationError DownloadPlsTableExecute(CommunicationManager communManager, ProgressBarHandle handle)
+        private static CommuicationError DownloadPlsTableExecute(CommunicationManager communManager)
         {
             if (dtTable.Count == 0) return CommuicationError.None;
-            return _DownloadHandle(communManager, dtTable.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_PLSTABLE, handle);
+            return _DownloadHandle(communManager, dtTable.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_PLSTABLE);
         }
         #endregion
 
         #region PlsBlock download
-        private static CommuicationError DownloadPlsBlockExecute(CommunicationManager communManager, ProgressBarHandle handle)
+        private static CommuicationError DownloadPlsBlockExecute(CommunicationManager communManager)
         {
             if (dtBlock.Count == 0) return CommuicationError.None;
-            return _DownloadHandle(communManager, dtBlock.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_PLSBLOCK, handle);
+            return _DownloadHandle(communManager, dtBlock.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_PLSBLOCK);
         }
         #endregion
 
         #region Config download
-        private static CommuicationError DownloadConfigExecute(CommunicationManager communManager, ProgressBarHandle handle)
+        private static CommuicationError DownloadConfigExecute(CommunicationManager communManager)
         {
             if (dtConfig.Count == 0) return CommuicationError.None;
-            return _DownloadHandle(communManager, dtConfig.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_CONFIG,handle);
+            return _DownloadHandle(communManager, dtConfig.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_CONFIG);
         }
         #endregion
 
         #region DownloadHandle
-        private static CommuicationError _DownloadHandle(CommunicationManager communManager, byte[] data, byte funcCode, ProgressBarHandle handle)
+        private static CommuicationError _DownloadHandle(CommunicationManager communManager, byte[] data, byte funcCode)
         {
             if (data.Length == 0) return CommuicationError.None;
             int time = 0;
@@ -854,8 +736,11 @@ namespace SamSoarII.Core.Helpers
             int rem = data.Length % communManager.DOWN_MAX_DATALEN;
             for (int i = 0; i < len; i++)
             {
+                ReportProgress(communManager, (uint)communManager.DOWN_MAX_DATALEN);
+
                 for (int j = 0; j < communManager.DOWN_MAX_DATALEN; j++)
                     pack[j] = data[i * communManager.DOWN_MAX_DATALEN + j];
+                
                 command = new DownloadTypeData(i, pack, funcCode);
                 for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
                 if (time >= 3) return CommuicationError.DownloadFailed;
@@ -865,6 +750,9 @@ namespace SamSoarII.Core.Helpers
                 pack = new byte[rem];
                 for (int j = 0; j < rem; j++)
                     pack[j] = data[len * communManager.DOWN_MAX_DATALEN + j];
+
+                ReportProgress(communManager, (uint)pack.Length);
+
                 command = new DownloadTypeData(len, pack, funcCode);
                 for (time = 0; time < 3 && !communManager.CommunicationHandle(command);) time++;
                 if (time >= 3) return CommuicationError.DownloadFailed;
@@ -885,6 +773,14 @@ namespace SamSoarII.Core.Helpers
         {
             return ((oldoption & CommunicationDataDefine.OPTION_INITIALIZE) == (newoption & CommunicationDataDefine.OPTION_INITIALIZE)) && 
                 ((oldoption & CommunicationDataDefine.OPTION_PROGRAM) == (newoption & CommunicationDataDefine.OPTION_PROGRAM));
+        }
+
+        private static void ReportProgress(CommunicationManager communManager,uint datalen)
+        {
+            if (communManager.MNGCurrent == communManager.MNGUSB)
+                Handle.ReportProgress(currentLen * 100 / TotalLen, 0.05);
+            else Handle.ReportProgress(currentLen * 100 / TotalLen, 36 * 115200 / communManager.MNGPort.BaudRate);
+            currentLen += datalen;
         }
         #endregion
 

@@ -99,7 +99,7 @@ namespace SamSoarII.Shell.Dialogs
         }
         
         #region Progress
-        public void ReportProgress(int percentProgress,double timeSpan)
+        public void ReportProgress(uint percentProgress,double timeSpan)
         {
             pg_Bar?.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
