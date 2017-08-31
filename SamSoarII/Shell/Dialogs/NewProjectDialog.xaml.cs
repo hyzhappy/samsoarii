@@ -24,7 +24,7 @@ namespace SamSoarII.Shell.Dialogs
     public partial class NewProjectDialog : Window, IDisposable
     {
         public event RoutedEventHandler EnsureButtonClick;
-        public PLC_FGs_Type Type
+        public object Type
         {
             get
             {

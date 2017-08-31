@@ -126,6 +126,16 @@ namespace SamSoarII.Core.Communication
             }
             return 0;
         }
+
+        private Exception ex;
+        public Exception Ex
+        {
+            get
+            {
+                return ex;
+            }
+        }
+
         private void CloseUSB()
         {
             if (!ReferenceEquals(reader, null))

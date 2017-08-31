@@ -14,7 +14,7 @@ namespace SamSoarII.PLCDevice
     {
         public abstract string DeviceName { get; }
         public abstract int BitNumber { get; }
-        public abstract PLC_FGs_Type Type { get; }
+        public abstract object Type { get; }
         private static BroadDevice _defaultDevice;
         private static MaxRangeDevice _maxRangeDevice;
         public static Device DefaultDevice { get { return _defaultDevice; } }

@@ -128,7 +128,7 @@ namespace SamSoarII.Core.Helpers
             if (desdata == null) desdata = new List<byte>();
             else if (desdata.Count() > 0) desdata.Clear();
             int time = 0;//记录重传次数
-            handle.ReportProgress(start + 5, 0.01);
+            handle.ReportProgress((uint)(start + 5), 10);
             span -= 5;
             ICommunicationCommand command = new UploadTypeStart(funcCode);
             for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
@@ -144,9 +144,9 @@ namespace SamSoarII.Core.Helpers
                 int rem = command.RecvDataLen % communManager.UP_MAX_DATALEN;
                 if (rem > 0) len++;
                 if (communManager.MNGCurrent == communManager.MNGUSB)
-                    handle.ReportProgress(start + span, 0.01 * len);
+                    handle.ReportProgress((uint)(start + span), 10 * len);
                 else
-                    handle.ReportProgress(start + span, 0.02 * len * 115200 / communManager.MNGPort.BaudRate);
+                    handle.ReportProgress((uint)(start + span), 20 * len * 115200 / communManager.MNGPort.BaudRate);
                 for (int i = 0; i < len; i++)
                 {
                     command = new UploadTypeData(funcCode,i);
@@ -155,7 +155,7 @@ namespace SamSoarII.Core.Helpers
                     data.Add(i,GetRetData(command.RetData));
                 }
             }
-            handle.ReportProgress(start + span + 5, 0.01);
+            handle.ReportProgress((uint)(start + span + 5), 10);
             command = new UploadTypeOver(funcCode);
             for (time = 0; time < 5 && !communManager.CommunicationHandle(command);)
             {

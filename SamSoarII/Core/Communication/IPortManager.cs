@@ -11,5 +11,6 @@ namespace SamSoarII.Core.Communication
         int Abort();
         int Read(ICommunicationCommand cmd);
         int Write(ICommunicationCommand cmd);
+        Exception Ex { get; }
     }
 }

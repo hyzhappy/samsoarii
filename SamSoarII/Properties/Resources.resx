@@ -2418,10 +2418,15 @@
   <data name="LadderNetwork_Network_Split" xml:space="preserve">
     <value>Network Split</value>
   </data>
+  <data name="PLC_Type_Not_Equal" xml:space="preserve">
+    <value>The PLC type of  current project is inconsistent with the underlying PLC type,whether to switch the current type?</value>
+  </data>
   <data name="Error_VerticalLineBorder" xml:space="preserve">
     <value>Here exists vertical lines linked from border of split fragment, so it is prohibited to spilt!</value>
   </data>
   <data name="Inst_CAM" xml:space="preserve">
     <value>Cam Command</value>
+  <data name="SerialPort_Occupied" xml:space="preserve">
+    <value>The serial port is occupied!</value>
   </data>
 </root>

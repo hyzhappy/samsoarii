@@ -177,6 +177,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_0ED78F5E0E504A1D8D4205142DF5BABF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0F147195C4584D17A12E16C4DBA3EB24"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -225,7 +231,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_157FBBC80FC449EABD2713BC26E1BC87"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_164D179B70374C2BB5F0DE984EA898EB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_171A77F5D2734203B1E5BC6A073E6221"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -363,6 +381,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_24B758E1412C4D7ABE88A460079821CC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_24C903D7E75947F785211D3A9B57574B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -388,6 +412,12 @@
         "Entry"
         {
         "MsmKey" = "8:_26D76F366FD74C7E93D1C48FBE97AC90"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_26F52F3731AA4209BDF0C39DCE60EAF7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -771,6 +801,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4F7C790CD87A4E17B641612ABEC1ED24"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4F9CCFAAB75F47AA91D01886A1597D20"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -778,6 +814,12 @@
         "Entry"
         {
         "MsmKey" = "8:_5055BDB2CAF148B38FE7DAEFA88F76F0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_510554590EB04B96BADDCF17CE520A6C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -880,6 +922,12 @@
         "Entry"
         {
         "MsmKey" = "8:_5CA3C0BE25654043B23EE9FC5BC9717C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5CDB75980E02420F9DAF154991169AA8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1089,7 +1137,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_76CC765C58C14EAA8F4C55595BF464EF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_76E1AD9D4FA14CAC90A2DA101A4F9169"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_777CCB4527074747A653984285EA1551"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1810,6 +1870,12 @@
         "Entry"
         {
         "MsmKey" = "8:_BDDC6D96CC6E48FB9D399E937E000304"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BEC1B9F94B274A259FB63FFF21922DF5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -3219,6 +3285,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0ED78F5E0E504A1D8D4205142DF5BABF"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\USB\\x86\\libusb0_x86.dll"
+            "TargetName" = "8:libusb0_x86.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_9CA51CFC0B6B4A40A850867C6A6B95B5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F147195C4584D17A12E16C4DBA3EB24"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\rdpmon.specs"
@@ -3379,12 +3465,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_157FBBC80FC449EABD2713BC26E1BC87"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\USB\\amd64\\libusb0.sys"
+            "TargetName" = "8:libusb0.sys"
+            "Tag" = "8:"
+            "Folder" = "8:_25008FE6F18744D6AC979FA10628997E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_164D179B70374C2BB5F0DE984EA898EB"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\unistd.h"
             "TargetName" = "8:unistd.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_171A77F5D2734203B1E5BC6A073E6221"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\USB\\FGs_PLC.inf"
+            "TargetName" = "8:FGs_PLC.inf"
+            "Tag" = "8:"
+            "Folder" = "8:_F2AA482552074CBEB796EDFEB5AD5337"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3850,6 +3976,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_24B758E1412C4D7ABE88A460079821CC"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\USB\\installer_x64.exe"
+            "TargetName" = "8:installer_x64.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_F2AA482552074CBEB796EDFEB5AD5337"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_24C903D7E75947F785211D3A9B57574B"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\include\\wchar.h"
@@ -3936,6 +4082,26 @@
             "TargetName" = "8:signal.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_26F52F3731AA4209BDF0C39DCE60EAF7"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\USB\\installer_x86.exe"
+            "TargetName" = "8:installer_x86.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_F2AA482552074CBEB796EDFEB5AD5337"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5214,6 +5380,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4F7C790CD87A4E17B641612ABEC1ED24"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\USB\\FGs_PLC.cat"
+            "TargetName" = "8:FGs_PLC.cat"
+            "Tag" = "8:"
+            "Folder" = "8:_F2AA482552074CBEB796EDFEB5AD5337"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4F9CCFAAB75F47AA91D01886A1597D20"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\armv7e-m\\cpu-init\\rdimon-aem.o"
@@ -5240,6 +5426,26 @@
             "TargetName" = "8:stdbool.h"
             "Tag" = "8:"
             "Folder" = "8:_975F26474D5644BF94321D19EE065033"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_510554590EB04B96BADDCF17CE520A6C"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\USB\\ia64\\libusb0.sys"
+            "TargetName" = "8:libusb0.sys"
+            "Tag" = "8:"
+            "Folder" = "8:_B6549277C7724A1C85967ABB4664E67D"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5580,6 +5786,26 @@
             "TargetName" = "8:mmintrin.h"
             "Tag" = "8:"
             "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5CDB75980E02420F9DAF154991169AA8"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\USB\\x86\\libusb0.sys"
+            "TargetName" = "8:libusb0.sys"
+            "Tag" = "8:"
+            "Folder" = "8:_9CA51CFC0B6B4A40A850867C6A6B95B5"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6274,12 +6500,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_76CC765C58C14EAA8F4C55595BF464EF"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\USB\\license\\libusb0\\installer_license.txt"
+            "TargetName" = "8:installer_license.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_75DAF9DE1CBA49A8ACD169C8AEA8865B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_76E1AD9D4FA14CAC90A2DA101A4F9169"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\sys\\fcntl.h"
             "TargetName" = "8:fcntl.h"
             "Tag" = "8:"
             "Folder" = "8:_F0750E8F30234C79A130AF03A8811067"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_777CCB4527074747A653984285EA1551"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\USB\\amd64\\libusb0.dll"
+            "TargetName" = "8:libusb0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_25008FE6F18744D6AC979FA10628997E"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8671,6 +8937,26 @@
             "TargetName" = "8:stdarg.h"
             "Tag" = "8:"
             "Folder" = "8:_975F26474D5644BF94321D19EE065033"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BEC1B9F94B274A259FB63FFF21922DF5"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\USB\\ia64\\libusb0.dll"
+            "TargetName" = "8:libusb0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_B6549277C7724A1C85967ABB4664E67D"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -11438,28 +11724,72 @@
                         {
                         }
                     }
-                }
-            }
-            "{1525181F-901A-416C-8A58-119130FE478E}:_485B0AEF68464EA5AA6256F398DA79E5"
-            {
-            "Name" = "8:#1916"
-            "AlwaysCreate" = "11:FALSE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Property" = "8:DesktopFolder"
-                "Folders"
-                {
-                }
-            }
-            "{1525181F-901A-416C-8A58-119130FE478E}:_5C83754CA8D94395B153A1C158EE095D"
-            {
-            "Name" = "8:#1919"
-            "AlwaysCreate" = "11:TRUE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Property" = "8:ProgramMenuFolder"
-                "Folders"
-                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_F2AA482552074CBEB796EDFEB5AD5337"
+                    {
+                    "Name" = "8:USB"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_D09091E6C1C34AE3B790323C79AF4AC1"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_25008FE6F18744D6AC979FA10628997E"
+                            {
+                            "Name" = "8:amd64"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_D8166CC72BCC457498F20CE8C6F4696F"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_4628B8B730A24E1EA9596A267C5463D5"
+                            {
+                            "Name" = "8:license"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_A47894CD199948A4AEE1788BDCC2FD92"
+                                "Folders"
+                                {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_75DAF9DE1CBA49A8ACD169C8AEA8865B"
+                                    {
+                                    "Name" = "8:libusb0"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_B8D8BABF39EB4E3DBF8820DE5FF6D05B"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_9CA51CFC0B6B4A40A850867C6A6B95B5"
+                            {
+                            "Name" = "8:x86"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_9655C11E271C465F90762F3AE2988E12"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_B6549277C7724A1C85967ABB4664E67D"
+                            {
+                            "Name" = "8:ia64"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_9E1D4C92BE7B4407849C27F6120D165F"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

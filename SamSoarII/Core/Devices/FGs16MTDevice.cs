@@ -110,8 +110,8 @@ namespace SamSoarII.PLCDevice
                 return new IntRange(0, 256);
             }
         }
-        private PLC_FGs_Type _type;
-        public override PLC_FGs_Type Type
+        private object _type;
+        public override object Type
         {
             get
             {

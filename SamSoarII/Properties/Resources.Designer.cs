@@ -5254,6 +5254,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 The PLC type of  current project is inconsistent with the underlying PLC type,whether to switch the current type? 的本地化字符串。
+        /// </summary>
+        public static string PLC_Type_Not_Equal {
+            get {
+                return ResourceManager.GetString("PLC_Type_Not_Equal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Please select the data to download! 的本地化字符串。
         /// </summary>
         public static string Please_Select_DownData {
@@ -6087,6 +6096,15 @@ namespace SamSoarII.Properties {
         public static string Serialport {
             get {
                 return ResourceManager.GetString("Serialport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The serial port is occupied! 的本地化字符串。
+        /// </summary>
+        public static string SerialPort_Occupied {
+            get {
+                return ResourceManager.GetString("SerialPort_Occupied", resourceCulture);
             }
         }
         
