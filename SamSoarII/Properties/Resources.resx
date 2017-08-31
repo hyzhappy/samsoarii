@@ -2426,6 +2426,7 @@
   </data>
   <data name="Inst_CAM" xml:space="preserve">
     <value>Cam Command</value>
+  </data>
   <data name="SerialPort_Occupied" xml:space="preserve">
     <value>The serial port is occupied!</value>
   </data>

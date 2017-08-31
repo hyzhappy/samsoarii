@@ -2426,6 +2426,7 @@
   </data>
   <data name="Inst_CAM" xml:space="preserve">
     <value>凸轮指令</value>
+  </data>
   <data name="SerialPort_Occupied" xml:space="preserve">
     <value>串口被占用！</value>
   </data>
