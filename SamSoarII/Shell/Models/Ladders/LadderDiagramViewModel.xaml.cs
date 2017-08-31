@@ -1866,13 +1866,13 @@ namespace SamSoarII.Shell.Models
                     if (_selectArea.Core.State == SelectAreaCore.Status.SelectCross)
                     {
                         List<LadderNetworkModel> removes = _selectArea.Core.SelectNetworks.ToList();
-                        ReleaseSelect();
+                        //ReleaseSelect();
                         Core.ReplaceN(removes, new LadderNetworkModel[] { });
                     }
                     else if (_selectArea.Core.State == SelectAreaCore.Status.SelectRange)
                     {
                         Core.RemoveU(SelectStartNetwork, _selectArea.Core.SelectUnits);
-                        ReleaseSelect();
+                        //ReleaseSelect();
                     }
                 }
             }

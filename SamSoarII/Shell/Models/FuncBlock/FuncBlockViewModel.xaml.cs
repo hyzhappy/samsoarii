@@ -31,6 +31,7 @@ using System.Threading;
 using SamSoarII.Threads;
 using ICSharpCode.AvalonEdit.Rendering;
 using SamSoarII.Shell.Managers;
+using SamSoarII.Global;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -1061,6 +1062,10 @@ namespace SamSoarII.Shell.Models
                 IFParent.WNDMain.LACReplace.Show();
             if (e.Command == ApplicationCommands.SelectAll)
                 CodeTextBox.SelectAll();
+            if (e.Command == GlobalCommand.ZoomOutCommand)
+                FontManager.GetFunc().FontSize = Math.Max(FontManager.GetFunc().FontSize - 1, 8);
+            if (e.Command == GlobalCommand.ZoomInCommand)
+                FontManager.GetFunc().FontSize = Math.Min(FontManager.GetFunc().FontSize + 1, 64);
             if (e.Command == AddBreakpoint)
             {
                 core.Current.Breakpoint.IsEnable = true;
