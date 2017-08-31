@@ -615,11 +615,21 @@ namespace SamSoarII.Core.Helpers
             }
             else if (unit is CAMModel)
             {
+                CAMModel cam = (CAMModel)unit;
                 Write(dtTable, (ushort)(228));
-                Write(dtTable, unit.PLSID);
-                Write(dtTable, unit.Children[0].Offset);
-
-
+                Write(dtTable, cam.PLSID);
+                Write(dtTable, cam.Children[0].Offset);
+                Write(dtTable, cam.NumStore.Offset);
+                Write(dtTable, cam.MaxTarget);
+                Write(dtTable, (byte)(cam.RefMode));
+                Write(dtTable, cam.RefAddr);
+                Write(dtTable, cam.Elements.Count);
+                for (int i = 0; i < cam.Elements.Count; i++)
+                {
+                    Write(dtTable, cam.Elements[i].Target);
+                    Write(dtTable, cam.Elements[i].Address);
+                    Write(dtTable, (byte)(cam.Elements[i].Mode));
+                }
             }
             else
             {

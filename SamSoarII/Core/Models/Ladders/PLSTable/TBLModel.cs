@@ -337,6 +337,7 @@ namespace SamSoarII.Core.Models
             that.WaitEvent_S = this.WaitEvent_S;
             that.Cond_S = this.Cond_S;
             that.End_S = this.End_S;
+            that.Jump_S = this.Jump_S;
             that.LoadFromDataGrid();
             return that;
         }
