@@ -56,7 +56,8 @@
         <TextBox Grid.Row="5" Grid.Column="1" x:Name="TBO_V"/>
         <TextBlock Grid.Row="5" Grid.Column="2" x:Name="TBL_VU">pls/s</TextBlock>
         <TextBlock Grid.Row="6" Grid.Column="0" x:Name="TBL_Arch">圆弧类：</TextBlock>
-        <ComboBox Grid.Row="6" Grid.Column="1" x:Name="TBO_Arch">
+        <ComboBox Grid.Row="6" Grid.Column="1" x:Name="TBO_Arch"
+                  SelectionChanged="TBO_Arch_SelectionChanged">
             <Label Content="两点"/>
             <Label Content="三点"/>
         </ComboBox>
@@ -73,5 +74,11 @@
             <Label Content="优弧"/>
             <Label Content="劣弧"/>
         </ComboBox>
+        <TextBlock Grid.Row="7" Grid.Column="0" x:Name="TBL_CX" Visibility="Hidden">X轴中心点：</TextBlock>
+        <TextBox Grid.Row="7" Grid.Column="1" x:Name="TBO_CX" Visibility="Hidden"/>
+        <TextBlock Grid.Row="7" Grid.Column="2" x:Name="TBL_CXU" Visibility="Hidden">pls</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="0" x:Name="TBL_CY" Visibility="Hidden">Y轴中心点：</TextBlock>
+        <TextBox Grid.Row="8" Grid.Column="1" x:Name="TBO_CY" Visibility="Hidden"/>
+        <TextBlock Grid.Row="8" Grid.Column="2" x:Name="TBL_CYU" Visibility="Hidden">pls</TextBlock>
     </Grid>
 </UserControl>

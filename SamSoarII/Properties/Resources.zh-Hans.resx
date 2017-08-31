@@ -2421,4 +2421,7 @@
   <data name="Error_VerticalLineBorder" xml:space="preserve">
     <value>分割块边缘存在相连的竖线，无法执行分割操作！</value>
   </data>
+  <data name="Inst_CAM" xml:space="preserve">
+    <value>凸轮指令</value>
+  </data>
 </root>

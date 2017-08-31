@@ -25,8 +25,24 @@ namespace SamSoarII.Core.Models
             base.Dispose();
         }
 
+        public override SystemUnits Unit { get { return SystemUnits.MM; } }
+
         private FloatLine line;
         public FloatLine Line { get { return this.line; } }
+
+        public override void Save(XElement xele)
+        {
+            base.Save(xele);
+            XElement xele_l = new XElement("Line");
+            line.Save(xele_l);
+            xele.Add(xele_l);
+        }
+
+        public override void Load(XElement xele)
+        {
+            base.Load(xele);
+            line.Load(xele.Element("Line"));
+        }
 
         public override POLYLINEModel Clone()
         {

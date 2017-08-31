@@ -22,9 +22,6 @@ namespace SamSoarII.Core.Models
 
         public TBLModel(LadderNetworkModel _parent, XElement xele) : base(_parent, xele)
         {
-            elements = new ObservableCollection<TBLElement>();
-            elements.CollectionChanged += OnElementsChanged;
-            mode = Modes.Relative;
         }
     
         public override void Dispose()
@@ -74,6 +71,36 @@ namespace SamSoarII.Core.Models
         {
             foreach (TBLElement element in elements)
                 element.LoadFromDataGrid();
+        }
+
+        public override void Save(XElement xele)
+        {
+            base.Save(xele);
+            xele.SetAttributeValue("Mode", (int)(mode));
+            foreach (TBLElement element in elements)
+            {
+                XElement xele_e = new XElement("Element");
+                element.Save(xele_e);
+                xele.Add(xele_e);
+            }
+        }
+
+        public override void Load(XElement xele)
+        {
+            base.Load(xele);
+            if (elements == null)
+            {
+                elements = new ObservableCollection<TBLElement>();
+                elements.CollectionChanged += OnElementsChanged;
+            }
+            XAttribute xatt = xele.Attribute("Mode");
+            mode = xatt != null ? (Modes)(int.Parse(xatt.Value)) : Modes.Relative;
+            foreach (XElement xele_e in xele.Elements("Element"))
+            {
+                TBLElement element = new TBLElement(this);
+                element.Load(xele_e);
+                elements.Add(element);
+            }
         }
 
         public TBLModel Clone()
@@ -276,6 +303,26 @@ namespace SamSoarII.Core.Models
             cond_s = cond.Text;
             end_s = end.Text;
             jump_s = jump.ToString();
+        }
+
+        public void Save(XElement xele)
+        {
+            CreateToDataGrid();
+            xele.SetAttributeValue("Frequency", freq_s);
+            xele.SetAttributeValue("Number", number_s);
+            xele.SetAttributeValue("WaitEvent", waitevent_s);
+            xele.SetAttributeValue("Condition", cond_s);
+            xele.SetAttributeValue("End", end_s);
+        }
+
+        public void Load(XElement xele)
+        {
+            freq_s = xele.Attribute("Frequency").Value;
+            number_s = xele.Attribute("Number").Value;
+            waitevent_s = xele.Attribute("WaitEvent").Value;
+            cond_s = xele.Attribute("Condition").Value;
+            end_s = xele.Attribute("End").Value;
+            LoadFromDataGrid();
         }
 
         public TBLElement Clone(TBLModel _parent)

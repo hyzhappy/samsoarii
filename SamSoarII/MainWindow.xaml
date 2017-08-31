@@ -229,12 +229,28 @@
                 <Separator></Separator>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Select_All}" Command="ApplicationCommands.SelectAll"></MenuItem>
                 <Separator/>
-                <MenuItem Header="{x:Static properties:Resources.Menu_Search}" Command="ApplicationCommands.Find"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.Replace}" Command="ApplicationCommands.Replace"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.Menu_Search}" Command="ApplicationCommands.Find">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Find.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.Replace}" Command="ApplicationCommands.Replace">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Replace.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_View}" Margin="0,-5,0,0">
-                <MenuItem Header="{x:Static properties:Resources.Zoom_In}" Command="{x:Static gb:GlobalCommand.ZoomInCommand}" InputGestureText="Ctrl+T,I"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.Zoom_Out}" Command="{x:Static gb:GlobalCommand.ZoomOutCommand}" InputGestureText="Ctrl+T,O"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.Zoom_In}" Command="{x:Static gb:GlobalCommand.ZoomInCommand}" InputGestureText="Ctrl+T,I">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/ZoomIn.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.Zoom_Out}" Command="{x:Static gb:GlobalCommand.ZoomOutCommand}" InputGestureText="Ctrl+T,O">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/ZoomOut.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.Comment_Mode}" IsCheckable="True" IsChecked="{Binding ElementName=TB_Comment, Path=IsChecked, Mode=TwoWay}" Command="{x:Static gb:GlobalCommand.CommentModeToggleCommand}" InputGestureText="Ctrl+E,C">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
@@ -343,6 +359,12 @@
                 </ToggleButton>
             </ToolBar>
             <ToolBar Height="25" VerticalAlignment="Top">
+                <Button ToolTip="{x:Static properties:Resources.Zoom_In}" Style="{StaticResource ButtonStyle}" Command="{x:Static gb:GlobalCommand.ZoomInCommand}">
+                    <Image Source="/Resources/Image/ZoomIn.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                </Button>
+                <Button ToolTip="{x:Static properties:Resources.Zoom_Out}" Style="{StaticResource ButtonStyle}" Command="{x:Static gb:GlobalCommand.ZoomOutCommand}">
+                    <Image Source="/Resources/Image/ZoomOut.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                </Button>
                 <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Ladder_Mode}" x:Name="TB_Ladder" Command="{x:Static gb:GlobalCommand.LadderModeToggleCommand}" Style="{StaticResource ToggleButtonStyle}">
                     <Image Source="/Resources/Image/Ladder.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>

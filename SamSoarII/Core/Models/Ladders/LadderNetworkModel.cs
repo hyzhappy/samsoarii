@@ -68,8 +68,12 @@ namespace SamSoarII.Core.Models
             Inst = new InstructionNetworkModel(this);
         }
 
+        private bool isdisposed = false;
+        public bool IsDisposed { get { return this.isdisposed; } }
         public void Dispose()
         {
+            if (isdisposed) return;
+            isdisposed = true;
             Parent = null;
             foreach (LadderUnitModel unit in children)
                 unit.Dispose();

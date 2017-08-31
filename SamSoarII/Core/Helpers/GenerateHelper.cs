@@ -327,16 +327,16 @@ namespace SamSoarII.Core.Helpers
                 case PLCDevice.PLC_FGs_Type.FGs_32MR_D:
                 case PLCDevice.PLC_FGs_Type.FGs_32MT_A:
                 case PLCDevice.PLC_FGs_Type.FGs_32MT_D:
-                    cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make32.cmd", currentPath);
+                    cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make32.bat", currentPath);
                     break;
                 case PLCDevice.PLC_FGs_Type.FGs_64MR_A:
                 case PLCDevice.PLC_FGs_Type.FGs_64MR_D:
                 case PLCDevice.PLC_FGs_Type.FGs_64MT_A:
                 case PLCDevice.PLC_FGs_Type.FGs_64MT_D:
-                    cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make64.cmd", currentPath);
+                    cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make64.bat", currentPath);
                     break;
                 default:
-                    cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make.cmd", currentPath);
+                    cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make.bat", currentPath);
                     break;
             }
             cmd.StartInfo.CreateNoWindow = true;

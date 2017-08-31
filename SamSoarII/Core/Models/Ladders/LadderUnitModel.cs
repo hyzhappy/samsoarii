@@ -66,7 +66,7 @@ namespace SamSoarII.Core.Models
             MBUS, SEND, REV,
             PLSF, DPLSF, PWM, DPWM, PLSY, DPLSY, PLSR, DPLSR, PLSRD, DPLSRD, PLSA, DPLSA, PLSNEXT, PLSSTOP, ZRN, ZRND, DZRN, DZRND, PTO, DRVI, DDRVI, DRVA, DDRVA,
             TBL, POLYLINEF, POLYLINEI, LINEF, LINEI, ARCF, ARCI, BLOCK, HMIBLOCK, PAUSE,
-            HCNT, EHCNT,
+            HCNT, EHCNT, CAM,
             LOG, POW, FACT, CMP, CMPD, CMPF, ZCP, ZCPD, ZCPF, NEG, NEGD, XCH, XCHD, XCHF, CML, CMLD, SMOV, FMOV, FMOVD,
             PID,
             VLINE, HLINE, NULL
@@ -698,6 +698,12 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("CM", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex}, null, "计数模式", "Counter Mode"),
                     new ValueFormat("TM", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyIntKValueRegex}, null, "启动复位触发方式", "Trigger Mode"),
                     new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 3, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "预设值", "Set Value") });
+            Formats[(int)Types.CAM] = new LadderUnitFormat(1702, "CAM", Types.CAM, Outlines.HighCount, Shapes.OutputRect,
+                Properties.Resources.Inst_CAM,
+                "", "",
+                new ValueFormat[] {
+                    new ValueFormat("C", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}, null, "计数器", "Counter"),
+                    new ValueFormat("N", ValueModel.Types.WORD, true, false, -1, new Regex[] { ValueModel.VerifyIntKValueRegex}, null, "节点数量", "Nodes") });
             Formats[(int)Types.FOR] = new LadderUnitFormat(1100, "FOR", Types.FOR, Outlines.ProgramControl, Shapes.OutputRect,
                 Properties.Resources.FOR_Inst,
                 "如果指令前条件导通，则执行此条指令。此条指令必须和NEXT指令配合使用，FOR和NEXT指令允许了一个程序的区域指定。\r\n" +
@@ -1296,6 +1302,7 @@ namespace SamSoarII.Core.Models
                 case Types.ARCF: return new ARCHFModel(_parent);
                 case Types.ARCI: return new ARCHIModel(_parent);
                 case Types.TBL: return new TBLModel(_parent);
+                case Types.CAM: return new CAMModel(_parent);
                 default: return new LadderUnitModel(_parent, _type);
             }
         }
@@ -1348,6 +1355,8 @@ namespace SamSoarII.Core.Models
                 case "LINEI": return new LINEIModel(_parent, xele);
                 case "ARCF": return new ARCHFModel(_parent, xele);
                 case "ARCI": return new ARCHIModel(_parent, xele);
+                case "TBL": return new TBLModel(_parent, xele);
+                case "CAM": return new CAMModel(_parent, xele);
                 default: return new LadderUnitModel(_parent, xele);
             }
         }
@@ -1360,8 +1369,12 @@ namespace SamSoarII.Core.Models
                 Breakpoint = new LadderBrpoModel(this);
         }
 
+        private bool isdisposed = false;
+        public bool IsDisposed { get { return this.isdisposed; } }
         public virtual void Dispose()
         {
+            if (isdisposed) return;
+            isdisposed = true;
             if (View != null) View.Dispose();
             if (Breakpoint != null) Breakpoint.Dispose();
             Parent = null;
