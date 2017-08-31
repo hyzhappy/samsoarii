@@ -32,6 +32,7 @@ namespace SamSoarII.Core.Models
 
         public override void Dispose()
         {
+            if (IsDisposed) return;
             base.Dispose();
             numstore.Dispose();
             maxtarget.Dispose();

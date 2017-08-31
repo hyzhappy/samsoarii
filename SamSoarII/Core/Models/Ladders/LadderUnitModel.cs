@@ -1063,9 +1063,7 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("P", ValueModel.Types.BOOL, false, true, 1, new Regex[] {ValueModel.VerifyBitRegex4}, null, "脉冲输出口", "Output"),
                     new ValueFormat("D", ValueModel.Types.BOOL, false, true, 2, new Regex[] {ValueModel.VerifyBitRegex4}, null, "方向输出口", "Direction") });
             vformats = new ValueFormat[] {
-                new ValueFormat("ID", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex}, null, "平面编号", "System ID"),
-                new ValueFormat("S", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex3}, null, "映射地址", "Reflicted data"),
-                new ValueFormat("NUM", ValueModel.Types.WORD, true, false, -1, new Regex[] { ValueModel.VerifyIntKValueRegex}, null, "线段数量", "Number") };
+                new ValueFormat("ID", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex}, null, "平面编号", "System ID")};
             Formats[(int)Types.POLYLINEF] = new LadderUnitFormat(1618, "POLYLINEF", Types.POLYLINEF, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.POLYLINEF_Inst,
                 "该指令作用是完成直线、圆弧组合运动，按照左侧的线段序列框中的线段顺序依次绘制。\r\n" +

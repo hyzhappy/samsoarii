@@ -22,6 +22,7 @@ namespace SamSoarII.Core.Models
 
         public override void Dispose()
         {
+            if (IsDisposed) return;
             arch.Dispose();
             base.Dispose();
         }

@@ -13,9 +13,9 @@ namespace SamSoarII.Core.Models
     {
         public POLYLINEModel(LadderNetworkModel _parent, LadderUnitModel.Types _type) : base(_parent, _type)
         {
+            refaddr = new ValueModel(this, new ValueFormat("S", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex3 }, null, "映射地址", "Refliction Address"));
+            refaddr.Text = "D0";
             Children[0].Text = "K1";
-            Children[1].Text = "D0";
-            Children[2].Text = "K0";
         }
 
         public POLYLINEModel(LadderNetworkModel _parent, XElement xele) : base(_parent, xele)
@@ -33,26 +33,37 @@ namespace SamSoarII.Core.Models
         public abstract SystemUnits Unit { get; }
 
         public enum ReflictModes { NoReflict, Reflict, Control }
-        private ReflictModes reflictmode;
-        public ReflictModes ReflictMode
+        private ReflictModes refmode;
+        public ReflictModes RefMode
         {
-            get { return this.reflictmode; }
-            set { this.reflictmode = value; InvokePropertyChanged("ReflictMode"); }
+            get { return this.refmode; }
+            set { this.refmode = value; InvokePropertyChanged("RefMode"); }
         }
+
+        private ValueModel refaddr;
+        public ValueModel RefAddr
+        {
+            get { return this.refaddr; }
+        }
+
 
         #endregion
 
         public override void Save(XElement xele)
         {
             base.Save(xele);
-            xele.SetAttributeValue("ReflictMode", (int)(reflictmode));
+            xele.SetAttributeValue("RefMode", (int)(refmode));
+            xele.SetAttributeValue("RefAddr", refaddr.Text);
         }
 
         public override void Load(XElement xele)
         {
             base.Load(xele);
-            XAttribute xatt = xele.Attribute("ReflictMode");
-            reflictmode = xatt != null ? (ReflictModes)(int.Parse(xatt.Value)) : ReflictModes.NoReflict;
+            XAttribute xatt = xele.Attribute("RefMode");
+            refmode = xatt != null ? (ReflictModes)(int.Parse(xatt.Value)) : ReflictModes.NoReflict;
+            xatt = xele.Attribute("RefAddr");
+            refaddr = new ValueModel(this, new ValueFormat("S", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex3 }, null, "映射地址", "Refliction Address"));
+            refaddr.Text = xatt != null ? xatt.Value : "D0";
         }
 
         public virtual POLYLINEModel Clone()
@@ -68,7 +79,7 @@ namespace SamSoarII.Core.Models
             that.Y = this.Y;
             for (int i = 0; i < Children.Count; i++)
                 that.Children[i].Text = this.Children[i].Text;
-            that.ReflictMode = this.ReflictMode;
+            that.RefMode = this.RefMode;
             return that;
         }
     }

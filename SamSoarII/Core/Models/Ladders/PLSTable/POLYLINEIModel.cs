@@ -25,6 +25,7 @@ namespace SamSoarII.Core.Models
         
         public override void Dispose()
         {
+            if (IsDisposed) return;
             foreach (IntPolyline pol in polylines) pol.Dispose();
             polylines.Clear();
             polylines = null;

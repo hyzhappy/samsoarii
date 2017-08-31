@@ -26,6 +26,7 @@ namespace SamSoarII.Core.Models
     
         public override void Dispose()
         {
+            if (IsDisposed) return;
             base.Dispose();
             foreach (TBLElement element in elements)
                 element.Dispose();

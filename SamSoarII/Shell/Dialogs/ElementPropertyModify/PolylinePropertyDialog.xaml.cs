@@ -57,8 +57,8 @@ namespace SamSoarII.Shell.Dialogs
                 try
                 {
                     CB_Sys.SelectedIndex = int.Parse(core.Children[0].Store.Value.ToString()) - 1;
-                    CB_Ref.SelectedIndex = (int)(core.ReflictMode);
-                    TB_Ref.Text = core.Children[1].Base != ValueModel.Bases.D ? "D0" : core.Children[1].Text;
+                    CB_Ref.SelectedIndex = (int)(core.RefMode);
+                    TB_Ref.Text = core.RefAddr.Base != ValueModel.Bases.D ? "D0" : core.RefAddr.Text;
                 }
                 catch (Exception e)
                 {
@@ -323,11 +323,8 @@ namespace SamSoarII.Shell.Dialogs
             {
                 MainModel.Core = null;
                 core.Children[0].Text = String.Format("K{0:d}", CB_Sys.SelectedIndex + 1);
-                core.Children[1].Text = TB_Ref.Text;
-                core.Children[2].Text = String.Format("K{0:d}",
-                    (core is POLYLINEIModel) ? ((POLYLINEIModel)core).Polylines.Count :
-                    (core is POLYLINEFModel) ? ((POLYLINEFModel)core).Polylines.Count : 0);
-                core.ReflictMode = (POLYLINEModel.ReflictModes)(CB_Ref.SelectedIndex);
+                core.RefMode = (POLYLINEModel.ReflictModes)(CB_Ref.SelectedIndex);
+                core.RefAddr.Text = TB_Ref.Text;
                 Ensure(this, e);
             }
             catch (ValueParseException exce)
