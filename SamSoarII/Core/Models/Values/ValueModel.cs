@@ -234,7 +234,14 @@ namespace SamSoarII.Core.Models
             {
                 if (Type != Types.STRING)
                     value = value.ToUpper();
-                Parse(value);
+                try
+                {
+                    Parse(value);
+                }
+                catch (Exception e)
+                {
+                    throw e is ValueParseException ? e : new ValueParseException(e.Message, Format);
+                }
                 //this.text = value;
             }
         }

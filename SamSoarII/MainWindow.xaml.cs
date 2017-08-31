@@ -769,6 +769,8 @@ namespace SamSoarII
                 ifParent.ReturnToEdit();
             if (e.Command == GlobalCommand.FileConvertCommand)
                 ifParent.ShowFileConvertDialog();
+            if (e.Command == GlobalCommand.PolylineSettingCommand)
+                ifParent.ShowPolylineSystemSettingDialog();
         }
 
         private void CommandBinding_Executed_SaveHint(object sender, ExecutedRoutedEventArgs e)

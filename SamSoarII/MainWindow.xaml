@@ -74,6 +74,7 @@
         <CommandBinding Command="{x:Static gb:GlobalCommand.ShowHelpDocumentCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.OnlineHelpCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.FileConvertCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.PolylineSettingCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Gesture="Alt+F4" Command="ApplicationCommands.Close"/>
@@ -303,6 +304,10 @@
                         <Image Source="/Resources/Image/Config.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
+            </MenuItem>
+            <MenuItem Header="脉冲配置(_P)" Margin="0,-5,0,0">
+                <MenuItem Header="脉冲平面" Command="{x:Static gb:GlobalCommand.PolylineSettingCommand}"/>
+                <MenuItem Header="图形导入"/>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Language}" Margin="0,-5,0,0">
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Chinese}" Command="{x:Static gb:GlobalCommand.ChangeToChineseCommand}" InputGestureText="Ctrl+U,C"/>

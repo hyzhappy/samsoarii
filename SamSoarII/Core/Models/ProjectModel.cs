@@ -31,6 +31,12 @@ namespace SamSoarII.Core.Models
             StreamReader sr = new StreamReader(String.Format(@"{0:s}\simug\simuflib.c", FileHelper.AppRootPath));
             libfuncblock = new FuncBlockModel(this, SamSoarII.Properties.Resources.Library_Function, sr.ReadToEnd(), true);
             funcblocks.Add(libfuncblock);
+            polylines = new PolylineSystemModel[5];
+            for (int i = 0; i < 5; i++)
+            {
+                polylines[i] = new PolylineSystemModel(this, i + 1);
+                //polylines[i].PropertyChanged += OnPolylinesChanged;
+            }
             if (filename != null)
             {
                 XDocument xdoc = XDocument.Load(filename);
@@ -78,6 +84,12 @@ namespace SamSoarII.Core.Models
             paraProj = null;
             valuebrpo.Dispose();
             valuebrpo = null;
+            foreach (PolylineSystemModel polyline in polylines)
+            {
+                //polyline.PropertyChanged -= OnPolylinesChanged;
+                polyline.Dispose();
+            }
+            polylines = null;
             parent = null;
             PTVItem = null;
         }
@@ -198,6 +210,9 @@ namespace SamSoarII.Core.Models
         private ProjectPropertyParams paraProj;
         public ProjectPropertyParams PARAProj { get { return this.paraProj; } }
 
+        private PolylineSystemModel[] polylines;
+        public IList<PolylineSystemModel> Polylines { get { return this.polylines; } }
+
         private ValueBrpoModel valuebrpo;
         public ValueBrpoModel ValueBrpo { get { return this.valuebrpo; } }
         
@@ -304,6 +319,12 @@ namespace SamSoarII.Core.Models
             XElement xele_mn = new XElement("Monitor");
             monitor.Save(xele_mn);
             xele.Add(xele_mn);
+            for (int i = 0; i < 5; i++)
+            {
+                XElement xele_pl = new XElement(String.Format("Polyline_{0:d}", i + 1));
+                polylines[i].Save(xele_pl);
+                xele.Add(xele_pl);
+            }
             IsModified = false;
         }
 
@@ -375,9 +396,12 @@ namespace SamSoarII.Core.Models
             XElement xele_mn = new XElement("Monitor");
             monitor.Save(xele_mn);
             xele_p.Add(xele_mn);
-            XElement xele_vb = new XElement("RegisterBreakpoints");
-            valuebrpo.Save(xele_vb);
-            xele_p.Add(xele_vb);
+            for (int i = 0; i < 5; i++)
+            {
+                XElement xele_pl = new XElement(String.Format("Polyline_{0:d}", i + 1));
+                polylines[i].Save(xele_pl);
+                xele_p.Add(xele_pl);
+            }
             FileStream stream = File.Create(_filename);
             xdoc.Save(stream);
             stream.Close();
@@ -427,6 +451,14 @@ namespace SamSoarII.Core.Models
             {
                 valuebrpo = new ValueBrpoModel(this);
                 valuebrpo.Load(xele.Element("RegisterBreakpoints"));
+            }
+            catch (Exception)
+            {
+            }
+            try
+            {
+                for (int i = 0; i < 5; i++)
+                    polylines[i].Load(xele.Element(String.Format("Polyline_{0:d}", i + 1)));
             }
             catch (Exception)
             {
@@ -481,7 +513,7 @@ namespace SamSoarII.Core.Models
             if (e.PropertyName == "Funcs") return;
             InvokeModify(this);
         }
-
+        
         #endregion
 
     }

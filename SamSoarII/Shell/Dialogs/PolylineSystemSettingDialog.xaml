@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:properties="clr-namespace:SamSoarII.Properties"
         xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
         mc:Ignorable="d"
         Title="PolylineSystemSettingDialog" Height="320" Width="600">
@@ -37,18 +38,19 @@
                     </Style>
                 </Grid.Resources>
                 <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <ComboBox Width="70" x:Name="CB_Sys">
+                    <ComboBox Width="70" x:Name="CB_Sys" SelectionChanged="CB_Sys_SelectionChanged">
                         <Label Content="1号平面系统"/>
                         <Label Content="2号平面系统"/>
                         <Label Content="3号平面系统"/>
                         <Label Content="4号平面系统"/>
                         <Label Content="5号平面系统"/>
                     </ComboBox>
-                    <CheckBox VerticalAlignment="Center" x:Name="CK_Sys"/>
+                    <CheckBox VerticalAlignment="Center" x:Name="CK_Sys" Checked="CK_Sys_Checked" Unchecked="CK_Sys_Unchecked"/>
                     <TextBlock Text="启用"/>
                 </StackPanel>
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="系统单位"/>
-                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="CB_Unit">
+                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="CB_Unit"
+                          SelectionChanged="CB_Unit_SelectionChanged">
                     <Label Content="mm"/>
                     <Label Content="pls"/>
                 </ComboBox>
@@ -66,14 +68,12 @@
             <local:PolylineAxisWidget x:Name="WG_Y"/>
         </GroupBox>
         <GroupBox Grid.Row="2" Grid.Column="1">
-            <GroupBox.HeaderTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox x:Name="CK_HMI"/>
-                        <TextBlock Text="启用HMI实时显示"/>
-                    </StackPanel>
-                </DataTemplate>
-            </GroupBox.HeaderTemplate>
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox x:Name="CK_HMI" Checked="CK_HMI_Checked" Unchecked="CK_HMI_Unchecked"/>
+                    <TextBlock Text="启用HMI实时显示"/>
+                </StackPanel>
+            </GroupBox.Header>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -89,8 +89,10 @@
         </GroupBox>
         <StackPanel Grid.Row="2" Grid.Column="2" 
                     Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button MinWidth="60" Width="80" Height="26" Margin="4,4,4,4" Content="确定"/>
-            <Button MinWidth="60" Width="80" Height="26" Margin="4,4,4,4" Content="帮助"/>
+            <Button MinWidth="60" Width="80" Height="26" Margin="4,4,4,4" Content="{x:Static properties:Resources.Ensure}"
+                    Click="OnEnsureButtonClick"/>
+            <Button MinWidth="60" Width="80" Height="26" Margin="4,4,4,4" Content="{x:Static properties:Resources.Help}"
+                    Click="OnHelpButtonClick"/>
         </StackPanel>
     </Grid>
 </Window>

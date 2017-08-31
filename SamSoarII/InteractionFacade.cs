@@ -1968,6 +1968,30 @@ namespace SamSoarII
             dialog.Owner = wndMain;
             dialog.ShowDialog();
         }
+
+        public void ShowPolylineSystemSettingDialog()
+        {
+            using (PolylineSystemSettingDialog dialog = new PolylineSystemSettingDialog(mdProj))
+            {
+                dialog.Owner = wndMain;
+                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                dialog.Ensure += (sender, e) =>
+                {
+                    try
+                    {
+                        dialog.Save();
+                        dialog.Close();
+                    }
+                    catch (ValueParseException exce)
+                    {
+                        LocalizedMessageBox.Show(string.Format(exce.Message), LocalizedMessageIcon.Error);
+                    }
+                };
+                dialog.Help += (sender, e) => { ShowHelpDocument(); };
+                dialog.ShowDialog();
+            }
+        }
+
         #endregion
 
         #region HotKey System
