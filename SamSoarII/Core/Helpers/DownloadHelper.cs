@@ -81,48 +81,64 @@ namespace SamSoarII.Core.Helpers
             WriteConfig(project.PARAProj);
             // Modbus
             Write(project.Modbus);
-
+            // Table表
+            WritePLSTable(project);
         }
 
         #region Base
 
-        static private void Write(List<byte> data, bool value)
+        static private void Write(List<byte> data, bool value, int index = -1)
         {
-            data.Add((byte)(value ? 1 : 0));
+            if (index == -1)
+                data.Add((byte)(value ? 1 : 0));
+            else
+                data[index] = (byte)(value ? 1 : 0);
         }
 
-        static private void Write(List<byte> data, short value)
+        static private void Write(List<byte> data, short value, int index = -1)
         {
             for (int i = 0; i < 2; i++)
             {
-                data.Add((byte)(value & 0xff));
+                if (index == -1)
+                    data.Add((byte)(value & 0xff));
+                else
+                    data[index++] = (byte)(value & 0xff);
                 value >>= 8;
             }
         }
 
-        static private void Write(List<byte> data, ushort value)
+        static private void Write(List<byte> data, ushort value, int index = -1)
         {
             for (int i = 0; i < 2; i++)
             {
-                data.Add((byte)(value & 0xff));
+                if (index == -1)
+                    data.Add((byte)(value & 0xff));
+                else
+                    data[index++] = (byte)(value & 0xff);
                 value >>= 8;
             }
         }
 
-        static private void Write(List<byte> data, int value)
+        static private void Write(List<byte> data, int value, int index = -1)
         {
             for (int i = 0; i < 4; i++)
             {
-                data.Add((byte)(value & 0xff));
+                if (index == -1)
+                    data.Add((byte)(value & 0xff));
+                else
+                    data[index++] = (byte)(value & 0xff);
                 value >>= 8;
             }
         }
 
-        static private void Write(List<byte> data, Int64 value)
+        static private void Write(List<byte> data, Int64 value, int index = -1)
         {
             for (int i = 0; i < 8; i++)
             {
-                data.Add((byte)(value & 0xff));
+                if (index == -1)
+                    data.Add((byte)(value & 0xff));
+                else
+                    data[index++] = (byte)(value & 0xff);
                 value >>= 8;
             }
         }
@@ -139,6 +155,47 @@ namespace SamSoarII.Core.Helpers
             Write(data, value.Length);
             for (int i = 0; i < value.Length; i++)
                 data.Add((byte)value[i]);
+        }
+        
+        private const ushort PLC_REG_X = 0;
+        private const ushort PLC_REG_Y = 10000;
+        private const ushort PLC_REG_AI = 20000;
+        private const ushort PLC_REG_AO = 20512;
+        private const ushort PLC_REG_M = 30000;
+        private const ushort PLC_REG_S = 50000;
+        private const ushort PLC_REG_D = 40000;
+        private const ushort PLC_REG_T = 60768;
+        private const ushort PLC_REG_C = 60512;
+        private const ushort PLC_REG_TV = 60256;
+        private const ushort PLC_REG_CV = 60000;
+        private const ushort PLC_REG_K = 0x10;
+        private const ushort PLC_REG_H = 0x11;
+        private const ushort PLC_REG_V = 48192;
+        private const ushort PLC_REG_Z = 48200;
+        private static void Write(List<byte> data, ValueModel value)
+        {
+            switch (value.Base)
+            {
+                case ValueModel.Bases.X: Write(data, PLC_REG_X); break;
+                case ValueModel.Bases.Y: Write(data, PLC_REG_Y); break;
+                case ValueModel.Bases.AI: Write(data, PLC_REG_AI); break;
+                case ValueModel.Bases.AO: Write(data, PLC_REG_AO); break;
+                case ValueModel.Bases.M: Write(data, PLC_REG_M); break;
+                case ValueModel.Bases.S: Write(data, PLC_REG_S); break;
+                case ValueModel.Bases.D: Write(data, PLC_REG_D); break;
+                case ValueModel.Bases.T: Write(data, PLC_REG_T); break;
+                case ValueModel.Bases.C: Write(data, PLC_REG_C); break;
+                case ValueModel.Bases.TV: Write(data, PLC_REG_TV); break;
+                case ValueModel.Bases.CV: Write(data, PLC_REG_CV); break;
+                case ValueModel.Bases.K: Write(data, PLC_REG_K); break;
+                case ValueModel.Bases.H: Write(data, PLC_REG_H); break;
+                case ValueModel.Bases.V: Write(data, PLC_REG_V); break;
+                case ValueModel.Bases.Z: Write(data, PLC_REG_Z); break;
+            }
+            if (value.Base == ValueModel.Bases.K || value.Base == ValueModel.Bases.H)
+                Write(data, int.Parse(value.Value.ToString()));
+            else
+                Write(data, value.Offset);
         }
 
         static private void Write(List<byte> data, ExpansionUnitModuleParams eumparams)
@@ -476,6 +533,186 @@ namespace SamSoarII.Core.Helpers
             Write(dtModbus, mitem.MasteRegisterAddress);
         }
 
+        #endregion
+
+        #region Initialize PLSTable data
+
+        private static void WritePLSTable(ProjectModel project)
+        {
+            int count = 0;
+            int idLength = dtTable.Count();
+            Write(dtTable, (int)(0));
+            int idCount = dtTable.Count();
+            Write(dtTable, (int)(0));
+            foreach (PolylineSystemModel polyline in project.Polylines)
+            {
+                polyline.PLSID = count++;
+                WritePLSTable(polyline);
+            }
+            foreach (LadderDiagramModel diagram in project.Diagrams)
+                foreach (LadderNetworkModel network in diagram.Children)
+                {
+                    if (network.IsMasked) continue;
+                    foreach (LadderUnitModel unit in network.Children)
+                    {
+                        if (!unit.IsPLSTable) continue;
+                        unit.PLSID = count++;
+                        WritePLSTable(unit);
+                    }
+                }
+            Write(dtTable, dtTable.Count() - idLength, idLength);
+            Write(dtTable, count, idCount);
+        }
+
+        private static void WritePLSTable(PolylineSystemModel polyline)
+        {
+            int index = dtTable.Count();
+            Write(dtTable, (int)(0));
+            Write(dtTable, (short)(223));
+            Write(dtTable, (int)(polyline.PLSID));
+            Write(dtTable, (byte)(polyline.ID));
+            Write(dtTable, polyline.IsEnabled);
+            Write(dtTable, (byte)(polyline.Unit));
+            Write(dtTable, polyline.X.PLS);
+            Write(dtTable, polyline.X.DIR);
+            Write(dtTable, polyline.X.WEI);
+            Write(dtTable, polyline.X.LIM);
+            Write(dtTable, polyline.X.CLM);
+            Write(dtTable, polyline.X.ITV);
+            Write(dtTable, polyline.Y.PLS);
+            Write(dtTable, polyline.Y.DIR);
+            Write(dtTable, polyline.Y.WEI);
+            Write(dtTable, polyline.Y.LIM);
+            Write(dtTable, polyline.Y.CLM);
+            Write(dtTable, polyline.Y.ITV);
+            Write(dtTable, (byte)(polyline.Overflow));
+            Write(dtTable, (short)(0));
+            Write(dtTable, polyline.IsHMIEnabled);
+            Write(dtTable, polyline.HMI);
+            Write(dtTable, dtTable.Count() - index, index);
+        }
+
+        private static void WritePLSTable(LadderUnitModel unit)
+        {
+            int index = dtTable.Count();
+            Write(dtTable, (int)(0));
+            if (unit is TBLModel)
+            {
+                TBLModel tbl = (TBLModel)unit;
+                Write(dtTable, (ushort)(221));
+                Write(dtTable, tbl.PLSID);
+                for (int i = 0; i < 3; i++)
+                    Write(dtTable, tbl.Children[i]);
+                Write(dtTable, tbl.Elements.Count());
+                for (int i = 0; i < tbl.Elements.Count; i++)
+                {
+                    Write(dtTable, tbl.Elements[i].Freq);
+                    Write(dtTable, tbl.Elements[i].Number);
+                    Write(dtTable, tbl.Elements[i].Cond);
+                    Write(dtTable, tbl.Elements[i].End);
+                    Write(dtTable, (ushort)(tbl.Elements[i].Jump));
+                }
+            }
+            else if (unit is CAMModel)
+            {
+                Write(dtTable, (ushort)(228));
+                Write(dtTable, unit.PLSID);
+                Write(dtTable, unit.Children[0].Offset);
+
+
+            }
+            else
+            {
+                IEnumerable<Polyline> polylines = null;
+                switch (unit.Type)
+                {
+                    case LadderUnitModel.Types.POLYLINEF:
+                        Write(dtTable, (ushort)(222));
+                        polylines = ((POLYLINEFModel)unit).Polylines.Cast<Polyline>();
+                        break;
+                    case LadderUnitModel.Types.POLYLINEI:
+                        Write(dtTable, (ushort)(230));
+                        polylines = ((POLYLINEIModel)unit).Polylines.Cast<Polyline>();
+                        break;
+                    case LadderUnitModel.Types.LINEF:
+                        Write(dtTable, (ushort)(224));
+                        polylines = new Polyline[] { ((LINEFModel)unit).Line };
+                        break;
+                    case LadderUnitModel.Types.LINEI:
+                        Write(dtTable, (ushort)(231));
+                        polylines = new Polyline[] { ((LINEIModel)unit).Line };
+                        break;
+                    case LadderUnitModel.Types.ARCF:
+                        Write(dtTable, (ushort)(225));
+                        polylines = new Polyline[] { ((ARCHFModel)unit).Arch };
+                        break;
+                    case LadderUnitModel.Types.ARCI:
+                        Write(dtTable, (ushort)(232));
+                        polylines = new Polyline[] { ((ARCHIModel)unit).Arch };
+                        break;
+                }
+                Write(dtTable, unit.PLSID);
+                Write(dtTable, byte.Parse(unit.Children[0].Value.ToString()));
+                POLYLINEModel poly = (POLYLINEModel)unit;
+                Write(dtTable, (byte)(poly.Unit));
+                Write(dtTable, poly.RefAddr);
+                Write(dtTable, (byte)(poly.RefMode));
+                Write(dtTable, polylines.Count() + 1);
+                foreach (Polyline polyline in polylines)
+                {
+                    if (polyline is IntLine || polyline is FloatLine)
+                        Write(dtTable, (byte)(0));
+                    else
+                        Write(dtTable, (byte)(1));
+                    Write(dtTable, polyline.X);
+                    Write(dtTable, polyline.Y);
+                    Write(dtTable, (byte)(polyline.Mode));
+                    if (polyline is IntArch)
+                    {
+                        IntArch arch = (IntArch)polyline;
+                        Write(dtTable, (byte)(arch.Type));
+                        switch (arch.Type)
+                        {
+                            case IntArch.ArchTypes.TwoPoint:
+                                Write(dtTable, arch.R);
+                                Write(dtTable, (byte)(arch.Dir));
+                                Write(dtTable, (byte)(arch.Qua));
+                                break;
+                            case IntArch.ArchTypes.ThreePoint:
+                                Write(dtTable, arch.CX);
+                                Write(dtTable, arch.CY);
+                                break;
+                        }
+                        Write(dtTable, arch.V);
+                        Write(dtTable, arch.AC);
+                        Write(dtTable, arch.DC);
+                    }
+                    if (polyline is FloatArch)
+                    {
+                        FloatArch arch = (FloatArch)polyline;
+                        Write(dtTable, (byte)(arch.Type));
+                        switch (arch.Type)
+                        {
+                            case FloatArch.ArchTypes.TwoPoint:
+                                Write(dtTable, arch.R);
+                                Write(dtTable, (byte)(arch.Dir));
+                                Write(dtTable, (byte)(arch.Qua));
+                                break;
+                            case FloatArch.ArchTypes.ThreePoint:
+                                Write(dtTable, arch.CX);
+                                Write(dtTable, arch.CY);
+                                break;
+                        }
+                        Write(dtTable, arch.V);
+                        Write(dtTable, arch.AC);
+                        Write(dtTable, arch.DC);
+                    }
+                }
+                Write(dtTable, (byte)(0xff));
+            }
+            Write(dtTable, dtTable.Count() - index, index);
+        }
+        
         #endregion
 
         #endregion

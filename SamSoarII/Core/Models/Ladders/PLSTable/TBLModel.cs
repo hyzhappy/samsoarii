@@ -58,6 +58,8 @@ namespace SamSoarII.Core.Models
             set { this.mode = value; InvokePropertyChanged("Mode"); }
         }
 
+        public override bool IsPLSTable { get { return true; } }
+
         #endregion
 
         #region Save & Load

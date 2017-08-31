@@ -45,6 +45,8 @@ namespace SamSoarII.Core.Models
 
         #region Number
 
+        public override bool IsPLSTable { get { return true; } }
+
         private ValueModel numstore;
         public ValueModel NumStore { get { return this.numstore; } }
 
