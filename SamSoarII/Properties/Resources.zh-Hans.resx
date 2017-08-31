@@ -2427,4 +2427,7 @@
   <data name="SerialPort_Occupied" xml:space="preserve">
     <value>串口被占用！</value>
   </data>
+  <data name="Unknown_PLC_Type" xml:space="preserve">
+    <value>未知的PLC型号！</value>
+  </data>
 </root>

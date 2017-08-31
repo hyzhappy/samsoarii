@@ -480,8 +480,7 @@ namespace SamSoarII
                             handle.Start();
                             Thread genthread = new Thread(() =>
                             {
-                                GenerateHelper.GenerateFinal(mdProj);
-                                mngComu.LoadExecute();
+                                mngComu.LoadExecute(GenerateHelper.GenerateFinal(mdProj));
                                 handle.Completed = true;
                                 handle.Abort();
                             });

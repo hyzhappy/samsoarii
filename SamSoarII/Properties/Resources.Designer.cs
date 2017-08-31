@@ -358,7 +358,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Cancel Al Force 的本地化字符串。
+        ///   查找类似 Cancel All Force 的本地化字符串。
         /// </summary>
         public static string Cancel_All_Force {
             get {
@@ -6537,6 +6537,15 @@ namespace SamSoarII.Properties {
         public static string Unknowed_Exception {
             get {
                 return ResourceManager.GetString("Unknowed_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Unknown PLC type! 的本地化字符串。
+        /// </summary>
+        public static string Unknown_PLC_Type {
+            get {
+                return ResourceManager.GetString("Unknown_PLC_Type", resourceCulture);
             }
         }
         

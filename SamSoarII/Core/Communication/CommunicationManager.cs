@@ -379,11 +379,15 @@ namespace SamSoarII.Core.Communication
 
         public int ExecLen { get { return execdata.Count(); } }
 
-        public void LoadExecute()
+        public void LoadExecute(bool isGenerateSuccess)
         {
-            string currentpath = FileHelper.AppRootPath;
-            string execfile = string.Format(@"{0:s}\downc.bin", currentpath);
-            execdata = FileHelper.GetBytesByBinaryFile(execfile).ToList();
+            if (isGenerateSuccess)
+            {
+                string currentpath = FileHelper.AppRootPath;
+                string execfile = string.Format(@"{0:s}\downc.bin", currentpath);
+                execdata = FileHelper.GetBytesByBinaryFile(execfile).ToList();
+            }
+            else execdata = new List<byte>();
         }
 
         public void DownloadExecute(ProgressBarHandle handle)

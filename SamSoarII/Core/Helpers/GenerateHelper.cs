@@ -2,6 +2,7 @@
 using SamSoarII.Core.Models;
 using SamSoarII.Core.Simulate;
 using SamSoarII.PLCDevice;
+using SamSoarII.Shell.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -174,7 +175,7 @@ namespace SamSoarII.Core.Helpers
             return SimulateDllModel.LoadDll(outputDllFile);
         }
 
-        public static void GenerateFinal(ProjectModel project)
+        public static bool GenerateFinal(ProjectModel project)
         {
             List<InstHelper.PLCInstNetwork> nets =
                 new List<InstHelper.PLCInstNetwork>();
@@ -313,34 +314,39 @@ namespace SamSoarII.Core.Helpers
             cmd = new Process();
             cmd.StartInfo.WorkingDirectory = String.Format(@"{0:s}\downg\.", currentPath);
             //由于暂不支持多脉冲，故默认为(PLC_FGs_Type)
-            switch ((PLC_FGs_Type)project.Parent.MNGComu.PLCMessage.PLCType)
+            if (project.Parent.MNGComu.PLCMessage.PLCType is PLC_FGs_Type)
             {
-                case PLC_FGs_Type.FGs_16MR_A:
-                case PLC_FGs_Type.FGs_16MR_D:
-                case PLC_FGs_Type.FGs_16MT_A:
-                case PLC_FGs_Type.FGs_16MT_D:
-                case PLC_FGs_Type.FGs_32MR_A:
-                case PLC_FGs_Type.FGs_32MR_D:
-                case PLC_FGs_Type.FGs_32MT_A:
-                case PLC_FGs_Type.FGs_32MT_D:
-                    cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make32.cmd", currentPath);
-                    break;
-                case PLC_FGs_Type.FGs_64MR_A:
-                case PLC_FGs_Type.FGs_64MR_D:
-                case PLC_FGs_Type.FGs_64MT_A:
-                case PLC_FGs_Type.FGs_64MT_D:
-                    cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make64.cmd", currentPath);
-                    break;
-                default:
-                    cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make.cmd", currentPath);
-                    break;
+                switch ((PLC_FGs_Type)project.Parent.MNGComu.PLCMessage.PLCType)
+                {
+                    case PLC_FGs_Type.FGs_16MR_A:
+                    case PLC_FGs_Type.FGs_16MR_D:
+                    case PLC_FGs_Type.FGs_16MT_A:
+                    case PLC_FGs_Type.FGs_16MT_D:
+                    case PLC_FGs_Type.FGs_32MR_A:
+                    case PLC_FGs_Type.FGs_32MR_D:
+                    case PLC_FGs_Type.FGs_32MT_A:
+                    case PLC_FGs_Type.FGs_32MT_D:
+                        cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make32.cmd", currentPath);
+                        break;
+                    case PLC_FGs_Type.FGs_64MR_A:
+                    case PLC_FGs_Type.FGs_64MR_D:
+                    case PLC_FGs_Type.FGs_64MT_A:
+                    case PLC_FGs_Type.FGs_64MT_D:
+                        cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make64.cmd", currentPath);
+                        break;
+                    default:
+                        cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make.cmd", currentPath);
+                        break;
+                }
+                cmd.StartInfo.CreateNoWindow = true;
+                cmd.StartInfo.UseShellExecute = false;
+                //cmd.StartInfo.RedirectStandardOutput = true;
+                //cmd.StartInfo.RedirectStandardError = true;
+                cmd.Start();
+                cmd.WaitForExit();
+                return true;
             }
-            cmd.StartInfo.CreateNoWindow = true;
-            cmd.StartInfo.UseShellExecute = false;
-            //cmd.StartInfo.RedirectStandardOutput = true;
-            //cmd.StartInfo.RedirectStandardError = true;
-            cmd.Start();
-            cmd.WaitForExit();
+            else return false;
 #if RELEASE
             cmd = new Process();
             cmd.StartInfo.WorkingDirectory = String.Format(@"{0:s}\downg\.", currentPath);

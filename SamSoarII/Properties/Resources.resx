@@ -1798,7 +1798,7 @@
     <value>Browse</value>
   </data>
   <data name="Cancel_All_Force" xml:space="preserve">
-    <value>Cancel Al Force</value>
+    <value>Cancel All Force</value>
   </data>
   <data name="Cancel_Force" xml:space="preserve">
     <value>Cancel Force</value>
@@ -2426,5 +2426,8 @@
   </data>
   <data name="SerialPort_Occupied" xml:space="preserve">
     <value>The serial port is occupied!</value>
+  </data>
+  <data name="Unknown_PLC_Type" xml:space="preserve">
+    <value>Unknown PLC type!</value>
   </data>
 </root>
