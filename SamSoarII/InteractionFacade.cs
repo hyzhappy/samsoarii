@@ -1543,6 +1543,31 @@ namespace SamSoarII
                 }
                 return;
             }
+            if (current is CAMModel)
+            {
+                using (CAMDialog dialog = new CAMDialog(((CAMModel)current).Clone()))
+                {
+                    dialog.Owner = wndMain;
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    dialog.Ensure += (sender, e) =>
+                    {
+                        try
+                        {
+                            dialog.Save();
+                            current.Parent.Parent.AddSingleUnit(dialog.Core, current.Parent);
+                            dialog.Close();
+                        }
+                        catch (ValueParseException exce)
+                        {
+                            LocalizedMessageBox.Show(string.Format(exce.Message), LocalizedMessageIcon.Error);
+                        }
+                    };
+                    dialog.Cancel += (sender, e) => { dialog.Close(); };
+                    dialog.Help += (sender, e) => { ShowHelpDocument(); };
+                    dialog.ShowDialog();
+                }
+                return;
+            }
             if (current.Type == LadderUnitModel.Types.PID)
             {
                 using (PIDDialog dialog = new PIDDialog(this, current))
@@ -1653,6 +1678,32 @@ namespace SamSoarII
                         }
                     };
                     dialog.Cancel += (sender, e) => { dialog.Close(); };
+                    dialog.ShowDialog();
+                }
+                return ret;
+            }
+            if (current is CAMModel)
+            {
+                using (CAMDialog dialog = new CAMDialog(((CAMModel)current).Clone()))
+                {
+                    dialog.Owner = wndMain;
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    dialog.Ensure += (sender, e) =>
+                    {
+                        try
+                        {
+                            dialog.Save();
+                            current.Parent.Parent.AddSingleUnit(dialog.Core, current.Parent);
+                            ret = true;
+                            dialog.Close();
+                        }
+                        catch (ValueParseException exce)
+                        {
+                            LocalizedMessageBox.Show(string.Format(exce.Message), LocalizedMessageIcon.Error);
+                        }
+                    };
+                    dialog.Cancel += (sender, e) => { dialog.Close(); };
+                    dialog.Help += (sender, e) => { ShowHelpDocument(); };
                     dialog.ShowDialog();
                 }
                 return ret;
@@ -1916,6 +1967,30 @@ namespace SamSoarII
             dialog.Owner = wndMain;
             dialog.ShowDialog();
         }
+
+        public void ShowPolylineSystemSettingDialog()
+        {
+            using (PolylineSystemSettingDialog dialog = new PolylineSystemSettingDialog(mdProj))
+            {
+                dialog.Owner = wndMain;
+                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                dialog.Ensure += (sender, e) =>
+                {
+                    try
+                    {
+                        dialog.Save();
+                        dialog.Close();
+                    }
+                    catch (ValueParseException exce)
+                    {
+                        LocalizedMessageBox.Show(string.Format(exce.Message), LocalizedMessageIcon.Error);
+                    }
+                };
+                dialog.Help += (sender, e) => { ShowHelpDocument(); };
+                dialog.ShowDialog();
+            }
+        }
+
         #endregion
 
         #region HotKey System

@@ -22,12 +22,29 @@ namespace SamSoarII.Core.Models
 
         public override void Dispose()
         {
+            if (IsDisposed) return;
             line.Dispose();
             base.Dispose();
         }
 
+        public override SystemUnits Unit { get { return SystemUnits.PLS; } }
+
         private IntLine line;
         public IntLine Line { get { return this.line; } }
+
+        public override void Save(XElement xele)
+        {
+            base.Save(xele);
+            XElement xele_l = new XElement("Line");
+            line.Save(xele_l);
+            xele.Add(xele_l);
+        }
+
+        public override void Load(XElement xele)
+        {
+            base.Load(xele);
+            line.Load(xele.Element("Line"));
+        }
 
         public override POLYLINEModel Clone()
         {

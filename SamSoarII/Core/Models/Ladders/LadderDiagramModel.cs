@@ -54,6 +54,8 @@ namespace SamSoarII.Core.Models
             children.CollectionChanged -= Children_CollectionChanged;
             children.Clear();
             children = null;
+            foreach (Command cmd in undos) cmd.Dispose();
+            foreach (Command cmd in redos) cmd.Dispose();
             undos.Clear();
             redos.Clear();
             undos = null;
@@ -337,7 +339,7 @@ namespace SamSoarII.Core.Models
         public const int CMDTYPE_MoveUnit = 0x08;
         public const int CMDTYPE_ChangeProperty = 0x10;
         public const int CMDTYPE_ChangeComments = 0x20;
-        private class Command
+        private class Command : IDisposable
         {
             public int Type;
             public LadderNetworkModel Network;
@@ -357,6 +359,56 @@ namespace SamSoarII.Core.Models
             public IList<string> NewProperties;
             public IList<string> OldComments;
             public IList<string> NewComments;
+            public void Dispose()
+            {
+                _Dispose(true);
+            }
+            public void DisposeNotExist()
+            {
+                _Dispose(false);
+            }
+            private void _Dispose(bool disposeexist)
+            {
+                if (Network != null && (disposeexist || Network.Parent == null))
+                    Network.Dispose();
+                if (Unit != null && (disposeexist || Unit.Parent == null))
+                    Unit.Dispose();
+                if (OldNetworks != null)
+                    foreach (LadderNetworkModel net in OldNetworks)
+                        if (disposeexist || net.Parent == null)
+                            net.Dispose();
+                if (NewNetworks != null)
+                    foreach (LadderNetworkModel net in NewNetworks)
+                        if (disposeexist || net.Parent == null)
+                            net.Dispose();
+                if (OldUnits != null)
+                    foreach (LadderUnitModel unit in OldUnits)
+                        if (disposeexist || unit.Parent == null)
+                            unit.Dispose();
+                if (NewUnits != null)
+                    foreach (LadderUnitModel unit in NewUnits)
+                        if (disposeexist || unit.Parent == null)
+                            unit.Dispose();
+                if (MoveUnits != null)
+                    foreach (LadderUnitModel unit in MoveUnits)
+                        if (disposeexist || unit.Parent == null)
+                            unit.Dispose();
+                Network = null;
+                Unit = null;
+                OldNetworks = null;
+                NewNetworks = null;
+                OldNetIDs = null;
+                NewNetIDs = null;
+                OldUnits = null;
+                NewUnits = null;
+                MoveUnits = null;
+                OldRows = null;
+                NewRows = null;
+                OldProperties = null;
+                NewProperties = null;
+                OldComments = null;
+                NewComments = null;
+            }
         }
 
         private class RelativeArea : IDisposable
@@ -485,10 +537,10 @@ namespace SamSoarII.Core.Models
                         ifparent.Select(diagram, start, end);
                         break;
                     default:
-                        if (diagram?.View != null)
-                            diagram.View.ReleaseSelect();
-                        else if (network?.Parent?.View != null)
-                            network.Parent.View.ReleaseSelect();
+                        //if (diagram?.View != null)
+                        //    diagram.View.ReleaseSelect();
+                        //else if (network?.Parent?.View != null)
+                        //    network.Parent.View.ReleaseSelect();
                         break;
                 }
             }
@@ -1210,6 +1262,8 @@ namespace SamSoarII.Core.Models
                     newunit = ((POLYLINEModel)oldunit).Clone();
                 else if (oldunit is TBLModel)
                     newunit = ((TBLModel)oldunit).Clone();
+                else if (oldunit is CAMModel)
+                    newunit = ((CAMModel)oldunit).Clone();
                 else
                     newunit = new LadderUnitModel(newnet, oldunit.Type);
                 newunit.Parent = newnet;

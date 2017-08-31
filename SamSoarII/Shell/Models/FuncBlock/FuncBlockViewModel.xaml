@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:SamSoarII.Shell.Models"
              xmlns:wnd="clr-namespace:SamSoarII.Shell.Windows"
              xmlns:mg="clr-namespace:SamSoarII.Shell.Managers"
+             xmlns:gb="clr-namespace:SamSoarII.Global"
              xmlns:Text="http://icsharpcode.net/sharpdevelop/avalonedit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -21,6 +22,8 @@
         <CommandBinding Command="{x:Static local:FuncBlockViewModel.AddBreakpoint}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>
         <CommandBinding Command="{x:Static local:FuncBlockViewModel.RemoveBreakpoint}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>
         <CommandBinding Command="{x:Static local:FuncBlockViewModel.ActiveBreakpoint}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.ZoomInCommand}" Executed="OnCommandExecute"/>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.ZoomOutCommand}" Executed="OnCommandExecute"/>
     </wnd:BaseTabItem.CommandBindings>
     <wnd:BaseTabItem.Resources>
         <ObjectDataProvider x:Key="FontData" ObjectType="{x:Type mg:FontManager}" MethodName="GetFunc"/>

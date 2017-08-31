@@ -30,8 +30,9 @@
                 <TextBlock Text="平面系统_5"/>
             </ComboBox>
             <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-                <TextBlock Text="系统单位：" Margin="6,8,4,6"/>
-                <ComboBox x:Name="CB_Unit" Margin="3,5,3,5" Width="49">
+                <TextBlock Text="系统单位：" Margin="6,10,4,6"/>
+                <ComboBox x:Name="CB_Unit" Margin="3,5,3,5" Width="60" IsReadOnly="True">
+                    <TextBlock Text="mm"/>
                     <TextBlock Text="pls"/>
                 </ComboBox>
             </StackPanel>
@@ -59,14 +60,15 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <GroupBox Grid.Row="0" Grid.Column="0" Margin="2,2,2,2" Header="映射方式">
-                <ComboBox Grid.Row="0" Grid.Column="0" Margin="10,2,10,2" x:Name="CB_Ref">
+                <ComboBox Grid.Row="0" Grid.Column="0" Margin="10,5,10,5" x:Name="CB_Ref"
+                          SelectionChanged="CB_Ref_SelectionChanged">
                     <TextBlock Text="不映射到D寄存器"/>
                     <TextBlock Text="映射到D寄存器"/>
                     <TextBlock Text="仅用D寄存器控制"/>
                 </ComboBox>
             </GroupBox>
             <GroupBox Grid.Row="0" Grid.Column="1" Margin="2,2,2,2" Header="映射地">
-                <TextBox Margin="0,3,0,3" x:Name="TB_Ref"></TextBox>
+                <TextBox Margin="0,6,0,6" x:Name="TB_Ref" TextChanged="TB_Ref_TextChanged"></TextBox>
             </GroupBox>
             <Button Grid.Row="0" Grid.Column="2" Margin="10,25,10,10" 
                     x:Name="BT_Ensure" Content="{x:Static properties:Resources.Ensure}"

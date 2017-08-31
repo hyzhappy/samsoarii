@@ -202,6 +202,10 @@
     <Compile Include="Core\Models\FuncBlocks\FuncBlockModel.cs" />
     <Compile Include="Core\Models\FuncBlocks\FuncModel.cs" />
     <Compile Include="Core\Models\FuncBlocks\FuncBrpoModel.cs" />
+    <Compile Include="Core\Models\Ladders\HighCount\CAMModel.cs" />
+    <Compile Include="Shell\Dialogs\ElementPropertyModify\CAMDialog.xaml.cs">
+      <DependentUpon>CAMDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shell\Models\Instructions\InstructionRowCanvas.cs" />
     <Compile Include="Core\Models\Interfaces\IElementInitializeModel.cs" />
     <Compile Include="Core\Models\Instructions\InstructionDiagramModel.cs" />
@@ -310,7 +314,7 @@
     <Compile Include="Shell\Dialogs\PasswordDialog.xaml.cs">
       <DependentUpon>PasswordDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shell\Dialogs\PIDDialog.xaml.cs">
+    <Compile Include="Shell\Dialogs\ElementPropertyModify\PIDDialog.xaml.cs">
       <DependentUpon>PIDDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Dialogs\PolylineAxisWidget.xaml.cs">
@@ -661,6 +665,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Image\Close.png" />
     <Resource Include="Resources\LayoutConfig.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -795,6 +800,10 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
+    <Page Include="Shell\Dialogs\ElementPropertyModify\CAMDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Shell\Dialogs\ElementPropertyModify\TBLDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -835,7 +844,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Shell\Dialogs\PIDDialog.xaml">
+    <Page Include="Shell\Dialogs\ElementPropertyModify\PIDDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1151,9 +1160,6 @@
     <Resource Include="Resources\Image\Minimized.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Image\Close.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Image\Inform.png" />
   </ItemGroup>
   <ItemGroup>
@@ -1168,6 +1174,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Find.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Replace.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\ZoomIn.png" />
+    <Resource Include="Resources\Image\ZoomOut.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

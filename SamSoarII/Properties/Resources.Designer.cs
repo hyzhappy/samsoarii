@@ -2167,6 +2167,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Cam Command 的本地化字符串。
+        /// </summary>
+        public static string Inst_CAM {
+            get {
+                return ResourceManager.GetString("Inst_CAM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Communication 的本地化字符串。
         /// </summary>
         public static string Inst_Communication {

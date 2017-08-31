@@ -13,6 +13,9 @@ namespace SamSoarII.Core.Models
     {
         public POLYLINEModel(LadderNetworkModel _parent, LadderUnitModel.Types _type) : base(_parent, _type)
         {
+            refaddr = new ValueModel(this, new ValueFormat("S", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex3 }, null, "映射地址", "Refliction Address"));
+            refaddr.Text = "D0";
+            Children[0].Text = "K1";
         }
 
         public POLYLINEModel(LadderNetworkModel _parent, XElement xele) : base(_parent, xele)
@@ -26,51 +29,57 @@ namespace SamSoarII.Core.Models
 
         #region Number
         
-        public enum SystemUnits { Pls }
-        private SystemUnits systemunit;
-        public SystemUnits SystemUnit
-        {
-            get { return this.systemunit; }
-            set { this.systemunit = value; InvokePropertyChanged("SystemUnit"); }
-        }
+        public enum SystemUnits { MM, PLS }
+        public abstract SystemUnits Unit { get; }
 
         public enum ReflictModes { NoReflict, Reflict, Control }
-        private ReflictModes reflictmode;
-        public ReflictModes ReflictMode
+        private ReflictModes refmode;
+        public ReflictModes RefMode
         {
-            get { return this.reflictmode; }
-            set { this.reflictmode = value; InvokePropertyChanged("ReflictMode"); }
+            get { return this.refmode; }
+            set { this.refmode = value; InvokePropertyChanged("RefMode"); }
         }
-        /*
-        private ValueModel reflictlocation;
-        public ValueModel ReflictLocation
+
+        private ValueModel refaddr;
+        public ValueModel RefAddr
         {
-            get { return this.reflictlocation; }
+            get { return this.refaddr; }
         }
-        */
+
+
         #endregion
+
+        public override void Save(XElement xele)
+        {
+            base.Save(xele);
+            xele.SetAttributeValue("RefMode", (int)(refmode));
+            xele.SetAttributeValue("RefAddr", refaddr.Text);
+        }
+
+        public override void Load(XElement xele)
+        {
+            base.Load(xele);
+            XAttribute xatt = xele.Attribute("RefMode");
+            refmode = xatt != null ? (ReflictModes)(int.Parse(xatt.Value)) : ReflictModes.NoReflict;
+            xatt = xele.Attribute("RefAddr");
+            refaddr = new ValueModel(this, new ValueFormat("S", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex3 }, null, "映射地址", "Refliction Address"));
+            refaddr.Text = xatt != null ? xatt.Value : "D0";
+        }
 
         public virtual POLYLINEModel Clone()
         {
             POLYLINEModel that = null;
-            if (this is POLYLINEIModel)
-                that = new POLYLINEIModel(null);
-            if (this is POLYLINEFModel)
-                that = new POLYLINEFModel(null);
-            if (this is LINEIModel)
-                that = new LINEIModel(null);
-            if (this is LINEFModel)
-                that = new LINEFModel(null);
-            if (this is LINEIModel)
-                that = new LINEIModel(null);
-            if (this is LINEFModel)
-                that = new LINEFModel(null);
+            if (this is POLYLINEIModel) that = new POLYLINEIModel(null);
+            if (this is POLYLINEFModel) that = new POLYLINEFModel(null);
+            if (this is LINEIModel) that = new LINEIModel(null);
+            if (this is LINEFModel) that = new LINEFModel(null);
+            if (this is LINEIModel) that = new LINEIModel(null);
+            if (this is LINEFModel) that = new LINEFModel(null);
             that.X = this.X;
             that.Y = this.Y;
             for (int i = 0; i < Children.Count; i++)
                 that.Children[i].Text = this.Children[i].Text;
-            that.SystemUnit = this.SystemUnit;
-            that.ReflictMode = this.ReflictMode;
+            that.RefMode = this.RefMode;
             return that;
         }
     }
@@ -109,27 +118,36 @@ namespace SamSoarII.Core.Models
 
         public override string ToString()
         {
-            int id = 0;
-            if (parent is POLYLINEIModel)
-                id = ((POLYLINEIModel)parent).Polylines.IndexOf((IntPolyline)this);
-            if (parent is POLYLINEFModel)
-                id = ((POLYLINEFModel)parent).Polylines.IndexOf((FloatPolyline)this);
             if (this is IntLine || this is FloatLine)
-                return String.Format("{0:d}.{1:s}", id, "直线");
+                return String.Format("{0:d}.{1:s}", ID, "直线");
             else
-                return String.Format("{0:d}.{1:s}", id, "圆弧");
+                return String.Format("{0:d}.{1:s}", ID, "圆弧");
         }
 
         #region Number
 
         private POLYLINEModel parent;
         public POLYLINEModel Parent { get { return this.parent; } }
-       
+
+        public int ID
+        {
+            get
+            {
+                if (parent is POLYLINEIModel)
+                    return ((POLYLINEIModel)parent).Polylines.IndexOf((IntPolyline)this);
+                if (parent is POLYLINEFModel)
+                    return ((POLYLINEFModel)parent).Polylines.IndexOf((FloatPolyline)this);
+                return 0;
+            }
+        }
+
         private ValueModel x;
         public ValueModel X { get { return this.x; } }
 
         private ValueModel y;
         public ValueModel Y { get { return this.y; } }
+
+        public abstract int Count { get; }
 
         public enum Modes { Relative, Absulate }
         private Modes mode;
@@ -150,6 +168,34 @@ namespace SamSoarII.Core.Models
 
         #endregion
 
+        public virtual void Save(XElement xele)
+        {
+            if (this is IntLine)
+                xele.SetAttributeValue("Inherited", "IntLine");
+            if (this is IntArch)
+                xele.SetAttributeValue("Inherited", "IntArch");
+            if (this is FloatLine)
+                xele.SetAttributeValue("Inherited", "FloatLine");
+            if (this is FloatArch)
+                xele.SetAttributeValue("Inherited", "FloatArch");
+            xele.SetAttributeValue("X", x.Text);
+            xele.SetAttributeValue("Y", y.Text);
+            xele.SetAttributeValue("Mode", (int)(mode));
+            xele.SetAttributeValue("AC", ac.Text);
+            xele.SetAttributeValue("DC", dc.Text);
+            xele.SetAttributeValue("V", v.Text);
+        }
+
+        public virtual void Load(XElement xele)
+        {
+            x.Text = xele.Attribute("X").Value;
+            y.Text = xele.Attribute("Y").Value;
+            mode = (Modes)(int.Parse(xele.Attribute("Mode").Value));
+            ac.Text = xele.Attribute("AC").Value;
+            dc.Text = xele.Attribute("DC").Value;
+            v.Text = xele.Attribute("V").Value;
+        }
+        
         public virtual Polyline Clone(POLYLINEModel _parent = null)
         {
             Polyline that = null;

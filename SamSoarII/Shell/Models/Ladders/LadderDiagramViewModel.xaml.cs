@@ -1866,13 +1866,13 @@ namespace SamSoarII.Shell.Models
                     if (_selectArea.Core.State == SelectAreaCore.Status.SelectCross)
                     {
                         List<LadderNetworkModel> removes = _selectArea.Core.SelectNetworks.ToList();
-                        ReleaseSelect();
+                        //ReleaseSelect();
                         Core.ReplaceN(removes, new LadderNetworkModel[] { });
                     }
                     else if (_selectArea.Core.State == SelectAreaCore.Status.SelectRange)
                     {
                         Core.RemoveU(SelectStartNetwork, _selectArea.Core.SelectUnits);
-                        ReleaseSelect();
+                        //ReleaseSelect();
                     }
                 }
             }
@@ -1912,7 +1912,7 @@ namespace SamSoarII.Shell.Models
                             xele_ns.Add(xele_n);
                             removes.Add(lnmodel);
                         }
-                        ReleaseSelect();
+                        //ReleaseSelect();
                         if (cut) Core.ReplaceN(removes, new LadderNetworkModel[] { });
                         Clipboard.SetData("LadderContent", xele.ToString());
                     }
@@ -1934,7 +1934,7 @@ namespace SamSoarII.Shell.Models
                         }
                         Clipboard.SetData("LadderContent", xele.ToString());
                         if (cut) Core.RemoveU(SelectStartNetwork, units);
-                        ReleaseSelect();
+                        //ReleaseSelect();
                     }
                 }
             }
