@@ -109,7 +109,11 @@ namespace SamSoarII.Core.Models
             set { isLoaded = value; }
         }
         private string projname;
-        public string ProjName { get { return this.projname; } }
+        public string ProjName
+        {
+            get { return this.projname; }
+            set { this.projname = value; PropertyChanged(this, new PropertyChangedEventArgs("ProjName")); }
+        }
         
         private string filename;
         public string FileName { get { return this.filename; } }
@@ -332,7 +336,7 @@ namespace SamSoarII.Core.Models
         {
             if (_filename == null || _filename == string.Empty) return;
             filename = _filename;
-            projname = FileHelper.GetFileName(_filename);
+            ProjName = FileHelper.GetFileName(_filename);
             XDocument xdoc = new XDocument();
             XElement xele_r = new XElement("Root");
             XElement xele_p = new XElement("Project");

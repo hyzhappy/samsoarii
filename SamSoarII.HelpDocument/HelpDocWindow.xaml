@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.HelpDocument"
         xmlns:hdoc="clr-namespace:SamSoarII.HelpDocument.HelpDocComponet"
-        mc:Ignorable="d" Icon="pack://application:,,,/SamSoarII;component/Resources/Image/SamSoarII.ico"
+        mc:Ignorable="d" Icon="pack://application:,,,/SamSoarII;component/Resources/Image/Help.png"
         Title="HelpDocWindow" Height="350" Width="525">
     <Window.CommandBindings>
         <CommandBinding x:Uid="PrintPage" x:Name="PrintPage" Command="{x:Static hdoc:HelpDocCommand.PrintPage}"></CommandBinding>

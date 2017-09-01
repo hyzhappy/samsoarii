@@ -1593,7 +1593,20 @@ namespace SamSoarII.Core.Models
         {
             get { return breakpoint?.Cursor; }
         }
-        
+
+        #endregion
+
+        #region PLS Table
+
+        private int plsid;
+        public int PLSID
+        {
+            get { return this.plsid; }
+            set { this.plsid = value; InvokePropertyChanged("PLSID"); }
+        }
+
+        public virtual bool IsPLSTable { get { return false; } }
+
         #endregion
 
         #endregion

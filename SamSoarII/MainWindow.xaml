@@ -229,7 +229,11 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Select_All}" Command="ApplicationCommands.SelectAll"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Select_All}" Command="ApplicationCommands.SelectAll">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/SelectAll.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator/>
                 <MenuItem Header="{x:Static properties:Resources.Menu_Search}" Command="ApplicationCommands.Find">
                     <MenuItem.Icon>
@@ -268,11 +272,27 @@
                 <MenuItem Header="{x:Static properties:Resources.ValueBrpo}" Command="{x:Static gb:GlobalCommand.ShowValueBrpoCommand}" InputGestureText="Ctrl+F9,O"></MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Proj}" Margin="0,-5,0,0">
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_SubRoutine}" Command="{x:Static gb:GlobalCommand.AddNewSubRoutineCommand}" InputGestureText="Ctrl+W,R"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_FuncBlock}" Command="{x:Static gb:GlobalCommand.AddNewFuncBlockCommand}" InputGestureText="Ctrl+W,F"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_Modbus_Table}" Command="{x:Static gb:GlobalCommand.AddNewModbusCommand}" InputGestureText="Ctrl+W,M"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_SubRoutine}" Command="{x:Static gb:GlobalCommand.AddNewSubRoutineCommand}" InputGestureText="Ctrl+W,R">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/AddSubRoutine.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_FuncBlock}" Command="{x:Static gb:GlobalCommand.AddNewFuncBlockCommand}" InputGestureText="Ctrl+W,F">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/AddFuncBlock.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_Modbus_Table}" Command="{x:Static gb:GlobalCommand.AddNewModbusCommand}" InputGestureText="Ctrl+W,M">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/AddModbus.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator/>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Property_Proj}" Command="{x:Static gb:GlobalCommand.ShowPropertyDialogCommand}" InputGestureText="Ctrl+F7,O"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Property_Proj}" Command="{x:Static gb:GlobalCommand.ShowPropertyDialogCommand}" InputGestureText="Ctrl+F7,O">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/PLCSetting.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Tool}" Margin="0,-5,0,0">
                 <MenuItem Header="{x:Static properties:Resources.Upload}" Command="{x:Static gb:GlobalCommand.UploadCommand}" InputGestureText="Ctrl+T,U">
@@ -290,19 +310,42 @@
                         <Image Source="/Resources/Image/Simu.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.Monitor}" Command="{x:Static gb:GlobalCommand.MonitorCommand}" InputGestureText="Ctrl+E,M"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Ret_Edit_Mode}" Command="{x:Static gb:GlobalCommand.EditCommand}" InputGestureText="Ctrl+T,E"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.Compile}" Command="{x:Static gb:GlobalCommand.CompileCommand}" InputGestureText="F4"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.Monitor}" Command="{x:Static gb:GlobalCommand.MonitorCommand}" InputGestureText="Ctrl+E,M">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Monitor.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Ret_Edit_Mode}" Command="{x:Static gb:GlobalCommand.EditCommand}" InputGestureText="Ctrl+T,E">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Edit.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.Compile}" Command="{x:Static gb:GlobalCommand.CompileCommand}" InputGestureText="F4">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Compile.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Proj_Check}">
-                    <MenuItem Header="{x:Static properties:Resources.MainWindow_Ladder_Check}" Command="{x:Static gb:GlobalCommand.CheckNetworkErrorCommand}" InputGestureText="Ctrl+T,N"></MenuItem>
-                    <MenuItem Header="{x:Static properties:Resources.MainWindow_Funcblock_Check}" Command="{x:Static gb:GlobalCommand.CheckFuncBlockCommand}" InputGestureText="Ctrl+T,F"></MenuItem>
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/CheckProgram.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="{x:Static properties:Resources.MainWindow_Ladder_Check}" Command="{x:Static gb:GlobalCommand.CheckNetworkErrorCommand}" InputGestureText="Ctrl+T,N">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/Image/CheckLadder.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static properties:Resources.MainWindow_Funcblock_Check}" Command="{x:Static gb:GlobalCommand.CheckFuncBlockCommand}" InputGestureText="Ctrl+T,F">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/Image/CheckFuncBlock.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_File_Converter}" Command="{x:Static gb:GlobalCommand.FileConvertCommand}" InputGestureText="Ctrl+T,H"/>
                 <Separator/>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Option}" Command="{x:Static gb:GlobalCommand.ShowOptionDialogCommand}" InputGestureText="Ctrl+F6,O">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/Image/Config.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                        <Image Source="/Resources/Image/SystemSetting.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -311,11 +354,23 @@
                 <MenuItem Header="图形导入" Command="{x:Static gb:GlobalCommand.ImageImportCommand}"/>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Language}" Margin="0,-5,0,0">
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Chinese}" Command="{x:Static gb:GlobalCommand.ChangeToChineseCommand}" InputGestureText="Ctrl+U,C"/>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_English}" Command="{x:Static gb:GlobalCommand.ChangeToEnglishCommand}" InputGestureText="Ctrl+U,E"/>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Chinese}" Command="{x:Static gb:GlobalCommand.ChangeToChineseCommand}" InputGestureText="Ctrl+U,C">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Chinese.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_English}" Command="{x:Static gb:GlobalCommand.ChangeToEnglishCommand}" InputGestureText="Ctrl+U,E">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/English.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Help}" Margin="0,-5,0,0">
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_View_Help}" Command="{x:Static gb:GlobalCommand.ShowHelpDocumentCommand}" InputGestureText="Ctrl+F9,O"/>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_View_Help}" Command="{x:Static gb:GlobalCommand.ShowHelpDocumentCommand}" InputGestureText="Ctrl+F9,O">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Help.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Online_Upgrade}" Command="{x:Static gb:GlobalCommand.OnlineHelpCommand}"/>
                 <Separator></Separator>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_About}" Click="About"></MenuItem>
@@ -396,7 +451,9 @@
                 <Button ToolTip="{x:Static properties:Resources.MainWindow_System_Settings}" Style="{StaticResource ButtonStyle}" Command="{x:Static gb:GlobalCommand.ShowOptionDialogCommand}">
                     <Image Source="/Resources/Image/SystemSetting.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_PLC_Settings}" Style="{StaticResource ButtonStyle}" Command="{x:Static gb:GlobalCommand.ShowPropertyDialogCommand}" Template="{StaticResource PLCSettingButton}"></Button>
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_PLC_Settings}" Style="{StaticResource ButtonStyle}" Command="{x:Static gb:GlobalCommand.ShowPropertyDialogCommand}">
+                    <Image Source="/Resources/Image/PLCSetting.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                </Button>
             </ToolBar>
         </ToolBarTray>
         <ToolBarTray x:Name="TB_Edit" DockPanel.Dock="Top" Height="25">

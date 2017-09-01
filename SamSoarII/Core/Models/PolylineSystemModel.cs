@@ -67,6 +67,13 @@ namespace SamSoarII.Core.Models
         private int id;
         public int ID { get { return this.id; } }
 
+        private int plsid;
+        public int PLSID
+        {
+            get { return this.plsid; }
+            set { this.plsid = value; PropertyChanged(this, new PropertyChangedEventArgs("PLSID")); }
+        }
+
         private bool isenabled;
         public bool IsEnabled
         {

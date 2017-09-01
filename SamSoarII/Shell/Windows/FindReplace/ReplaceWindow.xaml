@@ -54,7 +54,7 @@
             <Button x:Uid="Button_3" ToolTip="{x:Static properties:Resources.Setting}" Click="OnConfigClick"
                     Grid.Row="0" Grid.Column="3"
                     Height="24" Width="24">
-                <Image x:Uid="Image_3" Source="/Resources/Image/SystemSetting.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                <Image x:Uid="Image_3" Source="/Resources/Image/Setting.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
             </Button>
         </Grid>
         <Grid x:Uid="G_Main" x:Name="G_Main" Visibility="Visible"

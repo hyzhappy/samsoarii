@@ -28,7 +28,9 @@ namespace SamSoarII.Core.Models
         }
 
         #region Number
-        
+
+        public override bool IsPLSTable { get { return true; } }
+
         public enum SystemUnits { MM, PLS }
         public abstract SystemUnits Unit { get; }
 
@@ -184,6 +186,7 @@ namespace SamSoarII.Core.Models
             xele.SetAttributeValue("AC", ac.Text);
             xele.SetAttributeValue("DC", dc.Text);
             xele.SetAttributeValue("V", v.Text);
+            
         }
 
         public virtual void Load(XElement xele)

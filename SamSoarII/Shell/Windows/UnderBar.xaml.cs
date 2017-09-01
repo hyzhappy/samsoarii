@@ -352,6 +352,11 @@ namespace SamSoarII.Shell.Windows
         {
             if (e.PropertyName.Equals("IsModified") && project.IsModified == false)
                 TB_Header.Text = Properties.Resources.Project_Saved;
+            if (e.PropertyName.Equals("ProjName"))
+            {
+                TB_Item4.Text = String.Format("{0:s}:{1:s}", Properties.Resources.Project, project.ProjName);
+                TB_Item4.ToolTip = project.FileName;
+            }
         }
 
         private void OnProjectModified(object sender, RoutedEventArgs e)
