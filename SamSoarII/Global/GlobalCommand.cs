@@ -58,7 +58,7 @@ namespace SamSoarII.Global
         public static RoutedUICommand ShowAboutCommand { get; set; }
         public static RoutedUICommand FileConvertCommand { get; set; }
         public static RoutedUICommand PolylineSettingCommand { get; set; }
-        
+        public static RoutedUICommand ImageImportCommand { get; set; }
         static GlobalCommand()
         {
             commands = new HashSet<RoutedUICommand>();
@@ -154,6 +154,8 @@ namespace SamSoarII.Global
             commands.Add(FileConvertCommand);
             PolylineSettingCommand = new RoutedUICommand();
             commands.Add(PolylineSettingCommand);
+            ImageImportCommand = new RoutedUICommand();
+            commands.Add(ImageImportCommand);
         }
     }
 }

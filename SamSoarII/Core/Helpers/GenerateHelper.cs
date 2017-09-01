@@ -335,7 +335,7 @@ namespace SamSoarII.Core.Helpers
                         cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make64.cmd", currentPath);
                         break;
                     default:
-                        cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make.cmd", currentPath);
+                        cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make32.cmd", currentPath);
                         break;
                 }
                 cmd.StartInfo.CreateNoWindow = true;

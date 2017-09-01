@@ -27,6 +27,7 @@ using System.Windows.Threading;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections.Specialized;
+using SamSoarII.Utility.DXF;
 
 namespace SamSoarII
 {
@@ -1991,6 +1992,25 @@ namespace SamSoarII
             }
         }
 
+        public void ShowImageImportDialog()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = string.Format("{0}|*.{1}", Properties.Resources.DXF_File, "dxf");
+            openFileDialog.Multiselect = false;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                DXFModel dxfmodel = new DXFModel();
+                dxfmodel.Convert(openFileDialog.FileName);
+                Window window = new Window();
+                DXFImage image = new DXFImage(dxfmodel);
+                DXFImage.BaseP = new Point(0, 550);
+                image.DrawImage();
+                DrawingPanel panel = new DrawingPanel();
+                window.Content = panel;
+                panel.Add(image);
+                window.Show();
+            }
+        }
         #endregion
 
         #region HotKey System

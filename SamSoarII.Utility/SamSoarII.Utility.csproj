@@ -91,6 +91,16 @@
     <Compile Include="Converters\DoubleConverter2.cs" />
     <Compile Include="Converters\MutiConverter.cs" />
     <Compile Include="Converters\SelectIndexToVisibility.cs" />
+    <Compile Include="DXF\Model\Primitive\DXFArc.cs" />
+    <Compile Include="DXF\Model\Primitive\DXFCircle.cs" />
+    <Compile Include="DXF\Model\Primitive\DXFEllipse.cs" />
+    <Compile Include="DXF\Model\DXFEntity.cs" />
+    <Compile Include="DXF\View\DrawingPanel.cs" />
+    <Compile Include="DXF\View\DXFImage.cs" />
+    <Compile Include="DXF\Model\Primitive\DXFLine.cs" />
+    <Compile Include="DXF\Model\DXFModel.cs" />
+    <Compile Include="DXF\DXFReader.cs" />
+    <Compile Include="DXF\Model\DXFSection.cs" />
     <Compile Include="GridDictionary.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="TempDebugger.cs" />
