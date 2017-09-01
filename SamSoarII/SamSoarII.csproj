@@ -1185,6 +1185,54 @@
     <Resource Include="Resources\Image\ZoomIn.png" />
     <Resource Include="Resources\Image\ZoomOut.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\AddFuncBlock.png" />
+    <Resource Include="Resources\Image\AddModbus.png" />
+    <Resource Include="Resources\Image\AddSubRoutine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\CopyNet.png" />
+    <Resource Include="Resources\Image\CutNet.png" />
+    <Resource Include="Resources\Image\InsertNetAfter.png" />
+    <Resource Include="Resources\Image\InsertNetBefore.png" />
+    <Resource Include="Resources\Image\InsertNetEnd.png" />
+    <Resource Include="Resources\Image\InsertRowAfter.png" />
+    <Resource Include="Resources\Image\InsertRowBefore.png" />
+    <Resource Include="Resources\Image\InsertRowEnd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\MergeNet.png" />
+    <Resource Include="Resources\Image\SplitNet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Collapse.png" />
+    <Resource Include="Resources\Image\CollapseAll.png" />
+    <Resource Include="Resources\Image\ExpandAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\ExpandIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Chinese.png" />
+    <Resource Include="Resources\Image\English.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\SelectAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Help.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\CheckFuncBlock.png" />
+    <Resource Include="Resources\Image\CheckLadder.png" />
+    <Resource Include="Resources\Image\CheckProgram.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Setting.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

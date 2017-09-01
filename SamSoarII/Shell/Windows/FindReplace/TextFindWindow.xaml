@@ -38,7 +38,7 @@
             <Button x:Uid="Button_1" ToolTip="{x:Static properties:Resources.Setting}" Click="OnConfigClick"
                     Grid.Row="0" Grid.Column="3"
                     Height="24" Width="24">
-                <Image x:Uid="Image_1" Source="/Resources/Image/SystemSetting.png" />
+                <Image x:Uid="Image_1" Source="/Resources/Image/Setting.png" />
             </Button>
         </Grid>
         <Grid x:Uid="G_Main" Grid.Row="1" Grid.Column="0" x:Name="G_Main">
