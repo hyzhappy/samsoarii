@@ -8,7 +8,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
-
 namespace SamSoarII.Core.Models
 {
     public class TBLModel : LadderUnitModel
@@ -316,6 +315,7 @@ namespace SamSoarII.Core.Models
             xele.SetAttributeValue("WaitEvent", waitevent_s);
             xele.SetAttributeValue("Condition", cond_s);
             xele.SetAttributeValue("End", end_s);
+            xele.SetAttributeValue("Jump", jump_s);
         }
 
         public void Load(XElement xele)
@@ -325,6 +325,7 @@ namespace SamSoarII.Core.Models
             waitevent_s = xele.Attribute("WaitEvent").Value;
             cond_s = xele.Attribute("Condition").Value;
             end_s = xele.Attribute("End").Value;
+            jump_s = xele.Attribute("Jump").Value;
             LoadFromDataGrid();
         }
 

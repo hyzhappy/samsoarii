@@ -786,7 +786,7 @@ EXPORT void InitRunLadder(HANDLE _hdThread)
 	InitUserRegisters();
 	InitClock(0);
 	BeforeRunLadder();
-	RunLadder(_hdThread);
+	//RunLadder(_hdThread);
 	AfterRunLadder();
 	MBit[8151] = 1;
 	MBit[8152] = 0;

@@ -197,20 +197,34 @@ namespace SamSoarII.Core.Communication
 
         protected override void Handle()
         {
+            if (!ThAlive || !ThActive) return;
             if (current == null)
             {
                 if (writecmds.Count() > 0)
+                {
+                    if (!ThAlive || !ThActive) return;
                     current = writecmds.Dequeue();
+                }
                 else
                 {
                     if (readindex >= readcmds.Count())
                     {
-                        ValueManager.ReadMonitorData();
-                        readcmds = ValueManager.GetReadCommands();
-                        readcmds.Add(MonitorMessage);
-                        readcmds = readcmds.ToArray();
+                        if (!ThAlive || !ThActive) return;
+                        IList<GeneralReadCommand> _readcmds = readcmds;
+                        try
+                        {
+                            ValueManager.ReadMonitorData();
+                            readcmds = ValueManager.GetReadCommands();
+                            readcmds.Add(MonitorMessage);
+                            readcmds = readcmds.ToArray();
+                        }
+                        catch (Exception)
+                        {
+                            readcmds = _readcmds;
+                        }
                         readindex = 0;
                     }
+                    if (!ThAlive || !ThActive) return;
                     current = readcmds.Count() == 0 ? null : readcmds[readindex++];
                 }
             }

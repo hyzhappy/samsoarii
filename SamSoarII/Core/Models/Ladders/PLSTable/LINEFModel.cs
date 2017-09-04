@@ -17,7 +17,7 @@ namespace SamSoarII.Core.Models
         public LINEFModel(LadderNetworkModel _parent, XElement xele)
             : base(_parent, xele)
         {
-            line = new FloatLine(this);
+            //line = new FloatLine(this);
         }
         public override void Dispose()
         {
@@ -42,7 +42,9 @@ namespace SamSoarII.Core.Models
         public override void Load(XElement xele)
         {
             base.Load(xele);
-            line.Load(xele.Element("Line"));
+            XElement xele_l = xele.Element("Line");
+            if (line == null) line = new FloatLine(this);
+            if (xele_l != null) line.Load(xele_l);
         }
 
         public override POLYLINEModel Clone()

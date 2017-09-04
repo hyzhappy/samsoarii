@@ -17,7 +17,7 @@ namespace SamSoarII.Core.Models
         public ARCHIModel(LadderNetworkModel _parent, XElement xele)
             : base(_parent, xele)
         {
-            arch = new IntArch(this);
+            //arch = new IntArch(this);
         }
 
         public override void Dispose()
@@ -43,7 +43,9 @@ namespace SamSoarII.Core.Models
         public override void Load(XElement xele)
         {
             base.Load(xele);
-            arch.Load(xele.Element("Arch"));
+            XElement xele_a = xele.Element("Arch");
+            if (arch == null) arch = new IntArch(this);
+            if (xele_a != null) arch.Load(xele_a);
         }
 
         public override POLYLINEModel Clone()

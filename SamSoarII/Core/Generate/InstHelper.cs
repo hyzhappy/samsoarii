@@ -156,6 +156,7 @@ namespace SamSoarII.Core.Generate
             // 建立C代码的全局环境
             user_id = 0;
             sw.Write("static int8_t _global[{0:d}];\n", globalTotal); // 全局变量
+            if (simumode) sw.Write("static int32_t _tick = 0;");
             // 清空边沿信息
             sw.Write("void ClearEdge() {{ int i = 0; for ( ; i < {0:d}; i++) _global[i] = 0; }}\n", globalTotal);
             // 先声明所有的子函数
@@ -209,6 +210,9 @@ namespace SamSoarII.Core.Generate
         {
             // 断点
             int bp = 0;
+            // 仿真模式下运行一定次数后强制休息
+            if (simumode)
+                sw.Write("if (!((++_tick)&0xfff)) Sleep(2);\n");
             // 输出类指令的条件
             string cond = String.Format("_stack_{0:d}", stackTop);
             if (stlvalue != null) cond = String.Format("({0:s}&&{1:s})", cond, stlvalue);

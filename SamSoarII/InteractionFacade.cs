@@ -243,6 +243,8 @@ namespace SamSoarII
         #endregion
 
         #region Project
+        
+        private LoadingWindowHandle loadinghandle;
 
         private void InitializeProject()
         {
@@ -283,27 +285,26 @@ namespace SamSoarII
         {
             CloseProject();
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.Project_Preparing));
-            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Load);
-            handle.Start();
+            loadinghandle = new LoadingWindowHandle(Properties.Resources.Project_Load);
+            loadinghandle.Start();
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
-                _LoadProject(filename, handle,_isUpload);
-                handle.Completed = true;
-                handle.Abort();
+                _LoadProject(filename, _isUpload);
+                loadinghandle.Completed = true;
+                loadinghandle.Abort();
             });
-            while (!handle.Completed) Thread.Sleep(10);
+            while (!loadinghandle.Completed) Thread.Sleep(10);
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Normal, Properties.Resources.Ready));
         }
 
-        private void _LoadProject(string filename, LoadingWindowHandle handle, bool _isUpload = false)
+        private void _LoadProject(string filename, bool _isUpload = false)
         {
 #if RELEASE
             try
             {
 #endif
                 mdProj = new ProjectModel(this, FileHelper.GetFileName(filename), filename);
-                if (_isUpload)
-                    mdProj.ClearFileName();
+                if (_isUpload) mdProj.ClearFileName();
                 else ProjectFileManager.Update(filename, filename);
                 InitializeProject();
 #if RELEASE
@@ -357,16 +358,17 @@ namespace SamSoarII
         {
             if (vmdProj != null)
             {
-                EditProject();
-                LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.MainWindow_Close_Proj);
-                handle.Start();
+                EditProject(CloseMonitorToDo.CLOSE);
+                if (mngComu.IsAlive) return;
+                loadinghandle = new LoadingWindowHandle(Properties.Resources.MainWindow_Close_Proj);
+                loadinghandle.Start();
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                 {
                     _CloseProject();
-                    handle.Completed = true;
-                    handle.Abort();
+                    loadinghandle.Completed = true;
+                    loadinghandle.Abort();
                 });
-                while (!handle.Completed)
+                while (!loadinghandle.Completed)
                 {
                     Dispatcher.Run();
                     Thread.Sleep(10);
@@ -403,7 +405,11 @@ namespace SamSoarII
         public bool DownloadProject()
         {
             if (vmdProj.LadderMode == LadderModes.Simulate) _CloseSimulate();
-            if (vmdProj.LadderMode == LadderModes.Monitor) _CloseMonitor();
+            if (vmdProj.LadderMode == LadderModes.Monitor)
+            {
+                _CloseMonitor(CloseMonitorToDo.DOWNLOAD);
+                return false;
+            }
             if (!CheckLadder(false)) return false;
             if (!CheckFuncBlock(false)) return false;
 #if DEBUG
@@ -471,22 +477,19 @@ namespace SamSoarII
                             LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                             return;
                         }
-
-                        LoadingWindowHandle handle;
-
                         if (DownloadHelper.IsDownloadProgram && (_option < 0 || !DownloadHelper.CheckOption(_option, DownloadHelper.DownloadOption)))
                         {
                             //按下下载键时再生成Bin,判断是否要包括软元件初始化
-                            handle = new LoadingWindowHandle(Properties.Resources.Generating_Final);
-                            handle.Start();
+                            loadinghandle = new LoadingWindowHandle(Properties.Resources.Generating_Final);
+                            loadinghandle.Start();
                             Thread genthread = new Thread(() =>
                             {
                                 mngComu.LoadExecute(GenerateHelper.GenerateFinal(mdProj));
-                                handle.Completed = true;
-                                handle.Abort();
+                                loadinghandle.Completed = true;
+                                loadinghandle.Abort();
                             });
                             genthread.Start();
-                            while (!handle.Completed) Thread.Sleep(10);
+                            while (!loadinghandle.Completed) Thread.Sleep(10);
                         }
 
                         _option = DownloadHelper.DownloadOption;
@@ -508,6 +511,15 @@ namespace SamSoarII
         
         public bool UploadProject()
         {
+            if (mdProj != null)
+            {
+                if (mdProj.LadderMode == LadderModes.Simulate) _CloseSimulate();
+                if (mdProj.LadderMode == LadderModes.Monitor)
+                {
+                    _CloseMonitor(CloseMonitorToDo.UPLOAD);
+                    return false;
+                }
+            }
             if (UploadHelper.HasConfig)
             {
                 if (mdProj != null && mdProj.IsLoaded)
@@ -528,11 +540,6 @@ namespace SamSoarII
             }
             if (!UploadHelper.HasConfig || LocalizedMessageBox.Show(Properties.Resources.Continue_Upload, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information) == LocalizedMessageResult.Yes)
             {
-                if (mdProj != null)
-                {
-                    if (vmdProj.LadderMode == LadderModes.Simulate) _CloseSimulate();
-                    if (vmdProj.LadderMode == LadderModes.Monitor) _CloseMonitor();
-                }
                 mngComu.IsEnable = true;
                 CommunicationParams paraCom = mngComu.PARACom;
                 using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom,
@@ -597,7 +604,10 @@ namespace SamSoarII
         public bool SimulateProject()
         {
             if (vmdProj.LadderMode == LadderModes.Monitor)
-                _CloseMonitor();
+            {
+                _CloseMonitor(CloseMonitorToDo.SIMULATE);
+                return false;
+            }
             if (vmdProj.LadderMode == LadderModes.Simulate)
             {
                 _CloseSimulate();
@@ -607,17 +617,17 @@ namespace SamSoarII
             if (!CheckFuncBlock(false)) return false;
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, 
                 UnderBarStatus.Loading, Properties.Resources.Simulate_Initing));
-            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Simulate_Initing);
-            handle.Start();
+            loadinghandle = new LoadingWindowHandle(Properties.Resources.Simulate_Initing);
+            loadinghandle.Start();
             int ret = 0;
             vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
                 mngSimu.MNGBrpo.Initialize();
                 ret = GenerateHelper.GenerateSimu(mdProj);
-                handle.Completed = true;
-                handle.Abort();
+                loadinghandle.Completed = true;
+                loadinghandle.Abort();
             });
-            while (!handle.Completed) Thread.Sleep(10);
+            while (!loadinghandle.Completed) Thread.Sleep(10);
             switch (ret)
             {
                 case SimulateDllModel.LOADDLL_OK:
@@ -646,7 +656,6 @@ namespace SamSoarII
             }
             if (!CheckLadder(false)) return false;
             //if (!CheckFuncBlock(false)) return false;
-            
             if (!mngComu.CheckLink())
             {
                 PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
@@ -674,7 +683,7 @@ namespace SamSoarII
             return true;
         }
         
-        public void EditProject()
+        public void EditProject(CloseMonitorToDo todo = CloseMonitorToDo.NONE)
         {
             if (vmdProj == null) return;
             switch (vmdProj.LadderMode)
@@ -683,7 +692,7 @@ namespace SamSoarII
                     _CloseSimulate();
                     break;
                 case LadderModes.Monitor:
-                    _CloseMonitor();
+                    _CloseMonitor(todo);
                     break;
             }
         }
@@ -731,22 +740,54 @@ namespace SamSoarII
             while (!handle.Completed) Thread.Sleep(10);
         }
 
-        private void _CloseMonitor()
+        public enum CloseMonitorToDo { NONE, DOWNLOAD, UPLOAD, SIMULATE, CLOSE, COMMAND};
+        private CloseMonitorToDo closemonitortodo;
+        private void _CloseMonitor(CloseMonitorToDo todo = CloseMonitorToDo.NONE)
         {
+            closemonitortodo = todo;
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
                 UnderBarStatus.Loading, Properties.Resources.Monitor_Closing));
-            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Monitor_Closing);
-            handle.Start();
+            mngComu.Aborted += OnCommunicationAborted;
+            loadinghandle = new LoadingWindowHandle(Properties.Resources.Monitor_Closing);
+            loadinghandle.Start();
             vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
                 mngComu.AbortAll();
                 mngComu.IsEnable = false;
-                //while (mngComu.IsAlive) Thread.Sleep(10);
                 vmdProj.LadderMode = LadderModes.Edit;
-                handle.Completed = true;
-                handle.Abort();
+                //while (mngComu.IsAlive) Thread.Sleep(10);
+                //loadinghandle.Completed = true;
+                //loadinghandle.Abort();
             });
-            while (!handle.Completed) Thread.Sleep(10);
+            //while (!loadinghandle.Completed) Thread.Sleep(10);
+        }
+        private void OnCommunicationAborted(object sender, RoutedEventArgs e)
+        {
+            mngComu.Aborted -= OnCommunicationAborted;
+            loadinghandle.Completed = true;
+            loadinghandle.Abort();
+            Application.Current?.Dispatcher?.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                switch (closemonitortodo)
+                {
+                    case CloseMonitorToDo.CLOSE:
+                        CloseProject();
+                        break;
+                    case CloseMonitorToDo.SIMULATE:
+                        SimulateProject();
+                        break;
+                    case CloseMonitorToDo.DOWNLOAD:
+                        DownloadProject();
+                        break;
+                    case CloseMonitorToDo.UPLOAD:
+                        UploadProject();
+                        break;
+                    case CloseMonitorToDo.COMMAND:
+                        wndMain.ContinueCommandExecuted_ReturnEditMode();
+                        break;
+                }
+            });
+                
         }
         
         #endregion
@@ -757,19 +798,19 @@ namespace SamSoarII
         {
             bool result = false;
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.LadderDiagram_check));
-            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.LadderDiagram_check);
+            loadinghandle = new LoadingWindowHandle(Properties.Resources.LadderDiagram_check);
             wndMain.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
-                handle.Start();
+                loadinghandle.Start();
                 thmngCore.MNGInst.Pause();
                 while (thmngCore.MNGInst.IsActive)
                     Thread.Sleep(10);
-                result = _CheckLadder(handle, showreport);
+                result = _CheckLadder(showreport);
                 thmngCore.MNGInst.Start();
-                handle.Completed = true;
-                handle.Abort();
+                loadinghandle.Completed = true;
+                loadinghandle.Abort();
             });
-            while (!handle.Completed) Thread.Sleep(10);
+            while (!loadinghandle.Completed) Thread.Sleep(10);
             if (!showreport)
             {
                 if (result)
@@ -780,7 +821,7 @@ namespace SamSoarII
             return result;
         }
         
-        private bool _CheckLadder(LoadingWindowHandle handle, bool showreport)
+        private bool _CheckLadder(bool showreport)
         {
             bool result = false;
             foreach (ModbusModel modbus in mdProj.Modbus.Children)
@@ -789,7 +830,7 @@ namespace SamSoarII
                     ShowMessage(
                         String.Format("{0:s}{1:s}",
                             modbus.Name, Properties.Resources.Message_Modbus_Table_Error)
-                        , handle, true, true);
+                        , loadinghandle, true, true);
                     return false;
                 }
             List<ErrorMessage> errorMessages = new List<ErrorMessage>();
@@ -815,11 +856,11 @@ namespace SamSoarII
                         {
                             if (App.CultureIsZH_CH())
                                 ShowMessage(string.Format("程序存在{0:d}处错误，{1:d}处警告。",
-                                        ecount, wcount), handle, true, true);
+                                        ecount, wcount), loadinghandle, true, true);
                             else
                             {
                                 ShowMessage(string.Format("There are {0} errors and {1} warnings in the program.",
-                                        ecount, wcount), handle, true, true);
+                                        ecount, wcount), loadinghandle, true, true);
                             }
                         }
                     }
@@ -828,9 +869,9 @@ namespace SamSoarII
                         if (i == errorMessages.Count - 1)
                         {
                             if (showreport)
-                                ShowMessage(Properties.Resources.Program_Correct, handle, false, true);
+                                ShowMessage(Properties.Resources.Program_Correct, loadinghandle, false, true);
                             else
-                                handle?.Abort();
+                                loadinghandle?.Abort();
                             result = true;
                         }
                     }
@@ -850,9 +891,9 @@ namespace SamSoarII
                     string name = network.Parent.Name;
                     Navigate(network);
                     if (App.CultureIsZH_CH())
-                        ShowMessage(string.Format("程序{0}的网络{1}元素为空!", name, num), handle, true, true);
+                        ShowMessage(string.Format("程序{0}的网络{1}元素为空!", name, num), loadinghandle, true, true);
                     else
-                        ShowMessage(string.Format("Network {0} in {1} is empty!", num, name), handle, true, true);
+                        ShowMessage(string.Format("Network {0} in {1} is empty!", num, name), loadinghandle, true, true);
                     result = false;
                     break;
                 }
@@ -863,19 +904,19 @@ namespace SamSoarII
                     switch (errorMessages[i].Error)
                     {
                         case ErrorType.Open:
-                            ShowMessage(Properties.Resources.Open_Error, handle, true, true);
+                            ShowMessage(Properties.Resources.Open_Error, loadinghandle, true, true);
                             break;
                         case ErrorType.Short:
-                            ShowMessage(Properties.Resources.Short_Error, handle, true, true);
+                            ShowMessage(Properties.Resources.Short_Error, loadinghandle, true, true);
                             break;
                         case ErrorType.SelfLoop:
-                            ShowMessage(Properties.Resources.Selfloop_Error, handle, true, true);
+                            ShowMessage(Properties.Resources.Selfloop_Error, loadinghandle, true, true);
                             break;
                         case ErrorType.HybridLink:
-                            ShowMessage(Properties.Resources.HybridLink_Error, handle, true, true);
+                            ShowMessage(Properties.Resources.HybridLink_Error, loadinghandle, true, true);
                             break;
                         case ErrorType.Special:
-                            ShowMessage(Properties.Resources.Special_Instruction_Error, handle, true, true);
+                            ShowMessage(Properties.Resources.Special_Instruction_Error, loadinghandle, true, true);
                             break;
                         default:
                             break;
@@ -929,13 +970,13 @@ namespace SamSoarII
         {
             bool result = false;
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.Funcblock_Check));
-            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Funcblock_Check);
+            loadinghandle = new LoadingWindowHandle(Properties.Resources.Funcblock_Check);
             wndMain.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
-                handle.Start();
-                result = _CheckFuncBlock(handle, showreport);
+                loadinghandle.Start();
+                result = _CheckFuncBlock(showreport);
             });
-            while (!handle.Completed) Thread.Sleep(10);
+            while (!loadinghandle.Completed) Thread.Sleep(10);
             if (!showreport)
             {
                 if (result)
@@ -946,7 +987,7 @@ namespace SamSoarII
             return result;
         }
 
-        public bool _CheckFuncBlock(LoadingWindowHandle handle, bool showreport)
+        public bool _CheckFuncBlock(bool showreport)
         {
             List<string> cfiles = new List<string>();
             List<string> ofiles = new List<string>();
@@ -1132,20 +1173,20 @@ namespace SamSoarII
             if (showreport || !result)
             {
                 if (ecount == 0 && wcount == 0)
-                    ShowMessage(Properties.Resources.Function_Block_Correct, handle, false, false);
+                    ShowMessage(Properties.Resources.Function_Block_Correct, loadinghandle, false, false);
                 else
                 {
                     if (App.CultureIsZH_CH())
-                        ShowMessage(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount), handle, true, false);
+                        ShowMessage(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount), loadinghandle, true, false);
                     else
-                        ShowMessage(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount), handle, true, false);
+                        ShowMessage(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount), loadinghandle, true, false);
                     wndMain.LACErrorList.Show();
                 }
             }
             else
-                handle?.Abort();
-            if(handle != null)
-                handle.Completed = true;
+                loadinghandle?.Abort();
+            if(loadinghandle != null)
+                loadinghandle.Completed = true;
             return result;
         }
         
@@ -2034,6 +2075,7 @@ namespace SamSoarII
         #endregion
 
         #region Modify
+
         public void ReturnToEdit()
         {
             switch (mdProj.LadderMode)
@@ -2134,12 +2176,14 @@ namespace SamSoarII
                 thmngCore.MNGInst.Pause();
                 while (thmngCore.MNGInst.IsActive)
                     Thread.Sleep(10);
-                ret = _CheckLadder(null, false);
+                loadinghandle = null;
+                ret = _CheckLadder(false);
                 thmngCore.MNGInst.Start();
                 if(ret)
                 {
                     handle.UpdateMessage(string.Format("{0}...\n{1}", Properties.Resources.Compiling, Properties.Resources.Funcblock_Check));
-                    ret &= _CheckFuncBlock(null, false);
+                    loadinghandle = null;
+                    ret &= _CheckFuncBlock(false);
                 }
                 handle.Completed = true;
                 handle.Abort();
