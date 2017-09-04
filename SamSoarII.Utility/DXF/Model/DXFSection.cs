@@ -7,7 +7,7 @@ namespace SamSoarII.Utility.DXF
 {
     public class DXFSection : DXFEntity
     {
-        public DXFSection(string name, DXFReader reader) : base(reader)
+        public DXFSection(string name, DXFReader reader,DXFModel parent) : base(reader, parent)
         {
             Type = EntityType.Section;
             Name = name;
@@ -35,16 +35,16 @@ namespace SamSoarII.Utility.DXF
                                 switch (Reader.CurrentValue)
                                 {
                                     case "LINE":
-                                        Entities.Add(new DXFLine(Reader.CurrentValue, Reader));
+                                        Entities.Add(new DXFLine(Reader.CurrentValue, Reader, Parent));
                                         break;
                                     case "ARC":
-                                        Entities.Add(new DXFArc(Reader.CurrentValue, Reader));
+                                        Entities.Add(new DXFArc(Reader.CurrentValue, Reader, Parent));
                                         break;
                                     case "ELLIPSE":
-                                        Entities.Add(new DXFEllipse(Reader.CurrentValue, Reader));
+                                        Entities.Add(new DXFEllipse(Reader.CurrentValue, Reader, Parent));
                                         break;
                                     case "CIRCLE":
-                                        Entities.Add(new DXFCircle(Reader.CurrentValue, Reader));
+                                        Entities.Add(new DXFCircle(Reader.CurrentValue, Reader, Parent));
                                         break;
                                     default:
                                         Reader.MoveNext();

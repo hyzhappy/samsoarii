@@ -16,12 +16,14 @@ namespace SamSoarII.Utility.DXF
     }
     public class DXFModel
     {
+        public DXFGraph Graph { get; set; }
         private DXFReader converter;
         private List<DXFEntity> sections;
         public List<DXFEntity> Sections { get { return sections; } }
         public DXFModel()
         {
             sections = new List<DXFEntity>();
+            Graph = new DXFGraph();
         }
 
         public void Convert(string filename)
@@ -37,10 +39,10 @@ namespace SamSoarII.Utility.DXF
                     switch (converter.CurrentValue)
                     {
                         case "BLOCKS":
-                            sections.Add(new DXFSection("BLOCKS", converter));
+                            sections.Add(new DXFSection("BLOCKS", converter, this));
                             break;
                         case "ENTITIES":
-                            sections.Add(new DXFSection("ENTITIES", converter));
+                            sections.Add(new DXFSection("ENTITIES", converter, this));
                             break;
                     }
                 } while (true);

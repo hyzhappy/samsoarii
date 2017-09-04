@@ -464,11 +464,11 @@
                 </Button>
                 <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="202" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Open}" 
                         Command="{x:Static gb:GlobalCommand.InstShortCutOpenCommand}" Click="OnInstShortCutClick">
-                    <Image Source="/Resources/Image/InstructionToolBar/LDI.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                    <Image Source="/Resources/Image/InstructionToolBar/LDIM.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
                 <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="201" ToolTip="{x:Static properties:Resources.MainWindow_Normally_Closed}" 
                         Command="{x:Static gb:GlobalCommand.InstShortCutOpenCommand}" Click="OnInstShortCutClick">
-                    <Image Source="/Resources/Image/InstructionToolBar/LDIM.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                    <Image Source="/Resources/Image/InstructionToolBar/LDI.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
                 <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="203" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Close}" 
                         Command="{x:Static gb:GlobalCommand.InstShortCutOpenCommand}" Click="OnInstShortCutClick">

@@ -9,13 +9,14 @@ namespace SamSoarII.Utility.DXF
 {
     public class DXFLine : DXFEntity
     {
-        private Point PF = new Point();
-        private Point PS = new Point();
-        public DXFLine(string name,DXFReader reader) : base(reader)
+        public Point StartP = new Point();
+        public Point EndP = new Point();
+        public DXFLine(string name,DXFReader reader,DXFModel parent) : base(reader, parent)
         {
             Name = name;
             Type = EntityType.Line;
             ReadProperties();
+            parent.Graph.Add(new DXFEdge(this));
         }
         public override void ReadProperties()
         {
@@ -26,16 +27,16 @@ namespace SamSoarII.Utility.DXF
                 switch (Reader.CurrentCode)
                 {
                     case 10:
-                        PF.X = Convert.ToDouble(Reader.CurrentValue);
+                        StartP.X = Convert.ToDouble(Reader.CurrentValue);
                         break;
                     case 20:
-                        PF.Y = Convert.ToDouble(Reader.CurrentValue);
+                        StartP.Y = Convert.ToDouble(Reader.CurrentValue);
                         break;
                     case 11:
-                        PS.X = Convert.ToDouble(Reader.CurrentValue);
+                        EndP.X = Convert.ToDouble(Reader.CurrentValue);
                         break;
                     case 21:
-                        PS.Y = Convert.ToDouble(Reader.CurrentValue);
+                        EndP.Y = Convert.ToDouble(Reader.CurrentValue);
                         break;
                 }
             }
@@ -43,7 +44,7 @@ namespace SamSoarII.Utility.DXF
 
         public override void Render(DrawingContext context)
         {
-            context.DrawLine(DXFImage.BlackPen, DXFImage.GetMatPoint(PF), DXFImage.GetMatPoint(PS));
+            context.DrawLine(DXFImage.BlackPen, DXFImage.GetMatPoint(StartP), DXFImage.GetMatPoint(EndP));
         }
     }
 }

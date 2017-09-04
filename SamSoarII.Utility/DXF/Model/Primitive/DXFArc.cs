@@ -10,13 +10,14 @@ namespace SamSoarII.Utility.DXF
     public class DXFArc : DXFCircle
     {
         //这里代表角度
-        private double SAngle,EAngle;
-        public DXFArc(string name, DXFReader reader) : base(reader)
+        public double SAngle,EAngle;
+        public Point StartP, EndP;
+        public DXFArc(string name, DXFReader reader, DXFModel parent) : base(reader, parent)
         {
             Name = name;
             Type = EntityType.Arc;
             ReadProperties();
-            if (EAngle == 0) EAngle = 360;
+            parent.Graph.Add(new DXFEdge(this));
         }
         public override void ReadProperties()
         {
@@ -43,13 +44,16 @@ namespace SamSoarII.Utility.DXF
                         break;
                 }
             }
+            if (EAngle == 0) EAngle = 360;
+            StartP = DXFHelper.ComputePoint(CenterP, radius, SAngle);
+            EndP = DXFHelper.ComputePoint(CenterP, radius, EAngle);
         }
         public override void Render(DrawingContext context)
         {
             PathGeometry geometry = new PathGeometry();
             PathFigure figure = new PathFigure();
-            figure.StartPoint = DXFImage.GetMatPoint(DXFHelper.ComputePoint(CenterP, radius, SAngle));
-            ArcSegment segement = new ArcSegment(DXFImage.GetMatPoint(DXFHelper.ComputePoint(CenterP, radius, EAngle)), new Size(radius, radius), 0, EAngle - SAngle > 180, SweepDirection.Counterclockwise, true);
+            figure.StartPoint = DXFImage.GetMatPoint(StartP);
+            ArcSegment segement = new ArcSegment(DXFImage.GetMatPoint(EndP), new Size(radius, radius), 0, EAngle - SAngle > 180, SweepDirection.Counterclockwise, true);
             figure.Segments.Add(segement);
             geometry.Figures.Add(figure);
             context.DrawGeometry(Brushes.Transparent, DXFImage.BlackPen, geometry);

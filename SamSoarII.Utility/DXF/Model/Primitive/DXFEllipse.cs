@@ -9,19 +9,20 @@ namespace SamSoarII.Utility.DXF
 {
     public class DXFEllipse : DXFEntity
     {
-        private Point CenterP = new Point();
+        public Point CenterP = new Point();
         //长轴端点
-        private Point LongP = new Point();
+        public Point LongP = new Point();
         //这里代表弧度
         private double SRadian, ERadian;
         //短轴与长轴的比例
         private double ratio;
 
-        public DXFEllipse(string name, DXFReader reader) : base(reader)
+        public DXFEllipse(string name, DXFReader reader,DXFModel parent) : base(reader, parent)
         {
             Name = name;
             Type = EntityType.Ellipse;
             ReadProperties();
+            parent.Graph.Add(new DXFEdge(this));
         }
 
         public override void ReadProperties()

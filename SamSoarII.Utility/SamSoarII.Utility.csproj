@@ -92,6 +92,10 @@
     <Compile Include="Converters\MutiConverter.cs" />
     <Compile Include="Converters\SelectIndexToVisibility.cs" />
     <Compile Include="DXF\DXFHelper.cs" />
+    <Compile Include="DXF\Generate\DXFEdge.cs" />
+    <Compile Include="DXF\Generate\DXFGraph.cs" />
+    <Compile Include="DXF\Generate\DXFVertex.cs" />
+    <Compile Include="DXF\Generate\IVertex.cs" />
     <Compile Include="DXF\Model\Primitive\DXFArc.cs" />
     <Compile Include="DXF\Model\Primitive\DXFCircle.cs" />
     <Compile Include="DXF\Model\Primitive\DXFEllipse.cs" />

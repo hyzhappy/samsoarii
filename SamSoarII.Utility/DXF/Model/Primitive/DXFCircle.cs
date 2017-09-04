@@ -9,15 +9,16 @@ namespace SamSoarII.Utility.DXF
 {
     public class DXFCircle : DXFEntity
     {
-        protected Point CenterP = new Point();
-        protected double radius;
-        public DXFCircle(string name, DXFReader reader) : base(reader)
+        public Point CenterP = new Point();
+        public double radius;
+        public DXFCircle(string name, DXFReader reader, DXFModel parent) : base(reader, parent)
         {
             Name = name;
             Type = EntityType.Circle;
             ReadProperties();
+            parent.Graph.Add(new DXFEdge(this));
         }
-        protected DXFCircle(DXFReader reader) : base(reader) { }
+        protected DXFCircle(DXFReader reader, DXFModel parent) : base(reader, parent) { }
         
         public override void ReadProperties()
         {
