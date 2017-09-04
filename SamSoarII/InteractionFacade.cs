@@ -741,7 +741,7 @@ namespace SamSoarII
             {
                 mngComu.AbortAll();
                 mngComu.IsEnable = false;
-                while (mngComu.IsAlive) Thread.Sleep(10);
+                //while (mngComu.IsAlive) Thread.Sleep(10);
                 vmdProj.LadderMode = LadderModes.Edit;
                 handle.Completed = true;
                 handle.Abort();

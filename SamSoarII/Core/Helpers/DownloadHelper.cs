@@ -732,6 +732,7 @@ namespace SamSoarII.Core.Helpers
         static ProgressBarHandle Handle;
         static uint TotalLen;
         static uint currentLen;
+
         #region main download process
         public static CommuicationError DownloadExecute(CommunicationManager communManager, ProgressBarHandle handle)
         {
