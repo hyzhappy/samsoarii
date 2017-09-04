@@ -393,7 +393,7 @@ namespace SamSoarII.Core.Models
                         case "STLE":
                             break;
                         default:
-                            if (stkcount == 0)
+                            if (stkcount == 0 && inst.Inst.ProtoType != null)
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
                                 inst.Message = String.Format(Properties.Resources.Message_Stack);
