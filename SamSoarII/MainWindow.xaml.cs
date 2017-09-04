@@ -807,9 +807,18 @@ namespace SamSoarII
                 ifParent.ProjectCompile();
         }
 
+        private object _sender_1;
+        private ExecutedRoutedEventArgs _e_1;
+        public void ContinueCommandExecuted_ReturnEditMode()
+        {
+            CommandBinding_Executed_ReturnEditMode(_sender_1, _e_1);
+        }
         private void CommandBinding_Executed_ReturnEditMode(object sender, ExecutedRoutedEventArgs e)
         {
-            ifParent.EditProject();
+            _sender_1 = sender;
+            _e_1 = e;
+            ifParent.EditProject(InteractionFacade.CloseMonitorToDo.COMMAND);
+            if (ifParent.MNGComu.IsAlive) return;
             if (e.Command == ApplicationCommands.New)
                 ifParent.ShowCreateProjectDialog();
             if (e.Command == ApplicationCommands.Open)

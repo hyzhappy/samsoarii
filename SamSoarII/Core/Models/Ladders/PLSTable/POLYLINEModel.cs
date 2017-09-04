@@ -75,8 +75,8 @@ namespace SamSoarII.Core.Models
             if (this is POLYLINEFModel) that = new POLYLINEFModel(null);
             if (this is LINEIModel) that = new LINEIModel(null);
             if (this is LINEFModel) that = new LINEFModel(null);
-            if (this is LINEIModel) that = new LINEIModel(null);
-            if (this is LINEFModel) that = new LINEFModel(null);
+            if (this is ARCHIModel) that = new ARCHIModel(null);
+            if (this is ARCHFModel) that = new ARCHFModel(null);
             that.X = this.X;
             that.Y = this.Y;
             for (int i = 0; i < Children.Count; i++)
