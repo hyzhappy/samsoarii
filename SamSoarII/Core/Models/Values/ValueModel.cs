@@ -400,8 +400,8 @@ namespace SamSoarII.Core.Models
                                     throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
                                 bas = ParseBase(match.Groups[3].Value);
                                 ofs = int.Parse(match.Groups[4].Value);
-                                if (ofs < 0 || ofs + siz > device.GetRange(bas).Count)
-                                    throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                                //if (ofs < 0 || ofs + siz > device.GetRange(bas).Count)
+                                //    throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
                                 ibs = match.Groups.Count > 6 && match.Groups[6].Value.Length > 0 ? ParseBase(match.Groups[6].Value) : Bases.NULL;
                                 ifs = match.Groups.Count > 7 && match.Groups[7].Value.Length > 0 ? int.Parse(match.Groups[7].Value) : 0;
                             }
@@ -488,6 +488,8 @@ namespace SamSoarII.Core.Models
                 }
                 if (!inrange) throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
             }
+            if (ibs != Bases.NULL && (ifs < 0 || ifs >= device.GetRange(ibs).Count))
+                throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
             if (bas == Bases.CV)
             {
                 if (Type == Types.WORD && ofs >= 200)
@@ -507,8 +509,9 @@ namespace SamSoarII.Core.Models
                     this.text = text;
                     break;
                 default:
-                    if (ofs < 0 || ofs >= device.GetRange(bas).Count)
-                        throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                    if (bas != Bases.X && bas != Bases.Y)
+                        if (ofs < 0 || ofs >= device.GetRange(bas).Count)
+                            throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
                     if (IsWordBit)
                     {
                         if (ibs != Bases.V && ibs != Bases.Z)
