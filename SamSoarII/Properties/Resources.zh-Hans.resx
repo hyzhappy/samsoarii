@@ -2433,4 +2433,7 @@
   <data name="Unknown_PLC_Type" xml:space="preserve">
     <value>未知的PLC型号！</value>
   </data>
+  <data name="DXF_File" xml:space="preserve">
+    <value>DXF文件</value>
+  </data>
 </root>

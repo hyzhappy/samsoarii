@@ -2433,4 +2433,7 @@
   <data name="Unknown_PLC_Type" xml:space="preserve">
     <value>Unknown PLC type!</value>
   </data>
+  <data name="DXF_File" xml:space="preserve">
+    <value>DXF file</value>
+  </data>
 </root>

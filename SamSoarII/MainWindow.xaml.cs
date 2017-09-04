@@ -771,6 +771,8 @@ namespace SamSoarII
                 ifParent.ShowFileConvertDialog();
             if (e.Command == GlobalCommand.PolylineSettingCommand)
                 ifParent.ShowPolylineSystemSettingDialog();
+            if (e.Command == GlobalCommand.ImageImportCommand)
+                ifParent.ShowImageImportDialog();
         }
 
         private void CommandBinding_Executed_SaveHint(object sender, ExecutedRoutedEventArgs e)

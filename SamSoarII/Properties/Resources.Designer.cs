@@ -1330,6 +1330,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 DXF file 的本地化字符串。
+        /// </summary>
+        public static string DXF_File {
+            get {
+                return ResourceManager.GetString("DXF_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Return to origin(DWord) 的本地化字符串。
         /// </summary>
         public static string DZRN_Inst {
