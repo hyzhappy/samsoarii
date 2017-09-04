@@ -62,23 +62,11 @@ namespace SamSoarII.Utility.DXF
             PathFigure figure = new PathFigure();
             figure.StartPoint = DXFImage.GetMatPoint(LongP);
             double angleSpan = (ERadian - SRadian) * 180 / Math.PI;
-            double longLenght = ComputeLength();
-            ArcSegment segement = new ArcSegment(figure.StartPoint, new Size(longLenght, Math.Abs(longLenght * ratio)), ComputeRotateAngle(), angleSpan > 180, SweepDirection.Counterclockwise, true);
+            double longLenght = DXFHelper.ComputeLength(CenterP, LongP);
+            ArcSegment segement = new ArcSegment(figure.StartPoint, new Size(longLenght, Math.Abs(longLenght * ratio)), DXFHelper.ComputeRotateAngle(CenterP, LongP), angleSpan > 180, SweepDirection.Counterclockwise, true);
             figure.Segments.Add(segement);
             geometry.Figures.Add(figure);
             context.DrawGeometry(Brushes.Transparent, DXFImage.BlackPen, geometry);
-        }
-        private double ComputeLength()
-        {
-            return Math.Sqrt(Math.Pow(CenterP.X - LongP.X, 2) + Math.Pow(CenterP.Y - LongP.Y, 2));
-        }
-        private double ComputeRotateAngle()
-        {
-            if(Math.Abs(CenterP.Y - LongP.Y) < 1E-10)
-            {
-                return 0;
-            }
-            return Math.Atan2(LongP.Y - CenterP.Y, CenterP.X - LongP.X);
         }
     }
 }

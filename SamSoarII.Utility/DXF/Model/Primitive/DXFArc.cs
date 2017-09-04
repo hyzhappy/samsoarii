@@ -48,19 +48,11 @@ namespace SamSoarII.Utility.DXF
         {
             PathGeometry geometry = new PathGeometry();
             PathFigure figure = new PathFigure();
-            figure.StartPoint = DXFImage.GetMatPoint(ComputePoint(SAngle));
-            ArcSegment segement = new ArcSegment(DXFImage.GetMatPoint(ComputePoint(EAngle)), new Size(radius, radius), 0, EAngle - SAngle > 180, SweepDirection.Counterclockwise, true);
+            figure.StartPoint = DXFImage.GetMatPoint(DXFHelper.ComputePoint(CenterP, radius, SAngle));
+            ArcSegment segement = new ArcSegment(DXFImage.GetMatPoint(DXFHelper.ComputePoint(CenterP, radius, EAngle)), new Size(radius, radius), 0, EAngle - SAngle > 180, SweepDirection.Counterclockwise, true);
             figure.Segments.Add(segement);
             geometry.Figures.Add(figure);
             context.DrawGeometry(Brushes.Transparent, DXFImage.BlackPen, geometry);
-        }
-
-        private Point ComputePoint(double angle)
-        {
-            Point p = new Point();
-            p.X = CenterP.X + radius * Math.Cos(angle / 180 * Math.PI);
-            p.Y = CenterP.Y + radius * Math.Sin(angle / 180 * Math.PI);
-            return p;
         }
     }
 }

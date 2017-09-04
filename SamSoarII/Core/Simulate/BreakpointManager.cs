@@ -168,7 +168,7 @@ namespace SamSoarII.Core.Simulate
                 if (funcblock.View != null)
                     funcblock.Code = funcblock.View.Code;
                 funcblock.BuildAll(funcblock.Code);
-                Initialize(funcblock.Root);    
+                Initialize(funcblock.Root);
             }
         }
 

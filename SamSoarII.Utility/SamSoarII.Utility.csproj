@@ -91,6 +91,7 @@
     <Compile Include="Converters\DoubleConverter2.cs" />
     <Compile Include="Converters\MutiConverter.cs" />
     <Compile Include="Converters\SelectIndexToVisibility.cs" />
+    <Compile Include="DXF\DXFHelper.cs" />
     <Compile Include="DXF\Model\Primitive\DXFArc.cs" />
     <Compile Include="DXF\Model\Primitive\DXFCircle.cs" />
     <Compile Include="DXF\Model\Primitive\DXFEllipse.cs" />
