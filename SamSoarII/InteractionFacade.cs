@@ -413,7 +413,7 @@ namespace SamSoarII
             if (!CheckLadder(false)) return false;
             if (!CheckFuncBlock(false)) return false;
 #if DEBUG
-            //GenerateHelper.GenerateFinal(mdProj);
+            GenerateHelper.GenerateFinal(mdProj);
             //DownloadHelper.InitializeData(mdProj);
 #endif
             _option = -1;
@@ -904,7 +904,12 @@ namespace SamSoarII
                 }
             }
             //else
-            //    _projectModel.IsModify = false;
+            //    _projectModel.IsModify = false;if (showreport)
+            if (showreport)
+                ShowMessage(Properties.Resources.Program_Correct, loadinghandle, false, true);
+            else
+                loadinghandle.Abort();
+            result = true;
             return result;
         }
 

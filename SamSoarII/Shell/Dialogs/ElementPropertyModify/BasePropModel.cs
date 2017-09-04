@@ -124,19 +124,6 @@ namespace SamSoarII.Shell.Dialogs
             {
                 valuestrings[id] = str;
                 valuesmodifieds[id] = true;
-                //PropertyChanged(this, new PropertyChangedEventArgs(String.Format("ValueString{0:d}", id + 1)));
-                /*
-                string comment = null;    
-                try
-                {
-                    comment = core.ValueManager[str].Comment;
-                }
-                catch (ValueParseException)
-                {
-                    comment = "";
-                }
-                SetCommentString(id, comment);
-                */
             }
         }
         protected void SetCommentString(int id, string str)
