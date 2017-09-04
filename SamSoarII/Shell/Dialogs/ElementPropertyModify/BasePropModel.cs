@@ -1,11 +1,14 @@
 ﻿using SamSoarII.Core.Models;
+using SamSoarII.Threads;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace SamSoarII.Shell.Dialogs
 {
@@ -19,18 +22,23 @@ namespace SamSoarII.Shell.Dialogs
             selectedindex = -1;
             valuestrings = new string[5] { "", "", "", "", "" };
             commentstrings = new string[5] { "", "", "", "", "" };
+            valuesmodifieds = new bool[5] { false, false, false, false, false };
             for (int i = 0; i < core.Children.Count; i++)
             {
                 ValueModel value = core.Children[i];
                 valuestrings[i] = value.Text.Equals("???") ? "" : value.Text;
                 commentstrings[i] = value.ValueManager[value].Comment;
             }
+            mngUpdate = new UpdateValueChangedManager(this);
+            mngUpdate.Start();
         }
 
         public virtual void Dispose()
         {
+            mngUpdate.Abort();
             core = null;
             valuestrings = null;
+            valuesmodifieds = null;
             commentstrings = null;
         }
 
@@ -48,7 +56,62 @@ namespace SamSoarII.Shell.Dialogs
 
         #region Shell
 
+        #region Thread
+        
+        private class UpdateValueChangedManager : TimerThreadManager, IDisposable
+        {
+            public UpdateValueChangedManager(BasePropModel _core) : base(false, true)
+            {
+                core = _core;
+                TimeSpan = 200;
+            }
+
+            public void Dispose()
+            {
+                core = null;
+            }
+            
+            private BasePropModel core;
+            public BasePropModel Core { get { return this.core; } }
+
+            protected override void Handle()
+            {
+                if (core == null) return;
+                try
+                {
+                    for (int i = 0; i < core.Count; i++)
+                    {
+                        if (core.valuesmodifieds[i])
+                        {
+                            core.valuesmodifieds[i] = false;
+                            string comment = null;
+                            try
+                            {
+                                comment = core.Core.ValueManager[core.valuestrings[i]].Comment;
+                            }
+                            catch (ValueParseException)
+                            {
+                                comment = "";
+                            }
+                            core.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)(delegate ()
+                            {
+                                core.SetCommentString(i, comment);
+                            }));
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        private UpdateValueChangedManager mngUpdate;
+
+        #endregion
+
         private string[] valuestrings;
+        private bool[] valuesmodifieds;
         private string[] commentstrings;
         
         public string InstructionName { get { return core.InstName; } }
@@ -60,17 +123,7 @@ namespace SamSoarII.Shell.Dialogs
             if (id >= 0 && id < Count)
             {
                 valuestrings[id] = str;
-                //PropertyChanged(this, new PropertyChangedEventArgs(String.Format("ValueString{0:d}", id + 1)));
-                string comment = null;
-                try
-                {
-                    comment = core.ValueManager[str].Comment;
-                }
-                catch (ValueParseException)
-                {
-                    comment = "";
-                }
-                SetCommentString(id, comment);
+                valuesmodifieds[id] = true;
             }
         }
         protected void SetCommentString(int id, string str)

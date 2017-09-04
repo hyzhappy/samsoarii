@@ -351,10 +351,10 @@ namespace SamSoarII.Shell.Models
             switch (SelectionStatus)
             {
                 case SelectStatus.SingleSelected:
-                    Core.AddN(SelectRectOwner.ID);
+                    Core.AddN(SelectRectOwner.ID + 1);
                     break;
                 case SelectStatus.MultiSelected:
-                    Core.AddN(_selectArea.Core.NetStart);
+                    Core.AddN(_selectArea.Core.NetStart + 1);
                     break;
             }
         }

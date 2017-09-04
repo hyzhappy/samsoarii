@@ -233,8 +233,8 @@ namespace SamSoarII.Core.Models
                 "Compare the 16-bit word IN1 and IN2, access it (ON) when IN1 is move than IN2.",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "输入1", "Input1"),
-                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}, null, "输入2", "Input2") };
+                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "输入1", "Input1"),
+                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}, null, "输入2", "Input2") };
             Formats[(int)Types.LDDEQ] = new LadderUnitFormat(306, "LDDEQ", Types.LDDEQ, Outlines.Compare, Shapes.Input,
                 Properties.Resources.DWord_Equal,
                 "比较IN1是否等于IN2，如果比较结果为真实，输出打开。",

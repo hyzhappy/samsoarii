@@ -60,6 +60,12 @@ namespace SamSoarII.Shell.Dialogs
                         return PLC_FGs_Type.FGs_32MT_YTJ;
                     case 14:
                         return PLC_FGs_Type.FGs_20MR_BYK;
+                    case 15:
+                        return PLC_FGs_Type.FGm_32MT_A;
+                    case 16:
+                        return PLC_FGs_Type.FGm_48MT_A;
+                    case 17:
+                        return PLC_FGs_Type.FGm_64MT_A;
                     default:
                         return PLC_FGs_Type.FGs_16MR_A;
                 }

@@ -174,9 +174,9 @@ namespace SamSoarII.PLCDevice
         }
     }
 
-    class FGs64MTADevice : FGs64MTDevice
+    class FGm64MTDevice : FGs64MTDevice
     {
-        public FGs64MTADevice(PLC_FGs_Type _type) : base(_type) { }
+        public FGm64MTDevice(PLC_FGs_Type _type) : base(_type) { }
         public override IntRange PulseRange { get { return new IntRange(0, 10); } }
     }
 }

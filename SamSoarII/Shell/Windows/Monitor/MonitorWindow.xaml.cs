@@ -18,6 +18,8 @@ using System.ComponentModel;
 using SamSoarII.Global;
 using SamSoarII.Shell.Dialogs;
 using SamSoarII.Utility;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace SamSoarII.Shell.Windows
 {
@@ -195,6 +197,10 @@ namespace SamSoarII.Shell.Windows
                     }
                     dialog.Close();
                 };
+                IFParent.MNGComu.Aborted += (sender, e) =>
+                {
+                    dialog.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate () { dialog.Close(); }));
+                };
                 dialog.ShowDialog();
             }
         }
@@ -245,6 +251,10 @@ namespace SamSoarII.Shell.Windows
                     }
                     dialog.Close();
                 };
+                IFParent.MNGComu.Aborted += (sender, e) =>
+                {
+                    dialog.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate () { dialog.Close(); }));
+                };
                 dialog.ShowDialog();
             }
         }
@@ -275,6 +285,10 @@ namespace SamSoarII.Shell.Windows
                     {
                         LocalizedMessageBox.Show(Properties.Resources.Message_Element_Has_Added, LocalizedMessageIcon.Information);
                     }
+                };
+                IFParent.MNGComu.Aborted += (sender, e) =>
+                {
+                    dialog.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate () { dialog.Close(); }));
                 };
                 dialog.ShowDialog();
             }

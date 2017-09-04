@@ -2436,4 +2436,10 @@
   <data name="DXF_File" xml:space="preserve">
     <value>DXF file</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Message_DXF_HasBeenImported" xml:space="preserve">
+    <value>The DXF file of selected filename has been already existed!</value>
+  </data>
 </root>

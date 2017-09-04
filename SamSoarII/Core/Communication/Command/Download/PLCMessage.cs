@@ -125,11 +125,11 @@ namespace SamSoarII.Core.Communication
                 case 0x0203:
                     return PLC_FGs_Type.FGs_64MT_A;
                 case 0x0204:
-                    return PLC_FGm_Type.FGm_64MT_A;
+                    return PLC_FGs_Type.FGm_64MT_A;
                 case 0x0205:
-                    return PLC_FGm_Type.FGm_48MT_A;
+                    return PLC_FGs_Type.FGm_48MT_A;
                 case 0x0206:
-                    return PLC_FGm_Type.FGm_32MT_A;
+                    return PLC_FGs_Type.FGm_32MT_A;
                 default:
                     return PLC_FGs_Type.FGs_16MT_A;
             }

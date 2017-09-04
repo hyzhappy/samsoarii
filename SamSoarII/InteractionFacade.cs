@@ -413,7 +413,7 @@ namespace SamSoarII
             if (!CheckLadder(false)) return false;
             if (!CheckFuncBlock(false)) return false;
 #if DEBUG
-            //GenerateHelper.GenerateFinal(mdProj);
+            GenerateHelper.GenerateFinal(mdProj);
             //DownloadHelper.InitializeData(mdProj);
 #endif
             _option = -1;
@@ -842,49 +842,7 @@ namespace SamSoarII
             }
             for (int i = 0; i < errorMessages.Count; i++)
             {
-                if (errorMessages[i].Error == ErrorType.None
-                 || errorMessages[i].Error == ErrorType.InstPair)
-                {
-                    IList<ErrorReportElement> weinsts = null;
-                    int ecount = 0;
-                    int wcount = 0;
-                    weinsts = _CheckInsts(ref ecount, ref wcount);
-                    if (weinsts.Count() > 0)
-                    {
-                        result = (ecount == 0);
-                        if ((showreport || !result) && i == errorMessages.Count - 1)
-                        {
-                            if (App.CultureIsZH_CH())
-                                ShowMessage(string.Format("程序存在{0:d}处错误，{1:d}处警告。",
-                                        ecount, wcount), loadinghandle, true, true);
-                            else
-                            {
-                                ShowMessage(string.Format("There are {0} errors and {1} warnings in the program.",
-                                        ecount, wcount), loadinghandle, true, true);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (i == errorMessages.Count - 1)
-                        {
-                            if (showreport)
-                                ShowMessage(Properties.Resources.Program_Correct, loadinghandle, false, true);
-                            else
-                                loadinghandle?.Abort();
-                            result = true;
-                        }
-                    }
-                    if (i == errorMessages.Count - 1)
-                    {
-                        wndError.Mode = ErrorReportWindow.MODE_LADDER;
-                        wndError.Update(weinsts);
-                        if (!result) wndMain.LACErrorList.Show();
-                    }
-                    //else
-                    //    _projectModel.IsModify = false;
-                }
-                else if (errorMessages[i].Error == ErrorType.Empty)
+                if (errorMessages[i].Error == ErrorType.Empty)
                 {
                     LadderNetworkModel network = errorMessages[i].RefNetworks.First();
                     int num = network.ID;
@@ -895,9 +853,10 @@ namespace SamSoarII
                     else
                         ShowMessage(string.Format("Network {0} in {1} is empty!", num, name), loadinghandle, true, true);
                     result = false;
-                    break;
+                    return result;
                 }
-                else
+                else if (errorMessages[i].Error != ErrorType.None
+                      && errorMessages[i].Error != ErrorType.InstPair)
                 {
                     Navigate(errorMessages[i].RefNetworks.First(), errorMessages[i].RefNetworks.Last().ErrorModels.First().X, errorMessages[i].RefNetworks.Last().ErrorModels.First().Y);
                     result = false;
@@ -905,25 +864,52 @@ namespace SamSoarII
                     {
                         case ErrorType.Open:
                             ShowMessage(Properties.Resources.Open_Error, loadinghandle, true, true);
-                            break;
+                            return result;
                         case ErrorType.Short:
                             ShowMessage(Properties.Resources.Short_Error, loadinghandle, true, true);
-                            break;
+                            return result;
                         case ErrorType.SelfLoop:
                             ShowMessage(Properties.Resources.Selfloop_Error, loadinghandle, true, true);
-                            break;
+                            return result;
                         case ErrorType.HybridLink:
                             ShowMessage(Properties.Resources.HybridLink_Error, loadinghandle, true, true);
-                            break;
+                            return result;
                         case ErrorType.Special:
                             ShowMessage(Properties.Resources.Special_Instruction_Error, loadinghandle, true, true);
-                            break;
+                            return result;
                         default:
                             break;
                     }
                     break;
                 }
             }
+            IList<ErrorReportElement> weinsts = null;
+            int ecount = 0;
+            int wcount = 0;
+            weinsts = _CheckInsts(ref ecount, ref wcount);
+            if (weinsts.Count() > 0)
+            {
+                result = (ecount == 0);
+                if (showreport || !result)
+                {
+                    if (App.CultureIsZH_CH())
+                        ShowMessage(string.Format("程序存在{0:d}处错误，{1:d}处警告。",
+                                ecount, wcount), loadinghandle, true, true);
+                    else
+                        ShowMessage(string.Format("There are {0} errors and {1} warnings in the program.",
+                                ecount, wcount), loadinghandle, true, true);
+                    wndError.Mode = ErrorReportWindow.MODE_LADDER;
+                    wndError.Update(weinsts);
+                    if (ecount + wcount > 0) wndMain.LACErrorList.Show();
+                }
+            }
+            //else
+            //    _projectModel.IsModify = false;if (showreport)
+            if (showreport)
+                ShowMessage(Properties.Resources.Program_Correct, loadinghandle, false, true);
+            else
+                loadinghandle.Abort();
+            result = true;
             return result;
         }
 
@@ -939,11 +925,11 @@ namespace SamSoarII
                         inst.Message = String.Empty;
                     } 
             }
-            mngValue.Check();
             foreach (LadderDiagramModel ldmodel in mdProj.Diagrams) 
                 ldmodel.Inst.Check(); 
             foreach (LadderDiagramModel ldmodel in mdProj.Diagrams) 
-                ldmodel.Inst.CheckForInterrrupt(); 
+                ldmodel.Inst.CheckForInterrrupt();
+            mngValue.Check();
             ecount = 0;
             wcount = 0;
             List<ErrorReportElement> weinsts = new List<ErrorReportElement>();
@@ -1219,19 +1205,6 @@ namespace SamSoarII
 
         #region Navigate & Select
         
-        private LadderNetworkModel _lastnet;
-        private int _lastx1;
-        private int _lasty1;
-        private int _lastx2;
-        private int _lasty2;
-        private LadderDiagramModel _lastdia;
-        private int _laststart;
-        private int _lastend;
-        private FuncBlockModel _lastfunc;
-        private int _lastoffset;
-        private int _lastrow;
-        private int _lastcolumn;
-
         public void Navigate(string text)
         {
             Match m = Regex.Match(text, @"\(Diagram=([^)]*)\)\(Network=([^)]*)\)\(X=([^,]*),Y=([^)]*)\)");
@@ -1264,14 +1237,7 @@ namespace SamSoarII
             LadderDiagramModel diagram = network.Parent;
             if (diagram == null) return;
             if (diagram.Tab == null)
-            {
-                _lastnet = network;
-                _lastx1 = x;
-                _lasty1 = y;
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
-                diagram.Tab.Loaded += OnViewLoadedToNavigate;
-                return;
-            }
             tcMain.ShowItem(diagram.Tab);
             diagram.View.ReleaseSelect();
             SelectRectCore rect = diagram.View.SelectionRect.Core;
@@ -1281,13 +1247,7 @@ namespace SamSoarII
             diagram.View.SelectionStatus = SelectStatus.SingleSelected;
             diagram.View.NavigateToSelectRect();
         }
-        
-        private void OnViewLoadedToNavigate(object sender, RoutedEventArgs e)
-        {
-            Navigate(_lastnet, _lastx1, _lasty1);
-            _lastnet.Parent.Tab.Loaded -= OnViewLoadedToNavigate;
-        }
-        
+
         public void Navigate(FuncBlock fblock)
         {
             Navigate(fblock.Model, fblock.IndexStart);
@@ -1296,40 +1256,16 @@ namespace SamSoarII
         public void Navigate(FuncBlockModel fbmodel, int offset)
         {
             if (fbmodel.View == null)
-            {
-                _lastfunc = fbmodel;
-                _lastoffset = offset;
                 fbmodel.View = new FuncBlockViewModel(fbmodel, tcMain);
-                fbmodel.View.Loaded += OnViewLoadedToNavigateOffset;
-            }
             tcMain.ShowItem(fbmodel.View);
             fbmodel.View.SetOffset(offset);
-        }
-
-        private void OnViewLoadedToNavigateOffset(object sender, RoutedEventArgs e)
-        {
-            Navigate(_lastfunc, _lastoffset);
-            _lastfunc.View.Loaded -= OnViewLoadedToNavigateOffset;
         }
         
         public void Navigate(FuncBlockModel fbmodel, int row, int column)
         {
             if (fbmodel.View == null)
-            {
-                _lastfunc = fbmodel;
-                _lastrow = row;
-                _lastcolumn = column;
                 fbmodel.View = new FuncBlockViewModel(fbmodel, tcMain);
-                fbmodel.View.Loaded += OnViewLoadedToNavigatePosition;
-            }
-            tcMain.ShowItem(fbmodel.View);
             fbmodel.View.SetPosition(row, column);
-        }
-
-        private void OnViewLoadedToNavigatePosition(object sender, RoutedEventArgs e)
-        {
-            Navigate(_lastfunc, _lastrow, _lastcolumn);
-            _lastfunc.View.Loaded -= OnViewLoadedToNavigatePosition;
         }
 
         public void Select(LadderNetworkModel network, int x1, int x2, int y1, int y2)
@@ -1342,46 +1278,19 @@ namespace SamSoarII
             if (network.IsMasked) return;
             LadderDiagramModel diagram = network.Parent;
             if (diagram.Tab == null)
-            {
-                _lastnet = network;
-                _lastx1 = x1;
-                _lastx2 = x2;
-                _lasty1 = y1;
-                _lasty2 = y2;
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
-                diagram.Tab.Loaded += OnViewLoadedToSelectRange;
-                return;
-            }
             tcMain.ShowItem(diagram.Tab);
             diagram.View.Select(network, x1, x2, y1, y2);
-        }
-
-        private void OnViewLoadedToSelectRange(object sender, RoutedEventArgs e)
-        {
-            Select(_lastnet, _lastx1, _lastx2, _lasty1, _lasty2);
-            _lastnet.Parent.Tab.Loaded -= OnViewLoadedToSelectRange;
         }
         
         public void Select(LadderDiagramModel diagram, int start, int end)
         {
             if (diagram.Tab == null)
-            {
-                _lastdia = diagram;
-                _laststart = start;
-                _lastend = end;
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
-                diagram.Tab.Loaded += OnViewLoadedToSelectNetworks;
-            }
             tcMain.ShowItem(diagram.Tab);
             diagram.View.Select(start, end);
         }
         
-        private void OnViewLoadedToSelectNetworks(object sender, RoutedEventArgs e)
-        {
-            _lastdia.Tab.Loaded -= OnViewLoadedToSelectNetworks;
-            Select(_lastdia, _laststart, _lastend);
-        }
-
         public void NavigateToBreakpointCursor()
         {
             if (!mngSimu.IsBPPause) return;
@@ -1871,6 +1780,10 @@ namespace SamSoarII
                 {
                     dialog.Owner = wndMain;
                     dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    mngComu.Aborted += (sender, e) => 
+                    {
+                        dialog.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate () { dialog.Close(); }));
+                    };
                     dialog.ShowDialog();
                 }
             }
@@ -1881,6 +1794,10 @@ namespace SamSoarII
                     dialog.Owner = wndMain;
                     dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     dialog.SelectedIndex = id;
+                    mngComu.Aborted += (sender, e) =>
+                    {
+                        dialog.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate () { dialog.Close(); }));
+                    };
                     dialog.ShowDialog();
                 }
             }
@@ -2035,6 +1952,26 @@ namespace SamSoarII
 
         public void ShowImageImportDialog()
         {
+            using (PLSBlockDialog dialog = new PLSBlockDialog(mdProj))
+            {
+                dialog.Owner = wndMain;
+                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                dialog.Ensure += (sender, e) =>
+                {
+                    try
+                    {
+                        dialog.Save();
+                        dialog.Close();
+                    }
+                    catch (ValueParseException exce)
+                    {
+                        LocalizedMessageBox.Show(string.Format(exce.Message), LocalizedMessageIcon.Error);
+                    }
+                };
+                dialog.Help += (sender, e) => { ShowHelpDocument(); };
+                dialog.ShowDialog();
+            }
+            /*
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = string.Format("{0}|*.{1}", Properties.Resources.DXF_File, "dxf");
             openFileDialog.Multiselect = false;
@@ -2051,6 +1988,7 @@ namespace SamSoarII
                 panel.Add(image);
                 window.Show();
             }
+            */
         }
         #endregion
 

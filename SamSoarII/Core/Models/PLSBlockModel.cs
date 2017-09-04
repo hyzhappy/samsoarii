@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using SamSoarII.Core.Helpers;
+using SamSoarII.Utility;
 using SamSoarII.Utility.DXF;
 using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
@@ -13,16 +15,40 @@ namespace SamSoarII.Core.Models
 {
     public class PLSBlockModel : IModel
     {
+        #region Resources
+
+        private static string[] NameOfSystems = { "1号平面系统", "2号平面系统", "3号平面系统", "4号平面系统", "5号平面系统"};
+        public IList<string> GetNameOfSystems()
+        {
+            return NameOfSystems;
+        }
+
+        #endregion
+
+        public PLSBlockModel()
+        {
+        }
+        
         public PLSBlockModel(ProjectModel _parent, string _filename)
         {
             parent = _parent;
             filename = _filename;
+            name = FileHelper.GetFileName(_filename);
+            systemid = 1;
             velocity = new ValueModel(null, new ValueFormat("V", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }, null, "速度", "Velocity"));
             actime = new ValueModel(null, new ValueFormat("AC", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }, null, "加速时间", "Accelerate Time"));
             dctime = new ValueModel(null, new ValueFormat("DC", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }, null, "减速时间", "Decelerate Time"));
             velocity.Text = "K0";
             actime.Text = "K0";
             dctime.Text = "K0";
+            CreateToDataGrid();
+            dxf = new DXFModel();
+            dxf.Convert(filename);
+            elements = new List<DXFEntity>();
+            foreach (DXFEntity section in dxf.Sections)
+                foreach (DXFEntity entity in section.Entities)
+                    elements.Add(entity);
+            data = DownloadHelper.GetData(this);
         }
 
         public void Dispose()
@@ -49,6 +75,9 @@ namespace SamSoarII.Core.Models
         private string filename;
         public string FileName { get { return this.filename; } }
 
+        private DXFModel dxf;
+        public DXFModel DXF { get { return this.dxf; } }
+
         private string name;
         public string Name
         {
@@ -63,13 +92,13 @@ namespace SamSoarII.Core.Models
             set { this.systemid = value; PropertyChanged(this, new PropertyChangedEventArgs("SystemID")); }
         }
 
-        private DXFEntity[] elements;
+        private List<DXFEntity> elements;
         public IList<DXFEntity> Elements { get { return this.elements; } }
-        public int Count { get { return elements.Length; } }
+        public int Count { get { return elements.Count(); } }
 
-        private byte[] data;
+        private List<byte> data;
         public IList<byte> Data { get { return this.data; } }
-        public int DataLength { get { return data.Length; } }
+        public int ByteCount { get { return data.Count(); } }
 
         private ValueModel velocity;
         public ValueModel Velocity { get { return this.velocity; } }
@@ -78,7 +107,7 @@ namespace SamSoarII.Core.Models
         public ValueModel ACTime { get { return this.actime; } }
 
         private ValueModel dctime;
-        public ValueModel DDTime { get { return this.dctime; } }
+        public ValueModel DCTime { get { return this.dctime; } }
 
         #endregion
 
@@ -123,7 +152,7 @@ namespace SamSoarII.Core.Models
         ProjectTreeViewItem IModel.PTVItem { get { return null; } set { } }
 
         #endregion
-
+        
         #region Save & Load
 
         public void Load(XElement xele)
@@ -148,6 +177,7 @@ namespace SamSoarII.Core.Models
 
         public void CreateToDataGrid()
         {
+            systemid_s = GetNameOfSystems()[systemid - 1];
             velocity_s = velocity.Text;
             actime_s = actime.Text;
             dctime_s = dctime.Text;
@@ -155,11 +185,12 @@ namespace SamSoarII.Core.Models
 
         public void LoadFromDataGrid()
         {
+            systemid = GetNameOfSystems().IndexOf(systemid_s) + 1;
             velocity.Text = velocity_s;
             actime.Text = actime_s;
             dctime.Text = dctime_s;
         }
-
+        
         #endregion
     }
 }

@@ -9,7 +9,7 @@ namespace SamSoarII.Threads
 {
     public class AutoInstManager : TimerThreadManager
     {
-        public AutoInstManager(InteractionFacade _parent) : base(false)
+        public AutoInstManager(InteractionFacade _parent) : base(false, true)
         {
             parent = _parent;
             TimeSpan = GlobalSetting.InstTimeSpan * 1000;

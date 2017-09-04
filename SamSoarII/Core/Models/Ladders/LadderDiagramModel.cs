@@ -415,14 +415,16 @@ namespace SamSoarII.Core.Models
         {
             public enum Status { NULL, SINGLE, MULTIUNIT, MULTINET};
             private Status status;
+            private Command command;
             private LadderNetworkModel network;
             private LadderDiagramModel diagram;
             private int x1, x2, y1, y2;
             private int start, end;
 
-            public RelativeArea(LadderDiagramModel _diagram)
+            public RelativeArea(LadderDiagramModel _diagram, Command _command)
             {
                 diagram = _diagram;
+                command = _command;
                 status = Status.NULL;
             }
 
@@ -537,10 +539,14 @@ namespace SamSoarII.Core.Models
                         ifparent.Select(diagram, start, end);
                         break;
                     default:
-                        //if (diagram?.View != null)
-                        //    diagram.View.ReleaseSelect();
-                        //else if (network?.Parent?.View != null)
-                        //    network.Parent.View.ReleaseSelect();
+                        if ((command.Type & CMDTYPE_ReplaceRow) != 0
+                         || (command.Type & CMDTYPE_ReplaceNetwork) != 0)
+                        {
+                            if (diagram?.View != null)
+                                diagram.View.ReleaseSelect();
+                            else if (network?.Parent?.View != null)
+                                network.Parent.View.ReleaseSelect();
+                        }
                         break;
                 }
             }
@@ -582,158 +588,168 @@ namespace SamSoarII.Core.Models
         private void _Undo()
         {
             Command cmd = undos.Pop();
-            RelativeArea area = new RelativeArea(this);
+            RelativeArea area = new RelativeArea(this, cmd);
             LadderNetworkModel net = null;
-            int i1 = 0, i2 = 0;
-            IList<int> newrows = null;
-            if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
+            try
             {
-                for (i2 = cmd.NewNetworks.Count - 1; i2 >= 0; i2--)
+                int i1 = 0, i2 = 0;
+                IList<int> newrows = null;
+                if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
                 {
-                    net = (LadderNetworkModel)(cmd.NewNetworks[i2]);
-                    net.Invoke(LadderNetworkActions.REMOVE);
-                    net.ID = cmd.NewNetIDs[i2];
-                    children.RemoveAt(net.ID);
-                    net.Parent = null;
-                }
-                for (i1 = 0, i2 = 0; i1 < children.Count || i2 < cmd.OldNetworks.Count; i1++)
-                {
-                    if (i2 < cmd.OldNetworks.Count)
+                    for (i2 = cmd.NewNetworks.Count - 1; i2 >= 0; i2--)
                     {
-                        net = (LadderNetworkModel)(cmd.OldNetworks[i2]);
-                        net.ID = cmd.OldNetIDs[i2];
-                        if (i1 == net.ID)
+                        net = (LadderNetworkModel)(cmd.NewNetworks[i2]);
+                        net.Invoke(LadderNetworkActions.REMOVE);
+                        net.ID = cmd.NewNetIDs[i2];
+                        children.RemoveAt(net.ID);
+                        net.Parent = null;
+                    }
+                    for (i1 = 0, i2 = 0; i1 < children.Count || i2 < cmd.OldNetworks.Count; i1++)
+                    {
+                        if (i2 < cmd.OldNetworks.Count)
                         {
-                            net.Parent = this;
-                            children.Insert(i1, net);
-                            i2++;
+                            net = (LadderNetworkModel)(cmd.OldNetworks[i2]);
+                            net.ID = cmd.OldNetIDs[i2];
+                            if (i1 == net.ID)
+                            {
+                                net.Parent = this;
+                                children.Insert(i1, net);
+                                i2++;
+                            }
+                            net.Invoke(LadderNetworkActions.INSERT);
                         }
-                        net.Invoke(LadderNetworkActions.INSERT);
+                        children[i1].ID = i1;
                     }
-                    children[i1].ID = i1;
+                    area.Update(cmd.OldNetworks);
                 }
-                area.Update(cmd.OldNetworks);
-            }
-            if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
-            {
-                if (cmd.NewUnits.Where(u => u.Parent != cmd.Network).Count() > 0)
+                if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
                 {
-                    foreach (LadderNetworkModel network in children)
+                    if (cmd.NewUnits.Where(u => u.Parent != cmd.Network).Count() > 0)
                     {
-                        network.Remove(cmd.NewUnits.Where((_unit) => { return _unit.Parent == network && _unit.Shape != LadderUnitModel.Shapes.VLine; }));
-                        network.RemoveV(cmd.NewUnits.Where((_unit) => { return _unit.Parent == network && _unit.Shape == LadderUnitModel.Shapes.VLine; }));
-                    }
-                }
-                else
-                {
-                    cmd.Network.Remove(cmd.NewUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
-                    cmd.Network.RemoveV(cmd.NewUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
-                }
-            }
-            if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
-            {
-                newrows = cmd.NewRows.ToArray();
-                for (i2 = 0; i2 < cmd.OldRows.Count; i2++)
-                {
-                    int y1 = (int)(cmd.OldRows[i2]);
-                    int y2 = y1;
-                    while (i2 < cmd.OldRows.Count - 1)
-                    {
-                        int y = (int)(cmd.OldRows[i2 + 1]);
-                        if (y == y2 + 1) { y2++; i2++; } else break;
-                    }
-                    cmd.Network.InsertR(y1, y2);
-                    for (i1 = 0; i1 < newrows.Count; i1++)
-                        if (newrows[i1] >= y1) newrows[i1] += y2 - y1 + 1;
-                    area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity - 1, y1, y2);
-                }
-            }
-            if ((cmd.Type & CMDTYPE_MoveUnit) != 0)
-            {
-                List<LadderUnitModel> olds = new List<LadderUnitModel>();
-                olds.AddRange(cmd.Network.Move(cmd.MoveUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }), -cmd.MoveX, -cmd.MoveY));
-                olds.AddRange(cmd.Network.MoveV(cmd.MoveUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }), -cmd.MoveX, -cmd.MoveY));
-                if (olds.Where(u => u != null).Count() > 0)
-                {
-                    if ((cmd.Type & CMDTYPE_ReplaceUnit) == 0)
-                    {
-                        cmd.Type |= CMDTYPE_ReplaceUnit;
-                        cmd.NewUnits = olds.Where(u => u != null).ToArray();
-                        cmd.OldUnits = new LadderUnitModel[] { };
+                        foreach (LadderNetworkModel network in children)
+                        {
+                            network.Remove(cmd.NewUnits.Where((_unit) => { return _unit.Parent == network && _unit.Shape != LadderUnitModel.Shapes.VLine; }));
+                            network.RemoveV(cmd.NewUnits.Where((_unit) => { return _unit.Parent == network && _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                        }
                     }
                     else
                     {
-                        cmd.NewUnits = cmd.NewUnits.Union(olds.Where(u => u != null)).ToArray();
+                        cmd.Network.Remove(cmd.NewUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
+                        cmd.Network.RemoveV(cmd.NewUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
                     }
                 }
-            }
-            if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
-            {
-                List<LadderUnitModel> olds = new List<LadderUnitModel>();
-                if (cmd.OldUnits.Where(u => u.OldParent != null && u.OldParent != cmd.Network).Count() > 0)
+                if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
                 {
-                    foreach (LadderNetworkModel network in children)
+                    newrows = cmd.NewRows.ToArray();
+                    for (i2 = 0; i2 < cmd.OldRows.Count; i2++)
                     {
-                        olds.AddRange(network.Add(cmd.OldUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape != LadderUnitModel.Shapes.VLine; })));
-                        olds.AddRange(network.AddV(cmd.OldUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape == LadderUnitModel.Shapes.VLine; })));
+                        int y1 = (int)(cmd.OldRows[i2]);
+                        int y2 = y1;
+                        while (i2 < cmd.OldRows.Count - 1)
+                        {
+                            int y = (int)(cmd.OldRows[i2 + 1]);
+                            if (y == y2 + 1) { y2++; i2++; } else break;
+                        }
+                        cmd.Network.InsertR(y1, y2);
+                        for (i1 = 0; i1 < newrows.Count; i1++)
+                            if (newrows[i1] >= y1) newrows[i1] += y2 - y1 + 1;
+                        area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity - 1, y1, y2);
                     }
                 }
-                else
+                if ((cmd.Type & CMDTYPE_MoveUnit) != 0)
                 {
-                    olds.AddRange(cmd.Network.Add(cmd.OldUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; })));
-                    olds.AddRange(cmd.Network.AddV(cmd.OldUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; })));
+                    List<LadderUnitModel> olds = new List<LadderUnitModel>();
+                    olds.AddRange(cmd.Network.Move(cmd.MoveUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }), -cmd.MoveX, -cmd.MoveY));
+                    olds.AddRange(cmd.Network.MoveV(cmd.MoveUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }), -cmd.MoveX, -cmd.MoveY));
+                    if (olds.Where(u => u != null).Count() > 0)
+                    {
+                        if ((cmd.Type & CMDTYPE_ReplaceUnit) == 0)
+                        {
+                            cmd.Type |= CMDTYPE_ReplaceUnit;
+                            cmd.NewUnits = olds.Where(u => u != null).ToArray();
+                            cmd.OldUnits = new LadderUnitModel[] { };
+                        }
+                        else
+                        {
+                            cmd.NewUnits = cmd.NewUnits.Union(olds.Where(u => u != null)).ToArray();
+                        }
+                    }
                 }
-                cmd.NewUnits = cmd.NewUnits.Union(olds.Where(u => u != null)).ToArray();
-                area.Update(cmd.OldUnits);
-            }
-            if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
-            {
-                for (i2 = newrows.Count - 1; i2 >= 0; i2--)
+                if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
                 {
-                    int y2 = (int)(newrows[i2]);
-                    int y1 = y2;
-                    while (i2 > 0)
+                    List<LadderUnitModel> olds = new List<LadderUnitModel>();
+                    if (cmd.OldUnits.Where(u => u.OldParent != null && u.OldParent != cmd.Network).Count() > 0)
                     {
-                        int y = (int)(newrows[i2 - 1]);
-                        if (y == y1 - 1) { y1--; i2--; } else break;
+                        foreach (LadderNetworkModel network in children)
+                        {
+                            olds.AddRange(network.Add(cmd.OldUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape != LadderUnitModel.Shapes.VLine; })));
+                            olds.AddRange(network.AddV(cmd.OldUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape == LadderUnitModel.Shapes.VLine; })));
+                        }
                     }
-                    cmd.Network.RemoveR(y1, y2);
-                    
+                    else
+                    {
+                        olds.AddRange(cmd.Network.Add(cmd.OldUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; })));
+                        olds.AddRange(cmd.Network.AddV(cmd.OldUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; })));
+                    }
+                    cmd.NewUnits = cmd.NewUnits.Union(olds.Where(u => u != null)).ToArray();
+                    area.Update(cmd.OldUnits);
                 }
-            }
-            if ((cmd.Type & CMDTYPE_ChangeProperty) != 0)
-            {
-                cmd.Unit.InstArgs = cmd.OldProperties.ToArray();
-                area.Update(cmd.Unit);
-            }
-            if ((cmd.Type & CMDTYPE_ChangeComments) != 0)
-            {
-                for (i1 = 0; i1 < cmd.Unit.Children.Count; i1++)
+                if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
                 {
-                    try
+                    for (i2 = newrows.Count - 1; i2 >= 0; i2--)
                     {
-                        ValueManager[cmd.Unit.Children[i1]].Comment = cmd.OldComments[i1];
-                    }
-                    catch (ValueParseException)
-                    {
+                        int y2 = (int)(newrows[i2]);
+                        int y1 = y2;
+                        while (i2 > 0)
+                        {
+                            int y = (int)(newrows[i2 - 1]);
+                            if (y == y1 - 1) { y1--; i2--; } else break;
+                        }
+                        cmd.Network.RemoveR(y1, y2);
+
                     }
                 }
+                if ((cmd.Type & CMDTYPE_ChangeProperty) != 0)
+                {
+                    cmd.Unit.InstArgs = cmd.OldProperties.ToArray();
+                    area.Update(cmd.Unit);
+                }
+                if ((cmd.Type & CMDTYPE_ChangeComments) != 0)
+                {
+                    for (i1 = 0; i1 < cmd.Unit.Children.Count; i1++)
+                    {
+                        try
+                        {
+                            ValueManager[cmd.Unit.Children[i1]].Comment = cmd.OldComments[i1];
+                        }
+                        catch (ValueParseException)
+                        {
+                        }
+                    }
+                }
+                redos.Push(cmd);
+                PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
+                UpdateCanvasTop();
+                if (View != null)
+                {
+                    View.IsViewModified = true;
+                    if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
+                        area.Select(IFParent);
+                }
+                Parent.InvokeModify(this, true);
             }
-            redos.Push(cmd);
-            PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
-            UpdateCanvasTop();
-            if (View != null)
+            catch (ValueParseException e)
             {
-                View.IsViewModified = true;
-                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
-                    area.Select(IFParent);
+                throw e;
             }
-            Parent.InvokeModify(this, true);
-            IFParent.ThMNGView.Start();
-            area.Dispose();
-            IsExecuting = false;
-            if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
-                ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            finally
+            {
+                IFParent.ThMNGView.Start();
+                area.Dispose();
+                IsExecuting = false;
+                if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
+                    ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            }
         }
 
         public void Redo()
@@ -756,171 +772,182 @@ namespace SamSoarII.Core.Models
         private void _Redo()
         {
             Command cmd = redos.Pop();
-            if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
-            {
-                if (cmd.Network.RowCount - cmd.OldRows.Count() + cmd.NewRows.Count() <= 0)
-                {
-                    cmd.NewRows = cmd.NewRows.Concat(new int[] { 0 }).ToArray();
-                }
-            }
-            if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
-            {
-                if (Children.Where(n => !n.IsMasked).Count() - cmd.OldNetworks.Count() + cmd.NewNetworks.Count() <= 0)
-                {
-                    cmd.NewNetworks = cmd.NewNetworks.Concat(new LadderNetworkModel[] { new LadderNetworkModel(null, 0) }).ToArray();
-                }
-            }
             LadderNetworkModel net = null;
-            RelativeArea area = new RelativeArea(this);
-            int i1 = 0, i2 = 0;
-            IList<int> oldrows = null;
-            if ((cmd.Type & CMDTYPE_ChangeProperty) != 0)
+            RelativeArea area = new RelativeArea(this, cmd);
+            try
             {
-                cmd.Unit.InstArgs = cmd.NewProperties.ToArray();
-            }
-            if ((cmd.Type & CMDTYPE_ChangeComments) != 0)
-            {
-                for (i1 = 0; i1 < cmd.Unit.Children.Count; i1++)
+                if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
                 {
-                    try
+                    if (cmd.Network.RowCount - cmd.OldRows.Count() + cmd.NewRows.Count() <= 0)
                     {
-                        ValueManager[cmd.Unit.Children[i1]].Comment = cmd.NewComments[i1];
-                    }
-                    catch (ValueParseException)
-                    {
+                        cmd.NewRows = cmd.NewRows.Concat(new int[] { 0 }).ToArray();
                     }
                 }
-            }
-            if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
-            {
-                if (cmd.OldUnits.Where(u => u.Parent != cmd.Network).Count() > 0)
+                if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
                 {
-                    foreach (LadderNetworkModel network in children)
+                    if (Children.Where(n => !n.IsMasked).Count() - cmd.OldNetworks.Count() + cmd.NewNetworks.Count() <= 0)
                     {
-                        network.Remove(cmd.OldUnits.Where((_unit) => { return _unit.Parent == network && _unit.Shape != LadderUnitModel.Shapes.VLine; }));
-                        network.RemoveV(cmd.OldUnits.Where((_unit) => { return _unit.Parent == network && _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                        cmd.NewNetworks = cmd.NewNetworks.Concat(new LadderNetworkModel[] { new LadderNetworkModel(null, 0) }).ToArray();
                     }
                 }
-                else
+                int i1 = 0, i2 = 0;
+                IList<int> oldrows = null;
+                if ((cmd.Type & CMDTYPE_ChangeProperty) != 0)
                 {
-                    cmd.Network.Remove(cmd.OldUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
-                    cmd.Network.RemoveV(cmd.OldUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                    cmd.Unit.InstArgs = cmd.NewProperties.ToArray();
                 }
-            }
-            if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
-            {
-                oldrows = cmd.OldRows.ToArray();
-                for (i2 = 0; i2 < cmd.NewRows.Count; i2++)
+                if ((cmd.Type & CMDTYPE_ChangeComments) != 0)
                 {
-                    int y1 = (int)(cmd.NewRows[i2]);
-                    int y2 = y1;
-                    while (i2 < cmd.NewRows.Count - 1)
+                    for (i1 = 0; i1 < cmd.Unit.Children.Count; i1++)
                     {
-                        int y = (int)(cmd.NewRows[i2 + 1]);
-                        if (y == y2 + 1) { y2++; i2++; } else break;
+                        try
+                        {
+                            ValueManager[cmd.Unit.Children[i1]].Comment = cmd.NewComments[i1];
+                        }
+                        catch (ValueParseException)
+                        {
+                        }
                     }
-                    cmd.Network.InsertR(y1, y2);
-                    area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity - 1, y1, y2);
-                    for (i1 = 0; i1 < oldrows.Count; i1++)
-                        if (oldrows[i1] >= y1) oldrows[i1] += y2 - y1 + 1;
                 }
-            }
-            if ((cmd.Type & CMDTYPE_MoveUnit) != 0)
-            {
-                List<LadderUnitModel> olds = new List<LadderUnitModel>();
-                olds.AddRange(cmd.Network.Move(cmd.MoveUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }), cmd.MoveX, cmd.MoveY));
-                olds.AddRange(cmd.Network.MoveV(cmd.MoveUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }), cmd.MoveX, cmd.MoveY));
-                if (olds.Where(u => u != null).Count() > 0)
+                if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
                 {
-                    if ((cmd.Type & CMDTYPE_ReplaceUnit) == 0)
+                    if (cmd.OldUnits.Where(u => u.Parent != cmd.Network).Count() > 0)
                     {
-                        cmd.Type |= CMDTYPE_ReplaceUnit;
-                        cmd.OldUnits = olds.Where(u => u != null).ToArray();
-                        cmd.NewUnits = new LadderUnitModel[] { };
+                        foreach (LadderNetworkModel network in children)
+                        {
+                            network.Remove(cmd.OldUnits.Where((_unit) => { return _unit.Parent == network && _unit.Shape != LadderUnitModel.Shapes.VLine; }));
+                            network.RemoveV(cmd.OldUnits.Where((_unit) => { return _unit.Parent == network && _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                        }
                     }
                     else
                     {
-                        cmd.OldUnits = cmd.OldUnits.Union(olds.Where(u => u != null)).ToArray();
+                        cmd.Network.Remove(cmd.OldUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
+                        cmd.Network.RemoveV(cmd.OldUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
                     }
                 }
-            }
-            if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
-            {
-                List<LadderUnitModel> olds = new List<LadderUnitModel>();
-                if (cmd.NewUnits.Where(u => u.OldParent != null && u.OldParent != cmd.Network).Count() > 0)
+                if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
                 {
-                    foreach (LadderNetworkModel network in children)
+                    oldrows = cmd.OldRows.ToArray();
+                    for (i2 = 0; i2 < cmd.NewRows.Count; i2++)
                     {
-                        olds.AddRange(network.Add(cmd.NewUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape != LadderUnitModel.Shapes.VLine; })));
-                        olds.AddRange(network.AddV(cmd.NewUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape == LadderUnitModel.Shapes.VLine; })));
-                    }
-                }
-                else
-                {
-                    olds.AddRange(cmd.Network.Add(cmd.NewUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; })));
-                    olds.AddRange(cmd.Network.AddV(cmd.NewUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; })));
-                }
-                if (olds.Count() > 0)
-                    cmd.OldUnits = cmd.OldUnits.Union(olds.Where(u => u != null)).ToArray();
-                area.Update(cmd.NewUnits);
-            }
-            if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
-            {
-                for (i2 = oldrows.Count - 1; i2 >= 0; i2--)
-                {
-                    int y2 = (int)(oldrows[i2]);
-                    int y1 = y2;
-                    while (i2 > 0)
-                    {
-                        int y = (int)(oldrows[i2 - 1]);
-                        if (y == y1 - 1) { y1--; i2--; } else break;
-                    }
-                    cmd.Network.RemoveR(y1, y2);
-                }
-            }
-            if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
-            {
-                for (i2 = cmd.OldNetworks.Count - 1; i2 >= 0; i2--)
-                {
-                    net = (LadderNetworkModel)(cmd.OldNetworks[i2]);
-                    net.Invoke(LadderNetworkActions.REMOVE);
-                    net.ID = cmd.OldNetIDs[i2];
-                    children.RemoveAt(net.ID);
-                    net.Parent = null;
-                }
-                for (i1 = 0, i2 = 0; i1 < children.Count || i2 < cmd.NewNetworks.Count; i1++)
-                {
-                    if (i2 < cmd.NewNetworks.Count)
-                    {
-                        net = (LadderNetworkModel)(cmd.NewNetworks[i2]);
-                        net.ID = cmd.NewNetIDs[i2];
-                        if (i1 == net.ID)
+                        int y1 = (int)(cmd.NewRows[i2]);
+                        int y2 = y1;
+                        while (i2 < cmd.NewRows.Count - 1)
                         {
-                            net.Parent = this;
-                            children.Insert(i1, net);
-                            i2++;
+                            int y = (int)(cmd.NewRows[i2 + 1]);
+                            if (y == y2 + 1) { y2++; i2++; } else break;
                         }
-                        net.Invoke(LadderNetworkActions.INSERT);
+                        cmd.Network.InsertR(y1, y2);
+                        area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity - 1, y1, y2);
+                        for (i1 = 0; i1 < oldrows.Count; i1++)
+                            if (oldrows[i1] >= y1) oldrows[i1] += y2 - y1 + 1;
                     }
-                    children[i1].ID = i1;
                 }
-                area.Update(cmd.NewNetworks);
+                if ((cmd.Type & CMDTYPE_MoveUnit) != 0)
+                {
+                    List<LadderUnitModel> olds = new List<LadderUnitModel>();
+                    olds.AddRange(cmd.Network.Move(cmd.MoveUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }), cmd.MoveX, cmd.MoveY));
+                    olds.AddRange(cmd.Network.MoveV(cmd.MoveUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }), cmd.MoveX, cmd.MoveY));
+                    if (olds.Where(u => u != null).Count() > 0)
+                    {
+                        if ((cmd.Type & CMDTYPE_ReplaceUnit) == 0)
+                        {
+                            cmd.Type |= CMDTYPE_ReplaceUnit;
+                            cmd.OldUnits = olds.Where(u => u != null).ToArray();
+                            cmd.NewUnits = new LadderUnitModel[] { };
+                        }
+                        else
+                        {
+                            cmd.OldUnits = cmd.OldUnits.Union(olds.Where(u => u != null)).ToArray();
+                        }
+                    }
+                }
+                if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
+                {
+                    List<LadderUnitModel> olds = new List<LadderUnitModel>();
+                    if (cmd.NewUnits.Where(u => u.OldParent != null && u.OldParent != cmd.Network).Count() > 0)
+                    {
+                        foreach (LadderNetworkModel network in children)
+                        {
+                            olds.AddRange(network.Add(cmd.NewUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape != LadderUnitModel.Shapes.VLine; })));
+                            olds.AddRange(network.AddV(cmd.NewUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape == LadderUnitModel.Shapes.VLine; })));
+                        }
+                    }
+                    else
+                    {
+                        olds.AddRange(cmd.Network.Add(cmd.NewUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; })));
+                        olds.AddRange(cmd.Network.AddV(cmd.NewUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; })));
+                    }
+                    if (olds.Count() > 0)
+                        cmd.OldUnits = cmd.OldUnits.Union(olds.Where(u => u != null)).ToArray();
+                    area.Update(cmd.NewUnits);
+                }
+                if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
+                {
+                    for (i2 = oldrows.Count - 1; i2 >= 0; i2--)
+                    {
+                        int y2 = (int)(oldrows[i2]);
+                        int y1 = y2;
+                        while (i2 > 0)
+                        {
+                            int y = (int)(oldrows[i2 - 1]);
+                            if (y == y1 - 1) { y1--; i2--; } else break;
+                        }
+                        cmd.Network.RemoveR(y1, y2);
+                    }
+                }
+                if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
+                {
+                    for (i2 = cmd.OldNetworks.Count - 1; i2 >= 0; i2--)
+                    {
+                        net = (LadderNetworkModel)(cmd.OldNetworks[i2]);
+                        net.Invoke(LadderNetworkActions.REMOVE);
+                        net.ID = cmd.OldNetIDs[i2];
+                        children.RemoveAt(net.ID);
+                        net.Parent = null;
+                    }
+                    for (i1 = 0, i2 = 0; i1 < children.Count || i2 < cmd.NewNetworks.Count; i1++)
+                    {
+                        if (i2 < cmd.NewNetworks.Count)
+                        {
+                            net = (LadderNetworkModel)(cmd.NewNetworks[i2]);
+                            net.ID = cmd.NewNetIDs[i2];
+                            if (i1 == net.ID)
+                            {
+                                net.Parent = this;
+                                children.Insert(i1, net);
+                                i2++;
+                            }
+                            net.Invoke(LadderNetworkActions.INSERT);
+                        }
+                        children[i1].ID = i1;
+                    }
+                    area.Update(cmd.NewNetworks);
+                }
+                undos.Push(cmd);
+                PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
+                UpdateCanvasTop();
+                if (View != null)
+                {
+                    View.IsViewModified = true;
+                    if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
+                        area.Select(IFParent);
+                }
+                Parent.InvokeModify(this);
             }
-            undos.Push(cmd);
-            PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
-            UpdateCanvasTop();
-            if (View != null)
+            catch (ValueParseException e)
             {
-                View.IsViewModified = true;
-                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) == 0)
-                    area.Select(IFParent);
+                throw e;
             }
-            Parent.InvokeModify(this);
-            IFParent.ThMNGView.Start();
-            area.Dispose();
-            IsExecuting = false;
-            if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
-                ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            finally
+            {
+                IFParent.ThMNGView.Start();
+                area.Dispose();
+                IsExecuting = false;
+                if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
+                    ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            }
+            
         }
 
         private void Execute(int _type, object _target, IList<object> _olds, IList<object> _news)

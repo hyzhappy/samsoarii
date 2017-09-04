@@ -400,8 +400,8 @@ namespace SamSoarII.Core.Models
                                     throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
                                 bas = ParseBase(match.Groups[3].Value);
                                 ofs = int.Parse(match.Groups[4].Value);
-                                if (ofs < 0 || ofs + siz > device.GetRange(bas).Count)
-                                    throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                                //if (ofs < 0 || ofs + siz > device.GetRange(bas).Count)
+                                //    throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
                                 ibs = match.Groups.Count > 6 && match.Groups[6].Value.Length > 0 ? ParseBase(match.Groups[6].Value) : Bases.NULL;
                                 ifs = match.Groups.Count > 7 && match.Groups[7].Value.Length > 0 ? int.Parse(match.Groups[7].Value) : 0;
                             }
@@ -446,6 +446,7 @@ namespace SamSoarII.Core.Models
                 case Bases.NULL:
                     break;
                 default:
+                    siz = 1;
                     if (IsWordBit)
                     {
                         ofs = int.Parse(match.Groups[2].Value);
@@ -460,45 +461,42 @@ namespace SamSoarII.Core.Models
                     ofs = match.Groups.Count > 2 ? int.Parse(match.Groups[2].Value) : 0;
                     ibs = match.Groups.Count > 4 && match.Groups[4].Value.Length > 0 ? ParseBase(match.Groups[4].Value) : Bases.NULL;
                     ifs = match.Groups.Count > 5 && match.Groups[5].Value.Length > 0 ? int.Parse(match.Groups[5].Value) : 0;
-                    if (bas == Bases.X || bas == Bases.Y)
-                    {
-                        oldofs = ofs;
-                        try
-                        {
-                            ofs = ValueConverter.DexToInt(ofs);
-                        }
-                        catch (FormatException)
-                        {
-                            throw new ValueParseException(Properties.Resources.Message_Not_DexNumber, format);
-                        }
-                        bool inrange = false;
-                        switch (bas)
-                        {
-                            case Bases.X:
-                                inrange |= ofs >= device.XRange.Start && ofs < device.XRange.End;
-                                inrange |= ofs >= device.EXRange.Start && ofs < device.EXRange.End;
-                                break;
-                            case Bases.Y:
-                                inrange |= ofs >= device.YRange.Start && ofs < device.YRange.End;
-                                inrange |= ofs >= device.EYRange.Start && ofs < device.EYRange.End;
-                                break;
-                        }
-                        if (!inrange) throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
-                        break;
-                    }
-                    if (bas == Bases.CV)
-                    {
-                        if (Type == Types.WORD && ofs >= 200)
-                            throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
-                        if (Type == Types.DWORD && ofs < 200)
-                            throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
-                    }
-                    if (ofs < 0 || ofs >= device.GetRange(bas).Count)
-                        throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
                     break;
             }
-            if (bas != Bases.X && bas != Bases.Y)
-                oldofs = ofs;
+            oldofs = ofs;
+            if (bas == Bases.X || bas == Bases.Y)
+            {
+                try
+                {
+                    ofs = ValueConverter.DexToInt(ofs);
+                }
+                catch (FormatException)
+                {
+                    throw new ValueParseException(Properties.Resources.Message_Not_DexNumber, format);
+                }
+                bool inrange = false;
+                switch (bas)
+                {
+                    case Bases.X:
+                        inrange |= ofs >= device.XRange.Start && ofs + siz < device.XRange.End;
+                        inrange |= ofs >= device.EXRange.Start && ofs + siz < device.EXRange.End;
+                        break;
+                    case Bases.Y:
+                        inrange |= ofs >= device.YRange.Start && ofs + siz < device.YRange.End;
+                        inrange |= ofs >= device.EYRange.Start && ofs + siz < device.EYRange.End;
+                        break;
+                }
+                if (!inrange) throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+            }
+            if (ibs != Bases.NULL && (ifs < 0 || ifs >= device.GetRange(ibs).Count))
+                throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+            if (bas == Bases.CV)
+            {
+                if (Type == Types.WORD && ofs >= 200)
+                    throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                if (Type == Types.DWORD && ofs < 200)
+                    throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+            }
             switch (bas)
             {
                 case Bases.K:
@@ -511,6 +509,9 @@ namespace SamSoarII.Core.Models
                     this.text = text;
                     break;
                 default:
+                    if (bas != Bases.X && bas != Bases.Y)
+                        if (ofs < 0 || ofs >= device.GetRange(bas).Count)
+                            throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
                     if (IsWordBit)
                     {
                         if (ibs != Bases.V && ibs != Bases.Z)

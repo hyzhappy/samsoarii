@@ -207,6 +207,9 @@
     <Compile Include="Shell\Dialogs\ElementPropertyModify\CAMDialog.xaml.cs">
       <DependentUpon>CAMDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Dialogs\PLSBlockDialog.xaml.cs">
+      <DependentUpon>PLSBlockDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shell\Models\Instructions\InstructionRowCanvas.cs" />
     <Compile Include="Core\Models\Interfaces\IElementInitializeModel.cs" />
     <Compile Include="Core\Models\Instructions\InstructionDiagramModel.cs" />
@@ -846,6 +849,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Dialogs\ElementPropertyModify\PIDDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\PLSBlockDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

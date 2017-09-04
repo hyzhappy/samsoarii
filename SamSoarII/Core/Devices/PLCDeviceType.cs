@@ -22,12 +22,8 @@ namespace SamSoarII.PLCDevice
         FGs_64MT_D,
         FGs_32MR_YTJ,
         FGs_32MT_YTJ,
-        FGs_20MR_BYK
-    }
-
-    public enum PLC_FGm_Type : int
-    {
-        FGm_32MT_A = 15,
+        FGs_20MR_BYK,
+        FGm_32MT_A,
         FGm_48MT_A,
         FGm_64MT_A
     }
