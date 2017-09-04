@@ -37,6 +37,7 @@ namespace SamSoarII.Core.Models
                 polylines[i] = new PolylineSystemModel(this, i + 1);
                 //polylines[i].PropertyChanged += OnPolylinesChanged;
             }
+            plsblocks = new ObservableCollection<PLSBlockModel>();
             if (filename != null)
             {
                 XDocument xdoc = XDocument.Load(filename);
@@ -90,6 +91,11 @@ namespace SamSoarII.Core.Models
                 polyline.Dispose();
             }
             polylines = null;
+            foreach (PLSBlockModel plsblock in plsblocks)
+            {
+                plsblock.Dispose();
+            }
+            plsblocks = null;
             parent = null;
             PTVItem = null;
         }
@@ -217,6 +223,9 @@ namespace SamSoarII.Core.Models
         private PolylineSystemModel[] polylines;
         public IList<PolylineSystemModel> Polylines { get { return this.polylines; } }
 
+        private ObservableCollection<PLSBlockModel> plsblocks;
+        public IList<PLSBlockModel> PLSBlocks { get { return this.plsblocks; } }
+
         private ValueBrpoModel valuebrpo;
         public ValueBrpoModel ValueBrpo { get { return this.valuebrpo; } }
         
@@ -328,6 +337,12 @@ namespace SamSoarII.Core.Models
                 XElement xele_pl = new XElement(String.Format("Polyline_{0:d}", i + 1));
                 polylines[i].Save(xele_pl);
                 xele.Add(xele_pl);
+            }
+            foreach (PLSBlockModel plsblock in plsblocks)
+            {
+                XElement xele_pb = new XElement("PLSBlock");
+                plsblock.Save(xele_pb);
+                xele.Add(xele_pb);
             }
             IsModified = false;
         }
@@ -466,6 +481,18 @@ namespace SamSoarII.Core.Models
             }
             catch (Exception)
             {
+            }
+            foreach (XElement xele_pb in xele.Elements("PLSBlock"))
+            {
+                try
+                {
+                    PLSBlockModel plsblock = new PLSBlockModel(this, xele_pb.Attribute("FileName").Value);
+                    plsblock.Load(xele_pb);
+                    plsblocks.Add(plsblock);
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 

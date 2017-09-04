@@ -203,6 +203,7 @@
     <Compile Include="Core\Models\FuncBlocks\FuncModel.cs" />
     <Compile Include="Core\Models\FuncBlocks\FuncBrpoModel.cs" />
     <Compile Include="Core\Models\Ladders\HighCount\CAMModel.cs" />
+    <Compile Include="Core\Models\PLSBlockModel.cs" />
     <Compile Include="Shell\Dialogs\ElementPropertyModify\CAMDialog.xaml.cs">
       <DependentUpon>CAMDialog.xaml</DependentUpon>
     </Compile>
