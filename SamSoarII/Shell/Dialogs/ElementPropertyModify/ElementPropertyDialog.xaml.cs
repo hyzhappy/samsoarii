@@ -41,7 +41,7 @@ namespace SamSoarII.Shell.Dialogs
             {
                 case "CALL":
                 case "ATCH":
-                    SubRoutines = project.Diagrams.Select(diagram => diagram.Name);
+                    SubRoutines = project.Diagrams.Where(diagram => !diagram.IsMainLadder).Select(diagram => diagram.Name);
                     break;
                 case "CALLM":
                     Functions = project.Funcs.Where(f => f.CanCALLM()).Select(f => f.GetMessageList());

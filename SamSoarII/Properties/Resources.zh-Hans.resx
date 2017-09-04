@@ -2436,4 +2436,10 @@
   <data name="DXF_File" xml:space="preserve">
     <value>DXF文件</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Message_DXF_HasBeenImported" xml:space="preserve">
+    <value>选定的DXF文件已经加载！</value>
+  </data>
 </root>

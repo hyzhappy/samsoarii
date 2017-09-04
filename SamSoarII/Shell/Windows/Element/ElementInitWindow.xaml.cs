@@ -88,7 +88,7 @@ namespace SamSoarII.Shell.Windows
             {
                 LocalizedMessageBox.Show(Properties.Resources.Message_Can_Not_Be_Written, LocalizedMessageIcon.Error);
             }
-            else if (!ElementAddressHelper.AssertAddrRange(Type, uint.Parse(textBox.Text) + uint.Parse(LengthTextbox.Text), device))
+            else if (!ElementAddressHelper.AssertAddrRange(Type, uint.Parse(textBox.Text) + uint.Parse(LengthTextbox.Text) - 1, device))
             {
                 LocalizedMessageBox.Show(Properties.Resources.Message_Over_Max_Len, LocalizedMessageIcon.Error);
             }

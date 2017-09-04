@@ -20,7 +20,7 @@ namespace SamSoarII.Utility
 
         public bool AssertValue(uint input)
         {
-            return (input < End) & (input >= Start);
+            return (input < End) && (input >= Start);
         }
     }
 }

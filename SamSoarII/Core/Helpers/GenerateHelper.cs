@@ -334,6 +334,11 @@ namespace SamSoarII.Core.Helpers
                     case PLC_FGs_Type.FGs_64MT_D:
                         cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make64.cmd", currentPath);
                         break;
+                    case PLC_FGs_Type.FGm_32MT_A:
+                    case PLC_FGs_Type.FGm_48MT_A:
+                    case PLC_FGs_Type.FGm_64MT_A:
+                        cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make64Muti.cmd", currentPath);
+                        break;
                     default:
                         cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make32.cmd", currentPath);
                         break;

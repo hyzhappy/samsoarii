@@ -83,23 +83,19 @@ namespace SamSoarII.PLCDevice
                         return 13;
                     case PLC_FGs_Type.FGs_20MR_BYK:
                         return 14;
+                    case PLC_FGs_Type.FGm_32MT_A:
+                        return 15;
+                    case PLC_FGs_Type.FGm_48MT_A:
+                        return 16;
+                    case PLC_FGs_Type.FGm_64MT_A:
+                        return 17;
                     default:
                         return -1;
                 }
             }
             else
             {
-                switch ((PLC_FGm_Type)type)
-                {
-                    case PLC_FGm_Type.FGm_32MT_A:
-                        return 0;
-                    case PLC_FGm_Type.FGm_48MT_A:
-                        return 1;
-                    case PLC_FGm_Type.FGm_64MT_A:
-                        return 2;
-                    default:
-                        return -1;
-                }
+                return -1;
             }
         }
         public void SetSelectDeviceType(object type)
@@ -122,14 +118,10 @@ namespace SamSoarII.PLCDevice
                         _selectDevice = new FGs32MRDevice(fgs_type);
                         break;
                     case PLC_FGs_Type.FGs_32MT_A:
-                        _selectDevice = new FGs32MTADevice(fgs_type);
-                        break;
                     case PLC_FGs_Type.FGs_32MT_D:
                         _selectDevice = new FGs32MTDevice(fgs_type);
                         break;
                     case PLC_FGs_Type.FGs_64MR_A:
-                        _selectDevice = new FGs64MTADevice(fgs_type);
-                        break;
                     case PLC_FGs_Type.FGs_64MR_D:
                         _selectDevice = new FGs64MRDevice(fgs_type);
                         break;
@@ -145,6 +137,15 @@ namespace SamSoarII.PLCDevice
                         break;
                     case PLC_FGs_Type.FGs_20MR_BYK:
                         _selectDevice = new FGs20MR_BYKDevice(fgs_type);
+                        break;
+                    case PLC_FGs_Type.FGm_32MT_A:
+                        _selectDevice = new FGm32MTDevice(fgs_type);
+                        break;
+                    case PLC_FGs_Type.FGm_48MT_A:
+                        _selectDevice = new FGm48MTDevice(fgs_type);
+                        break;
+                    case PLC_FGs_Type.FGm_64MT_A:
+                        _selectDevice = new FGm64MTDevice(fgs_type);
                         break;
                     default:
                         _selectDevice = Device.DefaultDevice;

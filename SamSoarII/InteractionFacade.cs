@@ -939,11 +939,11 @@ namespace SamSoarII
                         inst.Message = String.Empty;
                     } 
             }
-            mngValue.Check();
             foreach (LadderDiagramModel ldmodel in mdProj.Diagrams) 
                 ldmodel.Inst.Check(); 
             foreach (LadderDiagramModel ldmodel in mdProj.Diagrams) 
-                ldmodel.Inst.CheckForInterrrupt(); 
+                ldmodel.Inst.CheckForInterrrupt();
+            mngValue.Check();
             ecount = 0;
             wcount = 0;
             List<ErrorReportElement> weinsts = new List<ErrorReportElement>();
@@ -2035,6 +2035,26 @@ namespace SamSoarII
 
         public void ShowImageImportDialog()
         {
+            using (PLSBlockDialog dialog = new PLSBlockDialog(mdProj))
+            {
+                dialog.Owner = wndMain;
+                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                dialog.Ensure += (sender, e) =>
+                {
+                    try
+                    {
+                        dialog.Save();
+                        dialog.Close();
+                    }
+                    catch (ValueParseException exce)
+                    {
+                        LocalizedMessageBox.Show(string.Format(exce.Message), LocalizedMessageIcon.Error);
+                    }
+                };
+                dialog.Help += (sender, e) => { ShowHelpDocument(); };
+                dialog.ShowDialog();
+            }
+            /*
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = string.Format("{0}|*.{1}", Properties.Resources.DXF_File, "dxf");
             openFileDialog.Multiselect = false;
@@ -2051,6 +2071,7 @@ namespace SamSoarII
                 panel.Add(image);
                 window.Show();
             }
+            */
         }
         #endregion
 

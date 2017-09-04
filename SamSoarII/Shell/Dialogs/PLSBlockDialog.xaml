@@ -1,0 +1,48 @@
+﻿<Window x:Class="SamSoarII.Shell.Dialogs.PLSBlockDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:properties="clr-namespace:SamSoarII.Properties"
+        xmlns:core="clr-namespace:SamSoarII.Core.Models"
+        mc:Ignorable="d"
+        Title="PLSBlockDialog" Height="300" Width="600">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="CBItems" ObjectType="{x:Type core:PLSBlockModel}" MethodName="GetNameOfSystems">
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="32"/>
+        </Grid.RowDefinitions>
+        <DataGrid Margin="5,5,5,5" x:Name="GD_Ele" ItemsSource="{Binding Elements}"
+                  SelectionMode="Single" AutoGenerateColumns="False" ColumnHeaderHeight="24"
+                  CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="True"
+                  SelectionChanged="GD_Ele_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="名称" MinWidth="100" Width="*" IsReadOnly="False" Binding="{Binding Name}"/>
+                <DataGridComboBoxColumn Header="平面系统" MinWidth="100" IsReadOnly="False"
+                                        ItemsSource="{Binding Source={StaticResource CBItems}, Mode=OneWay}"
+                                        TextBinding="{Binding SystemID_S}"/>
+                <DataGridTextColumn Header="线条数" MinWidth="50" IsReadOnly="True" Binding="{Binding Count}"/>
+                <DataGridTextColumn Header="大小" MinWidth="60" IsReadOnly="True" Binding="{Binding ByteCount}"/>
+                <DataGridTextColumn Header="速度(mm/s)" MinWidth="60" IsReadOnly="False" Binding="{Binding Velocity_S}"/>
+                <DataGridTextColumn Header="加速时间(ms)" MinWidth="60" IsReadOnly="False" Binding="{Binding ACTime_S}"/>
+                <DataGridTextColumn Header="减速时间(ms)" MinWidth="60" IsReadOnly="False" Binding="{Binding DCTime_S}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="4,4,4,4"/>
+                    <Setter Property="Width" Value="80"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button x:Name="BT_Import" Content="{x:Static properties:Resources.Import}" Click="OnButtonClick"/>
+            <Button x:Name="BT_Delete" Content="{x:Static properties:Resources.Delete}" Click="OnButtonClick"/>
+            <Button x:Name="BT_Ensure" Content="{x:Static properties:Resources.Ensure}" Click="OnButtonClick"/>
+            <Button x:Name="BT_Help" Content="{x:Static properties:Resources.Help}" Click="OnButtonClick"/>
+        </StackPanel>
+    </Grid>
+</Window>

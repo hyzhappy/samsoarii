@@ -32,8 +32,9 @@ namespace SamSoarII.Shell.Dialogs
             InitializeComponent();
             project = _project;
             instructionNames = LadderUnitModel.Formats.Where(f => f.Type < LadderUnitModel.Types.PID).Select(f => f.Name).ToList();
-            subdiagramNames = project.Diagrams.Select(
-                (diagram) => { return diagram.Name; }).ToList();
+            subdiagramNames = project.Diagrams.Where(
+                diagram => !diagram.IsMainLadder).Select(
+                diagram => diagram.Name).ToList();
             modbusNames = project.Modbus.Children.Select(
                 (modbus) => { return modbus.Name; }).ToList();
             functionMessages = project.Funcs.Where(

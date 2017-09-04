@@ -961,6 +961,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Delete 的本地化字符串。
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Delete All 的本地化字符串。
         /// </summary>
         public static string Delete_All {
@@ -3765,6 +3774,15 @@ namespace SamSoarII.Properties {
         public static string Message_Delete {
             get {
                 return ResourceManager.GetString("Message_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The DXF file of selected filename has been already existed! 的本地化字符串。
+        /// </summary>
+        public static string Message_DXF_HasBeenImported {
+            get {
+                return ResourceManager.GetString("Message_DXF_HasBeenImported", resourceCulture);
             }
         }
         

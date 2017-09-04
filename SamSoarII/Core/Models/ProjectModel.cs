@@ -438,7 +438,7 @@ namespace SamSoarII.Core.Models
             {
                 try
                 {
-                    deviceType = (PLC_FGm_Type)Enum.Parse(typeof(PLC_FGm_Type), xele.Attribute("DeviceType").Value);
+                    deviceType = (PLC_FGs_Type)Enum.Parse(typeof(PLC_FGs_Type), xele.Attribute("DeviceType").Value);
                 }
                 catch (Exception)
                 {

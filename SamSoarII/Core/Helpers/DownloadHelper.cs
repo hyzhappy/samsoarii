@@ -12,6 +12,7 @@ using SamSoarII.Global;
 using System.Threading;
 using System.Windows.Threading;
 using SamSoarII.PLCDevice;
+using SamSoarII.Utility.DXF;
 
 namespace SamSoarII.Core.Helpers
 {
@@ -131,6 +132,11 @@ namespace SamSoarII.Core.Helpers
             }
         }
 
+        unsafe static private void Write(List<byte> data, float value, int index = -1)
+        {
+            Write(data, *((int*)(&value)), index);
+        }
+
         static private void Write(List<byte> data, Int64 value, int index = -1)
         {
             for (int i = 0; i < 8; i++)
@@ -150,6 +156,12 @@ namespace SamSoarII.Core.Helpers
                 data.Add((byte)value[i]);
         }
 
+        static private void Write16(List<byte> data, string value)
+        {
+            Write(data, (short)(value.Length));
+            for (int i = 0; i < value.Length; i++)
+                data.Add((byte)value[i]);
+        }
         static private void Write(List<byte> data, string value)
         {
             Write(data, value.Length);
@@ -722,7 +734,59 @@ namespace SamSoarII.Core.Helpers
             }
             Write(dtTable, dtTable.Count() - index, index);
         }
-        
+
+        #endregion
+
+        #region Initialize PLSBlock data
+
+        static public List<byte> GetData(PLSBlockModel plsblock)
+        {
+            List<byte> data = new List<byte>();
+            Write(data, (int)(0));
+            Write16(data, plsblock.Name);
+            Write(data, (short)(plsblock.SystemID));
+            Write(data, plsblock.Velocity);
+            Write(data, plsblock.ACTime);
+            Write(data, plsblock.DCTime);
+            Write(data, plsblock.Elements.Count);
+            for (int i = 0; i < plsblock.Elements.Count; i++)
+            {
+                DXFEntity element = plsblock.Elements[i];
+                if (element is DXFLine)
+                {
+                    DXFLine line = (DXFLine)(element);
+                    Write(data, (byte)(0));
+                    Write(data, (byte)(1));
+                    Write(data, (float)(0.0));
+                    Write(data, (float)(0.0));
+                }
+                if (element is DXFArc)
+                {
+                    DXFArc arch = (DXFArc)(element);
+                    Write(data, (byte)(1));
+                    Write(data, (byte)(1));
+                    Write(data, (float)(0.0));
+                    Write(data, (float)(0.0));
+                    Write(data, (byte)(0));
+                    Write(data, (float)(0.0));
+                    Write(data, (float)(0.0));
+                }
+                if (element is DXFCircle)
+                {
+                    DXFCircle circle = (DXFCircle)(element);
+                    Write(data, (byte)(1));
+                    Write(data, (byte)(1));
+                    Write(data, (float)(0.0));
+                    Write(data, (float)(0.0));
+                    Write(data, (byte)(0));
+                    Write(data, (float)(0.0));
+                    Write(data, (float)(0.0));
+                }
+            }
+            Write(data, data.Count(), 0);
+            return data;
+        }
+
         #endregion
 
         #endregion
