@@ -413,7 +413,7 @@ namespace SamSoarII
             if (!CheckLadder(false)) return false;
             if (!CheckFuncBlock(false)) return false;
 #if DEBUG
-            GenerateHelper.GenerateFinal(mdProj);
+            //GenerateHelper.GenerateFinal(mdProj);
             //DownloadHelper.InitializeData(mdProj);
 #endif
             _option = -1;
@@ -484,6 +484,7 @@ namespace SamSoarII
                             loadinghandle.Start();
                             Thread genthread = new Thread(() =>
                             {
+                                DownloadHelper.InitializeData(mdProj);
                                 mngComu.LoadExecute(GenerateHelper.GenerateFinal(mdProj));
                                 loadinghandle.Completed = true;
                                 loadinghandle.Abort();

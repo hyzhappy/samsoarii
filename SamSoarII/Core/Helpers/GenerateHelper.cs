@@ -381,15 +381,27 @@ namespace SamSoarII.Core.Helpers
             PLCInstruction[] insts = network.Inst.Insts.Select(i => i.Inst).ToArray();
             foreach (PLCInstruction inst in insts)
             {
-                if (inst[0].Equals("CALL") || inst[0].Equals("ATCH"))
+                switch (inst[0])
                 {
-                    LadderDiagramModel diagram = project.Diagrams.FirstOrDefault(d => d.Name.Equals(inst[1]));
-                    if (diagram != null) inst[1] = diagram.CName;
-                }
-                if (inst[0].Equals("MBUS"))
-                {
-                    ModbusModel modbus = project.Modbus.Children.FirstOrDefault(m => m.Name.Equals(inst[2]));
-                    if (modbus != null) inst[2] = modbus.Parent.Children.IndexOf(modbus).ToString(); 
+                    case "CALL":
+                    case "ATCH":
+                        LadderDiagramModel diagram = project.Diagrams.FirstOrDefault(d => d.Name.Equals(inst[1]));
+                        if (diagram != null) inst[1] = diagram.CName;
+                        break;
+                    case "MBUS":
+                        ModbusModel modbus = project.Modbus.Children.FirstOrDefault(m => m.Name.Equals(inst[2]));
+                        if (modbus != null) inst[2] = modbus.Parent.Children.IndexOf(modbus).ToString();
+                        break;
+                    case "POLYLINEI":
+                    case "POLYLINEF":
+                    case "LINEI":
+                    case "LINEF":
+                    case "ARCI":
+                    case "ARCF":
+                    case "TBL":
+                    case "CAM":
+                        inst.Analyze();
+                        break;
                 }
             }
             InstHelper.PLCInstNetwork net = new InstHelper.PLCInstNetwork(

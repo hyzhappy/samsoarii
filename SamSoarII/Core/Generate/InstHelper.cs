@@ -711,6 +711,46 @@ namespace SamSoarII.Core.Generate
                         sw.Write("CI_DPLSA((uint8_t)({0:s}),&{1:s},{2:s},{3:s},{4:s},{5:d});\n",
                             cond, inst[1], inst[2], inst[3], inst[4], user_id++);
                     break;
+                case "TBL":
+                    if (!simumode)
+                        sw.Write("CI_TBL((uint8_t)({0:s}),&{1:s},{2:s},{3:s},{4:s});\n",
+                            cond, inst[1], inst[2], inst[3], inst[4]);
+                    break;
+                case "POLYLINEI":
+                    if (!simumode)
+                        sw.Write("CI_POLYLINEI((uint8_t)({0:s}),{1:s},{2:s},{3:s},{4:s});\n",
+                            cond, inst[1], inst[2], inst[3], inst[4]);
+                    break;
+                case "POLYLINEF":
+                    if (!simumode)
+                        sw.Write("CI_POLYLINEF((uint8_t)({0:s}),{1:s},{2:s},{3:s},{4:s});\n",
+                            cond, inst[1], inst[2], inst[3], inst[4]);
+                    break;
+                case "LINEI":
+                    if (!simumode)
+                        sw.Write("CI_LINEI((uint8_t)({0:s}),{1:s});\n",
+                            cond, inst[1], inst[2]);
+                    break;
+                case "LINEF":
+                    if (!simumode)
+                        sw.Write("CI_LINEF((uint8_t)({0:s}),{1:s});\n",
+                            cond, inst[1], inst[2]);
+                    break;
+                case "ARCI":
+                    if (!simumode)
+                        sw.Write("CI_ARCI((uint8_t)({0:s}),{1:s});\n",
+                            cond, inst[1], inst[2]);
+                    break;
+                case "ARCF":
+                    if (!simumode)
+                        sw.Write("CI_ARCF((uint8_t)({0:s}),{1:s});\n",
+                            cond, inst[1], inst[2]);
+                    break;
+                case "CAM":
+                    if (!simumode)
+                        sw.Write("CI_CAM((uint8_t)({0:s}),{1:s},{2:s},{3:s});\n",
+                            cond, inst[1], inst[2], inst[3]);
+                    break;
                 // 实时时钟
                 case "TRD":
                     if (!simumode)

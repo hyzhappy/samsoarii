@@ -182,9 +182,10 @@ namespace SamSoarII.Core.Generate
                         args[4] = ToCIndex(prototype.Children[3]);
                         break;
                     case "PTO":
+                    case "TBL":
                         args[2] = ToCIndex(prototype.Children[1]);
                         args[3] = ToCIndex(prototype.Children[2]);
-                        break;
+                        break;  
                 }
                 for (int i = 1; i <= prototype.Children.Count; i++)
                     if (args[i] == null) args[i] = ToCStyle(prototype.Children[i - 1]);
@@ -197,6 +198,19 @@ namespace SamSoarII.Core.Generate
                     args = args.Concat(new string[] { prototype.Children[0].Text.Substring(1), prototype.Children[1].Store.Value.ToString() }).ToArray();
                 if (args[0].Length > 2 && args[0].Substring(0, 2).Equals("CT"))
                     args = args.Concat(new string[] { prototype.Children[0].Text.Substring(2) }).ToArray();
+                if (args[0].Equals("POLYLINEI"))
+                {
+                    POLYLINEIModel polyline = (POLYLINEIModel)(prototype);
+                    args = args.Concat(new string[] { ToCStyle(polyline.RefAddr), polyline.Polylines.Count().ToString() }).ToArray();
+                }
+                if (args[0].Equals("POLYLINEF"))
+                {
+                    POLYLINEFModel polyline = (POLYLINEFModel)(prototype);
+                    args = args.Concat(new string[] { ToCStyle(polyline.RefAddr), polyline.Polylines.Count().ToString() }).ToArray();
+                }
+                // PLSBlock相关的指令，需要在末尾指示编号
+                if (prototype is TBLModel || prototype is CAMModel || prototype is POLYLINEModel)
+                    args = args.Concat(new string[] { prototype.PLSID.ToString()}).ToArray();
             }
         }
         

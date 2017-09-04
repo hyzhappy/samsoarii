@@ -290,6 +290,20 @@ extern void CI_INTR_DTCH(uint8_t en, uint16_t event_index);
 extern void CI_INTR_ENI(uint8_t en);
 extern void CI_INTR_DISI(uint8_t en);
 
+extern void CI_TBL(uint8_t en, uint32_t *plsParamAddr, uint16_t Yn, uint16_t dir, uint32_t useSheetID);
+extern void CI_EHCNT(uint8_t en, uint16_t ehcntIndex, uint16_t modeSelect, uint16_t triggerSelect, int32_t setValue);
+extern void CI_CAM(uint8_t en, uint16_t ehcntIndex, uint32_t sectionNum, uint32_t useSheetID);
+extern void CI_LINEF(uint8_t en, uint16_t planeNum, uint32_t useSheetID);
+extern void CI_LINEI(uint8_t en, uint16_t planeNum, uint32_t useSheetID);
+extern void CI_ARCF(uint8_t en, uint16_t planeNum, uint32_t useSheetID);
+extern void CI_ARCI(uint8_t en, uint16_t planeNum, uint32_t useSheetID);
+extern void CI_POLYLINEF(uint8_t en, uint16_t planeNum, uint32_t *plsParamAddr, uint32_t segmentNum, uint32_t useSheetID);
+extern void CI_POLYLINEI(uint8_t en, uint16_t planeNum, uint32_t *plsParamAddr, uint32_t segmentNum, uint32_t useSheetID);
+extern void CI_BLOCK(uint8_t en, uint32_t graphIndex, uint32_t *ctrlBit, uint32_t useSheetID);
+extern void CI_HMIBLOCK(uint8_t en, uint32_t *plsParamAddr, uint32_t useSheetID);
+extern void CI_PAUSE(uint8_t en, uint16_t planeNum);
+extern void CI_FOLLOW(uint8_t en, uint32_t *plsParamAddr, uint16_t Yn, uint16_t dir, uint32_t use_id);
+
 void _imyset(int16_t Yn, int16_t size);
 
 void _imyrst(int16_t Yn, int16_t size);

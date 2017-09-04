@@ -805,7 +805,7 @@ namespace SamSoarII.Core.Helpers
             Handle = handle;
             Handle.UpdateMessage(Properties.Resources.Initialize_Data);
             //初始化要下载的数据
-            InitializeData(communManager.IFParent.MDProj);
+            //InitializeData(communManager.IFParent.MDProj);
 
             //判断当前工程PLC型号与底层是否一致
             if ((int)PLCDeviceManager.GetPLCDeviceManager().SelectDevice.Type != (int)communManager.PLCMessage.PLCType)
