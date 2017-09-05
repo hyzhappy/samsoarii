@@ -14,6 +14,7 @@ using SamSoarII.Shell.Windows;
 using System.Windows;
 using SamSoarII.Core.Communication;
 using SamSoarII.Core.Helpers;
+using SamSoarII.Core.Generate;
 
 namespace SamSoarII.Core.Models
 {
@@ -494,6 +495,30 @@ namespace SamSoarII.Core.Models
                 {
                 }
             }
+        }
+
+        #endregion
+
+        #region Hash
+
+        public byte[] GetLadderHashCodes()
+        {
+            List<LadderDiagramModel> diagrams = Diagrams.ToList();
+            diagrams.Sort((d1, d2) => d1.Name.CompareTo(d2.Name));
+            byte[] rets = new byte[16];
+            for (int i = 0; i < rets.Length; i++)
+                rets[i] = 0;
+            int rid = 0;
+            foreach (LadderDiagramModel diagram in diagrams)
+                foreach (LadderNetworkModel network in diagram.Children)
+                    for (int i = 0; i < network.Inst.Insts.Count; i++)
+                    {
+                        PLCOriginInst inst = network.Inst.Insts[i];
+                        if (inst.Inst?.ProtoType != null)
+                            rets[rid++] ^= (byte)(inst.Inst.ProtoType.Type);
+                        if (rid >= rets.Length) rid = 0;
+                    }
+            return rets;
         }
 
         #endregion
