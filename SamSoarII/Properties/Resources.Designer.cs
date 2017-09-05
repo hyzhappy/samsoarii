@@ -1600,6 +1600,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Here exists vertical lines in bottom border of merging network, so they are prohibited to be merged! 的本地化字符串。
+        /// </summary>
+        public static string Error_VerticalLineUnder {
+            get {
+                return ResourceManager.GetString("Error_VerticalLineUnder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Error 的本地化字符串。
         /// </summary>
         public static string ErrorReportWindow_Error {

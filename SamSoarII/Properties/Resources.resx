@@ -2442,4 +2442,7 @@
   <data name="Message_DXF_HasBeenImported" xml:space="preserve">
     <value>The DXF file of selected filename has been already existed!</value>
   </data>
+  <data name="Error_VerticalLineUnder" xml:space="preserve">
+    <value>Here exists vertical lines in bottom border of merging network, so they are prohibited to be merged!</value>
+  </data>
 </root>

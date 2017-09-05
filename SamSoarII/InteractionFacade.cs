@@ -746,24 +746,25 @@ namespace SamSoarII
         private void _CloseMonitor(CloseMonitorToDo todo = CloseMonitorToDo.NONE)
         {
             closemonitortodo = todo;
+            mngComu.Aborted += OnCommunicationAborted;
+            isenvokedcomaborted = false;
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
                 UnderBarStatus.Loading, Properties.Resources.Monitor_Closing));
-            mngComu.Aborted += OnCommunicationAborted;
             loadinghandle = new LoadingWindowHandle(Properties.Resources.Monitor_Closing);
             loadinghandle.Start();
             vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
+                vmdProj.LadderMode = LadderModes.Edit;
                 mngComu.AbortAll();
                 mngComu.IsEnable = false;
-                vmdProj.LadderMode = LadderModes.Edit;
-                //while (mngComu.IsAlive) Thread.Sleep(10);
-                //loadinghandle.Completed = true;
-                //loadinghandle.Abort();
+                if (!mngComu.IsAlive && !isenvokedcomaborted)
+                    OnCommunicationAborted(this, new RoutedEventArgs());
             });
-            //while (!loadinghandle.Completed) Thread.Sleep(10);
         }
+        private bool isenvokedcomaborted;
         private void OnCommunicationAborted(object sender, RoutedEventArgs e)
         {
+            isenvokedcomaborted = true;
             mngComu.Aborted -= OnCommunicationAborted;
             loadinghandle.Completed = true;
             loadinghandle.Abort();
@@ -788,7 +789,6 @@ namespace SamSoarII
                         break;
                 }
             });
-                
         }
         
         #endregion
@@ -888,9 +888,9 @@ namespace SamSoarII
             int ecount = 0;
             int wcount = 0;
             weinsts = _CheckInsts(ref ecount, ref wcount);
+            result = (ecount == 0);
             if (weinsts.Count() > 0)
             {
-                result = (ecount == 0);
                 if (showreport || !result)
                 {
                     if (App.CultureIsZH_CH())
@@ -910,7 +910,7 @@ namespace SamSoarII
                 ShowMessage(Properties.Resources.Program_Correct, loadinghandle, false, true);
             else
                 loadinghandle?.Abort();
-            result = true;
+            //result = true;
             return result;
         }
 
@@ -1972,24 +1972,24 @@ namespace SamSoarII
                 dialog.Help += (sender, e) => { ShowHelpDocument(); };
                 dialog.ShowDialog();
             }
-
-            //OpenFileDialog openFileDialog = new OpenFileDialog();
-            //openFileDialog.Filter = string.Format("{0}|*.{1}", Properties.Resources.DXF_File, "dxf");
-            //openFileDialog.Multiselect = false;
-            //if (openFileDialog.ShowDialog() == true)
-            //{
-            //    DXFModel dxfmodel = new DXFModel();
-            //    dxfmodel.Convert(openFileDialog.FileName);
-            //    Window window = new Window();
-            //    DXFImage image = new DXFImage(dxfmodel);
-            //    DXFImage.BaseP = new Point(0, 550);
-            //    image.DrawImage();
-            //    DrawingPanel panel = new DrawingPanel();
-            //    window.Content = panel;
-            //    panel.Add(image);
-            //    window.Show();
-            //}
-
+            /*
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = string.Format("{0}|*.{1}", Properties.Resources.DXF_File, "dxf");
+            openFileDialog.Multiselect = false;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                DXFModel dxfmodel = new DXFModel();
+                dxfmodel.Convert(openFileDialog.FileName);
+                Window window = new Window();
+                DXFImage image = new DXFImage(dxfmodel);
+                DXFImage.BaseP = new Point(0, 550);
+                image.DrawImage();
+                DrawingPanel panel = new DrawingPanel();
+                window.Content = panel;
+                panel.Add(image);
+                window.Show();
+            }
+            */
         }
         #endregion
 
