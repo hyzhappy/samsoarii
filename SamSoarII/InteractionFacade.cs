@@ -904,13 +904,10 @@ namespace SamSoarII
                     if (ecount + wcount > 0) wndMain.LACErrorList.Show();
                 }
             }
-            //else
-            //    _projectModel.IsModify = false;if (showreport)
             if (showreport)
                 ShowMessage(Properties.Resources.Program_Correct, loadinghandle, false, true);
             else
                 loadinghandle?.Abort();
-            //result = true;
             return result;
         }
 
@@ -1006,6 +1003,7 @@ namespace SamSoarII
                 cw.Write("typedef float* FLOAT;\r\n");
                 cw.Write("#define DW ((DWORD)W)\r\n");
                 cw.Write("#define FW ((FLOAT)W)\r\n");
+                cw.Write("#define PI 3.1415926");
                 sline = 9 + fbmodel.Funcs.Count();
                 if (fbmodel.IsLibrary)
                 {

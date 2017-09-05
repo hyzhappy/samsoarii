@@ -36,8 +36,9 @@ namespace SamSoarII.Core.Models
             }
         }
 
-        public ValueInfo(ValuePrototype _prototype, int _dataaddr)
+        public ValueInfo(ValueManager _parent, ValuePrototype _prototype, int _dataaddr)
         {
+            parent = _parent;
             prototype = _prototype;
             dataaddr = _dataaddr;
             values = new ObservableCollection<ValueModel>();
@@ -67,6 +68,7 @@ namespace SamSoarII.Core.Models
             alias = null;
             initmodel = null;
             PropertyChanged = null;
+            parent = null;
         }
 
         public void Initialize(bool storedispose = true)
@@ -87,6 +89,9 @@ namespace SamSoarII.Core.Models
 
         #region Number
 
+        private ValueManager parent;
+        public ValueManager Parent { get { return this.parent; } }
+
         private ValuePrototype prototype;
         public ValuePrototype Prototype { get { return this.prototype; } }
         public string Name { get { return prototype.Text; } }
@@ -103,13 +108,14 @@ namespace SamSoarII.Core.Models
         }
         public void Add(ValueModel value)
         {
-            Values.Add(value);
+            if (this != parent.EmptyInfo)
+                Values.Remove(value);
             if (value.Store != null)
             {
                 value.Store.Parent = this;
                 value.Store.RefNum++;
                 value.Store.VisualRefNum += value.Parent.View != null ? 1 : 0;
-                if (prototype.Base != ValueModel.Bases.NULL && value.Store.RefNum == 1)
+                if (this != parent.EmptyInfo && value.Store.RefNum == 1)
                     Stores.Add(value.Store);
             }
             else
@@ -121,7 +127,7 @@ namespace SamSoarII.Core.Models
                 if (vstore == null)
                 {
                     vstore = new ValueStore(this, value.Type, value.Intra, value.IntraOffset, flag);
-                    if (prototype.Base != ValueModel.Bases.NULL)
+                    if (this != parent.EmptyInfo)
                         Stores.Add(vstore);
                 }
                 vstore.RefNum++;
@@ -131,18 +137,18 @@ namespace SamSoarII.Core.Models
         }
         public void Remove(ValueModel value)
         {
-            Values.Remove(value);
+            if (this != parent.EmptyInfo)
+                Values.Remove(value);
             if (value.Store != null)
             {
-                bool isvar = true;
-                isvar &= value.Type != ValueModel.Types.STRING;
-                isvar &= value.Base != ValueModel.Bases.K;
-                isvar &= value.Base != ValueModel.Bases.H;
                 value.Store.RefNum--;
                 value.Store.VisualRefNum -= value.Parent.View != null ? 1 : 0;
-                if (prototype.Base != ValueModel.Bases.NULL && value.Store.RefNum == 0)
-                    Stores.Remove(value.Store);
-                if (isvar) value.Store = null;
+                if (this != parent.EmptyInfo)
+                {
+                    if (value.Store.RefNum == 0)
+                        Stores.Remove(value.Store);
+                    value.Store = null;
+                }
             }
         }
 
@@ -177,6 +183,7 @@ namespace SamSoarII.Core.Models
         }
         public void Add(LadderUnitModel unit)
         {
+            if (this == parent.EmptyInfo) return;
             if (units == null) units = new Dictionary<LadderUnitModel, int>();
             if (!units.ContainsKey(unit))
             {
@@ -188,6 +195,7 @@ namespace SamSoarII.Core.Models
         }
         public void Remove(LadderUnitModel unit)
         {
+            if (this == parent.EmptyInfo) return;
             if (units == null) return;
             if (!units.ContainsKey(unit)) return;
             if (--units[unit] == 0)
