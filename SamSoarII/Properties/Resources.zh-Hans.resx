@@ -2442,4 +2442,7 @@
   <data name="Message_DXF_HasBeenImported" xml:space="preserve">
     <value>选定的DXF文件已经加载！</value>
   </data>
+  <data name="Error_VerticalLineUnder" xml:space="preserve">
+    <value>网络底部存在竖线，无法执行合并操作！</value>
+  </data>
 </root>

@@ -2698,6 +2698,16 @@ namespace SamSoarII.Shell.Models
                     if (_selectArea.Core.State == SelectAreaCore.Status.SelectCross
                      && SelectAllNetworks.Count() > 0)
                     {
+                        foreach (LadderNetworkModel network in SelectAllNetworks)
+                        {
+                            int hmax = network.Children.Count() > 0 ? network.Children.Select(u => u.Y).Max() : -1;
+                            int vmax = network.VLines.Count() > 0 ? network.VLines.Select(v => v.Y).Max() : -1;
+                            if ((hmax >= 0 || vmax >= 0) && vmax >= hmax)
+                            {
+                                LocalizedMessageBox.Show(Properties.Resources.Error_VerticalLineUnder, LocalizedMessageIcon.Warning);
+                                return;
+                            }
+                        }
                         core.MergeNetworks(SelectAllNetworks, SelectAllNetworks.Select(n => n.ID).Min());
                     }
                     break;
