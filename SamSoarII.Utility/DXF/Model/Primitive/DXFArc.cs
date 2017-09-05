@@ -12,35 +12,35 @@ namespace SamSoarII.Utility.DXF
         //这里代表角度
         public double SAngle,EAngle;
         public Point StartP, EndP;
-        public DXFArc(string name, DXFReader reader, DXFModel parent) : base(reader, parent)
+        public DXFArc(string name, DXFModel parent) : base(parent)
         {
             Name = name;
             Type = EntityType.Arc;
             ReadProperties();
-            parent.Graph.Add(new DXFEdge(this));
+            parent.Graph.AddEdge(new DXFEdge(this));
         }
         public override void ReadProperties()
         {
             while (true)
             {
-                Reader.MoveNext();
-                if (Reader.CurrentCode == 0) break;
-                switch (Reader.CurrentCode)
+                Parent.Reader.MoveNext();
+                if (Parent.Reader.CurrentCode == 0) break;
+                switch (Parent.Reader.CurrentCode)
                 {
                     case 10:
-                        CenterP.X = Convert.ToDouble(Reader.CurrentValue);
+                        CenterP.X = Convert.ToDouble(Parent.Reader.CurrentValue);
                         break;
                     case 20:
-                        CenterP.Y = Convert.ToDouble(Reader.CurrentValue);
+                        CenterP.Y = Convert.ToDouble(Parent.Reader.CurrentValue);
                         break;
                     case 40:
-                        radius = Convert.ToDouble(Reader.CurrentValue);
+                        radius = Convert.ToDouble(Parent.Reader.CurrentValue);
                         break;
                     case 50:
-                        SAngle = Convert.ToDouble(Reader.CurrentValue);
+                        SAngle = Convert.ToDouble(Parent.Reader.CurrentValue);
                         break;
                     case 51:
-                        EAngle = Convert.ToDouble(Reader.CurrentValue);
+                        EAngle = Convert.ToDouble(Parent.Reader.CurrentValue);
                         break;
                 }
             }

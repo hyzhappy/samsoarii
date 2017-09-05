@@ -11,31 +11,31 @@ namespace SamSoarII.Utility.DXF
     {
         public Point CenterP = new Point();
         public double radius;
-        public DXFCircle(string name, DXFReader reader, DXFModel parent) : base(reader, parent)
+        public DXFCircle(string name, DXFModel parent) : base(parent)
         {
             Name = name;
             Type = EntityType.Circle;
             ReadProperties();
-            parent.Graph.Add(new DXFEdge(this));
+            parent.Graph.AddEdge(new DXFEdge(this));
         }
-        protected DXFCircle(DXFReader reader, DXFModel parent) : base(reader, parent) { }
+        protected DXFCircle(DXFModel parent) : base(parent) { }
         
         public override void ReadProperties()
         {
             while (true)
             {
-                Reader.MoveNext();
-                if (Reader.CurrentCode == 0) break;
-                switch (Reader.CurrentCode)
+                Parent.Reader.MoveNext();
+                if (Parent.Reader.CurrentCode == 0) break;
+                switch (Parent.Reader.CurrentCode)
                 {
                     case 10:
-                        CenterP.X = Convert.ToDouble(Reader.CurrentValue);
+                        CenterP.X = Convert.ToDouble(Parent.Reader.CurrentValue);
                         break;
                     case 20:
-                        CenterP.Y = Convert.ToDouble(Reader.CurrentValue);
+                        CenterP.Y = Convert.ToDouble(Parent.Reader.CurrentValue);
                         break;
                     case 40:
-                        radius = Convert.ToDouble(Reader.CurrentValue);
+                        radius = Convert.ToDouble(Parent.Reader.CurrentValue);
                         break;
                 }
             }

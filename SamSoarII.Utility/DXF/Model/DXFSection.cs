@@ -7,7 +7,7 @@ namespace SamSoarII.Utility.DXF
 {
     public class DXFSection : DXFEntity
     {
-        public DXFSection(string name, DXFReader reader,DXFModel parent) : base(reader, parent)
+        public DXFSection(string name,DXFModel parent) : base(parent)
         {
             Type = EntityType.Section;
             Name = name;
@@ -25,29 +25,29 @@ namespace SamSoarII.Utility.DXF
                     while (true)
                     {
                         //这里为0时表示下一个图元,因此不移动
-                        if (Reader.CurrentCode != 0)
-                            Reader.MoveNext();
-                        if (Reader.CurrentValue == "ENDSEC")
+                        if (Parent.Reader.CurrentCode != 0)
+                            Parent.Reader.MoveNext();
+                        if (Parent.Reader.CurrentValue == "ENDSEC")
                             break;
-                        switch (Reader.CurrentCode)
+                        switch (Parent.Reader.CurrentCode)
                         {
                             case 0:
-                                switch (Reader.CurrentValue)
+                                switch (Parent.Reader.CurrentValue)
                                 {
                                     case "LINE":
-                                        Entities.Add(new DXFLine(Reader.CurrentValue, Reader, Parent));
+                                        Entities.Add(new DXFLine(Parent.Reader.CurrentValue, Parent));
                                         break;
                                     case "ARC":
-                                        Entities.Add(new DXFArc(Reader.CurrentValue, Reader, Parent));
+                                        Entities.Add(new DXFArc(Parent.Reader.CurrentValue, Parent));
                                         break;
                                     case "ELLIPSE":
-                                        Entities.Add(new DXFEllipse(Reader.CurrentValue, Reader, Parent));
+                                        Entities.Add(new DXFEllipse(Parent.Reader.CurrentValue, Parent));
                                         break;
                                     case "CIRCLE":
-                                        Entities.Add(new DXFCircle(Reader.CurrentValue, Reader, Parent));
+                                        Entities.Add(new DXFCircle(Parent.Reader.CurrentValue, Parent));
                                         break;
                                     default:
-                                        Reader.MoveNext();
+                                        Parent.Reader.MoveNext();
                                         break;
                                 }
                                 break;
@@ -62,8 +62,8 @@ namespace SamSoarII.Utility.DXF
         {
             while (true)
             {
-                Reader.MoveNext();
-                if (Reader.CurrentValue == "ENDSEC") break;
+                Parent.Reader.MoveNext();
+                if (Parent.Reader.CurrentValue == "ENDSEC") break;
             }
         }
     }

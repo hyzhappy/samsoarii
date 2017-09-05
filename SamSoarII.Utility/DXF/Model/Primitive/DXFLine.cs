@@ -9,34 +9,47 @@ namespace SamSoarII.Utility.DXF
 {
     public class DXFLine : DXFEntity
     {
-        public Point StartP = new Point();
-        public Point EndP = new Point();
-        public DXFLine(string name,DXFReader reader,DXFModel parent) : base(reader, parent)
+        public Point StartP;
+        public Point EndP;
+        private bool isReal;
+        public bool IsReal { get { return isReal; } }
+        public DXFLine(string name, DXFModel parent) : base(parent)
         {
             Name = name;
             Type = EntityType.Line;
+            isReal = true;
             ReadProperties();
-            parent.Graph.Add(new DXFEdge(this));
+            parent.Graph.AddEdge(new DXFEdge(this));
         }
+        //虚线的构造函数
+        public DXFLine(DXFModel parent, Point startP, Point endP) : base(parent)
+        {
+            Name = "LINE";
+            Type = EntityType.Line;
+            isReal = false;
+            StartP = startP;
+            EndP = endP;
+        }
+
         public override void ReadProperties()
         {
             while (true)
             {
-                Reader.MoveNext();
-                if (Reader.CurrentCode == 0) break;
-                switch (Reader.CurrentCode)
+                Parent.Reader.MoveNext();
+                if (Parent.Reader.CurrentCode == 0) break;
+                switch (Parent.Reader.CurrentCode)
                 {
                     case 10:
-                        StartP.X = Convert.ToDouble(Reader.CurrentValue);
+                        StartP.X = Convert.ToDouble(Parent.Reader.CurrentValue);
                         break;
                     case 20:
-                        StartP.Y = Convert.ToDouble(Reader.CurrentValue);
+                        StartP.Y = Convert.ToDouble(Parent.Reader.CurrentValue);
                         break;
                     case 11:
-                        EndP.X = Convert.ToDouble(Reader.CurrentValue);
+                        EndP.X = Convert.ToDouble(Parent.Reader.CurrentValue);
                         break;
                     case 21:
-                        EndP.Y = Convert.ToDouble(Reader.CurrentValue);
+                        EndP.Y = Convert.ToDouble(Parent.Reader.CurrentValue);
                         break;
                 }
             }
