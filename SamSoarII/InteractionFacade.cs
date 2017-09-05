@@ -909,8 +909,8 @@ namespace SamSoarII
             if (showreport)
                 ShowMessage(Properties.Resources.Program_Correct, loadinghandle, false, true);
             else
-                loadinghandle.Abort();
-            result = true;
+                loadinghandle?.Abort();
+            //result = true;
             return result;
         }
 
