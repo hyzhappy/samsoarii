@@ -754,12 +754,12 @@ namespace SamSoarII
             loadinghandle.Start();
             vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
+                vmdProj.LadderMode = LadderModes.Edit;
                 mngComu.AbortAll();
                 mngComu.IsEnable = false;
-                vmdProj.LadderMode = LadderModes.Edit;
+                if (!mngComu.IsAlive && !isenvokedcomaborted)
+                    OnCommunicationAborted(this, new RoutedEventArgs());
             });
-            if (!mngComu.IsAlive && !isenvokedcomaborted)
-                OnCommunicationAborted(this, new RoutedEventArgs());
         }
         private bool isenvokedcomaborted;
         private void OnCommunicationAborted(object sender, RoutedEventArgs e)
@@ -789,7 +789,6 @@ namespace SamSoarII
                         break;
                 }
             });
-                
         }
         
         #endregion
