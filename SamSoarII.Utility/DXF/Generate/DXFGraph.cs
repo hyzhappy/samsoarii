@@ -15,8 +15,13 @@ namespace SamSoarII.Utility.DXF
 
         private DXFVertex startP = new DXFVertex(new Point(0,0));
         public DXFVertex StartP { get { return startP; } }
-        public DXFGraph()
+
+        private DXFModel model;
+
+        public DXFModel Model { get { return model; } }
+        public DXFGraph(DXFModel model)
         {
+            this.model = model;
             Graph = new SortedDictionary<DXFVertex, List<DXFEdge>>();
         }
 
@@ -51,7 +56,7 @@ namespace SamSoarII.Utility.DXF
             //判断图是否存在起点，不存在则添加进去
             if (!Graph.ContainsKey(startP))
                 if (Graph.Count > 0)
-                    AddEdge(new DXFEdge(startP, Graph.Keys.First()));//添加一条连接起点和图的虚线
+                    AddEdge(new DXFEdge(startP, Graph.Keys.First(), model));//添加一条连接起点和图的虚线
             //DXFVertex是类，因此不同边的定点引用不同，这里将引用设置一致
             initVertex();
             //先遍历所有节点，得到该图的所有连通子图,并转化成一笔画图
@@ -100,7 +105,7 @@ namespace SamSoarII.Utility.DXF
             for (int i = 1; i < graphs.Count; i++)
             {
                 //将每个一笔画图首位相连,生成一幅一笔画图
-                path.Add(new DXFEdge(graphs[i - 1].EndP, graphs[i].StartP));
+                path.Add(new DXFEdge(graphs[i - 1].EndP, graphs[i].StartP, model));
                 path.AddRange(graphs[i].Path);
             }
         }

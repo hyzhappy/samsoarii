@@ -83,7 +83,7 @@ namespace SamSoarII.Utility.DXF
                         vertex1 = tempStack.Pop();
                         vertex2 = tempStack.Pop();
                         //添加虚线
-                        parent.AddEdge(new DXFEdge(vertex1, vertex2));
+                        parent.AddEdge(new DXFEdge(vertex1, vertex2, parent.Model));
                     }
                     startP = tempStack.Pop();
                     endP = tempStack.Pop();
@@ -112,7 +112,7 @@ namespace SamSoarII.Utility.DXF
                 if (!edge.IsSreached)
                 {
                     edge.IsSreached = true;
-                    if (edge.Start != p)
+                    if (edge.Start.CompareTo(p) != 0)
                         edge.Flip();//保持图的有向性
                     path.Add(edge);
                     DPSearchEdge(edge.End, ref path);

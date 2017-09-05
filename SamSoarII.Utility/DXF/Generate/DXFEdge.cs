@@ -8,8 +8,6 @@ namespace SamSoarII.Utility.DXF
 {
     public class DXFEdge
     {
-        private bool isReal;
-        public bool IsReal { get { return isReal; } }
         private bool isSreached;
         public bool IsSreached { get { return isSreached; } set { isSreached = value; } }
         private DXFEntity entity;
@@ -17,19 +15,17 @@ namespace SamSoarII.Utility.DXF
         public DXFEdge(DXFEntity entity)
         {
             this.entity = entity;
-            //代表实线
-            isReal = true;
             isSreached = false;
             ComputeVertex();
         }
-        public DXFEdge(DXFVertex start, DXFVertex end)
+        public DXFEdge(DXFVertex start, DXFVertex end, DXFModel model)
         {
             Start = start;
             End = end;
-            //代表虚线
-            isReal = false;
             isSreached = false;
+            entity = new DXFLine(model, start.P, end.P);
         }
+
         public DXFVertex Start, End;
 
         private void ComputeVertex()
