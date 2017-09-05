@@ -109,28 +109,17 @@ namespace SamSoarII.Shell.Dialogs
                         switch (words[0].ToUpper())
                         {
                             case "CALL":
-                                if (words.Length == 2)
-                                {
-                                    return _subdiagramSource.Where(x => { return (x.Content as string).StartsWith(words[1]); });
-                                }
-                                break;
                             case "ATCH":
                                 if (words.Length == 2)
-                                {
-                                    return _subdiagramSource.Where(x => { return (x.Content as string).StartsWith(words[2]); });
-                                }
+                                    return _subdiagramSource.Where(x => { return (x.Content as string).StartsWith(words[1]); });
                                 break;
                             case "CALLM":
                                 if (words.Length == 2)
-                                {
                                     return _functionSource.Where(x => { return (x.Content as string).StartsWith(words[1]); });
-                                }
                                 break;
                             case "MBUS":
                                 if (words.Length == 3)
-                                {
                                     return _modbusSource.Where(x => { return (x.Content as string).StartsWith(words[2]); });
-                                }
                                 break;
                         }
                     }

@@ -1009,12 +1009,15 @@ namespace SamSoarII
                 sline = 9 + fbmodel.Funcs.Count();
                 if (fbmodel.IsLibrary)
                 {
-                    cw.Write("double asin(double a) {}\r\n");
-                    cw.Write("double acos(double a) {}\r\n");
-                    cw.Write("double atan(double a) {}\r\n");
-                    cw.Write("double log(double a) {}\r\n");
-                    cw.Write("double log10(double a) {}\r\n");
-                    cw.Write("double sqrt(double a) {}\r\n");
+                    cw.Write("float sin(float a) {}\r\n");
+                    cw.Write("float cos(float a) {}\r\n");
+                    cw.Write("float tan(float a) {}\r\n");
+                    cw.Write("float asin(float a) {}\r\n");
+                    cw.Write("float acos(float a) {}\r\n");
+                    cw.Write("float atan(float a) {}\r\n");
+                    cw.Write("float log(float a) {}\r\n");
+                    cw.Write("float log10(float a) {}\r\n");
+                    cw.Write("float sqrt(float a) {}\r\n");
                     sline += 6;
                 }
                 foreach (FuncModel fmodel in fbmodel.Funcs)
@@ -1051,11 +1054,11 @@ namespace SamSoarII
                     stderr.Append(cmd.StandardError.ReadToEnd());
                     Thread.Sleep(50);
                 }
-                m1 = Regex.Match(stderr.ToString(), @"[^\s](.+):(.+):(.+): error: (.+)\r\n");
+                m1 = Regex.Match(stderr.ToString(), @"[^\s](.+):(.+):(.+): (error|fatal error): (.+)\r\n");
                 m2 = Regex.Match(stderr.ToString(), @"[^\s](.+):(.+):(.+): warning: (.+)\r\n");
                 while (m1 != null && m1.Success)
                 {
-                    message = m1.Groups[4].Value;
+                    message = m1.Groups[5].Value;
                     line = int.Parse(m1.Groups[2].Value) - sline;
                     if (line > 0)
                     {
