@@ -49,15 +49,21 @@ namespace SamSoarII.Utility.DXF
                 case EntityType.Ellipse:
                     DXFEllipse ellipsec = (DXFEllipse)entity;
                     Start = new DXFVertex(ellipsec.LongP);
-                    End = new DXFVertex(ellipsec.LongP);
+                    End = Start;
                     break;
                 case EntityType.Circle:
                     DXFCircle circle = (DXFCircle)entity;
                     Point p = new Point(circle.CenterP.X - circle.radius, circle.CenterP.Y);
                     Start = new DXFVertex(p);
-                    End = new DXFVertex(p);
+                    End = Start;
                     break;
             }
+        }
+        public void Flip()
+        {
+            DXFVertex temp = Start;
+            Start = End;
+            End = temp;
         }
     }
 }

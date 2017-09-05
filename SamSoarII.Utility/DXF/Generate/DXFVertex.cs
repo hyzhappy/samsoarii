@@ -33,7 +33,7 @@ namespace SamSoarII.Utility.DXF
         }
         private int ComputeOffset(double x1,double x2)
         {
-            if (Math.Abs(x1 - x2) < 0.00001) return 0;
+            if (Math.Abs(x1 - x2) < 0.0001) return 0;
             if (x1 > x2) return 1;
             else return -1;
         }

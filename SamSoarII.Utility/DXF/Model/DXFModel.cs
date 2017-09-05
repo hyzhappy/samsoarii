@@ -52,6 +52,7 @@ namespace SamSoarII.Utility.DXF
             {
                 converter.Close();
             }
+            Graph.Convert();
         }
     }
 }

@@ -45,9 +45,8 @@ namespace SamSoarII.Core.Models
             dxf = new DXFModel();
             dxf.Convert(filename);
             elements = new List<DXFEntity>();
-            foreach (DXFEntity section in dxf.Sections)
-                foreach (DXFEntity entity in section.Entities)
-                    elements.Add(entity);
+            foreach (var entity in dxf.Graph.Path)
+                elements.Add(entity.Entity);
             data = DownloadHelper.GetData(this);
         }
 

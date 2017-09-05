@@ -16,8 +16,9 @@ namespace SamSoarII.Utility.DXF
             Name = name;
             Type = EntityType.Line;
             ReadProperties();
-            parent.Graph.Add(new DXFEdge(this));
+            parent.Graph.AddEdge(new DXFEdge(this));
         }
+
         public override void ReadProperties()
         {
             while (true)

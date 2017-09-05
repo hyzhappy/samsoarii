@@ -16,7 +16,7 @@ namespace SamSoarII.Utility.DXF
             Name = name;
             Type = EntityType.Circle;
             ReadProperties();
-            parent.Graph.Add(new DXFEdge(this));
+            parent.Graph.AddEdge(new DXFEdge(this));
         }
         protected DXFCircle(DXFReader reader, DXFModel parent) : base(reader, parent) { }
         

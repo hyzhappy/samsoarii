@@ -909,7 +909,7 @@ namespace SamSoarII
             if (showreport)
                 ShowMessage(Properties.Resources.Program_Correct, loadinghandle, false, true);
             else
-                loadinghandle.Abort();
+                loadinghandle?.Abort();
             result = true;
             return result;
         }
@@ -1972,24 +1972,24 @@ namespace SamSoarII
                 dialog.Help += (sender, e) => { ShowHelpDocument(); };
                 dialog.ShowDialog();
             }
-            /*
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = string.Format("{0}|*.{1}", Properties.Resources.DXF_File, "dxf");
-            openFileDialog.Multiselect = false;
-            if (openFileDialog.ShowDialog() == true)
-            {
-                DXFModel dxfmodel = new DXFModel();
-                dxfmodel.Convert(openFileDialog.FileName);
-                Window window = new Window();
-                DXFImage image = new DXFImage(dxfmodel);
-                DXFImage.BaseP = new Point(0, 550);
-                image.DrawImage();
-                DrawingPanel panel = new DrawingPanel();
-                window.Content = panel;
-                panel.Add(image);
-                window.Show();
-            }
-            */
+
+            //OpenFileDialog openFileDialog = new OpenFileDialog();
+            //openFileDialog.Filter = string.Format("{0}|*.{1}", Properties.Resources.DXF_File, "dxf");
+            //openFileDialog.Multiselect = false;
+            //if (openFileDialog.ShowDialog() == true)
+            //{
+            //    DXFModel dxfmodel = new DXFModel();
+            //    dxfmodel.Convert(openFileDialog.FileName);
+            //    Window window = new Window();
+            //    DXFImage image = new DXFImage(dxfmodel);
+            //    DXFImage.BaseP = new Point(0, 550);
+            //    image.DrawImage();
+            //    DrawingPanel panel = new DrawingPanel();
+            //    window.Content = panel;
+            //    panel.Add(image);
+            //    window.Show();
+            //}
+
         }
         #endregion
 
