@@ -746,9 +746,10 @@ namespace SamSoarII
         private void _CloseMonitor(CloseMonitorToDo todo = CloseMonitorToDo.NONE)
         {
             closemonitortodo = todo;
+            mngComu.Aborted += OnCommunicationAborted;
+            isenvokedcomaborted = false;
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
                 UnderBarStatus.Loading, Properties.Resources.Monitor_Closing));
-            mngComu.Aborted += OnCommunicationAborted;
             loadinghandle = new LoadingWindowHandle(Properties.Resources.Monitor_Closing);
             loadinghandle.Start();
             vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
@@ -756,14 +757,14 @@ namespace SamSoarII
                 mngComu.AbortAll();
                 mngComu.IsEnable = false;
                 vmdProj.LadderMode = LadderModes.Edit;
-                //while (mngComu.IsAlive) Thread.Sleep(10);
-                //loadinghandle.Completed = true;
-                //loadinghandle.Abort();
             });
-            //while (!loadinghandle.Completed) Thread.Sleep(10);
+            if (!mngComu.IsAlive && !isenvokedcomaborted)
+                OnCommunicationAborted(this, new RoutedEventArgs());
         }
+        private bool isenvokedcomaborted;
         private void OnCommunicationAborted(object sender, RoutedEventArgs e)
         {
+            isenvokedcomaborted = true;
             mngComu.Aborted -= OnCommunicationAborted;
             loadinghandle.Completed = true;
             loadinghandle.Abort();
@@ -888,9 +889,9 @@ namespace SamSoarII
             int ecount = 0;
             int wcount = 0;
             weinsts = _CheckInsts(ref ecount, ref wcount);
+            result = (ecount == 0);
             if (weinsts.Count() > 0)
             {
-                result = (ecount == 0);
                 if (showreport || !result)
                 {
                     if (App.CultureIsZH_CH())
