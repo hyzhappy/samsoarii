@@ -135,9 +135,9 @@ namespace SamSoarII.Core.Models
             if (value.Store != null)
             {
                 bool isvar = true;
-                isvar &= value.Store.Type != ValueModel.Types.STRING;
-                isvar &= value.Store.Base != ValueModel.Bases.K;
-                isvar &= value.Store.Base != ValueModel.Bases.H;
+                isvar &= value.Type != ValueModel.Types.STRING;
+                isvar &= value.Base != ValueModel.Bases.K;
+                isvar &= value.Base != ValueModel.Bases.H;
                 value.Store.RefNum--;
                 value.Store.VisualRefNum -= value.Parent.View != null ? 1 : 0;
                 if (prototype.Base != ValueModel.Bases.NULL && value.Store.RefNum == 0)
