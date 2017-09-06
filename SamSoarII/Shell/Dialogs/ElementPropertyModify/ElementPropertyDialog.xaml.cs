@@ -61,6 +61,7 @@ namespace SamSoarII.Shell.Dialogs
         public void Dispose()
         {
             core = null;
+            BPModel.Dispose();
             BPModel = null;
         }
 

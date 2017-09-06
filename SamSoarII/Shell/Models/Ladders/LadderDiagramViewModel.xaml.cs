@@ -361,15 +361,41 @@ namespace SamSoarII.Shell.Models
 
         public void RemoveNet()
         {
+            int netstart = -1, netend = -1;
             switch (SelectionStatus)
             {
                 case SelectStatus.SingleSelected:
-                    Core.RemoveN(SelectRectOwner.ID, SelectRectOwner);
+                    netstart = netend = SelectRectOwner.ID;
+                    Core.RemoveN(netend, SelectRectOwner);
                     break;
                 case SelectStatus.MultiSelected:
+                    netstart = _selectArea.Core.NetStart;
+                    netend = _selectArea.Core.NetEnd;
                     Core.ReplaceN(SelectAllNetworks, new LadderNetworkModel[] { });
                     break;
             }
+            if (_selectStatus == SelectStatus.Idle && netend >= 0)
+                for (int i = netend; i < core.NetworkCount; i++)
+                {
+                    if (core.Children[i].IsMasked) continue;
+                    core.Children[i].IsExpand = true;
+                    _selectRect.Core.X = 0;
+                    _selectRect.Core.Y = 0;
+                    _selectRect.Core.Parent = core.Children[i];
+                    _selectStatus = SelectStatus.SingleSelected;
+                    break;
+                }
+            if (_selectStatus == SelectStatus.Idle && netstart >= 0)
+                for (int i = netstart - 1; i >= 0; i--)
+                {
+                    if (core.Children[i].IsMasked) continue;
+                    core.Children[i].IsExpand = true;
+                    _selectRect.Core.X = 0;
+                    _selectRect.Core.Y = 0;
+                    _selectRect.Core.Parent = core.Children[i];
+                    _selectStatus = SelectStatus.SingleSelected;
+                    break;
+                }
         }
 
         #endregion
@@ -1516,11 +1542,12 @@ namespace SamSoarII.Shell.Models
         {
             this.Focus();
             Keyboard.Focus(this);
-            
+            /*
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 _selectStatus = SelectStatus.Idle;
             }
+            */
             if (LadderMode != LadderModes.Edit)
             {
                 return;
@@ -2361,7 +2388,25 @@ namespace SamSoarII.Shell.Models
             if (MainCanvas.ContextMenu == cmMoni && cmMoni.Core == null)
                 MainCanvas.ContextMenu = null;
             if (e.ClickCount == 2 && _selectRect.Core.Parent != null)
-            { 
+                mouseuptohandledoubleclick = true;
+        }
+
+        private bool mouseuptohandledoubleclick = false;
+        private void OnMainCanvasMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            CanvasGrid.ReleaseMouseCapture();
+            switch (SelectionStatus)
+            {
+                case SelectStatus.SingleSelecting:
+                    _selectStatus = SelectStatus.SingleSelected;
+                    break;
+                case SelectStatus.MultiSelecting:
+                    _selectStatus = SelectStatus.MultiSelected;
+                    break;
+            }
+            if (mouseuptohandledoubleclick)
+            {
+                mouseuptohandledoubleclick = false;
                 LadderUnitModel unit = _selectRect.Current;
                 if (LadderMode == LadderModes.Edit)
                 {
@@ -2374,20 +2419,6 @@ namespace SamSoarII.Shell.Models
                 {
                     IFParent.ShowValueModifyDialog(unit.UniqueChildren);
                 }
-            }
-        }
-        
-        private void OnMainCanvasMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            CanvasGrid.ReleaseMouseCapture();
-            switch (SelectionStatus)
-            {
-                case SelectStatus.SingleSelecting:
-                    _selectStatus = SelectStatus.SingleSelected;
-                    break;
-                case SelectStatus.MultiSelecting:
-                    _selectStatus = SelectStatus.MultiSelected;
-                    break;
             }
         }
         
