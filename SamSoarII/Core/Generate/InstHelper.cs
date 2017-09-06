@@ -531,9 +531,14 @@ namespace SamSoarII.Core.Generate
                     break;
                 // 交替
                 case "ALT": sw.Write("if ({0:s}) {1:s}=({1:s} ? 0 : 1);\n", cond, inst[1]); break;
+                case "WBALT": sw.Write("if ({0:s}) {1:s} ({2:s} ? 0 : 1);\n", cond, inst.ToCWrite(1), inst.ToCRead(1)); break;
                 // 上升沿交替
                 case "ALTP":
                     sw.Write("if ({3:s} && _global[{0:d}]==0 && _stack_{1:d}==1) {2:s}=({2:s} ? 0 : 1);\n", globalCount, stackTop, inst[1], cond);
+                    sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount++, stackTop);
+                    break;
+                case "WBALTP":
+                    sw.Write("if ({4:s} && _global[{0:d}]==0 && _stack_{1:d}==1) {2:s}=({3:s} ? 0 : 1);\n", globalCount, stackTop, inst.ToCWrite(1), inst.ToCRead(1), cond);
                     sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount++, stackTop);
                     break;
                 // 当栈顶为1时运行的计时器

@@ -386,6 +386,244 @@ namespace SamSoarII.Core.Generate
             return vmodel.Text;
         }
 
+        public string ToCRead(int id)
+        {
+            ValueModel vmodel = prototype.Children[id - 1];
+            switch (vmodel.Type)
+            {
+                case ValueModel.Types.BOOL:
+                    switch (vmodel.Base)
+                    {
+                        case ValueModel.Bases.X:
+                        case ValueModel.Bases.Y:
+                            if (vmodel.IsExtend)
+                                return String.Format("E{0:s}Bit[{1:s}-512]",
+                                    ValueModel.NameOfBases[(int)(vmodel.Base)],
+                                    ToCIndex(vmodel));
+                            else
+                                return String.Format("{0:s}Bit[{1:s}]",
+                                    ValueModel.NameOfBases[(int)(vmodel.Base)],
+                                    ToCIndex(vmodel));
+                        case ValueModel.Bases.S:
+                        case ValueModel.Bases.M:
+                        case ValueModel.Bases.C:
+                        case ValueModel.Bases.T:
+                            return String.Format("{0:s}Bit[{1:s}]",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)],
+                                ToCIndex(vmodel));
+                        case ValueModel.Bases.D:
+                        case ValueModel.Bases.V:
+                        case ValueModel.Bases.Z:
+                            return String.Format(
+                                "_get_wbit({0:s}Word+({1:s}>>4), {1:s}&15)",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                    }
+                    break;
+                case ValueModel.Types.WORD:
+                    switch (vmodel.Base)
+                    {
+                        case ValueModel.Bases.D:
+                        case ValueModel.Bases.AI:
+                        case ValueModel.Bases.AO:
+                        case ValueModel.Bases.V:
+                        case ValueModel.Bases.Z:
+                        case ValueModel.Bases.TV:
+                            return String.Format("{0:s}Word[{1:s}]",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.CV:
+                            return vmodel.Offset < 200
+                                ? String.Format("CVWord[{0:s}]", ToCIndex(vmodel))
+                                : String.Format("*((_WORD)(&CVDoubleWord[{0:s}-200]))", ToCIndex(vmodel));
+                        case ValueModel.Bases.X:
+                        case ValueModel.Bases.Y:
+                        case ValueModel.Bases.M:
+                        case ValueModel.Bases.S:
+                            return String.Format(
+                                "_get_bword({0:s}Bit+{1:s}, {2:d})",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel), vmodel.Size);
+                        case ValueModel.Bases.K:
+                        case ValueModel.Bases.H:
+                            return vmodel.Store.Value.ToString();
+                    }
+                    break;
+                case ValueModel.Types.DWORD:
+                    switch (vmodel.Base)
+                    {
+                        case ValueModel.Bases.D:
+                            if (vmodel.IsPulseCount)
+                                return String.Format(
+                                    "(UpdatePulseCount(({0:s}-8140)>>1),*((D_WORD)(&DWord[{0:s}])))",
+                                    ToCIndex(vmodel));
+                            return String.Format("*((D_WORD)(&DWord[{0:s}]))", ToCIndex(vmodel));
+                        case ValueModel.Bases.AI:
+                        case ValueModel.Bases.AO:
+                        case ValueModel.Bases.V:
+                        case ValueModel.Bases.Z:
+                        case ValueModel.Bases.TV:
+                            return String.Format("*((D_WORD)(&{0:s}Word[{1:s}]))",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.CV:
+                            return vmodel.Offset < 200
+                                ? String.Format("*((D_WORD)(&CVWord[{0:s}]))", ToCIndex(vmodel))
+                                : String.Format("CVDoubleWord[{0:s}-200]", ToCIndex(vmodel));
+                        case ValueModel.Bases.X:
+                        case ValueModel.Bases.Y:
+                        case ValueModel.Bases.M:
+                        case ValueModel.Bases.S:
+                            if (vmodel.IsBitDoubleWord)
+                                return String.Format(
+                                    "_get_bdword({0:s}Bit+{1:s}, {2:d})",
+                                    ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel), vmodel.Size);
+                            return String.Format("{0:s}Bit[{1:s}]",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.K:
+                        case ValueModel.Bases.H:
+                            return vmodel.Store.Value.ToString();
+                    }
+                    break;
+                case ValueModel.Types.FLOAT:
+                    switch (vmodel.Base)
+                    {
+                        case ValueModel.Bases.D:
+                        case ValueModel.Bases.AI:
+                        case ValueModel.Bases.AO:
+                        case ValueModel.Bases.V:
+                        case ValueModel.Bases.Z:
+                        case ValueModel.Bases.TV:
+                            return String.Format("*((_FLOAT)(&{0:s}Word[{1:s}]))",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.CV:
+                            return vmodel.Offset < 200
+                                ? String.Format("*((_FLOAT)(&CVWord[{0:s}]))", ToCIndex(vmodel))
+                                : String.Format("*((_FLOAT)(&CVDoubleWord[{0:s}-200]))", ToCIndex(vmodel));
+                        case ValueModel.Bases.K:
+                        case ValueModel.Bases.H:
+                            return vmodel.Store.Value.ToString();
+                    }
+                    break;
+            }
+            return vmodel.Text;
+        }
+
+        public string ToCWrite(int id)
+        {
+            ValueModel vmodel = prototype.Children[id - 1];
+            switch (vmodel.Type)
+            {
+                case ValueModel.Types.BOOL:
+                    switch (vmodel.Base)
+                    {
+                        case ValueModel.Bases.X:
+                        case ValueModel.Bases.Y:
+                            if (vmodel.IsExtend)
+                                return String.Format("E{0:s}Bit[{1:s}-512]",
+                                    ValueModel.NameOfBases[(int)(vmodel.Base)],
+                                    ToCIndex(vmodel));
+                            else
+                                return String.Format("{0:s}Bit[{1:s}]",
+                                    ValueModel.NameOfBases[(int)(vmodel.Base)],
+                                    ToCIndex(vmodel));
+                        case ValueModel.Bases.S:
+                        case ValueModel.Bases.M:
+                        case ValueModel.Bases.C:
+                        case ValueModel.Bases.T:
+                            return String.Format("{0:s}Bit[{1:s}]",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)],
+                                ToCIndex(vmodel));
+                        case ValueModel.Bases.D:
+                        case ValueModel.Bases.V:
+                        case ValueModel.Bases.Z:
+                            return String.Format(
+                                "_set_wbit({0:s}Word+({1:s}>>4), {1:s}&15,",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                    }
+                    break;
+                case ValueModel.Types.WORD:
+                    switch (vmodel.Base)
+                    {
+                        case ValueModel.Bases.D:
+                        case ValueModel.Bases.AI:
+                        case ValueModel.Bases.AO:
+                        case ValueModel.Bases.V:
+                        case ValueModel.Bases.Z:
+                        case ValueModel.Bases.TV:
+                            return String.Format("{0:s}Word[{1:s}]",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.CV:
+                            return vmodel.Offset < 200
+                                ? String.Format("CVWord[{0:s}]", ToCIndex(vmodel))
+                                : String.Format("*((_WORD)(&CVDoubleWord[{0:s}-200]))", ToCIndex(vmodel));
+                        case ValueModel.Bases.X:
+                        case ValueModel.Bases.Y:
+                        case ValueModel.Bases.M:
+                        case ValueModel.Bases.S:
+                            return String.Format(
+                                "_set_bword({0:s}Bit+{1:s}, {2:d},",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel), vmodel.Size);
+                        case ValueModel.Bases.K:
+                        case ValueModel.Bases.H:
+                            return vmodel.Store.Value.ToString();
+                    }
+                    break;
+                case ValueModel.Types.DWORD:
+                    switch (vmodel.Base)
+                    {
+                        case ValueModel.Bases.D:
+                            if (vmodel.IsPulseCount)
+                                return String.Format(
+                                    "WritePulseCount(({0:s}-8140)>>1,",
+                                    ToCIndex(vmodel));
+                            return String.Format("*((D_WORD)(&DWord[{0:s}]))", ToCIndex(vmodel));
+                        case ValueModel.Bases.AI:
+                        case ValueModel.Bases.AO:
+                        case ValueModel.Bases.V:
+                        case ValueModel.Bases.Z:
+                        case ValueModel.Bases.TV:
+                            return String.Format("*((D_WORD)(&{0:s}Word[{1:s}]))",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.CV:
+                            return vmodel.Offset < 200
+                                ? String.Format("*((D_WORD)(&CVWord[{0:s}]))", ToCIndex(vmodel))
+                                : String.Format("CVDoubleWord[{0:s}-200]", ToCIndex(vmodel));
+                        case ValueModel.Bases.X:
+                        case ValueModel.Bases.Y:
+                        case ValueModel.Bases.M:
+                        case ValueModel.Bases.S:
+                            if (vmodel.IsBitDoubleWord)
+                                return String.Format(
+                                    "_set_bdword({0:s}Bit+{1:s}, {2:d},",
+                                    ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel), vmodel.Size);
+                            return String.Format("{0:s}Bit[{1:s}]",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.K:
+                        case ValueModel.Bases.H:
+                            return vmodel.Store.Value.ToString();
+                    }
+                    break;
+                case ValueModel.Types.FLOAT:
+                    switch (vmodel.Base)
+                    {
+                        case ValueModel.Bases.D:
+                        case ValueModel.Bases.AI:
+                        case ValueModel.Bases.AO:
+                        case ValueModel.Bases.V:
+                        case ValueModel.Bases.Z:
+                        case ValueModel.Bases.TV:
+                            return String.Format("*((_FLOAT)(&{0:s}Word[{1:s}]))",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.CV:
+                            return vmodel.Offset < 200
+                                ? String.Format("*((_FLOAT)(&CVWord[{0:s}]))", ToCIndex(vmodel))
+                                : String.Format("*((_FLOAT)(&CVDoubleWord[{0:s}-200]))", ToCIndex(vmodel));
+                        case ValueModel.Bases.K:
+                        case ValueModel.Bases.H:
+                            return vmodel.Store.Value.ToString();
+                    }
+                    break;
+            }
+            return vmodel.Text;
+        }
+
         private string ToCIndex(ValueModel vmodel)
         {
             int intratime = vmodel.IsWordBit ? 16 : 1;
