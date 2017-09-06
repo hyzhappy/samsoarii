@@ -90,7 +90,7 @@ namespace SamSoarII.Shell.Dialogs
             foreach (string item in LB_Old.Items)
             {
                 currentFileLen = FileHelper.GetFileLength(item);
-                string filename = FileHelper.GetFileName(item);
+                string filename = System.IO.Path.GetFileName(item);
                 string outFilename = string.Format("{0}{1}{2}.{3}", outPath, System.IO.Path.DirectorySeparatorChar, filename, FileHelper.NewFileExtension);
                 if (File.Exists(outFilename))
                 {

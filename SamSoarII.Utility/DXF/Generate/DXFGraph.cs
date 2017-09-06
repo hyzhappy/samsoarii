@@ -10,8 +10,12 @@ namespace SamSoarII.Utility.DXF
     {
         public SortedDictionary<DXFVertex, List<DXFEdge>> Graph { get; set; }
 
-        private List<DXFEdge> path;
+        /// <summary>
+        /// 该图的一笔画路径
+        /// </summary>
         public List<DXFEdge> Path { get { return path; } }
+
+        private List<DXFEdge> path;
 
         private DXFVertex startP = new DXFVertex(new Point(0,0));
         public DXFVertex StartP { get { return startP; } }

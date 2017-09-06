@@ -756,9 +756,9 @@ namespace SamSoarII.Core.Helpers
                 {
                     DXFLine line = (DXFLine)(element);
                     Write(data, (byte)(0));
-                    Write(data, (byte)(1));
-                    Write(data, (float)(0.0));
-                    Write(data, (float)(0.0));
+                    Write(data, line.IsReal ? (byte)(1) : (byte)(0));
+                    Write(data, (float)line.EndP.X);
+                    Write(data, (float)line.EndP.Y);
                 }
                 if (element is DXFArc)
                 {
@@ -774,7 +774,7 @@ namespace SamSoarII.Core.Helpers
                 if (element is DXFCircle)
                 {
                     DXFCircle circle = (DXFCircle)(element);
-                    Write(data, (byte)(1));
+                    Write(data, (byte)(2));
                     Write(data, (byte)(1));
                     Write(data, (float)(0.0));
                     Write(data, (float)(0.0));
@@ -952,7 +952,7 @@ namespace SamSoarII.Core.Helpers
                 Directory.CreateDirectory(genPath);
             _filename = communManager.IFParent.MDProj.FileName;
             _filename = string.Format(@"{0}\{1}.{2}", genPath,
-                FileHelper.InvalidFileName(_filename) ? "tempdfile" : FileHelper.GetFileName(_filename),
+                FileHelper.InvalidFileName(_filename) ? "tempdfile" : Path.GetFileName(_filename),
                 FileHelper.NewFileExtension);
             if (File.Exists(_filename)) File.Delete(_filename);
 

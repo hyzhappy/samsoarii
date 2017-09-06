@@ -303,7 +303,7 @@ namespace SamSoarII
             try
             {
 #endif
-                mdProj = new ProjectModel(this, FileHelper.GetFileName(filename), filename);
+                mdProj = new ProjectModel(this, Path.GetFileName(filename), filename);
                 if (_isUpload) mdProj.ClearFileName();
                 else ProjectFileManager.Update(filename, filename);
                 InitializeProject();
