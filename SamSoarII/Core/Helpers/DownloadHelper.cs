@@ -78,7 +78,7 @@ namespace SamSoarII.Core.Helpers
             dtModbus = new List<byte>();
             dtTable = new List<byte>();
             dtBlock = new List<byte>();
-            dtHashCode = project.GetLadderHashCodes().ToList();
+            dtHashCode = new byte[] { 16, 0, 0, 0 }.Concat(project.GetLadderHashCodes()).ToList();
             // 条形码
 
             // 配置

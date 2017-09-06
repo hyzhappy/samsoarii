@@ -304,6 +304,10 @@ extern void CI_HMIBLOCK(uint8_t en, uint32_t *plsParamAddr, uint32_t useSheetID)
 extern void CI_PAUSE(uint8_t en, uint16_t planeNum);
 extern void CI_FOLLOW(uint8_t en, uint32_t *plsParamAddr, uint16_t Yn, uint16_t dir, uint32_t use_id);
 
+extern void CI_PLSR(uint8_t en, uint16_t *plsParam, uint32_t timechange, uint16_t Yn, uint32_t use_id);
+extern void CI_PLSRD(uint8_t en, uint16_t *plsParam, uint32_t timechange, uint16_t Yn, uint16_t dir, uint32_t use_id);
+extern void CI_PLSA(uint8_t en, uint16_t *plsParam, uint32_t timechange, uint16_t Yn, uint16_t dir, uint32_t use_id);
+
 void _imyset(int16_t Yn, int16_t size);
 
 void _imyrst(int16_t Yn, int16_t size);
