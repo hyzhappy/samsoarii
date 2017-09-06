@@ -313,7 +313,6 @@ namespace SamSoarII.Core.Helpers
             Process cmd = null;
             cmd = new Process();
             cmd.StartInfo.WorkingDirectory = String.Format(@"{0:s}\downg\.", currentPath);
-            //由于暂不支持多脉冲，故默认为(PLC_FGs_Type)
             if (project.Parent.MNGComu.PLCMessage.PLCType is PLC_FGs_Type)
             {
                 switch ((PLC_FGs_Type)project.Parent.MNGComu.PLCMessage.PLCType)

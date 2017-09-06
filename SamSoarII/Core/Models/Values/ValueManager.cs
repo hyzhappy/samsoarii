@@ -75,63 +75,63 @@ namespace SamSoarII.Core.Models
         {
             parent = _parent;
             infos = new ValueInfo[InfoCount];
-            emptyinfo = new ValueInfo(new ValuePrototype(ValueModel.Bases.NULL, 0), -1);
+            emptyinfo = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.NULL, 0), -1);
             tempmodel = new ValueModel(null, new ValueFormat("TEMP", ValueModel.Types.NULL, false, false, 0, new Regex[] { ValueModel.VarRegex, ValueModel.IntKValueRegex, ValueModel.IntHValueRegex}));
             wbitmodel = new ValueModel(null, new ValueFormat("WBIT", ValueModel.Types.BOOL, false, false, 0, new Regex[] { ValueModel.WordBitRegex }));
             bdwordmodel = new ValueModel(null, new ValueFormat("BDW", ValueModel.Types.DWORD, false, false, 0, new Regex[] { ValueModel.BitDoubleWordRegex }));
             for (int i = 0; i < MaxRange.XRange.Count; i++)
-                infos[i + XOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.X, i), i + XOffset);
+                infos[i + XOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.X, i), i + XOffset);
             for (int i = 0; i < MaxRange.EXRange.Count; i++)
-                infos[i + EXOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.X, (int)(i + MaxRange.EXRange.Start)), i + EXOffset);
+                infos[i + EXOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.X, (int)(i + MaxRange.EXRange.Start)), i + EXOffset);
             for (int i = 0; i < MaxRange.YRange.Count; i++)
-                infos[i + YOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.Y, i), i + YOffset);
+                infos[i + YOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.Y, i), i + YOffset);
             for (int i = 0; i < MaxRange.EYRange.Count; i++)
-                infos[i + EYOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.Y, (int)(i + MaxRange.EYRange.Start)), i + EYOffset);
+                infos[i + EYOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.Y, (int)(i + MaxRange.EYRange.Start)), i + EYOffset);
             for (int i = 0; i < MaxRange.MRange.Count; i++)
-                infos[i + MOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.M, i), i + MOffset);
+                infos[i + MOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.M, i), i + MOffset);
             for (int i = 0; i < MaxRange.SRange.Count; i++)
-                infos[i + SOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.S, i), i + SOffset);
+                infos[i + SOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.S, i), i + SOffset);
             for (int i = 0; i < MaxRange.CRange.Count; i++)
-                infos[i + COffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.C, i), i + COffset);
+                infos[i + COffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.C, i), i + COffset);
             for (int i = 0; i < MaxRange.TRange.Count; i++)
-                infos[i + TOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.T, i), i + TOffset);
+                infos[i + TOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.T, i), i + TOffset);
             int dataaddr = DOffset;
             for (int i = 0; i < MaxRange.DRange.Count; i++)
             {
-                infos[i + DOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.D, i), dataaddr);
+                infos[i + DOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.D, i), dataaddr);
                 dataaddr += 2;
             }
             for (int i = 0; i < MaxRange.CVRange.Count; i++)
             {
-                infos[i + CVOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.CV, i), dataaddr);
+                infos[i + CVOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.CV, i), dataaddr);
                 dataaddr += (i <= MaxRange.CV16Range.End ? 2 : 4);
             }
             for (int i = 0; i < MaxRange.TVRange.Count; i++)
             {
-                infos[i + TVOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.TV, i), dataaddr);
+                infos[i + TVOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.TV, i), dataaddr);
                 dataaddr += 2;
             }
             for (int i = 0; i < MaxRange.AIRange.Count; i++)
             {
-                infos[i + AIOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.AI, i), dataaddr);
+                infos[i + AIOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.AI, i), dataaddr);
                 dataaddr += 2;
             }
             for (int i = 0; i < MaxRange.AORange.Count; i++)
             {
-                infos[i + AOOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.AO, i), dataaddr);
+                infos[i + AOOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.AO, i), dataaddr);
                 dataaddr += 2;
             }
             storev = new ValueStore[MaxRange.VRange.Count];
             for (int i = 0; i < MaxRange.VRange.Count; i++)
             {
-                infos[i + VOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.V, i), dataaddr);
+                infos[i + VOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.V, i), dataaddr);
                 storev[i] = new ValueStore(infos[i + VOffset], ValueModel.Types.WORD);
                 dataaddr += 2;
             }
             storez = new ValueStore[MaxRange.ZRange.Count];
             for (int i = 0; i < MaxRange.ZRange.Count; i++)
             {
-                infos[i + ZOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.Z, i), dataaddr);
+                infos[i + ZOffset] = new ValueInfo(this, new ValuePrototype(ValueModel.Bases.Z, i), dataaddr);
                 storez[i] = new ValueStore(infos[i + ZOffset], ValueModel.Types.WORD);
                 dataaddr += 2;
             }

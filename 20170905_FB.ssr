@@ -1,0 +1,730 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <Project Name="20170905_FB" DeviceType="FGs_16MR_A">
+    <Ladder Name="Main" IsExpand="true" IsMain="true" Brief="" Path="工程 - 20170905_FB.程序.主程序 - Main">
+      <Network Number="0" RowCount="2" IsMasked="false" IsExpand="true">
+        <Brief></Brief>
+        <Description></Description>
+        <LadderContent>
+          <InstEle Type="LD" X="0" Y="0">
+            <Value>M0</Value>
+          </InstEle>
+          <InstEle Type="HLINE" X="1" Y="0" />
+          <InstEle Type="HLINE" X="2" Y="0" />
+          <InstEle Type="HLINE" X="3" Y="0" />
+          <InstEle Type="HLINE" X="4" Y="0" />
+          <InstEle Type="HLINE" X="5" Y="0" />
+          <InstEle Type="HLINE" X="6" Y="0" />
+          <InstEle Type="HLINE" X="7" Y="0" />
+          <InstEle Type="HLINE" X="8" Y="0" />
+          <InstEle Type="HLINE" X="9" Y="0" />
+          <InstEle Type="HLINE" X="10" Y="0" />
+          <InstEle Type="PLSR" X="11" Y="0">
+            <Value>D0</Value>
+            <Value>K20</Value>
+            <Value>Y0</Value>
+          </InstEle>
+          <InstEle Type="LDP" X="0" Y="1">
+            <Value>M1</Value>
+          </InstEle>
+          <InstEle Type="HLINE" X="1" Y="1" />
+          <InstEle Type="HLINE" X="2" Y="1" />
+          <InstEle Type="HLINE" X="3" Y="1" />
+          <InstEle Type="HLINE" X="4" Y="1" />
+          <InstEle Type="HLINE" X="5" Y="1" />
+          <InstEle Type="HLINE" X="6" Y="1" />
+          <InstEle Type="HLINE" X="7" Y="1" />
+          <InstEle Type="HLINE" X="8" Y="1" />
+          <InstEle Type="HLINE" X="9" Y="1" />
+          <InstEle Type="HLINE" X="10" Y="1" />
+          <InstEle Type="CALLM" X="11" Y="1">
+            <Value>Init_PLSR</Value>
+            <Value>D0</Value>
+          </InstEle>
+        </LadderContent>
+      </Network>
+      <Network Number="1" RowCount="7" IsMasked="false" IsExpand="true">
+        <Brief></Brief>
+        <Description></Description>
+        <LadderContent>
+          <InstEle Type="LD" X="0" Y="0">
+            <Value>M0</Value>
+          </InstEle>
+          <InstEle Type="HLINE" X="1" Y="0" />
+          <InstEle Type="HLINE" X="2" Y="0" />
+          <InstEle Type="HLINE" X="3" Y="0" />
+          <InstEle Type="HLINE" X="4" Y="0" />
+          <InstEle Type="HLINE" X="5" Y="0" />
+          <InstEle Type="HLINE" X="6" Y="0" />
+          <InstEle Type="HLINE" X="7" Y="0" />
+          <InstEle Type="HLINE" X="8" Y="0" />
+          <InstEle Type="HLINE" X="9" Y="0" />
+          <InstEle Type="HLINE" X="10" Y="0" />
+          <InstEle Type="TON" X="11" Y="0">
+            <Value>TV250</Value>
+            <Value>K1</Value>
+          </InstEle>
+          <InstEle Type="LD" X="0" Y="1">
+            <Value>T250</Value>
+          </InstEle>
+          <InstEle Type="MEP" X="1" Y="1" />
+          <InstEle Type="HLINE" X="2" Y="1" />
+          <InstEle Type="HLINE" X="3" Y="1" />
+          <InstEle Type="HLINE" X="4" Y="1" />
+          <InstEle Type="HLINE" X="5" Y="1" />
+          <InstEle Type="HLINE" X="6" Y="1" />
+          <InstEle Type="HLINE" X="7" Y="1" />
+          <InstEle Type="HLINE" X="8" Y="1" />
+          <InstEle Type="HLINE" X="9" Y="1" />
+          <InstEle Type="HLINE" X="10" Y="1" />
+          <InstEle Type="DTOF" X="11" Y="1">
+            <Value>K1Y0</Value>
+            <Value>D100V0</Value>
+          </InstEle>
+          <InstEle Type="HLINE" X="2" Y="2" />
+          <InstEle Type="HLINE" X="3" Y="2" />
+          <InstEle Type="HLINE" X="4" Y="2" />
+          <InstEle Type="HLINE" X="5" Y="2" />
+          <InstEle Type="HLINE" X="6" Y="2" />
+          <InstEle Type="HLINE" X="7" Y="2" />
+          <InstEle Type="HLINE" X="8" Y="2" />
+          <InstEle Type="HLINE" X="9" Y="2" />
+          <InstEle Type="HLINE" X="10" Y="2" />
+          <InstEle Type="ADD" X="11" Y="2">
+            <Value>V0</Value>
+            <Value>K2</Value>
+            <Value>V0</Value>
+          </InstEle>
+          <InstEle Type="HLINE" X="1" Y="3" />
+          <InstEle Type="HLINE" X="2" Y="3" />
+          <InstEle Type="HLINE" X="3" Y="3" />
+          <InstEle Type="HLINE" X="4" Y="3" />
+          <InstEle Type="HLINE" X="5" Y="3" />
+          <InstEle Type="HLINE" X="6" Y="3" />
+          <InstEle Type="HLINE" X="7" Y="3" />
+          <InstEle Type="HLINE" X="8" Y="3" />
+          <InstEle Type="HLINE" X="9" Y="3" />
+          <InstEle Type="HLINE" X="10" Y="3" />
+          <InstEle Type="RST" X="11" Y="3">
+            <Value>T250</Value>
+            <Value>K1</Value>
+          </InstEle>
+          <InstEle Type="LDWGE" X="0" Y="4">
+            <Value>V0</Value>
+            <Value>K1024</Value>
+          </InstEle>
+          <InstEle Type="MEP" X="1" Y="4" />
+          <InstEle Type="HLINE" X="2" Y="4" />
+          <InstEle Type="HLINE" X="3" Y="4" />
+          <InstEle Type="HLINE" X="4" Y="4" />
+          <InstEle Type="HLINE" X="5" Y="4" />
+          <InstEle Type="HLINE" X="6" Y="4" />
+          <InstEle Type="HLINE" X="7" Y="4" />
+          <InstEle Type="HLINE" X="8" Y="4" />
+          <InstEle Type="HLINE" X="9" Y="4" />
+          <InstEle Type="HLINE" X="10" Y="4" />
+          <InstEle Type="MOV" X="11" Y="4">
+            <Value>V0</Value>
+            <Value>D2000</Value>
+          </InstEle>
+          <InstEle Type="HLINE" X="2" Y="5" />
+          <InstEle Type="HLINE" X="3" Y="5" />
+          <InstEle Type="HLINE" X="4" Y="5" />
+          <InstEle Type="HLINE" X="5" Y="5" />
+          <InstEle Type="HLINE" X="6" Y="5" />
+          <InstEle Type="HLINE" X="7" Y="5" />
+          <InstEle Type="HLINE" X="8" Y="5" />
+          <InstEle Type="HLINE" X="9" Y="5" />
+          <InstEle Type="HLINE" X="10" Y="5" />
+          <InstEle Type="CALLM" X="11" Y="5">
+            <Value>FFT</Value>
+            <Value>D100</Value>
+            <Value>D1200</Value>
+            <Value>D2000</Value>
+          </InstEle>
+          <InstEle Type="HLINE" X="2" Y="6" />
+          <InstEle Type="HLINE" X="3" Y="6" />
+          <InstEle Type="HLINE" X="4" Y="6" />
+          <InstEle Type="HLINE" X="5" Y="6" />
+          <InstEle Type="HLINE" X="6" Y="6" />
+          <InstEle Type="HLINE" X="7" Y="6" />
+          <InstEle Type="HLINE" X="8" Y="6" />
+          <InstEle Type="HLINE" X="9" Y="6" />
+          <InstEle Type="HLINE" X="10" Y="6" />
+          <InstEle Type="MOV" X="11" Y="6">
+            <Value>K0</Value>
+            <Value>V0</Value>
+          </InstEle>
+          <InstEle Type="VLINE" X="0" Y="1" />
+          <InstEle Type="VLINE" X="1" Y="1" />
+          <InstEle Type="VLINE" X="0" Y="2" />
+          <InstEle Type="VLINE" X="1" Y="4" />
+          <InstEle Type="VLINE" X="1" Y="5" />
+        </LadderContent>
+      </Network>
+    </Ladder>
+    <FuncBlock Name="新建函数功能块" Path="工程 - 20170905_FB.程序.函数功能块.新建函数功能块">
+// 傅里叶变换 
+void FFT(FLOAT in, FLOAT out, WORD n)
+{
+	static float tmp[1024];
+	if (*n &lt;= 1) return;
+	int i;
+	int ndiv = *n/2;
+	for (i = 0 ; i &lt; *n ; i++)
+	{
+		tmp[i] = in[i];
+	}
+	for (i = 0 ; i &lt; ndiv ; i++)
+	{
+		in[i] = tmp[i*2];
+		in[i+ndiv] = tmp[i*2+1];
+	}
+	FFT(in, out, &amp;ndiv);
+	FFT(in+(*n/2), out+(*n/2), &amp;ndiv);
+	for (i = 0 ; i &lt; *n ; i++)
+	{
+		tmp[i] = out[i];
+	}
+	for (i = 0 ; i &lt; *n/2 ; i++)
+	{
+		out[i] = tmp[i] + tmp[i+ndiv] * (i/(*n) * 3.14*2); 
+		out[i+ndiv] = tmp[i] - tmp[i+ndiv] * (i/(*n) * 3.14*2);
+	}
+}
+
+// 生成分段频率数据 
+void Init_PLSR(WORD d)
+{
+	d[0] = 0;
+	d[1] = 100;
+	d[2] = 100;
+	d[3] = 300;
+	d[4] = 300;
+	d[5] = 200;
+	d[6] = 200;
+	d[7] = 400;
+	d[8] = 400;
+	d[9] = 0;
+}
+</FuncBlock>
+    <Modbus>
+      <Table Name="表格3" Comment="" />
+      <Table Name="table1" Comment="" />
+    </Modbus>
+    <ProjectPropertyParams>
+      <CommunicationInterfaceParams232>
+        <BaudRateIndex>1</BaudRateIndex>
+        <DataBitIndex>0</DataBitIndex>
+        <StopBitIndex>0</StopBitIndex>
+        <CheckCodeIndex>0</CheckCodeIndex>
+        <BufferBitIndex>0</BufferBitIndex>
+        <StationNumber>1</StationNumber>
+        <Timeout>20</Timeout>
+        <ComType>0</ComType>
+      </CommunicationInterfaceParams232>
+      <CommunicationInterfaceParams485>
+        <BaudRateIndex>1</BaudRateIndex>
+        <DataBitIndex>0</DataBitIndex>
+        <StopBitIndex>0</StopBitIndex>
+        <CheckCodeIndex>0</CheckCodeIndex>
+        <BufferBitIndex>0</BufferBitIndex>
+        <StationNumber>1</StationNumber>
+        <Timeout>20</Timeout>
+        <ComType>0</ComType>
+      </CommunicationInterfaceParams485>
+      <USBCommunicationParams>
+        <Timeout>20</Timeout>
+      </USBCommunicationParams>
+      <PasswordParams>
+        <IsUploadProtection>false</IsUploadProtection>
+        <UploadPassword></UploadPassword>
+        <IsDownloadProtection>false</IsDownloadProtection>
+        <DownloadPassword></DownloadPassword>
+        <IsMonitorProtection>false</IsMonitorProtection>
+        <MonitorPassword></MonitorPassword>
+      </PasswordParams>
+      <FilterParams>
+        <IsChecked>true</IsChecked>
+        <FilterTimeIndex>5</FilterTimeIndex>
+      </FilterParams>
+      <HoldingSectionParams>
+        <MStartAddr>7504</MStartAddr>
+        <MLength>496</MLength>
+        <DStartAddr>5968</DStartAddr>
+        <DLength>2032</DLength>
+        <SStartAddr>600</SStartAddr>
+        <SLength>400</SLength>
+        <CVStartAddr>100</CVStartAddr>
+        <CVLength>100</CVLength>
+        <NotClear>false</NotClear>
+      </HoldingSectionParams>
+      <AnalogQuantityParams>
+        <Input>
+          <IP_Channel_Index>0</IP_Channel_Index>
+          <IP_Channel_CB_Enabled1>false</IP_Channel_CB_Enabled1>
+          <IP_Channel_CB_Enabled2>false</IP_Channel_CB_Enabled2>
+          <IP_Channel_CB_Enabled3>false</IP_Channel_CB_Enabled3>
+          <IP_Channel_CB_Enabled4>false</IP_Channel_CB_Enabled4>
+          <IP_Channel_CB_Enabled5>false</IP_Channel_CB_Enabled5>
+          <IP_Channel_CB_Enabled6>false</IP_Channel_CB_Enabled6>
+          <IP_Channel_CB_Enabled7>false</IP_Channel_CB_Enabled7>
+          <IP_Channel_CB_Enabled8>false</IP_Channel_CB_Enabled8>
+          <IP_Mode_Index1>0</IP_Mode_Index1>
+          <IP_Mode_Index2>0</IP_Mode_Index2>
+          <IP_Mode_Index3>0</IP_Mode_Index3>
+          <IP_Mode_Index4>0</IP_Mode_Index4>
+          <IP_Mode_Index5>0</IP_Mode_Index5>
+          <IP_Mode_Index6>0</IP_Mode_Index6>
+          <IP_Mode_Index7>0</IP_Mode_Index7>
+          <IP_Mode_Index8>0</IP_Mode_Index8>
+          <IP_SampleTime_Index1>0</IP_SampleTime_Index1>
+          <IP_SampleTime_Index2>0</IP_SampleTime_Index2>
+          <IP_SampleTime_Index3>0</IP_SampleTime_Index3>
+          <IP_SampleTime_Index4>0</IP_SampleTime_Index4>
+          <IP_SampleTime_Index5>0</IP_SampleTime_Index5>
+          <IP_SampleTime_Index6>0</IP_SampleTime_Index6>
+          <IP_SampleTime_Index7>0</IP_SampleTime_Index7>
+          <IP_SampleTime_Index8>0</IP_SampleTime_Index8>
+          <SampleValue1>1000</SampleValue1>
+          <SampleValue2>1000</SampleValue2>
+          <SampleValue3>1000</SampleValue3>
+          <SampleValue4>1000</SampleValue4>
+          <SampleValue5>1000</SampleValue5>
+          <SampleValue6>1000</SampleValue6>
+          <SampleValue7>1000</SampleValue7>
+          <SampleValue8>1000</SampleValue8>
+          <IP_StartRange1>0</IP_StartRange1>
+          <IP_StartRange2>0</IP_StartRange2>
+          <IP_StartRange3>0</IP_StartRange3>
+          <IP_StartRange4>0</IP_StartRange4>
+          <IP_EndRange1>65535</IP_EndRange1>
+          <IP_EndRange2>65535</IP_EndRange2>
+          <IP_EndRange3>65535</IP_EndRange3>
+          <IP_EndRange4>65535</IP_EndRange4>
+        </Input>
+        <Output>
+          <OP_Channel_Index>0</OP_Channel_Index>
+          <OP_Channel_CB_Enabled1>false</OP_Channel_CB_Enabled1>
+          <OP_Channel_CB_Enabled2>false</OP_Channel_CB_Enabled2>
+          <OP_Channel_CB_Enabled3>false</OP_Channel_CB_Enabled3>
+          <OP_Channel_CB_Enabled4>false</OP_Channel_CB_Enabled4>
+          <OP_Mode_Index1>0</OP_Mode_Index1>
+          <OP_Mode_Index2>0</OP_Mode_Index2>
+          <OP_Mode_Index3>0</OP_Mode_Index3>
+          <OP_Mode_Index4>0</OP_Mode_Index4>
+          <OP_StartRange1>0</OP_StartRange1>
+          <OP_StartRange2>0</OP_StartRange2>
+          <OP_StartRange3>0</OP_StartRange3>
+          <OP_StartRange4>0</OP_StartRange4>
+          <OP_EndRange1>65535</OP_EndRange1>
+          <OP_EndRange2>65535</OP_EndRange2>
+          <OP_EndRange3>65535</OP_EndRange3>
+          <OP_EndRange4>65535</OP_EndRange4>
+        </Output>
+      </AnalogQuantityParams>
+      <ExpansionModuleParams CanUseExpansion="false">
+        <ExpansionUnitParams1>
+          <ModuleTypeIndex>0</ModuleTypeIndex>
+          <UseModule>false</UseModule>
+          <Input>
+            <IP_Channel_Index>0</IP_Channel_Index>
+            <IP_Channel_CB_Enabled1>false</IP_Channel_CB_Enabled1>
+            <IP_Channel_CB_Enabled2>false</IP_Channel_CB_Enabled2>
+            <IP_Channel_CB_Enabled3>false</IP_Channel_CB_Enabled3>
+            <IP_Channel_CB_Enabled4>false</IP_Channel_CB_Enabled4>
+            <IP_Mode_Index1>0</IP_Mode_Index1>
+            <IP_Mode_Index2>0</IP_Mode_Index2>
+            <IP_Mode_Index3>0</IP_Mode_Index3>
+            <IP_Mode_Index4>0</IP_Mode_Index4>
+            <IP_SampleTime_Index1>0</IP_SampleTime_Index1>
+            <IP_SampleTime_Index2>0</IP_SampleTime_Index2>
+            <IP_SampleTime_Index3>0</IP_SampleTime_Index3>
+            <IP_SampleTime_Index4>0</IP_SampleTime_Index4>
+            <SampleValue1>1000</SampleValue1>
+            <SampleValue2>1000</SampleValue2>
+            <SampleValue3>1000</SampleValue3>
+            <SampleValue4>1000</SampleValue4>
+            <IP_StartRange1>0</IP_StartRange1>
+            <IP_StartRange2>0</IP_StartRange2>
+            <IP_StartRange3>0</IP_StartRange3>
+            <IP_StartRange4>0</IP_StartRange4>
+            <IP_EndRange1>65535</IP_EndRange1>
+            <IP_EndRange2>65535</IP_EndRange2>
+            <IP_EndRange3>65535</IP_EndRange3>
+            <IP_EndRange4>65535</IP_EndRange4>
+          </Input>
+          <Output>
+            <OP_Channel_Index>0</OP_Channel_Index>
+            <OP_Channel_CB_Enabled1>false</OP_Channel_CB_Enabled1>
+            <OP_Channel_CB_Enabled2>false</OP_Channel_CB_Enabled2>
+            <OP_Mode_Index1>0</OP_Mode_Index1>
+            <OP_Mode_Index2>0</OP_Mode_Index2>
+            <OP_StartRange1>0</OP_StartRange1>
+            <OP_StartRange2>0</OP_StartRange2>
+            <OP_EndRange1>65535</OP_EndRange1>
+            <OP_EndRange2>65535</OP_EndRange2>
+          </Output>
+          <FilterTime>
+            <FilterTime_Index>0</FilterTime_Index>
+          </FilterTime>
+        </ExpansionUnitParams1>
+        <ExpansionUnitParams2>
+          <ModuleTypeIndex>0</ModuleTypeIndex>
+          <UseModule>false</UseModule>
+          <Input>
+            <IP_Channel_Index>0</IP_Channel_Index>
+            <IP_Channel_CB_Enabled1>false</IP_Channel_CB_Enabled1>
+            <IP_Channel_CB_Enabled2>false</IP_Channel_CB_Enabled2>
+            <IP_Channel_CB_Enabled3>false</IP_Channel_CB_Enabled3>
+            <IP_Channel_CB_Enabled4>false</IP_Channel_CB_Enabled4>
+            <IP_Mode_Index1>0</IP_Mode_Index1>
+            <IP_Mode_Index2>0</IP_Mode_Index2>
+            <IP_Mode_Index3>0</IP_Mode_Index3>
+            <IP_Mode_Index4>0</IP_Mode_Index4>
+            <IP_SampleTime_Index1>0</IP_SampleTime_Index1>
+            <IP_SampleTime_Index2>0</IP_SampleTime_Index2>
+            <IP_SampleTime_Index3>0</IP_SampleTime_Index3>
+            <IP_SampleTime_Index4>0</IP_SampleTime_Index4>
+            <SampleValue1>1000</SampleValue1>
+            <SampleValue2>1000</SampleValue2>
+            <SampleValue3>1000</SampleValue3>
+            <SampleValue4>1000</SampleValue4>
+            <IP_StartRange1>0</IP_StartRange1>
+            <IP_StartRange2>0</IP_StartRange2>
+            <IP_StartRange3>0</IP_StartRange3>
+            <IP_StartRange4>0</IP_StartRange4>
+            <IP_EndRange1>65535</IP_EndRange1>
+            <IP_EndRange2>65535</IP_EndRange2>
+            <IP_EndRange3>65535</IP_EndRange3>
+            <IP_EndRange4>65535</IP_EndRange4>
+          </Input>
+          <Output>
+            <OP_Channel_Index>0</OP_Channel_Index>
+            <OP_Channel_CB_Enabled1>false</OP_Channel_CB_Enabled1>
+            <OP_Channel_CB_Enabled2>false</OP_Channel_CB_Enabled2>
+            <OP_Mode_Index1>0</OP_Mode_Index1>
+            <OP_Mode_Index2>0</OP_Mode_Index2>
+            <OP_StartRange1>0</OP_StartRange1>
+            <OP_StartRange2>0</OP_StartRange2>
+            <OP_EndRange1>65535</OP_EndRange1>
+            <OP_EndRange2>65535</OP_EndRange2>
+          </Output>
+          <FilterTime>
+            <FilterTime_Index>0</FilterTime_Index>
+          </FilterTime>
+        </ExpansionUnitParams2>
+        <ExpansionUnitParams3>
+          <ModuleTypeIndex>0</ModuleTypeIndex>
+          <UseModule>false</UseModule>
+          <Input>
+            <IP_Channel_Index>0</IP_Channel_Index>
+            <IP_Channel_CB_Enabled1>false</IP_Channel_CB_Enabled1>
+            <IP_Channel_CB_Enabled2>false</IP_Channel_CB_Enabled2>
+            <IP_Channel_CB_Enabled3>false</IP_Channel_CB_Enabled3>
+            <IP_Channel_CB_Enabled4>false</IP_Channel_CB_Enabled4>
+            <IP_Mode_Index1>0</IP_Mode_Index1>
+            <IP_Mode_Index2>0</IP_Mode_Index2>
+            <IP_Mode_Index3>0</IP_Mode_Index3>
+            <IP_Mode_Index4>0</IP_Mode_Index4>
+            <IP_SampleTime_Index1>0</IP_SampleTime_Index1>
+            <IP_SampleTime_Index2>0</IP_SampleTime_Index2>
+            <IP_SampleTime_Index3>0</IP_SampleTime_Index3>
+            <IP_SampleTime_Index4>0</IP_SampleTime_Index4>
+            <SampleValue1>1000</SampleValue1>
+            <SampleValue2>1000</SampleValue2>
+            <SampleValue3>1000</SampleValue3>
+            <SampleValue4>1000</SampleValue4>
+            <IP_StartRange1>0</IP_StartRange1>
+            <IP_StartRange2>0</IP_StartRange2>
+            <IP_StartRange3>0</IP_StartRange3>
+            <IP_StartRange4>0</IP_StartRange4>
+            <IP_EndRange1>65535</IP_EndRange1>
+            <IP_EndRange2>65535</IP_EndRange2>
+            <IP_EndRange3>65535</IP_EndRange3>
+            <IP_EndRange4>65535</IP_EndRange4>
+          </Input>
+          <Output>
+            <OP_Channel_Index>0</OP_Channel_Index>
+            <OP_Channel_CB_Enabled1>false</OP_Channel_CB_Enabled1>
+            <OP_Channel_CB_Enabled2>false</OP_Channel_CB_Enabled2>
+            <OP_Mode_Index1>0</OP_Mode_Index1>
+            <OP_Mode_Index2>0</OP_Mode_Index2>
+            <OP_StartRange1>0</OP_StartRange1>
+            <OP_StartRange2>0</OP_StartRange2>
+            <OP_EndRange1>65535</OP_EndRange1>
+            <OP_EndRange2>65535</OP_EndRange2>
+          </Output>
+          <FilterTime>
+            <FilterTime_Index>0</FilterTime_Index>
+          </FilterTime>
+        </ExpansionUnitParams3>
+        <ExpansionUnitParams4>
+          <ModuleTypeIndex>0</ModuleTypeIndex>
+          <UseModule>false</UseModule>
+          <Input>
+            <IP_Channel_Index>0</IP_Channel_Index>
+            <IP_Channel_CB_Enabled1>false</IP_Channel_CB_Enabled1>
+            <IP_Channel_CB_Enabled2>false</IP_Channel_CB_Enabled2>
+            <IP_Channel_CB_Enabled3>false</IP_Channel_CB_Enabled3>
+            <IP_Channel_CB_Enabled4>false</IP_Channel_CB_Enabled4>
+            <IP_Mode_Index1>0</IP_Mode_Index1>
+            <IP_Mode_Index2>0</IP_Mode_Index2>
+            <IP_Mode_Index3>0</IP_Mode_Index3>
+            <IP_Mode_Index4>0</IP_Mode_Index4>
+            <IP_SampleTime_Index1>0</IP_SampleTime_Index1>
+            <IP_SampleTime_Index2>0</IP_SampleTime_Index2>
+            <IP_SampleTime_Index3>0</IP_SampleTime_Index3>
+            <IP_SampleTime_Index4>0</IP_SampleTime_Index4>
+            <SampleValue1>1000</SampleValue1>
+            <SampleValue2>1000</SampleValue2>
+            <SampleValue3>1000</SampleValue3>
+            <SampleValue4>1000</SampleValue4>
+            <IP_StartRange1>0</IP_StartRange1>
+            <IP_StartRange2>0</IP_StartRange2>
+            <IP_StartRange3>0</IP_StartRange3>
+            <IP_StartRange4>0</IP_StartRange4>
+            <IP_EndRange1>65535</IP_EndRange1>
+            <IP_EndRange2>65535</IP_EndRange2>
+            <IP_EndRange3>65535</IP_EndRange3>
+            <IP_EndRange4>65535</IP_EndRange4>
+          </Input>
+          <Output>
+            <OP_Channel_Index>0</OP_Channel_Index>
+            <OP_Channel_CB_Enabled1>false</OP_Channel_CB_Enabled1>
+            <OP_Channel_CB_Enabled2>false</OP_Channel_CB_Enabled2>
+            <OP_Mode_Index1>0</OP_Mode_Index1>
+            <OP_Mode_Index2>0</OP_Mode_Index2>
+            <OP_StartRange1>0</OP_StartRange1>
+            <OP_StartRange2>0</OP_StartRange2>
+            <OP_EndRange1>65535</OP_EndRange1>
+            <OP_EndRange2>65535</OP_EndRange2>
+          </Output>
+          <FilterTime>
+            <FilterTime_Index>0</FilterTime_Index>
+          </FilterTime>
+        </ExpansionUnitParams4>
+        <ExpansionUnitParams5>
+          <ModuleTypeIndex>0</ModuleTypeIndex>
+          <UseModule>false</UseModule>
+          <Input>
+            <IP_Channel_Index>0</IP_Channel_Index>
+            <IP_Channel_CB_Enabled1>false</IP_Channel_CB_Enabled1>
+            <IP_Channel_CB_Enabled2>false</IP_Channel_CB_Enabled2>
+            <IP_Channel_CB_Enabled3>false</IP_Channel_CB_Enabled3>
+            <IP_Channel_CB_Enabled4>false</IP_Channel_CB_Enabled4>
+            <IP_Mode_Index1>0</IP_Mode_Index1>
+            <IP_Mode_Index2>0</IP_Mode_Index2>
+            <IP_Mode_Index3>0</IP_Mode_Index3>
+            <IP_Mode_Index4>0</IP_Mode_Index4>
+            <IP_SampleTime_Index1>0</IP_SampleTime_Index1>
+            <IP_SampleTime_Index2>0</IP_SampleTime_Index2>
+            <IP_SampleTime_Index3>0</IP_SampleTime_Index3>
+            <IP_SampleTime_Index4>0</IP_SampleTime_Index4>
+            <SampleValue1>1000</SampleValue1>
+            <SampleValue2>1000</SampleValue2>
+            <SampleValue3>1000</SampleValue3>
+            <SampleValue4>1000</SampleValue4>
+            <IP_StartRange1>0</IP_StartRange1>
+            <IP_StartRange2>0</IP_StartRange2>
+            <IP_StartRange3>0</IP_StartRange3>
+            <IP_StartRange4>0</IP_StartRange4>
+            <IP_EndRange1>65535</IP_EndRange1>
+            <IP_EndRange2>65535</IP_EndRange2>
+            <IP_EndRange3>65535</IP_EndRange3>
+            <IP_EndRange4>65535</IP_EndRange4>
+          </Input>
+          <Output>
+            <OP_Channel_Index>0</OP_Channel_Index>
+            <OP_Channel_CB_Enabled1>false</OP_Channel_CB_Enabled1>
+            <OP_Channel_CB_Enabled2>false</OP_Channel_CB_Enabled2>
+            <OP_Mode_Index1>0</OP_Mode_Index1>
+            <OP_Mode_Index2>0</OP_Mode_Index2>
+            <OP_StartRange1>0</OP_StartRange1>
+            <OP_StartRange2>0</OP_StartRange2>
+            <OP_EndRange1>65535</OP_EndRange1>
+            <OP_EndRange2>65535</OP_EndRange2>
+          </Output>
+          <FilterTime>
+            <FilterTime_Index>0</FilterTime_Index>
+          </FilterTime>
+        </ExpansionUnitParams5>
+        <ExpansionUnitParams6>
+          <ModuleTypeIndex>0</ModuleTypeIndex>
+          <UseModule>false</UseModule>
+          <Input>
+            <IP_Channel_Index>0</IP_Channel_Index>
+            <IP_Channel_CB_Enabled1>false</IP_Channel_CB_Enabled1>
+            <IP_Channel_CB_Enabled2>false</IP_Channel_CB_Enabled2>
+            <IP_Channel_CB_Enabled3>false</IP_Channel_CB_Enabled3>
+            <IP_Channel_CB_Enabled4>false</IP_Channel_CB_Enabled4>
+            <IP_Mode_Index1>0</IP_Mode_Index1>
+            <IP_Mode_Index2>0</IP_Mode_Index2>
+            <IP_Mode_Index3>0</IP_Mode_Index3>
+            <IP_Mode_Index4>0</IP_Mode_Index4>
+            <IP_SampleTime_Index1>0</IP_SampleTime_Index1>
+            <IP_SampleTime_Index2>0</IP_SampleTime_Index2>
+            <IP_SampleTime_Index3>0</IP_SampleTime_Index3>
+            <IP_SampleTime_Index4>0</IP_SampleTime_Index4>
+            <SampleValue1>1000</SampleValue1>
+            <SampleValue2>1000</SampleValue2>
+            <SampleValue3>1000</SampleValue3>
+            <SampleValue4>1000</SampleValue4>
+            <IP_StartRange1>0</IP_StartRange1>
+            <IP_StartRange2>0</IP_StartRange2>
+            <IP_StartRange3>0</IP_StartRange3>
+            <IP_StartRange4>0</IP_StartRange4>
+            <IP_EndRange1>65535</IP_EndRange1>
+            <IP_EndRange2>65535</IP_EndRange2>
+            <IP_EndRange3>65535</IP_EndRange3>
+            <IP_EndRange4>65535</IP_EndRange4>
+          </Input>
+          <Output>
+            <OP_Channel_Index>0</OP_Channel_Index>
+            <OP_Channel_CB_Enabled1>false</OP_Channel_CB_Enabled1>
+            <OP_Channel_CB_Enabled2>false</OP_Channel_CB_Enabled2>
+            <OP_Mode_Index1>0</OP_Mode_Index1>
+            <OP_Mode_Index2>0</OP_Mode_Index2>
+            <OP_StartRange1>0</OP_StartRange1>
+            <OP_StartRange2>0</OP_StartRange2>
+            <OP_EndRange1>65535</OP_EndRange1>
+            <OP_EndRange2>65535</OP_EndRange2>
+          </Output>
+          <FilterTime>
+            <FilterTime_Index>0</FilterTime_Index>
+          </FilterTime>
+        </ExpansionUnitParams6>
+        <ExpansionUnitParams7>
+          <ModuleTypeIndex>0</ModuleTypeIndex>
+          <UseModule>false</UseModule>
+          <Input>
+            <IP_Channel_Index>0</IP_Channel_Index>
+            <IP_Channel_CB_Enabled1>false</IP_Channel_CB_Enabled1>
+            <IP_Channel_CB_Enabled2>false</IP_Channel_CB_Enabled2>
+            <IP_Channel_CB_Enabled3>false</IP_Channel_CB_Enabled3>
+            <IP_Channel_CB_Enabled4>false</IP_Channel_CB_Enabled4>
+            <IP_Mode_Index1>0</IP_Mode_Index1>
+            <IP_Mode_Index2>0</IP_Mode_Index2>
+            <IP_Mode_Index3>0</IP_Mode_Index3>
+            <IP_Mode_Index4>0</IP_Mode_Index4>
+            <IP_SampleTime_Index1>0</IP_SampleTime_Index1>
+            <IP_SampleTime_Index2>0</IP_SampleTime_Index2>
+            <IP_SampleTime_Index3>0</IP_SampleTime_Index3>
+            <IP_SampleTime_Index4>0</IP_SampleTime_Index4>
+            <SampleValue1>1000</SampleValue1>
+            <SampleValue2>1000</SampleValue2>
+            <SampleValue3>1000</SampleValue3>
+            <SampleValue4>1000</SampleValue4>
+            <IP_StartRange1>0</IP_StartRange1>
+            <IP_StartRange2>0</IP_StartRange2>
+            <IP_StartRange3>0</IP_StartRange3>
+            <IP_StartRange4>0</IP_StartRange4>
+            <IP_EndRange1>65535</IP_EndRange1>
+            <IP_EndRange2>65535</IP_EndRange2>
+            <IP_EndRange3>65535</IP_EndRange3>
+            <IP_EndRange4>65535</IP_EndRange4>
+          </Input>
+          <Output>
+            <OP_Channel_Index>0</OP_Channel_Index>
+            <OP_Channel_CB_Enabled1>false</OP_Channel_CB_Enabled1>
+            <OP_Channel_CB_Enabled2>false</OP_Channel_CB_Enabled2>
+            <OP_Mode_Index1>0</OP_Mode_Index1>
+            <OP_Mode_Index2>0</OP_Mode_Index2>
+            <OP_StartRange1>0</OP_StartRange1>
+            <OP_StartRange2>0</OP_StartRange2>
+            <OP_EndRange1>65535</OP_EndRange1>
+            <OP_EndRange2>65535</OP_EndRange2>
+          </Output>
+          <FilterTime>
+            <FilterTime_Index>0</FilterTime_Index>
+          </FilterTime>
+        </ExpansionUnitParams7>
+        <ExpansionUnitParams8>
+          <ModuleTypeIndex>0</ModuleTypeIndex>
+          <UseModule>false</UseModule>
+          <Input>
+            <IP_Channel_Index>0</IP_Channel_Index>
+            <IP_Channel_CB_Enabled1>false</IP_Channel_CB_Enabled1>
+            <IP_Channel_CB_Enabled2>false</IP_Channel_CB_Enabled2>
+            <IP_Channel_CB_Enabled3>false</IP_Channel_CB_Enabled3>
+            <IP_Channel_CB_Enabled4>false</IP_Channel_CB_Enabled4>
+            <IP_Mode_Index1>0</IP_Mode_Index1>
+            <IP_Mode_Index2>0</IP_Mode_Index2>
+            <IP_Mode_Index3>0</IP_Mode_Index3>
+            <IP_Mode_Index4>0</IP_Mode_Index4>
+            <IP_SampleTime_Index1>0</IP_SampleTime_Index1>
+            <IP_SampleTime_Index2>0</IP_SampleTime_Index2>
+            <IP_SampleTime_Index3>0</IP_SampleTime_Index3>
+            <IP_SampleTime_Index4>0</IP_SampleTime_Index4>
+            <SampleValue1>1000</SampleValue1>
+            <SampleValue2>1000</SampleValue2>
+            <SampleValue3>1000</SampleValue3>
+            <SampleValue4>1000</SampleValue4>
+            <IP_StartRange1>0</IP_StartRange1>
+            <IP_StartRange2>0</IP_StartRange2>
+            <IP_StartRange3>0</IP_StartRange3>
+            <IP_StartRange4>0</IP_StartRange4>
+            <IP_EndRange1>65535</IP_EndRange1>
+            <IP_EndRange2>65535</IP_EndRange2>
+            <IP_EndRange3>65535</IP_EndRange3>
+            <IP_EndRange4>65535</IP_EndRange4>
+          </Input>
+          <Output>
+            <OP_Channel_Index>0</OP_Channel_Index>
+            <OP_Channel_CB_Enabled1>false</OP_Channel_CB_Enabled1>
+            <OP_Channel_CB_Enabled2>false</OP_Channel_CB_Enabled2>
+            <OP_Mode_Index1>0</OP_Mode_Index1>
+            <OP_Mode_Index2>0</OP_Mode_Index2>
+            <OP_StartRange1>0</OP_StartRange1>
+            <OP_StartRange2>0</OP_StartRange2>
+            <OP_EndRange1>65535</OP_EndRange1>
+            <OP_EndRange2>65535</OP_EndRange2>
+          </Output>
+          <FilterTime>
+            <FilterTime_Index>0</FilterTime_Index>
+          </FilterTime>
+        </ExpansionUnitParams8>
+      </ExpansionModuleParams>
+      <CommunicationParams>
+        <SerialPortIndex>0</SerialPortIndex>
+        <BaudRateIndex>1</BaudRateIndex>
+        <DataBitIndex>0</DataBitIndex>
+        <StopBitIndex>0</StopBitIndex>
+        <CheckCodeIndex>0</CheckCodeIndex>
+        <Timeout>200</Timeout>
+        <IsCOMLinked>false</IsCOMLinked>
+        <IsAutoCheck>true</IsAutoCheck>
+      </CommunicationParams>
+    </ProjectPropertyParams>
+    <ValueManager>
+      <ValueInfo Name="D0" Comment="" Alias="" />
+      <ValueInfo Name="D100" Comment="" Alias="" />
+      <ValueInfo Name="D1200" Comment="" Alias="" />
+      <ValueInfo Name="D2000" Comment="" Alias="" />
+      <ValueInfo Name="V0" Comment="" Alias="" />
+    </ValueManager>
+    <Monitor>
+      <Table Name="Default" />
+    </Monitor>
+    <Polyline_1 ID="1" IsEnable="false" Unit="0" Overflow="0" IsHMIEnable="false" HMI="D0">
+      <X PLS="Y0" DIR="Y12" WEI="K0" LIM="K0" CLM="K0" ITV="K0" />
+      <Y PLS="Y1" DIR="Y13" WEI="K0" LIM="K0" CLM="K0" ITV="K0" />
+    </Polyline_1>
+    <Polyline_2 ID="2" IsEnable="false" Unit="0" Overflow="0" IsHMIEnable="false" HMI="D0">
+      <X PLS="Y2" DIR="Y14" WEI="K0" LIM="K0" CLM="K0" ITV="K0" />
+      <Y PLS="Y3" DIR="Y15" WEI="K0" LIM="K0" CLM="K0" ITV="K0" />
+    </Polyline_2>
+    <Polyline_3 ID="3" IsEnable="false" Unit="0" Overflow="0" IsHMIEnable="false" HMI="D0">
+      <X PLS="Y4" DIR="Y16" WEI="K0" LIM="K0" CLM="K0" ITV="K0" />
+      <Y PLS="Y5" DIR="Y17" WEI="K0" LIM="K0" CLM="K0" ITV="K0" />
+    </Polyline_3>
+    <Polyline_4 ID="4" IsEnable="false" Unit="0" Overflow="0" IsHMIEnable="false" HMI="D0">
+      <X PLS="Y6" DIR="Y20" WEI="K0" LIM="K0" CLM="K0" ITV="K0" />
+      <Y PLS="Y7" DIR="Y21" WEI="K0" LIM="K0" CLM="K0" ITV="K0" />
+    </Polyline_4>
+    <Polyline_5 ID="5" IsEnable="false" Unit="0" Overflow="0" IsHMIEnable="false" HMI="D0">
+      <X PLS="Y10" DIR="Y22" WEI="K0" LIM="K0" CLM="K0" ITV="K0" />
+      <Y PLS="Y11" DIR="Y23" WEI="K0" LIM="K0" CLM="K0" ITV="K0" />
+    </Polyline_5>
+  </Project>
+</Root>
