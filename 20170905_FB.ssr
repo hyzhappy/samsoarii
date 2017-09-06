@@ -188,8 +188,8 @@ void FFT(FLOAT in, FLOAT out, WORD n)
 	}
 	for (i = 0 ; i &lt; *n/2 ; i++)
 	{
-		out[i] = tmp[i] + tmp[i+ndiv] * (i/(*n) * 3.14*2); 
-		out[i+ndiv] = tmp[i] - tmp[i+ndiv] * (i/(*n) * 3.14*2);
+		out[i] = tmp[i] + tmp[i+ndiv] * cos(i/(*n) * PI*2); 
+		out[i+ndiv] = tmp[i] - tmp[i+ndiv] * cos(i/(*n) * PI*2);
 	}
 }
 

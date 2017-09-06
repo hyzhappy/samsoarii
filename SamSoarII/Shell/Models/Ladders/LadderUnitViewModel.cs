@@ -438,6 +438,10 @@ namespace SamSoarII.Shell.Models
                             case "LDFL": value = (f1 < f2); break;
                             case "LDFG": value = (f1 > f2); break;
                         }
+                        if (core.Shape == LadderUnitModel.Shapes.Output)
+                        {
+                            value = BIT_1_SHOWS.Contains(core.Children[0].Value.ToString());
+                        }
                     }
                     catch (Exception)
                     {
@@ -821,6 +825,7 @@ namespace SamSoarII.Shell.Models
                     }
                     break;
             }
+            /*
             switch (core.LadderMode)
             {
                 case LadderModes.Simulate:
@@ -829,6 +834,7 @@ namespace SamSoarII.Shell.Models
                     context.DrawRectangle(value ? Brushes.Green : Brushes.Transparent, Transparent, new Rect(new Point(ActualX + 100, ActualY + 50), new Size(100, 100)));
                     break;
             }
+            */
         }
         public void DrawingOutputRectProperty(DrawingContext context)
         {

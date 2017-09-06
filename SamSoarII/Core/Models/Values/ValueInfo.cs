@@ -109,7 +109,7 @@ namespace SamSoarII.Core.Models
         public void Add(ValueModel value)
         {
             if (this != parent.EmptyInfo)
-                Values.Remove(value);
+                Values.Add(value);
             if (value.Store != null)
             {
                 value.Store.Parent = this;

@@ -1225,8 +1225,8 @@ namespace SamSoarII.Core.Models
         /// 分析对应的代码文本，获得声明变量的信息
         /// </summary>
         /// <param name="text"></param>
-        private static Regex r1 = new Regex(@"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*;\s*$", RegexOptions.Compiled);
-        private static Regex r2 = new Regex(@"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$", RegexOptions.Compiled);
+        private static Regex r1 = new Regex(@"^\s*(static\s+)?(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)(\[[^\]]+\])?\s*;\s*$", RegexOptions.Compiled);
+        private static Regex r2 = new Regex(@"^\s*(static\s+)?(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)(\[[^\]]+\])?\s*$", RegexOptions.Compiled);
         public void AnalyzeText(string text)
         {
             string[] texts = text.Split('=');
@@ -1241,7 +1241,7 @@ namespace SamSoarII.Core.Models
             }
             if (m1 != null && m1.Success)
             {
-                Name = m1.Groups[5].Value;
+                Name = m1.Groups[6].Value;
             }
             else
             {
@@ -1341,8 +1341,8 @@ namespace SamSoarII.Core.Models
         /// </summary>
         /// <param name="text">代码文本</param>
         /// <returns></returns>
-        private static Regex r4 = new Regex(@"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*;\s*$", RegexOptions.Compiled);
-        private static Regex r5 = new Regex(@"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$", RegexOptions.Compiled);
+        private static Regex r4 = new Regex(@"^\s*(static\s+)?(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)(\[[^\]]+\])?\s*;\s*$", RegexOptions.Compiled);
+        private static Regex r5 = new Regex(@"^\s*(static\s+)?(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)(\[[^\]]+\])?\s*$", RegexOptions.Compiled);
         private static Regex r6 = new Regex(@"^\s*[^;]*;\s*$", RegexOptions.Compiled);
         static public bool TextSuit(string text)
         {
@@ -1409,14 +1409,14 @@ namespace SamSoarII.Core.Models
             defines.Clear();
         }
 
-        private static Regex r1 = new Regex(@"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+(.*);$", RegexOptions.Compiled);
-        private static Regex r2 = new Regex(@"^(\s*\*)*\s*([a-zA-Z_]\w*)\s*", RegexOptions.Compiled);
+        private static Regex r1 = new Regex(@"^\s*(static\s+)?(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)(\[[^\]]+\])?", RegexOptions.Compiled);
+        private static Regex r2 = new Regex(@"^(\s*\*)*\s*([a-zA-Z_]\w*)(\[[^\]]+\])?\s*", RegexOptions.Compiled);
         public override void Build(string text, int start, int end, int offset = 0)
         {
             ClearDefines();
             Match m1 = r1.Match(text.Substring(start, end - start + 1));
             if (!m1.Success) return;
-            string _text = m1.Groups[5].Value;
+            string _text = m1.Groups[6].Value;
             string[] texts = _text.Split(',');
             foreach (string sub in texts)
             {
@@ -1434,7 +1434,7 @@ namespace SamSoarII.Core.Models
         {
             Match m1 = r1.Match(text);
             if (!m1.Success) return false;
-            string _text = m1.Groups[5].Value;
+            string _text = m1.Groups[6].Value;
             string[] texts = _text.Split(',');
             foreach (string sub in texts)
             {

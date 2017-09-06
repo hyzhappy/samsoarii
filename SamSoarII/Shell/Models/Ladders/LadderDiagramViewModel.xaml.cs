@@ -1516,11 +1516,12 @@ namespace SamSoarII.Shell.Models
         {
             this.Focus();
             Keyboard.Focus(this);
-            
+            /*
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 _selectStatus = SelectStatus.Idle;
             }
+            */
             if (LadderMode != LadderModes.Edit)
             {
                 return;
@@ -2361,7 +2362,25 @@ namespace SamSoarII.Shell.Models
             if (MainCanvas.ContextMenu == cmMoni && cmMoni.Core == null)
                 MainCanvas.ContextMenu = null;
             if (e.ClickCount == 2 && _selectRect.Core.Parent != null)
-            { 
+                mouseuptohandledoubleclick = true;
+        }
+
+        private bool mouseuptohandledoubleclick = false;
+        private void OnMainCanvasMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            CanvasGrid.ReleaseMouseCapture();
+            switch (SelectionStatus)
+            {
+                case SelectStatus.SingleSelecting:
+                    _selectStatus = SelectStatus.SingleSelected;
+                    break;
+                case SelectStatus.MultiSelecting:
+                    _selectStatus = SelectStatus.MultiSelected;
+                    break;
+            }
+            if (mouseuptohandledoubleclick)
+            {
+                mouseuptohandledoubleclick = false;
                 LadderUnitModel unit = _selectRect.Current;
                 if (LadderMode == LadderModes.Edit)
                 {
@@ -2374,20 +2393,6 @@ namespace SamSoarII.Shell.Models
                 {
                     IFParent.ShowValueModifyDialog(unit.UniqueChildren);
                 }
-            }
-        }
-        
-        private void OnMainCanvasMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            CanvasGrid.ReleaseMouseCapture();
-            switch (SelectionStatus)
-            {
-                case SelectStatus.SingleSelecting:
-                    _selectStatus = SelectStatus.SingleSelected;
-                    break;
-                case SelectStatus.MultiSelecting:
-                    _selectStatus = SelectStatus.MultiSelected;
-                    break;
             }
         }
         
