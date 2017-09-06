@@ -61,7 +61,7 @@ namespace SamSoarII.Shell.Dialogs
             switch (e.PropertyName)
             {
                 case "Value":
-                    //Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)(delegate () { TB_Value.Text = Store.ShowValue; }));
+                    Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)(delegate () { TB_Value.Text = Store.ShowValue; }));
                     break;
             }
         }
