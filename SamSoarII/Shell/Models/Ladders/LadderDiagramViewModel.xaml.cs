@@ -361,15 +361,41 @@ namespace SamSoarII.Shell.Models
 
         public void RemoveNet()
         {
+            int netstart = -1, netend = -1;
             switch (SelectionStatus)
             {
                 case SelectStatus.SingleSelected:
-                    Core.RemoveN(SelectRectOwner.ID, SelectRectOwner);
+                    netstart = netend = SelectRectOwner.ID;
+                    Core.RemoveN(netend, SelectRectOwner);
                     break;
                 case SelectStatus.MultiSelected:
+                    netstart = _selectArea.Core.NetStart;
+                    netend = _selectArea.Core.NetEnd;
                     Core.ReplaceN(SelectAllNetworks, new LadderNetworkModel[] { });
                     break;
             }
+            if (_selectStatus == SelectStatus.Idle && netend >= 0)
+                for (int i = netend; i < core.NetworkCount; i++)
+                {
+                    if (core.Children[i].IsMasked) continue;
+                    core.Children[i].IsExpand = true;
+                    _selectRect.Core.X = 0;
+                    _selectRect.Core.Y = 0;
+                    _selectRect.Core.Parent = core.Children[i];
+                    _selectStatus = SelectStatus.SingleSelected;
+                    break;
+                }
+            if (_selectStatus == SelectStatus.Idle && netstart >= 0)
+                for (int i = netstart - 1; i >= 0; i--)
+                {
+                    if (core.Children[i].IsMasked) continue;
+                    core.Children[i].IsExpand = true;
+                    _selectRect.Core.X = 0;
+                    _selectRect.Core.Y = 0;
+                    _selectRect.Core.Parent = core.Children[i];
+                    _selectStatus = SelectStatus.SingleSelected;
+                    break;
+                }
         }
 
         #endregion

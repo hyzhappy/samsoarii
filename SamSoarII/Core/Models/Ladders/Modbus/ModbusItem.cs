@@ -29,13 +29,13 @@ namespace SamSoarII.Core.Models
         static private byte[] handlecodes = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x0f, 0x10 };
         static private ValueModel[] analyzers = {
             new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex1})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex8})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex1})),
             new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, false, true, 0, new Regex[] { ValueModel.VerifyWordRegex1})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, false, true, 0, new Regex[] { ValueModel.VerifyWordRegex2})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex2})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex2})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex2})),
-            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex2}))};
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, false, true, 0, new Regex[] { ValueModel.VerifyWordRegex1})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex1})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex1})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.NULL, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1}))};
 
         public IList<string> SelectedHandleCodes()
         {
