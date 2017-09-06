@@ -93,17 +93,6 @@ namespace SamSoarII.Utility
             }
         }
         /// <summary>
-        /// 得到相应的文件名
-        /// </summary>
-        /// <param name="fullFileName">文件的完整路径(包括文件名与后缀)</param>
-        /// <returns>文件名</returns>
-        public static string GetFileName(string fullFileName)
-        {
-            string tempstr = fullFileName.Substring(fullFileName.LastIndexOf(Path.DirectorySeparatorChar) + 1);
-            tempstr = tempstr.Substring(0, tempstr.LastIndexOf('.'));
-            return tempstr;
-        }
-        /// <summary>
         /// 得到相应的文件大小（以字节为单位）
         /// </summary>
         /// <param name="fullFileName">文件的完整路径(包括文件名与后缀)</param>
@@ -124,7 +113,7 @@ namespace SamSoarII.Utility
         {
             Process cmd = new Process();
             string exepath = string.Format(@"{0}\rar", StringHelper.RemoveSystemSeparator(AppRootPath));
-            string CFName = string.Format(@"{0}\rar\temp\{1}.7z", StringHelper.RemoveSystemSeparator(AppRootPath), GetFileName(fullFileName));
+            string CFName = string.Format(@"{0}\rar\temp\{1}.7z", StringHelper.RemoveSystemSeparator(AppRootPath), Path.GetFileName(fullFileName));
             cmd.StartInfo.FileName = string.Format(@"{0}\{1}",exepath,"HaoZipC.exe");
             cmd.StartInfo.Arguments = string.Format("a -t7z -pSamSoarII \"{0}\" \"{1}\"", CFName, fullFileName);
             cmd.StartInfo.UseShellExecute = false;

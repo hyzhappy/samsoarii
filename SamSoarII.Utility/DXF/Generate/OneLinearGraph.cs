@@ -107,7 +107,18 @@ namespace SamSoarII.Utility.DXF
         private void DPSearchEdge(DXFVertex p, ref List<DXFEdge> path)
         {
             List<DXFEdge> edges = parent.Graph[p];
-            foreach (var edge in edges)
+            List<DXFEdge> selfEdges = edges.Where(edge => { return edge.Start.CompareTo(edge.End) == 0; }).ToList();
+            //首先添加此节点的所有自环（自环是不需要继续搜索的）
+            foreach (var edge in selfEdges)
+            {
+                if (!edge.IsSreached)
+                {
+                    edge.IsSreached = true;
+                    path.Add(edge);
+                }
+            }
+            //再遍历其他边
+            foreach (var edge in edges.Except(selfEdges))
             {
                 if (!edge.IsSreached)
                 {
@@ -115,6 +126,7 @@ namespace SamSoarII.Utility.DXF
                     if (edge.Start.CompareTo(p) != 0)
                         edge.Flip();//保持图的有向性
                     path.Add(edge);
+                    //继续搜索
                     DPSearchEdge(edge.End, ref path);
                 }
             }

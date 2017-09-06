@@ -10,6 +10,7 @@ using SamSoarII.Utility;
 using SamSoarII.Utility.DXF;
 using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
+using System.IO;
 
 namespace SamSoarII.Core.Models
 {
@@ -33,7 +34,7 @@ namespace SamSoarII.Core.Models
         {
             parent = _parent;
             filename = _filename;
-            name = FileHelper.GetFileName(_filename);
+            name = Path.GetFileName(_filename);
             systemid = 1;
             velocity = new ValueModel(null, new ValueFormat("V", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }, null, "速度", "Velocity"));
             actime = new ValueModel(null, new ValueFormat("AC", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }, null, "加速时间", "Accelerate Time"));

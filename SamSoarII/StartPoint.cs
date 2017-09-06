@@ -28,8 +28,10 @@ namespace SamSoarII.AppMain
                     filePath = filePath.Trim();
                 }
                 //FilePath为Main程序的数据成员属性
-                App.AutoOpenFileFullPath = filePath;
-                new App().Run();
+                if (filePath != string.Empty)
+                    App.AutoOpenFileFullPath = Path.GetFullPath(filePath);
+                else App.AutoOpenFileFullPath = string.Empty;
+                    new App().Run();
             /*}
             else
             {
