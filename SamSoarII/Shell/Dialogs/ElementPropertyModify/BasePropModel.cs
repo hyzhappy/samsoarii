@@ -95,7 +95,13 @@ namespace SamSoarII.Shell.Dialogs
                             }
                             core.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)(delegate ()
                             {
-                                core.SetCommentString(i, comment);
+                                try
+                                {
+                                    core.SetCommentString(i, comment);
+                                }
+                                catch (Exception)
+                                {
+                                }
                             }));
                         }
                     }

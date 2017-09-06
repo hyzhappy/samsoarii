@@ -47,6 +47,10 @@ namespace SamSoarII.Core.Communication
 
         //是否需要监视密码
         public bool IsMPNeed;
+
+        //梯形图HashCode
+        public byte[] HashCode;
+
         public PLCMessage(CommunicationTestCommand command)
         {
             byte[] data = new byte[ValueConverter.GetValueByBytes(command.RetData[1], command.RetData[2]) - 7];
@@ -64,7 +68,10 @@ namespace SamSoarII.Core.Communication
             IsUPNeed = data[cursor++] == 1;
             IsDPNeed = data[cursor++] == 1;
             IsMPNeed = data[cursor++] == 1;
-            PortType = GetPortType(data[cursor]);
+            PortType = GetPortType(data[cursor++]);
+            HashCode = new byte[data.Length - cursor];
+            for (int i = 0; i < HashCode.Length; i++)
+                HashCode[i] = data[cursor++];
         }
 
         private static RunStatus GetRunStatus(byte data)

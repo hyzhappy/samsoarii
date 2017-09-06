@@ -147,12 +147,14 @@
     <Compile Include="Core\Communication\Command\Download\SwitchPLCStatusCommand.cs" />
     <Compile Include="Core\Communication\Command\Download\SwitchToIAPCommand.cs" />
     <Compile Include="Core\Communication\Command\Download\TransportBinCommand.cs" />
+    <Compile Include="Core\Communication\Command\Monitor\BitWordWriteCommand.cs" />
     <Compile Include="Core\Communication\Command\Monitor\ForceCancelCommand.cs" />
     <Compile Include="Core\Communication\Command\Monitor\GeneralReadCommand.cs" />
     <Compile Include="Core\Communication\Command\Monitor\GeneralWriteCommand.cs" />
     <Compile Include="Core\Communication\Command\ICommunicationCommand.cs" />
     <Compile Include="Core\Communication\Command\Monitor\IntrasegmentReadCommand.cs" />
     <Compile Include="Core\Communication\Command\Monitor\IntrasegmentWriteCommand.cs" />
+    <Compile Include="Core\Communication\Command\Monitor\WordBitWriteCommand.cs" />
     <Compile Include="Core\Communication\Command\Password\PasswordCheckCommand.cs" />
     <Compile Include="Core\Communication\Command\Upload\UploadTypeData.cs" />
     <Compile Include="Core\Communication\Command\Upload\UploadTypeOver.cs" />

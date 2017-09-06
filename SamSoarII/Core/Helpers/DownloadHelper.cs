@@ -62,6 +62,8 @@ namespace SamSoarII.Core.Helpers
         static private List<byte> dtTable;
         /// <summary> Block表 </summary>
         static private List<byte> dtBlock;
+        /// <summary> HashCode </summary>
+        static private List<byte> dtHashCode;
         #endregion
 
         #region InitializeData
@@ -76,6 +78,7 @@ namespace SamSoarII.Core.Helpers
             dtModbus = new List<byte>();
             dtTable = new List<byte>();
             dtBlock = new List<byte>();
+            dtHashCode = project.GetLadderHashCodes().ToList();
             // 条形码
 
             // 配置
@@ -854,6 +857,11 @@ namespace SamSoarII.Core.Helpers
                 if (ret != CommuicationError.None)
                     return ret;
 
+                //下载HashCode
+                ret = DownloadHashCodeExecute(communManager);
+                if (ret != CommuicationError.None)
+                    return ret;
+
                 //下载Modbus表格
                 ret = DownloadModbusTableExecute(communManager);
                 if (ret != CommuicationError.None)
@@ -868,6 +876,7 @@ namespace SamSoarII.Core.Helpers
                 ret = DownloadPlsBlockExecute(communManager);
                 if (ret != CommuicationError.None)
                     return ret;
+
             }
             //下载 Config
             if (IsDownloadSetting)
@@ -1026,6 +1035,16 @@ namespace SamSoarII.Core.Helpers
             if (dtConfig.Count == 0) return CommuicationError.None;
             return _DownloadHandle(communManager, dtConfig.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_CONFIG);
         }
+        #endregion
+
+        #region HashCode Download
+
+        private static CommuicationError DownloadHashCodeExecute(CommunicationManager communManager)
+        {
+            if (dtHashCode.Count == 0) return CommuicationError.None;
+            return _DownloadHandle(communManager, dtHashCode.ToArray(), CommunicationDataDefine.CMD_DOWNLOAD_HASH);
+        }
+
         #endregion
 
         #region DownloadHandle

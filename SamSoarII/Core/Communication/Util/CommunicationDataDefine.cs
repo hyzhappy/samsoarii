@@ -86,6 +86,7 @@ namespace SamSoarII.Core.Communication
         public const byte CMD_DOWNLOAD_MODBUSTABLE = 0x27;//下载Modbus表
         public const byte CMD_DOWNLOAD_PLSTABLE = 0x28;//下载脉冲Table表
         public const byte CMD_DOWNLOAD_PLSBLOCK = 0x29;//下载脉冲Block表
+        public const byte CMD_DOWNLOAD_HASH = 0x30;//下载HashCode
 
         //上载
         public const byte CMD_UPLOAD_START = 0x40;//某功能码上载开始
@@ -116,5 +117,22 @@ namespace SamSoarII.Core.Communication
         public const byte ADDRESS_TYPE_CV = 0x11;
         public const byte ADDRESS_TYPE_TV = 0x12;
         public const byte ADDRESS_TYPE_CV32 = 0x13;
+
+        public const byte ADDRESS_TYPE_AI_B = 0x16;
+        public const byte ADDRESS_TYPE_AO_B = 0x17;
+        public const byte ADDRESS_TYPE_D_B = 0x18;
+        public const byte ADDRESS_TYPE_V_B = 0x19;
+        public const byte ADDRESS_TYPE_Z_B = 0x1A;
+        public const byte ADDRESS_TYPE_CV_B = 0x1B;
+        public const byte ADDRESS_TYPE_TV_B = 0x1C;
+        public const byte ADDRESS_TYPE_CV32_B = 0x1D;
+
+        public const byte ADDRESS_TYPE_X_B = 0x20;
+        public const byte ADDRESS_TYPE_Y_B = 0x21;
+        public const byte ADDRESS_TYPE_M_B = 0x22;
+        public const byte ADDRESS_TYPE_S_B = 0x23;
+        public const byte ADDRESS_TYPE_C_B = 0x24;
+        public const byte ADDRESS_TYPE_T_B = 0x25;
+
     }
 }

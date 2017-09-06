@@ -175,42 +175,55 @@ namespace SamSoarII.Core.Models
         {
             get
             {
-                switch (type)
+                try
                 {
-                    case ValueModel.Types.BOOL:
-                        return byte.Parse(value.ToString()) == 1 ? "ON" : "OFF";
-                    case ValueModel.Types.HEX:
-                        return String.Format("0x{0:x4}", (ushort)(value));
-                    case ValueModel.Types.DHEX:
-                        return String.Format("0x{0:x8}", (uint)(value));
-                    case ValueModel.Types.BCD:
-                        return (ushort)(value) > 9999 ? "???" : ValueConverter.ToBCD((ushort)(value)).ToString();
-                    default:
-                        return value.ToString();
+                    switch (type)
+                    {
+                        case ValueModel.Types.BOOL:
+                            return byte.Parse(value.ToString()) == 1 ? "ON" : "OFF";
+                        case ValueModel.Types.HEX:
+                            return String.Format("0x{0:x4}", ushort.Parse(value.ToString()));
+                        case ValueModel.Types.DHEX:
+                            return String.Format("0x{0:x8}", uint.Parse(value.ToString()));
+                        case ValueModel.Types.BCD:
+                            return ushort.Parse(value.ToString()) > 9999 ? "???" : ValueConverter.ToBCD(ushort.Parse(value.ToString())).ToString();
+                        default:
+                            return value.ToString();
+                    }
+                }
+                catch (Exception)
+                {
+                    return "???";
                 }
             }
             set
             {
-                switch (type)
+                try
                 {
-                    case ValueModel.Types.BOOL:
-                        Value = (byte)(value.Equals("ON") ? 1 : 0); break;
-                    case ValueModel.Types.HEX:
-                        Value = ushort.Parse(value, System.Globalization.NumberStyles.HexNumber); break;
-                    case ValueModel.Types.DHEX:
-                        Value = uint.Parse(value, System.Globalization.NumberStyles.HexNumber); break;
-                    case ValueModel.Types.BCD:
-                        Value = ValueConverter.ToUINT16(ushort.Parse(value)); break;
-                    case ValueModel.Types.WORD:
-                        Value = short.Parse(value); break;
-                    case ValueModel.Types.UWORD:
-                        Value = ushort.Parse(value); break;
-                    case ValueModel.Types.DWORD:
-                        Value = int.Parse(value); break;
-                    case ValueModel.Types.UDWORD:
-                        Value = uint.Parse(value); break;
-                    case ValueModel.Types.FLOAT:
-                        Value = float.Parse(value); break;
+                    switch (type)
+                    {
+                        case ValueModel.Types.BOOL:
+                            Value = (byte)(value.Equals("ON") ? 1 : 0); break;
+                        case ValueModel.Types.HEX:
+                            Value = ushort.Parse(value, System.Globalization.NumberStyles.HexNumber); break;
+                        case ValueModel.Types.DHEX:
+                            Value = uint.Parse(value, System.Globalization.NumberStyles.HexNumber); break;
+                        case ValueModel.Types.BCD:
+                            Value = ValueConverter.ToUINT16(ushort.Parse(value)); break;
+                        case ValueModel.Types.WORD:
+                            Value = short.Parse(value); break;
+                        case ValueModel.Types.UWORD:
+                            Value = ushort.Parse(value); break;
+                        case ValueModel.Types.DWORD:
+                            Value = int.Parse(value); break;
+                        case ValueModel.Types.UDWORD:
+                            Value = uint.Parse(value); break;
+                        case ValueModel.Types.FLOAT:
+                            Value = float.Parse(value); break;
+                    }
+                }
+                catch (Exception)
+                {
                 }
             }
         }

@@ -924,6 +924,16 @@ namespace SamSoarII.Core.Communication
                     IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data, vstore);
                     writecmds.Enqueue(command);
                 }
+                else if (vstore.IsWordBit)
+                {
+                    WordBitWriteCommand command = new WordBitWriteCommand(data, vstore);
+                    writecmds.Enqueue(command);
+                }
+                else if (vstore.IsBitWord || vstore.IsBitDoubleWord)
+                {
+                    BitWordWriteCommand command = new BitWordWriteCommand(data, vstore);
+                    writecmds.Enqueue(command);
+                }
                 else
                 {
                     GeneralWriteCommand command = new GeneralWriteCommand(data, vstore);

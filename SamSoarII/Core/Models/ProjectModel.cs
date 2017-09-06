@@ -515,8 +515,17 @@ namespace SamSoarII.Core.Models
                     {
                         PLCOriginInst inst = network.Inst.Insts[i];
                         if (inst.Inst?.ProtoType != null)
-                            rets[rid++] ^= (byte)(inst.Inst.ProtoType.Type);
-                        if (rid >= rets.Length) rid = 0;
+                        {
+                            LadderUnitModel unit = inst.Inst?.ProtoType;
+                            rets[rid++] ^= (byte)(unit.Type);
+                            if (rid >= rets.Length) rid = 0;
+                            for (int j = 0; j < unit.Children.Count(); j++)
+                            {
+                                ValueModel vmodel = unit.Children[i];
+                                rets[rid++] ^= (byte)(vmodel.Offset & 255);
+                                if (rid >= rets.Length) rid = 0;
+                            }
+                        }
                     }
             return rets;
         }

@@ -2445,4 +2445,7 @@
   <data name="Error_VerticalLineUnder" xml:space="preserve">
     <value>网络底部存在竖线，无法执行合并操作！</value>
   </data>
+  <data name="Monitor_LadderNotMatch" xml:space="preserve">
+    <value>当前监视PLC与梯形图不一致，是否继续？</value>
+  </data>
 </root>

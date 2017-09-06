@@ -2445,4 +2445,7 @@
   <data name="Error_VerticalLineUnder" xml:space="preserve">
     <value>Here exists vertical lines in bottom border of merging network, so they are prohibited to be merged!</value>
   </data>
+  <data name="Monitor_LadderNotMatch" xml:space="preserve">
+    <value>The monitored PLC is not corrosponded with ladder, continue or not?</value>
+  </data>
 </root>

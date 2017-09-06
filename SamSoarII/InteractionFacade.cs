@@ -678,7 +678,13 @@ namespace SamSoarII
                 LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                 return false;
             }
-            
+            byte[] hashcode1 = mdProj.GetLadderHashCodes();
+            byte[] hashcode2 = mngComu.PLCMessage.HashCode;
+            if (!hashcode1.Equals(hashcode2) 
+             && LocalizedMessageBox.Show(Properties.Resources.Monitor_LadderNotMatch, LocalizedMessageButton.OKCancel, LocalizedMessageIcon.Information) == LocalizedMessageResult.Cancel)
+            {
+                return false;
+            }
             mngComu.IsEnable = true;
             vmdProj.LadderMode = LadderModes.Monitor;
             return true;

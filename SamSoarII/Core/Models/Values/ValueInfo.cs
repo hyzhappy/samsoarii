@@ -110,6 +110,8 @@ namespace SamSoarII.Core.Models
         {
             if (this != parent.EmptyInfo)
                 Values.Add(value);
+            if (value.Store != null && value.Store.Parent == parent.EmptyInfo && this != parent.EmptyInfo)
+                value.Store = null;
             if (value.Store != null)
             {
                 value.Store.Parent = this;

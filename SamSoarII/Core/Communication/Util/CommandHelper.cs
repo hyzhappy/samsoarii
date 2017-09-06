@@ -120,6 +120,48 @@ namespace SamSoarII.Core.Communication
                     return null;
             }
         }
+        public static byte? GetWordBitAddrType(ValueModel.Bases bas, uint ofs)
+        {
+            switch (bas)
+            {
+                case ValueModel.Bases.AI:
+                    return CommunicationDataDefine.ADDRESS_TYPE_AI_B;
+                case ValueModel.Bases.AO:
+                    return CommunicationDataDefine.ADDRESS_TYPE_AO_B;
+                case ValueModel.Bases.D:
+                    return CommunicationDataDefine.ADDRESS_TYPE_D_B;
+                case ValueModel.Bases.V:
+                    return CommunicationDataDefine.ADDRESS_TYPE_V_B;
+                case ValueModel.Bases.Z:
+                    return CommunicationDataDefine.ADDRESS_TYPE_Z_B;
+                case ValueModel.Bases.CV:
+                    return CommunicationDataDefine.ADDRESS_TYPE_CV_B;
+                case ValueModel.Bases.TV:
+                    return CommunicationDataDefine.ADDRESS_TYPE_TV_B;
+                default:
+                    return null;
+            }
+        }
+        public static byte? GetBitWordAddrType(ValueModel.Bases bas, uint ofs)
+        {
+            switch (bas)
+            {
+                case ValueModel.Bases.X:
+                    return CommunicationDataDefine.ADDRESS_TYPE_X_B;
+                case ValueModel.Bases.Y:
+                    return CommunicationDataDefine.ADDRESS_TYPE_Y_B;
+                case ValueModel.Bases.S:
+                    return CommunicationDataDefine.ADDRESS_TYPE_S_B;
+                case ValueModel.Bases.M:
+                    return CommunicationDataDefine.ADDRESS_TYPE_M_B;
+                case ValueModel.Bases.C:
+                    return CommunicationDataDefine.ADDRESS_TYPE_C_B;
+                case ValueModel.Bases.T:
+                    return CommunicationDataDefine.ADDRESS_TYPE_T_B;
+                default:
+                    return null;
+            }
+        }
         public static AddrSegment GetAddrSegment(ValueModel.Bases bas, int ofs, int len)
         {
             AddrSegment ret = new AddrSegment();

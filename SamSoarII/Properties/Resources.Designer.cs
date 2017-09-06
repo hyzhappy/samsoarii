@@ -4741,6 +4741,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 The monitored PLC is not corrosponded with ladder, continue or not? 的本地化字符串。
+        /// </summary>
+        public static string Monitor_LadderNotMatch {
+            get {
+                return ResourceManager.GetString("Monitor_LadderNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Monitor List 的本地化字符串。
         /// </summary>
         public static string Monitor_List {
