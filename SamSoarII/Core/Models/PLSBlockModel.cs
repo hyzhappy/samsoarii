@@ -34,7 +34,7 @@ namespace SamSoarII.Core.Models
         {
             parent = _parent;
             filename = _filename;
-            name = Path.GetFileName(_filename);
+            name = Path.GetFileNameWithoutExtension(_filename);
             systemid = 1;
             velocity = new ValueModel(null, new ValueFormat("V", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }, null, "速度", "Velocity"));
             actime = new ValueModel(null, new ValueFormat("AC", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }, null, "加速时间", "Accelerate Time"));

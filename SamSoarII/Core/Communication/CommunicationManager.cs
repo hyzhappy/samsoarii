@@ -490,7 +490,7 @@ namespace SamSoarII.Core.Communication
                         ret1 = LocalizedMessageBox.Show(Properties.Resources.Config_Applied_NewProj, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
                         if (ret1 == LocalizedMessageResult.Yes)
                         {
-                            ifParent.CreateProject("New Project");
+                            ifParent.CreateProject(Properties.Resources.New_Project_Name);
                             ifParent.MDProj.PARAProj.Load(UploadHelper.ProjectParams);
                         }
                     }

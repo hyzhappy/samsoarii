@@ -352,7 +352,7 @@ namespace SamSoarII.Core.Models
         {
             if (_filename == null || _filename == string.Empty) return;
             filename = _filename;
-            ProjName = Path.GetFileName(_filename);
+            ProjName = Path.GetFileNameWithoutExtension(_filename);
             XDocument xdoc = new XDocument();
             XElement xele_r = new XElement("Root");
             XElement xele_p = new XElement("Project");
@@ -386,7 +386,7 @@ namespace SamSoarII.Core.Models
             XElement xele_p = new XElement("Project");
             xdoc.Add(xele_r);
             xele_r.Add(xele_p);
-            xele_p.SetAttributeValue("Name", Path.GetFileName(_filename));
+            xele_p.SetAttributeValue("Name", Path.GetFileNameWithoutExtension(_filename));
             xele_p.SetAttributeValue("DeviceType", Device.Type);
             foreach (LadderDiagramModel diagram in diagrams)
             {
