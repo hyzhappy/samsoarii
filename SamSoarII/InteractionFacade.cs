@@ -303,7 +303,7 @@ namespace SamSoarII
             try
             {
 #endif
-                mdProj = new ProjectModel(this, Path.GetFileName(filename), filename);
+                mdProj = new ProjectModel(this, Path.GetFileNameWithoutExtension(filename), filename);
                 if (_isUpload) mdProj.ClearFileName();
                 else ProjectFileManager.Update(filename, filename);
                 InitializeProject();
@@ -534,7 +534,7 @@ namespace SamSoarII
                     var ret = LocalizedMessageBox.Show(Properties.Resources.Config_Applied_NewProj, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Information);
                     if (ret == LocalizedMessageResult.Yes)
                     {
-                        CreateProject("New Project");
+                        CreateProject(Properties.Resources.New_Project_Name);
                         mdProj.PARAProj.Load(UploadHelper.ProjectParams);
                     }
                 }

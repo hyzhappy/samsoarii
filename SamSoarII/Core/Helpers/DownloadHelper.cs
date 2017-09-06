@@ -952,7 +952,7 @@ namespace SamSoarII.Core.Helpers
                 Directory.CreateDirectory(genPath);
             _filename = communManager.IFParent.MDProj.FileName;
             _filename = string.Format(@"{0}\{1}.{2}", genPath,
-                FileHelper.InvalidFileName(_filename) ? "tempdfile" : Path.GetFileName(_filename),
+                FileHelper.InvalidFileName(_filename) ? "tempdfile" : Path.GetFileNameWithoutExtension(_filename),
                 FileHelper.NewFileExtension);
             if (File.Exists(_filename)) File.Delete(_filename);
 

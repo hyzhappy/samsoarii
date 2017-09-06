@@ -40,49 +40,77 @@ namespace SamSoarII.Core.Models
         public bool IsComLinked
         {
             get { return this.iscomlinked; }
-            set { this.iscomlinked = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsComLinked")); }
+            set
+            {
+                this.iscomlinked = value;
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsComLinked")); 
+            }
         }
 
         private bool isautocheck;
         public bool IsAutoCheck
         {
             get { return this.isautocheck; }
-            set { this.isautocheck = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsAutoCheck")); }
+            set
+            {
+                this.isautocheck = value;
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsAutoCheck"));
+            }
         }
 
         private int serialportindex;
         public int SerialPortIndex
         {
             get { return this.serialportindex; }
-            set { this.serialportindex = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SerialPortIndex")); }
+            set
+            {
+                this.serialportindex = value;
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SerialPortIndex")); 
+            }
         }
 
         private int baudrateindex;
         public int BaudRateIndex
         {
             get { return this.baudrateindex; }
-            set { this.baudrateindex = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BaudRateIndex")); }
+            set
+            {
+                this.baudrateindex = value;
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BaudRateIndex")); 
+            }
         }
 
         private int databitindex;
         public int DataBitIndex
         {
             get { return this.databitindex; }
-            set { this.databitindex = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DataBitIndex")); }
+            set
+            {
+                this.databitindex = value;
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DataBitIndex"));
+            }
         }
 
         private int stopbitindex;
         public int StopBitIndex
         {
             get { return this.stopbitindex; }
-            set { this.stopbitindex = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StopBitIndex")); }
+            set
+            {
+                this.stopbitindex = value;
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StopBitIndex")); 
+            }
         }
 
         private int checkcodeindex;
         public int CheckCodeIndex
         {
             get { return this.checkcodeindex; }
-            set { this.checkcodeindex = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CheckCodeIndex")); }
+            set
+            {
+                this.checkcodeindex = value;
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CheckCodeIndex"));
+            }
         }
 
         private int timeout;
@@ -92,7 +120,7 @@ namespace SamSoarII.Core.Models
             set
             {
                 this.timeout = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Timeout"));
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Timeout"));
             }
         }
         

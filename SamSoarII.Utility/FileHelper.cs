@@ -113,7 +113,7 @@ namespace SamSoarII.Utility
         {
             Process cmd = new Process();
             string exepath = string.Format(@"{0}\rar", StringHelper.RemoveSystemSeparator(AppRootPath));
-            string CFName = string.Format(@"{0}\rar\temp\{1}.7z", StringHelper.RemoveSystemSeparator(AppRootPath), Path.GetFileName(fullFileName));
+            string CFName = string.Format(@"{0}\rar\temp\{1}.7z", StringHelper.RemoveSystemSeparator(AppRootPath), Path.GetFileNameWithoutExtension(fullFileName));
             cmd.StartInfo.FileName = string.Format(@"{0}\{1}",exepath,"HaoZipC.exe");
             cmd.StartInfo.Arguments = string.Format("a -t7z -pSamSoarII \"{0}\" \"{1}\"", CFName, fullFileName);
             cmd.StartInfo.UseShellExecute = false;
@@ -121,6 +121,16 @@ namespace SamSoarII.Utility
             cmd.Start();
             cmd.WaitForExit();
             cmd.Close();
+            try
+            {
+                //由于某种原因，进程HaoZipC.exe可能未正常关闭，这里强制关闭进程
+                foreach (var process in Process.GetProcessesByName("HaoZipC.exe"))
+                    process.Kill();
+            }
+            catch (Exception)
+            {
+
+            }
             return CFName;
         }
 
@@ -135,6 +145,16 @@ namespace SamSoarII.Utility
             cmd.Start();
             cmd.WaitForExit();
             cmd.Close();
+            try
+            {
+                //由于某种原因，进程HaoZipC.exe可能未正常关闭，这里强制关闭进程
+                foreach (var process in Process.GetProcessesByName("HaoZipC.exe"))
+                    process.Kill();
+            }
+            catch (Exception)
+            {
+                
+            }
         }
 
         public static bool InvalidFileName(string fullFileName)
